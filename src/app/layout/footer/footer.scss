@@ -2,7 +2,40 @@ footer {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 6px;
   background-color: var(--bg-primary);
   border-top: solid 1px var(--border-subtle);
+}
+
+.copyright {
+  font-size: small;
+}
+
+.about-btn {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  transition:
+    color 0.1s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    color: var(--accent-hover);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    color: var(--accent-active);
+    transform: scale(0.9);
+    transition: transform 0.08s ease;
+  }
+
+  &:focus-visible {
+    color: var(--accent-primary);
+    transform: scale(1.05);
+    outline: 1px solid var(--accent-primary);
+  }
 }

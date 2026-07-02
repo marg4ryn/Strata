@@ -8,11 +8,72 @@
 }
 
 .logo {
-  max-width: 100px;
+  width: 100px;
+  height: 180px;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+label {
+  color: var(--text-primary);
+}
+
+input {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  }
+
+  &:invalid:not(:placeholder-shown) {
+    border-color: var(--danger);
+  }
+}
+
+button {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background-color: var(--accent-hover);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: none;
+    background-color: var(--accent-hover);
+  }
 }

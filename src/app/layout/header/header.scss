@@ -6,30 +6,81 @@
   padding: 10px 15px;
 }
 
-#left-section {
+.logo-section {
   display: flex;
   flex-direction: row;
   justify-content: start;
   align-items: center;
   gap: 10px;
-}
+  padding: 4px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  transition:
+    color 0.1s ease,
+    transform 0.1s ease;
 
-#right-section {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  gap: 10px;
+  &:hover {
+    color: var(--accent-hover);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    color: var(--accent-active);
+    transform: scale(0.9);
+    transition: transform 0.08s ease;
+  }
+
+  &:focus-visible {
+    color: var(--accent-primary);
+    transform: scale(1.05);
+    outline: 1px solid var(--accent-primary);
+  }
 }
 
 .logo {
-  max-width: 25px;
+  width: 22px;
+  height: 40px;
 }
 
-p {
+.icon-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-button {
+  border: none;
   background-color: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  width: 33px;
+  transition:
+    color 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: var(--accent-hover);
+    transform: scale(1.2);
+  }
+
+  &:active {
+    color: var(--accent-active);
+    transform: scale(0.9);
+    transition: transform 0.08s ease;
+  }
+
+  &:focus-visible {
+    color: var(--accent-primary);
+    transform: scale(1.05);
+    outline: 1px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
 }
 
 .icon {
-  min-width: 30px;
+  width: 30px;
 }

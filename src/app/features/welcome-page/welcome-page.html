@@ -1,6 +1,12 @@
-<img src="/logo.svg" class="logo" />
+<img src="/logo.svg" class="logo" alt="" />
 <form>
-  <label for="analysisTargetURL">Enter link to analysis target:</label>
-  <input type="text" id="analysisTargetURL" name="analysisTargetURL" required="required" />
+  <label for="analysisTargetURL">Enter link to analysis target</label>
+  <input
+    type="url"
+    id="analysisTargetURL"
+    name="analysisTargetURL"
+    placeholder="https://github.com/JohnDoe/Project.git"
+    required
+  />
   <button type="submit">Start Analysis</button>
 </form>
