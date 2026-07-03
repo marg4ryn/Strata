@@ -2,9 +2,27 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: center;
+  justify-content: stretch;
   align-items: center;
   gap: 20px;
+}
+
+.logo-container {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.form-container {
+  flex: 1.1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .logo {
@@ -49,6 +67,12 @@ input {
   }
 }
 
+.date-range-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .dates-container {
   display: flex;
   flex-direction: row;
@@ -88,4 +112,13 @@ button {
     outline: none;
     background-color: var(--accent-hover);
   }
+}
+
+.error-list {
+  color: var(--danger);
+  font-size: smaller;
+  list-style-position: inside;
+}
+.error-list li {
+  margin: 0;
 }

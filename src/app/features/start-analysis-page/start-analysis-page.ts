@@ -4,10 +4,8 @@ import { form, FormField, hidden, required, schema } from '@angular/forms/signal
 interface AnalysisTarget {
   URL: string;
   limitRange: boolean;
-  range: {
-    startDate: Date | null;
-    endDate: Date | null;
-  };
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 @Component({
@@ -20,33 +18,34 @@ export class StartAnalysisPage {
   initialAnalysisTarget = (): AnalysisTarget => ({
     URL: '',
     limitRange: false,
-    range: {
-      startDate: null,
-      endDate: null,
-    },
+    startDate: null,
+    endDate: null,
   });
 
   analysisTargetModel = signal<AnalysisTarget>(this.initialAnalysisTarget());
 
-  analysisTargetSchema = schema<AnalysisTarget>((analysisTarget) => {
-    hidden(analysisTarget.range.startDate, ({ valueOf }) => !valueOf(analysisTarget.limitRange));
-    hidden(analysisTarget.range.endDate, ({ valueOf }) => !valueOf(analysisTarget.limitRange));
-  });
-
   analysisTargetForm = form(this.analysisTargetModel, (schemaPath) => {
-    required(schemaPath.URL);
-    required(schemaPath.range.startDate, {
+    required(schemaPath.URL, { message: 'URL is required' });
+    required(schemaPath.startDate, {
+      message: 'Start date is required when Limit date range selected',
       when: ({ valueOf }) => valueOf(schemaPath.limitRange),
     });
-    required(schemaPath.range.endDate, {
+    required(schemaPath.endDate, {
+      message: 'End date is required when Limit date range selected',
       when: ({ valueOf }) => valueOf(schemaPath.limitRange),
     });
+
+    hidden(schemaPath.startDate, ({ valueOf }) => !valueOf(schemaPath.limitRange));
+    hidden(schemaPath.endDate, ({ valueOf }) => !valueOf(schemaPath.limitRange));
   });
 
   onSubmit(event: Event) {
     event.preventDefault();
+    this.analysisTargetForm.URL().markAsTouched();
+    this.analysisTargetForm.startDate().markAsTouched();
+    this.analysisTargetForm.endDate().markAsTouched();
+    if (this.analysisTargetForm().invalid()) return;
     const formData = this.analysisTargetModel();
-    if (!this.analysisTargetForm().valid()) return;
     console.log(formData);
     this.resetForm();
   }
