@@ -1,0 +1,25 @@
+<img src="/logo.svg" class="logo" alt="" />
+<form (submit)="onSubmit($event)" novalidate>
+  <label for="analysisTargetURL">Enter link to analysis target</label>
+  <input
+    type="url"
+    id="analysisTargetURL"
+    placeholder="https://github.com/JohnDoe/Project.git"
+    [formField]="analysisTargetForm.URL"
+  />
+
+  <label>
+    <input type="checkbox" [formField]="analysisTargetForm.limitRange" />
+    Limit date range
+  </label>
+
+  @if (analysisTargetModel().limitRange) {
+    <div class="dates-container">
+      <input type="date" [formField]="analysisTargetForm.range.startDate" />
+      <span>–</span>
+      <input type="date" [formField]="analysisTargetForm.range.endDate" />
+    </div>
+  }
+
+  <button type="submit">Start Analysis</button>
+</form>

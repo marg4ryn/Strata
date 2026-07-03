@@ -23,6 +23,7 @@ form {
 
 label {
   color: var(--text-primary);
+  cursor: pointer;
 }
 
 input {
@@ -32,6 +33,7 @@ input {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-size: 14px;
+  min-width: 0;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -45,6 +47,14 @@ input {
   &:invalid:not(:placeholder-shown) {
     border-color: var(--danger);
   }
+}
+
+.dates-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
 }
 
 button {

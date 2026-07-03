@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { WelcomePage } from './features/welcome-page/welcome-page';
+import { StartAnalysisPage } from './features/start-analysis-page/start-analysis-page';
 
-export const routes: Routes = [{ path: '', component: WelcomePage }];
+export const routes: Routes = [{ path: '', component: StartAnalysisPage }];
