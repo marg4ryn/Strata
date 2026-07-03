@@ -18,7 +18,7 @@ form {
   gap: 12px;
   width: 100%;
   max-width: 420px;
-  padding: 16px;
+  padding: 12px 42px;
 }
 
 label {
@@ -66,6 +66,7 @@ button {
 
   &:active {
     transform: scale(0.97);
+    background-color: var(--accent-active);
   }
 
   &:disabled {
