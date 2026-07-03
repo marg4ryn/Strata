@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { form, FormField, hidden, required, schema } from '@angular/forms/signals';
+import { form, FormField, hidden, required } from '@angular/forms/signals';
 
 interface AnalysisTarget {
   URL: string;
@@ -35,15 +35,13 @@ export class StartAnalysisPage {
       when: ({ valueOf }) => valueOf(schemaPath.limitRange),
     });
 
-    hidden(schemaPath.startDate, ({ valueOf }) => !valueOf(schemaPath.limitRange));
-    hidden(schemaPath.endDate, ({ valueOf }) => !valueOf(schemaPath.limitRange));
+    hidden(schemaPath.startDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
+    hidden(schemaPath.endDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
   });
 
   onSubmit(event: Event) {
     event.preventDefault();
-    this.analysisTargetForm.URL().markAsTouched();
-    this.analysisTargetForm.startDate().markAsTouched();
-    this.analysisTargetForm.endDate().markAsTouched();
+    this.analysisTargetForm().markAsTouched();
     if (this.analysisTargetForm().invalid()) return;
     const formData = this.analysisTargetModel();
     console.log(formData);
