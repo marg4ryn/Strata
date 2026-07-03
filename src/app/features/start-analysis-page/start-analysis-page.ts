@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { form, FormField, hidden, required } from '@angular/forms/signals';
+import { form, FormField, FormRoot, hidden, required } from '@angular/forms/signals';
 
 interface AnalysisTarget {
   URL: string;
@@ -10,46 +10,48 @@ interface AnalysisTarget {
 
 @Component({
   selector: 'app-start-analysis-page',
-  imports: [FormField],
+  imports: [FormField, FormRoot],
   templateUrl: './start-analysis-page.html',
   styleUrl: './start-analysis-page.scss',
 })
 export class StartAnalysisPage {
-  initialAnalysisTarget = (): AnalysisTarget => ({
+  private readonly INITIAL_MODEL = (): AnalysisTarget => ({
     URL: '',
     limitRange: false,
     startDate: null,
     endDate: null,
   });
 
-  analysisTargetModel = signal<AnalysisTarget>(this.initialAnalysisTarget());
+  analysisTargetModel = signal<AnalysisTarget>(this.INITIAL_MODEL());
 
-  analysisTargetForm = form(this.analysisTargetModel, (schemaPath) => {
-    required(schemaPath.URL, { message: 'URL is required' });
-    required(schemaPath.startDate, {
-      message: 'Start date is required when Limit date range selected',
-      when: ({ valueOf }) => valueOf(schemaPath.limitRange),
-    });
-    required(schemaPath.endDate, {
-      message: 'End date is required when Limit date range selected',
-      when: ({ valueOf }) => valueOf(schemaPath.limitRange),
-    });
+  analysisTargetForm = form(
+    this.analysisTargetModel,
+    (schemaPath) => {
+      required(schemaPath.URL, { message: 'URL is required' });
+      required(schemaPath.startDate, {
+        message: 'Start date is required when Limit date range selected',
+        when: ({ valueOf }) => valueOf(schemaPath.limitRange),
+      });
+      required(schemaPath.endDate, {
+        message: 'End date is required when Limit date range selected',
+        when: ({ valueOf }) => valueOf(schemaPath.limitRange),
+      });
 
-    hidden(schemaPath.startDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
-    hidden(schemaPath.endDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
-  });
-
-  onSubmit(event: Event) {
-    event.preventDefault();
-    this.analysisTargetForm().markAsTouched();
-    if (this.analysisTargetForm().invalid()) return;
-    const formData = this.analysisTargetModel();
-    console.log(formData);
-    this.resetForm();
-  }
-
-  resetForm() {
-    this.analysisTargetModel.set(this.initialAnalysisTarget());
-    this.analysisTargetForm().reset();
-  }
+      hidden(schemaPath.startDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
+      hidden(schemaPath.endDate, { when: ({ valueOf }) => !valueOf(schemaPath.limitRange) });
+    },
+    {
+      submission: {
+        action: async (field) => {
+          const formData = field().value();
+          console.log(formData);
+          field().reset(this.INITIAL_MODEL());
+        },
+        onInvalid: (field) => {
+          const firstError = field().errorSummary()[0];
+          firstError?.fieldTree().focusBoundControl();
+        },
+      },
+    },
+  );
 }
