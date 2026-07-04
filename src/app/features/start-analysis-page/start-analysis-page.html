@@ -14,7 +14,7 @@
 
     @if (analysisTargetForm.URL().touched() && analysisTargetForm.URL().invalid()) {
       <ul class="error-list">
-        @for (error of analysisTargetForm.URL().errors(); track error) {
+        @for (error of analysisTargetForm.URL().errors(); track error.message) {
           <li>{{ error.message }}</li>
         }
       </ul>
@@ -35,7 +35,7 @@
 
         @if (analysisTargetForm.startDate().touched() && analysisTargetForm.startDate().invalid()) {
           <ul class="error-list">
-            @for (error of analysisTargetForm.startDate().errors(); track error) {
+            @for (error of analysisTargetForm.startDate().errors(); track error.message) {
               <li>{{ error.message }}</li>
             }
           </ul>
@@ -43,7 +43,7 @@
 
         @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
           <ul class="error-list">
-            @for (error of analysisTargetForm.endDate().errors(); track error) {
+            @for (error of analysisTargetForm.endDate().errors(); track error.message) {
               <li>{{ error.message }}</li>
             }
           </ul>
