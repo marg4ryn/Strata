@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import {
   form,
   FormField,
@@ -25,6 +26,9 @@ interface AnalysisTarget {
   styleUrl: './start-analysis-page.scss',
 })
 export class StartAnalysisPage {
+  private readonly datePipe = new DatePipe('en-US');
+  private readonly MIN_DATE = new Date('1970-01-01');
+
   private readonly INITIAL_MODEL = (): AnalysisTarget => ({
     URL: '',
     limitRange: false,
@@ -61,11 +65,11 @@ export class StartAnalysisPage {
       url(schemaPath.URL);
       maxLength(schemaPath.URL, 500);
 
-      afterDate(schemaPath.startDate, new Date('1970-01-01'), {
-        fieldName: 'Start date',
+      afterDate(schemaPath.startDate, this.MIN_DATE, {
+        message: `Start date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
       });
-      afterDate(schemaPath.endDate, new Date('1970-01-01'), {
-        fieldName: 'End date',
+      afterDate(schemaPath.endDate, this.MIN_DATE, {
+        message: `End date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
       });
       afterDate(schemaPath.endDate, schemaPath.startDate, {
         message: 'End date must be after start date',
@@ -115,7 +119,7 @@ function url(path: SchemaPath<string>, options?: { message?: string }) {
 function afterDate(
   path: SchemaPath<Date | null>,
   min: Date | SchemaPath<Date | null>,
-  options?: { message?: string; fieldName?: string },
+  options: { message: string },
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
@@ -124,16 +128,7 @@ function afterDate(
     if (date && minDate && date < minDate) {
       return {
         kind: 'date',
-        message:
-          options?.message ??
-          `${options?.fieldName ?? 'Date'} cannot be earlier than ${minDate.toLocaleDateString(
-            'en-US',
-            {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            },
-          )}`,
+        message: options.message,
       };
     }
     return null;
@@ -143,7 +138,7 @@ function afterDate(
 function beforeDate(
   path: SchemaPath<Date | null>,
   max: Date | SchemaPath<Date | null>,
-  options?: { message?: string; fieldName?: string },
+  options: { message: string },
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
@@ -152,13 +147,7 @@ function beforeDate(
     if (date && maxDate && date > maxDate) {
       return {
         kind: 'date',
-        message:
-          options?.message ??
-          `${options?.fieldName ?? 'Date'} cannot be after ${maxDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}`,
+        message: options.message,
       };
     }
     return null;
