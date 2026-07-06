@@ -20,12 +20,12 @@ interface AnalysisTarget {
 }
 
 @Component({
-  selector: 'app-start-analysis-page',
+  selector: 'app-start-analysis',
   imports: [FormField, FormRoot],
-  templateUrl: './start-analysis-page.html',
-  styleUrl: './start-analysis-page.scss',
+  templateUrl: './start-analysis.component.html',
+  styleUrl: './start-analysis.component.scss',
 })
-export class StartAnalysisPage {
+export class StartAnalysis {
   private readonly datePipe = new DatePipe('en-US');
   private readonly MIN_DATE = new Date('1970-01-01');
 

@@ -1,20 +1,20 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { StartAnalysisPage } from './start-analysis-page';
+import { StartAnalysis } from './start-analysis.component';
 
 describe('StartAnalysisPage', () => {
-  let fixture: ComponentFixture<StartAnalysisPage>;
-  let component: StartAnalysisPage;
+  let fixture: ComponentFixture<StartAnalysis>;
+  let component: StartAnalysis;
 
   beforeEach(async () => {
     vi.useFakeTimers();
 
     await TestBed.configureTestingModule({
-      imports: [StartAnalysisPage],
+      imports: [StartAnalysis],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StartAnalysisPage);
+    fixture = TestBed.createComponent(StartAnalysis);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
