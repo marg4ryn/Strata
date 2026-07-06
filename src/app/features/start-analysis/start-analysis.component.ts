@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
   form,
@@ -11,6 +11,7 @@ import {
   SchemaPath,
   debounce,
 } from '@angular/forms/signals';
+import { LoggerService } from '../../core/logging/logger.service';
 
 interface AnalysisTarget {
   URL: string;
@@ -35,6 +36,8 @@ export class StartAnalysis {
     startDate: null,
     endDate: null,
   });
+
+  private logger = inject(LoggerService);
 
   analysisTargetModel = signal<AnalysisTarget>(this.INITIAL_MODEL());
 
@@ -85,7 +88,7 @@ export class StartAnalysis {
       submission: {
         action: async (field) => {
           const formData = field().value();
-          console.log(formData);
+          this.logger.info(formData);
           field().reset(this.INITIAL_MODEL());
         },
         onInvalid: (field) => {
