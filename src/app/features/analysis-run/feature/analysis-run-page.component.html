@@ -1,5 +1,8 @@
-@if (true) {
-  <app-analysis-target-form></app-analysis-target-form>
+@if (!isRunning()) {
+  <app-analysis-target-form (analysisTargetData)="runAnalysis($event)"></app-analysis-target-form>
 } @else {
-  <app-analysis-progress-spinner></app-analysis-progress-spinner>
+  <app-analysis-progress-spinner
+    [label]="label()"
+    (abort)="abortAnalysis()"
+  ></app-analysis-progress-spinner>
 }

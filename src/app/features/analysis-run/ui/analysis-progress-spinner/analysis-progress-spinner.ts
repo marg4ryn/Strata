@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-analysis-progress-spinner',
@@ -6,4 +6,11 @@ import { Component } from '@angular/core';
   templateUrl: './analysis-progress-spinner.html',
   styleUrl: './analysis-progress-spinner.scss',
 })
-export class AnalysisProgressSpinner {}
+export class AnalysisProgressSpinner {
+  label = input<string>('');
+  abort = output<void>();
+
+  onAbort(): void {
+    this.abort.emit();
+  }
+}

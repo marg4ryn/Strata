@@ -4,5 +4,7 @@
     <div class="spinner-ring"></div>
     <div class="spinner-ring"></div>
   </div>
-  <p class="loading-label">Loading...</p>
+  <p class="loading-label">{{ label() }}</p>
 </div>
+
+<button class="abort-btn" (click)="onAbort()">Abort</button>

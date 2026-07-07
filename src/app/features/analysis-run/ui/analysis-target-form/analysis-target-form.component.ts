@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
   form,
@@ -11,14 +11,7 @@ import {
   SchemaPath,
   debounce,
 } from '@angular/forms/signals';
-import { LoggerService } from '@core/logging/logger.service';
-
-interface AnalysisTarget {
-  URL: string;
-  limitRange: boolean;
-  startDate: Date | null;
-  endDate: Date | null;
-}
+import { AnalysisTarget } from '../../data-access/analysis-run.model';
 
 @Component({
   selector: 'app-analysis-target-form',
@@ -37,7 +30,7 @@ export class AnalysisTargetForm {
     endDate: null,
   });
 
-  private logger = inject(LoggerService);
+  analysisTargetData = output<AnalysisTarget>();
 
   analysisTargetModel = signal<AnalysisTarget>(this.INITIAL_MODEL());
 
@@ -68,27 +61,25 @@ export class AnalysisTargetForm {
       url(schemaPath.URL);
       maxLength(schemaPath.URL, 500);
 
-      afterDate(schemaPath.startDate, this.MIN_DATE, {
-        message: `Start date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
-      });
-      afterDate(schemaPath.endDate, this.MIN_DATE, {
-        message: `End date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
-      });
-      afterDate(schemaPath.endDate, schemaPath.startDate, {
-        message: 'End date must be after start date',
-      });
-      beforeDate(schemaPath.startDate, new Date(), {
-        message: 'Start date cannot be in the future',
-      });
-      beforeDate(schemaPath.endDate, new Date(), {
-        message: 'End date cannot be in the future',
-      });
+      afterDate(
+        schemaPath.startDate,
+        this.MIN_DATE,
+        `Start date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
+      );
+      afterDate(
+        schemaPath.endDate,
+        this.MIN_DATE,
+        `End date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
+      );
+      afterDate(schemaPath.endDate, schemaPath.startDate, 'End date must be after start date');
+      beforeDate(schemaPath.startDate, new Date(), 'Start date cannot be in the future');
+      beforeDate(schemaPath.endDate, new Date(), 'End date cannot be in the future');
     },
     {
       submission: {
         action: async (field) => {
           const formData = field().value();
-          this.logger.info(formData);
+          this.analysisTargetData.emit(formData);
           field().reset(this.INITIAL_MODEL());
         },
         onInvalid: (field) => {
@@ -122,7 +113,7 @@ function url(path: SchemaPath<string>, options?: { message?: string }) {
 function afterDate(
   path: SchemaPath<Date | null>,
   min: Date | SchemaPath<Date | null>,
-  options: { message: string },
+  message: string,
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
@@ -131,7 +122,7 @@ function afterDate(
     if (date && minDate && date < minDate) {
       return {
         kind: 'date',
-        message: options.message,
+        message: message,
       };
     }
     return null;
@@ -141,7 +132,7 @@ function afterDate(
 function beforeDate(
   path: SchemaPath<Date | null>,
   max: Date | SchemaPath<Date | null>,
-  options: { message: string },
+  message: string,
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
@@ -150,7 +141,7 @@ function beforeDate(
     if (date && maxDate && date > maxDate) {
       return {
         kind: 'date',
-        message: options.message,
+        message: message,
       };
     }
     return null;
