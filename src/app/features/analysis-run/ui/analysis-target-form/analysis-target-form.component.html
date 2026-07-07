@@ -1,0 +1,75 @@
+<div class="logo-container">
+  <img src="/logo.svg" class="logo" alt="" />
+</div>
+
+<div class="form-container">
+  <form [formRoot]="analysisTargetForm">
+    <label for="analysisTargetURL">Enter link to analysis target</label>
+    <input
+      type="url"
+      id="analysisTargetURL"
+      placeholder="https://github.com/JohnDoe/Project.git"
+      [formField]="analysisTargetForm.URL"
+      [class.invalid]="isInvalid(analysisTargetForm.URL)"
+    />
+
+    @if (analysisTargetForm.URL().touched() && analysisTargetForm.URL().invalid()) {
+      <ul class="error-list">
+        @for (error of analysisTargetForm.URL().errors(); track error.message) {
+          <li>{{ error.message }}</li>
+        }
+      </ul>
+    }
+
+    <label>
+      <input type="checkbox" [formField]="analysisTargetForm.limitRange" />
+      Limit date range
+    </label>
+
+    <div class="date-range-wrapper" [class.expanded]="!analysisTargetForm.startDate().hidden()">
+      @if (!analysisTargetForm.startDate().hidden()) {
+        <div class="date-range-container" animate.leave="collapsing">
+          <div class="dates-container">
+            <input
+              type="date"
+              [formField]="analysisTargetForm.startDate"
+              [class.invalid]="isInvalid(analysisTargetForm.startDate)"
+            />
+            <span>–</span>
+            <input
+              type="date"
+              [formField]="analysisTargetForm.endDate"
+              [class.invalid]="isInvalid(analysisTargetForm.endDate)"
+            />
+          </div>
+
+          @if (
+            analysisTargetForm.startDate().touched() && analysisTargetForm.startDate().invalid()
+          ) {
+            <ul class="error-list">
+              @for (error of analysisTargetForm.startDate().errors(); track error.message) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+
+          @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
+            <ul class="error-list">
+              @for (error of analysisTargetForm.endDate().errors(); track error.message) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+
+    <button type="submit" [disabled]="analysisTargetForm().submitting()">
+      @if (analysisTargetForm().submitting()) {
+        Loading ...
+      } @else {
+        Start Analysis
+      }
+    </button>
+  </form>
+</div>
