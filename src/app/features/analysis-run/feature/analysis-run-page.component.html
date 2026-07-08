@@ -2,7 +2,7 @@
   <app-analysis-target-form (analysisTargetData)="runAnalysis($event)"></app-analysis-target-form>
 } @else {
   <app-analysis-progress-spinner
-    [label]="label()"
+    [label]="label.value()"
     (abort)="abortAnalysis()"
   ></app-analysis-progress-spinner>
 }
