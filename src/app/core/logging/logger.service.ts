@@ -4,6 +4,7 @@ import { LogLevel } from './logger.enum';
 
 @Service()
 export class LoggerService {
+  private readonly isProduction: boolean = environment.production;
   private readonly isEnabled: boolean = environment.enableLogging;
   private readonly logLevel: LogLevel = environment.logLevel;
 
@@ -24,7 +25,7 @@ export class LoggerService {
   }
 
   private log(level: LogLevel, message: any, ...params: any[]): void {
-    if (!this.isEnabled || level < this.logLevel) return;
+    if (!this.isEnabled || this.isProduction || level < this.logLevel) return;
 
     const timestamp = new Date().toISOString();
     const prefix = `[${timestamp}] [${LogLevel[level]}]`;
