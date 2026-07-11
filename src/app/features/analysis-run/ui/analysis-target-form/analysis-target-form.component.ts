@@ -1,4 +1,4 @@
-import { Component, inject, signal, output } from '@angular/core';
+import { Component, signal, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import {
   form,
@@ -11,7 +11,7 @@ import {
   SchemaPath,
   debounce,
 } from '@angular/forms/signals';
-import { AnalysisTarget } from '../../data-access/analysis-run.model';
+import { AnalysisTargetFormModel } from '../../data-access/analysis-run.model';
 
 @Component({
   selector: 'app-analysis-target-form',
@@ -23,16 +23,16 @@ export class AnalysisTargetForm {
   private readonly datePipe = new DatePipe('en-US');
   private readonly MIN_DATE = new Date('1970-01-01');
 
-  private readonly INITIAL_MODEL = (): AnalysisTarget => ({
+  private readonly INITIAL_MODEL = (): AnalysisTargetFormModel => ({
     targetURL: '',
     limitRange: false,
     startDate: null,
     endDate: null,
   });
 
-  analysisTargetData = output<AnalysisTarget>();
+  analysisTargetData = output<AnalysisTargetFormModel>();
 
-  analysisTargetModel = signal<AnalysisTarget>(this.INITIAL_MODEL());
+  analysisTargetModel = signal<AnalysisTargetFormModel>(this.INITIAL_MODEL());
 
   analysisTargetForm = form(
     this.analysisTargetModel,

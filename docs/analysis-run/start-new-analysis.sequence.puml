@@ -13,17 +13,18 @@ database "SessionStorage" as SS
 database "LocalStorage" as LS
 
 U -> F: startAnalysis()
-note right of F: args: URL, limitRange, startDate, endDate
+note right of U: args: AnalysisTargetFormModel
 F -> O: startAnalysis()
+note right of F: args: AnalysisTargetFormModel
 O -> O: generateSessionId()
 O -> L: lockAnalysis(sessionId)
-O -> STG: saveAnalysis(sessionId, startedAt, targetUrl)
-STG -> SS: sessionId
-note right of SS: "a1b2c3d4-..."
+O -> STG: savePendingAnalysis()
+note right of O: args: PendingAnalysis
 STG -> LS: pendingAnalysis
-note left of LS: {"a1b2c3d4-...": { "sessionId": "a1b2c3d4-...", "startedAt": "...", "targetURL": "..." }}
-O -> WS: connect(sessionId, params)
-WS -> SRV: connect(sessionId, params)
+O -> STG: saveSessionId(sessionId)
+STG -> SS: sessionId
+O -> WS: connect(params)
+WS -> SRV: connect(params)
 WS -> ST: isBusy.set(true)
 ST -> F: emit(isBusy)
 

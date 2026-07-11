@@ -1,7 +1,7 @@
 import { Component, inject, computed, debounced } from '@angular/core';
 import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-form.component';
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner';
-import { AnalysisStatus, AnalysisTarget } from '../data-access/analysis-run.model';
+import { AnalysisStatus, AnalysisTargetFormModel } from '../data-access/analysis-run.model';
 import { LoggerService } from '@app/core/logging/logger.service';
 import { WebSocketService } from '../data-access/web-socket/web-socket.service';
 
@@ -25,7 +25,7 @@ export class AnalysisRunPage {
 
   isBusy = this.websocket.isBusy;
 
-  runAnalysis(data: AnalysisTarget): void {
+  runAnalysis(data: AnalysisTargetFormModel): void {
     this.logger.info(`Analysis target form accepted data: `, data);
 
     if (!data.limitRange) {

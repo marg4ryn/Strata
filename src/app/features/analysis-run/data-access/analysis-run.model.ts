@@ -1,10 +1,3 @@
-export interface AnalysisTarget {
-  targetURL: string;
-  limitRange: boolean;
-  startDate: Date | null;
-  endDate: Date | null;
-}
-
 export enum AnalysisStatus {
   QUEUED = 'Queued',
   CLONING = 'Cloning',
@@ -16,8 +9,35 @@ export enum AnalysisStatus {
 
 export type AnalysisStatusKey = keyof typeof AnalysisStatus;
 
+export interface AnalysisTargetFormModel {
+  targetURL: string;
+  limitRange: boolean;
+  startDate: Date | null;
+  endDate: Date | null;
+}
+
+export type ISODateString = string; // Alias ​​for readability - "YYYY-MM-DD"
+
+export interface DateRange {
+  startDate: ISODateString;
+  endDate: ISODateString;
+  timezone: string; // IANA name, e.g. "Europe/Warsaw" - context for both dates above
+}
+
+export interface AnalysisTarget {
+  targetURL: string;
+  limitRange: boolean;
+  range: DateRange | null;
+}
+
 export interface PendingAnalysis {
   sessionId: string;
-  startedAt: Date;
-  targetUrl: string;
+  startedAt: number;
+  target: AnalysisTarget;
+}
+
+export interface AnalysisHistoryEntry {
+  analysisId: string;
+  startedAt: number;
+  target: AnalysisTarget;
 }
