@@ -24,7 +24,7 @@ export class AnalysisTargetForm {
   private readonly MIN_DATE = new Date('1970-01-01');
 
   private readonly INITIAL_MODEL = (): AnalysisTarget => ({
-    URL: '',
+    targetURL: '',
     limitRange: false,
     startDate: null,
     endDate: null,
@@ -37,9 +37,9 @@ export class AnalysisTargetForm {
   analysisTargetForm = form(
     this.analysisTargetModel,
     (schemaPath) => {
-      debounce(schemaPath.URL, 300);
+      debounce(schemaPath.targetURL, 300);
 
-      required(schemaPath.URL, {
+      required(schemaPath.targetURL, {
         message: 'URL is required',
       });
       required(schemaPath.startDate, {
@@ -58,8 +58,8 @@ export class AnalysisTargetForm {
         when: ({ valueOf }) => !valueOf(schemaPath.limitRange),
       });
 
-      url(schemaPath.URL);
-      maxLength(schemaPath.URL, 500);
+      url(schemaPath.targetURL);
+      maxLength(schemaPath.targetURL, 500);
 
       afterDate(
         schemaPath.startDate,

@@ -13,16 +13,19 @@ participant "Server" as SRV
 database "Session Storage" as SS
 database "Local Storage" as LS
 
-O -> STG: read pendingAnalyses
+O -> STG: getPendingAnalyses()
+STG -> O: pendingAnalyses
 
 alt pendingAnalyses empty
     note left of O: goto Start New Analysis
 
 else pendingAnalyses exist
-    O -> L: read locks
+    O -> L: get locks
+    L -> O: locks
 
     loop Unprocessed analysis without lock?
         O -> L: lock sessionID
+        L -> O: success?
 
         opt Lock acquired
             O -> ST: showModal.set(true)
@@ -43,8 +46,8 @@ else pendingAnalyses exist
             else User cancels analysis
                 O -> ST: showModal.set(false)
                 ST -> F: emit(showModal)
-                O -> STG: deleteAnalysis(sessionId)
-                STG -> LS: deleteAnalysis(sessionId)
+                O -> STG: deletePendingAnalysis(sessionId)
+                STG -> LS: deletePendingAnalysis(sessionId)
                 O -> L: unlockAnalysis(sessionId)
                 O -> ST: resetState()
             end

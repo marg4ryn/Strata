@@ -23,29 +23,33 @@ alt isBusy = true
 
 else isBusy = false
     O -> ST: resetState()
-    O -> STG: read sessionId
+    O -> STG: getSessionId()
+    STG -> O: sessionId
 
     alt sessionId does not exist
         note left of O: goto Try To Resume Analysis
 
     else sessionId exists
-        O -> STG: read pendindAnalyses
+        O -> STG: getPendingAnalyses()
+        STG -> O: pendingAnalyses
 
         alt sessionId not in pendingAnalyses
-            O -> STG: deleteSessionId(sessionId)
-            STG -> SS: deleteSessionId(sessionId)
+            O -> STG: deleteSessionId()
+            STG -> SS: deleteSessionId()
             note left of O: goto Try To Resume Analysis
 
         else sessionId in pendingAnalyses
-            O -> L: read locks
+            O -> L: get locks
+            L -> O: locks
 
             alt Lock for sessionId exists
-                O -> STG: deleteSessionId(sessionId)
-                STG -> SS: deleteSessionId(sessionId)
+                O -> STG: deleteSessionId()
+                STG -> SS: deleteSessionId()
                 note left of O: goto Try To Resume Analysis
             
             else sessionId available
                 O -> L: lock sessionID
+                L -> O: success?
 
                 alt Lock acquired
                     O -> WS: reconnect(sessionId)
@@ -56,8 +60,8 @@ else isBusy = false
                     note left of O: goto Continue Analysis
 
                 else Lock unsuccessful
-                    O -> STG: deleteSessionId(sessionId)
-                    STG -> SS: deleteSessionId(sessionId)
+                    O -> STG: deleteSessionId()
+                    STG -> SS: deleteSessionId()
                     note left of O: goto Try To Resume Analysis
                 end
             end

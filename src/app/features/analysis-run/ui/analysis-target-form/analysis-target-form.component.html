@@ -9,13 +9,13 @@
       type="url"
       id="analysisTargetURL"
       placeholder="https://github.com/JohnDoe/Project.git"
-      [formField]="analysisTargetForm.URL"
-      [class.invalid]="isInvalid(analysisTargetForm.URL)"
+      [formField]="analysisTargetForm.targetURL"
+      [class.invalid]="isInvalid(analysisTargetForm.targetURL)"
     />
 
-    @if (analysisTargetForm.URL().touched() && analysisTargetForm.URL().invalid()) {
+    @if (analysisTargetForm.targetURL().touched() && analysisTargetForm.targetURL().invalid()) {
       <ul class="error-list">
-        @for (error of analysisTargetForm.URL().errors(); track error.message) {
+        @for (error of analysisTargetForm.targetURL().errors(); track error.message) {
           <li>{{ error.message }}</li>
         }
       </ul>

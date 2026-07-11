@@ -65,9 +65,9 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, '');
       await advance(300);
 
-      expect(component.analysisTargetForm.URL().invalid()).toBe(true);
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(true);
       const messages = component.analysisTargetForm
-        .URL()
+        .targetURL()
         .errors()
         .map((e: any) => e.message);
       expect(messages).toContain('URL is required');
@@ -78,9 +78,9 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, 'not-a-valid-url');
       await advance(300);
 
-      expect(component.analysisTargetForm.URL().invalid()).toBe(true);
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(true);
       const messages = component.analysisTargetForm
-        .URL()
+        .targetURL()
         .errors()
         .map((e: any) => e.message);
       expect(messages).toContain('Enter a valid URL');
@@ -91,7 +91,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, 'https://github.com/JohnDoe/Project.git');
       await advance(300);
 
-      expect(component.analysisTargetForm.URL().invalid()).toBe(false);
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(false);
     });
 
     it('should be invalid when exceeding max length of 500 characters', async () => {
@@ -100,7 +100,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, longUrl);
       await advance(300);
 
-      expect(component.analysisTargetForm.URL().invalid()).toBe(true);
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(true);
     });
 
     it('should debounce validation by 300ms', async () => {
@@ -111,7 +111,7 @@ describe('AnalysisTargetForm', () => {
 
       const hasUrlError = () =>
         component.analysisTargetForm
-          .URL()
+          .targetURL()
           .errors()
           .some((e: any) => e.kind === 'url');
 
@@ -160,7 +160,7 @@ describe('AnalysisTargetForm', () => {
 
       expect(component.analysisTargetForm.startDate().hidden()).toBe(true);
       submitForm();
-      expect(component.analysisTargetForm.URL().invalid()).toBe(true); // still empty
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(true); // still empty
       expect(getDateInputs().length).toBe(0);
     });
   });
@@ -252,7 +252,7 @@ describe('AnalysisTargetForm', () => {
       submitForm();
       fixture.detectChanges();
 
-      expect(component.analysisTargetForm.URL().invalid()).toBe(true);
+      expect(component.analysisTargetForm.targetURL().invalid()).toBe(true);
       expect(document.activeElement).toBe(getUrlInput());
     });
 
@@ -281,7 +281,7 @@ describe('AnalysisTargetForm', () => {
   // ---------------------------------------------------------------------
   describe('isInvalid helper', () => {
     it('should return false when field is untouched, even if invalid', () => {
-      expect(component.isInvalid(component.analysisTargetForm.URL)).toBe(false);
+      expect(component.isInvalid(component.analysisTargetForm.targetURL)).toBe(false);
     });
 
     it('should return true only after the field has been touched and is invalid', async () => {
@@ -289,7 +289,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, '');
       await advance(300);
 
-      expect(component.isInvalid(component.analysisTargetForm.URL)).toBe(true);
+      expect(component.isInvalid(component.analysisTargetForm.targetURL)).toBe(true);
     });
 
     it('should add the "invalid" class to the URL input when isInvalid is true', async () => {

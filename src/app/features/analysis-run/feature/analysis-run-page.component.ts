@@ -30,11 +30,11 @@ export class AnalysisRunPage {
 
     if (!data.limitRange) {
       this.websocket.connect({
-        repositoryUrl: data.URL,
+        repositoryUrl: data.targetURL,
       });
     } else {
       this.websocket.connect({
-        repositoryUrl: data.URL,
+        repositoryUrl: data.targetURL,
         startDate: data.startDate!.toISOString().split('T')[0],
         endDate: data.endDate!.toISOString().split('T')[0],
       });

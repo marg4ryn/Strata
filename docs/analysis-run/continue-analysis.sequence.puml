@@ -63,9 +63,10 @@ else Connection / Server Error
     end
 end
 
-O -> STG: deleteAnalysis(sessionId)
-STG -> SS: deleteSessionId(sessionId)
-STG -> LS: deleteAnalysis(sessionId)
+O -> STG: deleteSessionId()
+STG -> SS: deleteSessionId()
+O -> STG: deletePendingAnalysis(sessionId)
+STG -> LS: deletePendingAnalysis(sessionId)
 O -> L: unlockAnalysis(sessionId)
 O -> ST: resetState()
 

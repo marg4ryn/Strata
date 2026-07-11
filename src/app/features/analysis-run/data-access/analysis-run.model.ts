@@ -1,5 +1,5 @@
 export interface AnalysisTarget {
-  URL: string;
+  targetURL: string;
   limitRange: boolean;
   startDate: Date | null;
   endDate: Date | null;
@@ -15,3 +15,9 @@ export enum AnalysisStatus {
 }
 
 export type AnalysisStatusKey = keyof typeof AnalysisStatus;
+
+export interface PendingAnalysis {
+  sessionId: string;
+  startedAt: Date;
+  targetUrl: string;
+}
