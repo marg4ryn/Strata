@@ -54,6 +54,7 @@ else isBusy = false
                 alt Lock acquired
                     O -> WS: reconnect(sessionId)
                     WS -> SRV: reconnect(sessionId)
+                    WS -> ST: isBusy.set(true)
                     SRV -> WS: progresss
                     WS -> ST: progress.set(...)
                     ST -> F: emit(progress)

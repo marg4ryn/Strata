@@ -1,23 +1,26 @@
-import { inject, Service, signal } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { environment } from '@env/environment';
 import { AnalysisStatusKey } from '../analysis-run.model';
+import { StoreService } from '../store/store.service';
 import { LoggerService } from '@app/core/logging/logger.service';
 
 type WsMessage =
   | { type: 'progress'; data: AnalysisStatusKey }
   | { type: 'success'; data: string }
-  | { type: 'error'; data: string };
+  | { type: 'error'; data: string }
+  | { type: 'aborted' };
 
 @Service()
 export class WebSocketService {
   private readonly logger = inject(LoggerService);
+  private readonly store = inject(StoreService);
 
   private socket?: WebSocket;
 
-  isBusy = signal<boolean>(false);
-  progress = signal<AnalysisStatusKey | null>(null);
-  result = signal<string>('');
-  error = signal<string>('');
+  isBusy = this.store.isBusy;
+  progress = this.store.progress;
+  result = this.store.result;
+  error = this.store.error;
 
   connect(params?: Record<string, string>): void {
     const url = this.constructUrl(params);
@@ -40,6 +43,9 @@ export class WebSocketService {
             break;
           case 'success':
             this.result.set(message.data);
+            this.disconnect();
+            break;
+          case 'aborted':
             this.disconnect();
             break;
           case 'error':
@@ -66,6 +72,18 @@ export class WebSocketService {
       this.logger.debug('WebSocket Service closed connection');
       this.isBusy.set(false);
     };
+  }
+
+  abort(): void {
+    if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    this.socket.send(
+      JSON.stringify({
+        type: 'abort',
+      }),
+    );
   }
 
   disconnect(): void {

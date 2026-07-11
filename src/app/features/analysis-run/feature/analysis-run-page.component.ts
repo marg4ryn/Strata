@@ -3,6 +3,7 @@ import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-f
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner';
 import { AnalysisStatus, AnalysisTargetFormModel } from '../data-access/analysis-run.model';
 import { LoggerService } from '@app/core/logging/logger.service';
+import { AnalysisRunFacade } from '../data-access/facade/analysis-run.facade';
 import { WebSocketService } from '../data-access/web-socket/web-socket.service';
 
 @Component({
@@ -13,17 +14,18 @@ import { WebSocketService } from '../data-access/web-socket/web-socket.service';
 })
 export class AnalysisRunPage {
   private readonly logger = inject(LoggerService);
+  private readonly facade = inject(AnalysisRunFacade);
   private readonly websocket = inject(WebSocketService);
 
   label = debounced(
     computed(() => {
-      const progress = this.websocket.progress();
+      const progress = this.facade.progress();
       return progress ? `${AnalysisStatus[progress]}...` : 'Connecting...';
     }),
     800,
   );
 
-  isBusy = this.websocket.isBusy;
+  isBusy = this.facade.isBusy;
 
   runAnalysis(data: AnalysisTargetFormModel): void {
     this.logger.info(`Analysis target form accepted data: `, data);

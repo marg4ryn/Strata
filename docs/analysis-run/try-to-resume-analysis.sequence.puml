@@ -38,6 +38,7 @@ else pendingAnalyses exist
                 STG -> SS: sessionId
                 O -> WS: reconnect(sessionId)
                 WS -> SRV: reconnect(sessionId)
+                WS -> ST: isBusy.set(true)
                 SRV -> WS: progresss
                 WS -> ST: progress.set(...)
                 ST -> F: emit(progress)

@@ -17,15 +17,15 @@ describe('StoreService', () => {
     it('should reset state', () => {
       store.showModal.set(true);
       store.isBusy.set(true);
-      store.progress.set('foo');
-      store.result.set('bar');
-      store.error.set('baz');
+      store.progress.set('QUEUED');
+      store.result.set('foo');
+      store.error.set('bar');
 
       store.resetState();
 
       expect(store.showModal()).toBeFalsy();
       expect(store.isBusy()).toBeFalsy();
-      expect(store.progress()).toBe('');
+      expect(store.progress()).toBeNull();
       expect(store.result()).toBe('');
       expect(store.error()).toBe('');
     });
