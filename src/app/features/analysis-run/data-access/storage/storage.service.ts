@@ -83,13 +83,19 @@ export class StorageService {
   }
 
   deletePendingAnalysis(sessionId: string): void {
-    const pendingAnalyses = this.getPendingAnalyses() ?? [];
+    const pendingAnalyses = this.getPendingAnalyses();
+    if (pendingAnalyses === null) return;
+
     const remainingAnalyses = pendingAnalyses.filter(
       (analysis) => analysis.sessionId !== sessionId,
     );
 
     try {
-      localStorage.setItem(this.PENDING_ANALYSES_KEY, JSON.stringify(remainingAnalyses));
+      if (remainingAnalyses.length !== 0) {
+        localStorage.setItem(this.PENDING_ANALYSES_KEY, JSON.stringify(remainingAnalyses));
+      } else {
+        localStorage.removeItem(this.PENDING_ANALYSES_KEY);
+      }
       this.logger.info(
         `Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
       );
