@@ -67,8 +67,17 @@ export class StorageService {
       return pendingAnalyses;
     } catch (error) {
       this.logger.error('Failed to parse pendingAnalyses JSON, clearing corrupted data: ', error);
-      localStorage.removeItem(this.PENDING_ANALYSES_KEY);
+      this.removePendingAnalysesItem();
       return null;
+    }
+  }
+
+  removePendingAnalysesItem(): void {
+    try {
+      localStorage.removeItem(this.PENDING_ANALYSES_KEY);
+      this.logger.info(`Storage Service removed pendingAnalyses from localStorage`);
+    } catch (error) {
+      this.logger.error('Failed to remove pendingAnalyses from localStorage: ', error);
     }
   }
 
@@ -93,12 +102,12 @@ export class StorageService {
     try {
       if (remainingAnalyses.length !== 0) {
         localStorage.setItem(this.PENDING_ANALYSES_KEY, JSON.stringify(remainingAnalyses));
+        this.logger.info(
+          `Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
+        );
       } else {
-        localStorage.removeItem(this.PENDING_ANALYSES_KEY);
+        this.removePendingAnalysesItem();
       }
-      this.logger.info(
-        `Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
-      );
     } catch (error) {
       this.logger.error(
         `Failed to remove pendingAnalysis with sessionId: ${sessionId} from localStorage: `,

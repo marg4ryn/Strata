@@ -185,15 +185,7 @@ describe('StorageService', () => {
       );
     });
 
-    it('should not throw on remove item storage error', () => {
-      vi.spyOn(storage, 'getPendingAnalyses').mockReturnValue([pendingAnalysis]);
-      vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
-        throw new Error('Storage error');
-      });
-      expect(() => storage.deletePendingAnalysis('1')).not.toThrow();
-    });
-
-    it('should not throw on set item storage error', () => {
+    it('should not throw on storage error', () => {
       vi.spyOn(storage, 'getPendingAnalyses').mockReturnValue([
         pendingAnalysis,
         newPendingAnalysis,
@@ -266,6 +258,31 @@ describe('StorageService', () => {
       });
       const errorSpy = vi.spyOn(logger, 'error');
       storage.getPendingAnalyses();
+      expect(errorSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('removePendingAnalysesItem', () => {
+    it('should remove storage item', () => {
+      const removeItemSpy = vi.spyOn(Storage.prototype, 'removeItem');
+      storage.removePendingAnalysesItem();
+      expect(removeItemSpy).toHaveBeenCalledWith('pendingAnalyses');
+    });
+
+    it('should not throw on storage error', () => {
+      vi.spyOn(storage, 'getPendingAnalyses').mockReturnValue([pendingAnalysis]);
+      vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+      expect(() => storage.removePendingAnalysesItem()).not.toThrow();
+    });
+
+    it('should log storage error', () => {
+      vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+        throw new Error('Storage error');
+      });
+      const errorSpy = vi.spyOn(logger, 'error');
+      storage.removePendingAnalysesItem();
       expect(errorSpy).toHaveBeenCalled();
     });
   });
