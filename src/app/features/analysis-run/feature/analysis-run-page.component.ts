@@ -2,48 +2,55 @@ import { Component, inject, computed, debounced } from '@angular/core';
 import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-form.component';
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner';
 import { AnalysisStatus, AnalysisTargetFormModel } from '../data-access/analysis-run.model';
-import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisRunFacade } from '../data-access/facade/analysis-run.facade';
-import { WebSocketService } from '../data-access/web-socket/web-socket.service';
 
 @Component({
-  selector: 'app-analysis-run-page.component',
+  selector: 'app-analysis-run-page',
   imports: [AnalysisTargetForm, AnalysisProgressSpinner],
   templateUrl: './analysis-run-page.component.html',
   styleUrl: './analysis-run-page.component.scss',
 })
 export class AnalysisRunPage {
-  private readonly logger = inject(LoggerService);
   private readonly facade = inject(AnalysisRunFacade);
-  private readonly websocket = inject(WebSocketService);
+
+  showModal = this.facade.showModal;
+  isBusy = this.facade.isBusy;
+  progress = this.facade.progress;
+  error = this.facade.error;
 
   label = debounced(
     computed(() => {
-      const progress = this.facade.progress();
+      const progress = this.progress();
       return progress ? `${AnalysisStatus[progress]}...` : 'Connecting...';
     }),
     800,
   );
 
-  isBusy = this.facade.isBusy;
+  ngOnInit() {
+    this.facade.tryToReconnect();
+  }
 
-  runAnalysis(data: AnalysisTargetFormModel): void {
-    this.logger.info(`Analysis target form accepted data: `, data);
-
-    if (!data.limitRange) {
-      this.websocket.connect({
-        repositoryUrl: data.targetURL,
-      });
-    } else {
-      this.websocket.connect({
-        repositoryUrl: data.targetURL,
-        startDate: data.startDate!.toISOString().split('T')[0],
-        endDate: data.endDate!.toISOString().split('T')[0],
-      });
-    }
+  startNewAnalysis(formData: AnalysisTargetFormModel): void {
+    this.facade.startNewAnalysis(formData);
   }
 
   abortAnalysis(): void {
-    this.websocket.disconnect();
+    this.facade.abortAnalysis();
+  }
+
+  resumeAnalysis(): void {
+    this.facade.resumeAnalysis();
+  }
+
+  retryAnalysis(): void {
+    this.facade.retryAnalysis();
+  }
+
+  cancelAnalysis(): void {
+    this.facade.cancelAnalysis();
+  }
+
+  abandonAnalysis(): void {
+    this.facade.abandonAnalysis();
   }
 }

@@ -72,8 +72,8 @@ export class AnalysisTargetForm {
         `End date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
       );
       afterDate(schemaPath.endDate, schemaPath.startDate, 'End date must be after start date');
-      beforeDate(schemaPath.startDate, new Date(), 'Start date cannot be in the future');
-      beforeDate(schemaPath.endDate, new Date(), 'End date cannot be in the future');
+      beforeDate(schemaPath.startDate, localNowAsUtcMidnight, 'Start date cannot be in the future');
+      beforeDate(schemaPath.endDate, localNowAsUtcMidnight, 'End date cannot be in the future');
     },
     {
       submission: {
@@ -118,12 +118,10 @@ function afterDate(
   validate(path, ({ value, valueOf }) => {
     const date = value();
     const minDate = min instanceof Date ? min : valueOf(min);
+    if (!date || !minDate) return null;
 
-    if (date && minDate && date < minDate) {
-      return {
-        kind: 'date',
-        message: message,
-      };
+    if (toCalendarKey(date) < toCalendarKey(minDate)) {
+      return { kind: 'date', message };
     }
     return null;
   });
@@ -131,19 +129,26 @@ function afterDate(
 
 function beforeDate(
   path: SchemaPath<Date | null>,
-  max: Date | SchemaPath<Date | null>,
+  max: Date | (() => Date) | SchemaPath<Date | null>,
   message: string,
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
-    const maxDate = max instanceof Date ? max : valueOf(max);
+    const maxDate = max instanceof Date ? max : typeof max === 'function' ? max() : valueOf(max);
+    if (!date || !maxDate) return null;
 
-    if (date && maxDate && date > maxDate) {
-      return {
-        kind: 'date',
-        message: message,
-      };
+    if (toCalendarKey(date) > toCalendarKey(maxDate)) {
+      return { kind: 'date', message };
     }
     return null;
   });
+}
+
+function toCalendarKey(date: Date): number {
+  return date.getUTCFullYear() * 10000 + date.getUTCMonth() * 100 + date.getUTCDate();
+}
+
+function localNowAsUtcMidnight(): Date {
+  const now = new Date();
+  return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 }

@@ -1,5 +1,7 @@
 @if (!isBusy()) {
-  <app-analysis-target-form (analysisTargetData)="runAnalysis($event)"></app-analysis-target-form>
+  <app-analysis-target-form
+    (analysisTargetData)="startNewAnalysis($event)"
+  ></app-analysis-target-form>
 } @else {
   <app-analysis-progress-spinner
     [label]="label.value()"
