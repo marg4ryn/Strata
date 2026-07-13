@@ -23,6 +23,7 @@ case (Connection or server error)
     :Ask whether to retry analysis;
 
     if (Retry?) then (yes)
+       :Delete error;
        :Continue analysis;
        stop
     endif

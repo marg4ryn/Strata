@@ -8,24 +8,30 @@ if (pendingAnalyses empty?) then (yes)
     stop
 endif
 
-:Query Web Locks;
-
-while (Unprocessed analysis without lock?) is (yes)
+while (Unprocessed pendingAnalysis?) is (yes)
     :Select analysis;
     :Try to acquire lock;
 
     if (Lock acquired?) then (yes)
-        :Ask user whether to continue analysis;
+        :Read pendingAnalyses;
 
-        if (User wants to continue?) then (yes)
-            :Save sessionId in sessionStorage;
-            :Reconnect to sessionId;
-            :Receive last status;
-            :Continue analysis;
-            stop
-        else (no)
-            :Delete pendingAnalysis from localStorage;
+        if (Locked sessionId still in pendingAnalyses?) then (no)
             :Release lock;
+
+        else (yes)
+            :Ask user whether to continue analysis;
+
+            if (User wants to continue?) then (yes)
+                :Save sessionId in sessionStorage;
+                :Reconnect to sessionId;
+                :Receive last status;
+                :Continue analysis;
+                stop
+
+            else (no)
+                :Delete pendingAnalysis from localStorage;
+                :Release lock;
+            endif
         endif
     endif
 endwhile (no)

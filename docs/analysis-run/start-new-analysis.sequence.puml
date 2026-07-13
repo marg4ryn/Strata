@@ -3,7 +3,7 @@
 participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
-participant "Lock Web API" as L
+participant "Lock Service" as L
 participant "Store Service" as ST
 participant "Storage Service" as STG
 participant "Web Socket Service" as WS
@@ -12,20 +12,27 @@ participant "Server" as SRV
 database "SessionStorage" as SS
 database "LocalStorage" as LS
 
-U -> F: startAnalysis()
+U -> F: startNewAnalysis()
 note right of U: args: AnalysisTargetFormModel
-F -> O: startAnalysis()
+F -> O: startNewAnalysis()
 note right of F: args: AnalysisTargetFormModel
 O -> O: generateSessionId()
-O -> L: lockAnalysis(sessionId)
+O -> O: constructPendingAnalysis()
+note right of O: args: AnalysisTargetFormModel
+O -> L: lock(sessionId)
+O -> ST: pendingAnalysis.set()
+note right of O: args: PendingAnalysis
 O -> STG: savePendingAnalysis()
 note right of O: args: PendingAnalysis
 STG -> LS: pendingAnalysis
 O -> STG: saveSessionId(sessionId)
 STG -> SS: sessionId
+O -> O: constructConnectionParams()
+note right of O: args: PendingAnalysis
 O -> WS: connect(params)
 WS -> SRV: connect(params)
 WS -> ST: isBusy.set(true)
 ST -> F: emit(isBusy)
+F -> U: emit(isBusy)
 
 @enduml

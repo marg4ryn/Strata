@@ -1,0 +1,40 @@
+@startuml Try To Reconnect
+
+start
+
+if (isBusy?) then (yes)
+    :Continue analysis;
+    stop
+endif
+
+:Reset state;
+:Read sessionId from sessionStorage;
+
+if (sessionId exists?) then (no)
+    :Try to resume analysis;
+    stop
+endif
+
+:Lock sessionId;
+
+if (Lock acquired?) then (no)
+    :Delete sessionId from sessionStorage;
+    :Try to resume analysis;
+    stop
+endif
+
+:Read pendingAnalyses;
+
+if (sessionId in pendingAnalyses?) then (no)
+    :Delete sessionId from sessionStorage;
+    :Release lock;
+    :Try to resume analysis;
+    stop
+endif
+
+:Reconnect to sessionId;
+:Receive last status;
+:Continue analysis;
+stop
+
+@enduml

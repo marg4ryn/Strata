@@ -3,7 +3,7 @@
 participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
-participant "Lock Web API" as L
+participant "Lock Service" as L
 participant "Notification Service" as N
 participant "Store Service" as ST
 participant "Storage Service" as STG
@@ -20,37 +20,52 @@ alt pendingAnalyses empty
     note left of O: goto Start New Analysis
 
 else pendingAnalyses exist
-    O -> L: get locks
-    L -> O: locks
-
-    loop Unprocessed analysis without lock?
-        O -> L: lock sessionID
-        L -> O: success?
+    loop Unprocessed pendingAnalysis?
+        O -> L: lock(sessionId)
+        L -> O: acquired
 
         opt Lock acquired
-            O -> ST: showModal.set(true)
-            ST -> F: emit(showModal)
+            O -> STG: getPendingAnalyses()
+            STG -> O: pendingAnalyses
+            
+            alt Locked sessionId was deleted from pendingAnalyses
+                O -> L: unlock(sessionId)
 
-            alt User wants to continue
-                O -> ST: showModal.set(false)
+            else Locked sessionId still in pendingAnalyses
+                O -> ST: showModal.set(true)
                 ST -> F: emit(showModal)
-                O -> STG: saveSessionId(sessionId)
-                STG -> SS: sessionId
-                O -> WS: reconnect(sessionId)
-                WS -> SRV: reconnect(sessionId)
-                WS -> ST: isBusy.set(true)
-                SRV -> WS: progresss
-                WS -> ST: progress.set(...)
-                ST -> F: emit(progress)
-                note left of O: goto Continue Analysis
+                F -> U: emit(showModal)
 
-            else User cancels analysis
-                O -> ST: showModal.set(false)
-                ST -> F: emit(showModal)
-                O -> STG: deletePendingAnalysis(sessionId)
-                STG -> LS: deletePendingAnalysis(sessionId)
-                O -> L: unlockAnalysis(sessionId)
-                O -> ST: resetState()
+                alt User wants to continue
+                    U -> F: resumeAnalysis()
+                    F -> O: resumeAnalysis()
+                    O -> STG: saveSessionId(sessionId)
+                    STG -> SS: sessionId
+                    O -> WS: reconnect(sessionId)
+                    WS -> SRV: reconnect(sessionId)
+                    WS -> ST: isBusy.set(true)
+                    ST -> F: emit(isBusy)
+                    F -> U: emit(isBusy)
+                    O -> ST: showModal.set(false)
+                    ST -> F: emit(showModal)
+                    F -> U: emit(showModal)
+                    SRV -> WS: progresss
+                    WS -> ST: progress.set(...)
+                    ST -> F: emit(progress)
+                    F -> U: emit(progress)
+                    note left of O: goto Continue Analysis
+
+                else User abandons analysis
+                    U -> F: abandonAnalysis();
+                    F -> O: abandonAnalysis();
+                    O -> STG: deletePendingAnalysis(sessionId)
+                    STG -> LS: deletePendingAnalysis(sessionId)
+                    O -> L: unlockAnalysis(sessionId)
+                    O -> N: sendMessageCancel()
+                    O -> ST: resetState()
+                    ST -> F: emit(showModal)
+                    F -> U: emit(showModal)
+                end
             end
         end
     end

@@ -3,8 +3,10 @@
 participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
-participant "Lock Web API" as L
+participant "Lock Service" as L
 participant "Notification Service" as N
+participant "History Service" as H
+participant "Analysis Results Service" as ARS
 participant "Store Service" as ST
 participant "Storage Service" as STG
 participant "Web Socket Service" as WS
@@ -17,27 +19,34 @@ loop Until closed
     SRV -> WS: progress
     WS -> ST: progress.set(...)
     ST -> F: emit(progress)
+    F -> U: emit(progress)
 end
 
 alt Analysis Successful
     SRV -> WS: result
+    WS -> ST: result.set(analysisId)
+    ST -> O: emit(result)
+    O -> N: sendMessageSuccess()
+    O -> O: constructAnalysisHistoryEntry()
+    note right of O: args: PendingAnalysis
+    O -> H: saveAnalysisToHistory()
+    note right of O: args: AnalysisHistoryEntry
+    O -> ARS: call analysis results feature
     SRV -> WS: connection.close()
     WS -> ST: isBusy.set(false)
-    WS -> ST: result.set(analysisId)
     ST -> F: emit(isBusy)
-    ST -> F: emit(analysisId)
-    ST -> O: emit(analysisId)
-    O -> N: sendMessageSuccess()
+    F -> U: emit(isBusy)
 
 else User Aborts
-    U -> F: abort()
-    F -> O: abort()
-    O -> WS: abortConnection()    
+    U -> F: abortAnalysis()
+    F -> O: abortAnalysis()
+    O -> WS: abort()    
     WS -> SRV: abort()
     WS -> SRV: connection.close()
     WS -> ST: isBusy.set(false)
     ST -> F: emit(isBusy)
-    O -> N: sendMessageAbort()
+    F -> U: emit(isBusy)
+    O -> N: sendMessageCancel()
 
 else Connection / Server Error
     SRV -> WS: connection.close()
@@ -45,21 +54,31 @@ else Connection / Server Error
     WS -> ST: error.set(...)
     ST -> F: emit(isBusy)
     ST -> F: emit(error)
+    F -> U: emit(isBusy)
+    F -> U: emit(error)
     ST -> O: emit(error)
     O -> N: sendMessageError()
 
     alt With Retry
-        U -> F: retry()
-        F -> O: retry()
+        U -> F: retryAnalysis()
+        F -> O: retryAnalysis()
+        O -> ST: error.set(null)
+        ST -> F: emit(error)
+        F -> U: emit(error)
         O -> WS: reconnect(sessionId)
         WS -> SRV: reconnect(sessionId)
         WS -> ST: isBusy.set(true)
         ST -> F: emit(isBusy)
+        F -> U: emit(isBusy)
         note left of O: goto progress loop
 
     else Without Retry
-        U -> F: cancel()
-        F -> O: cancel()
+        U -> F: cancelAnalysis()
+        F -> O: cancelAnalysis()
+        O -> N: sendMessageCancel()
+        O -> ST: error.set(null)
+        ST -> F: emit(error)
+        F -> U: emit(error)
     end
 end
 
