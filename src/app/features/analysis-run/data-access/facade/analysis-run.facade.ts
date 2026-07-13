@@ -8,10 +8,10 @@ export class AnalysisRunFacade {
   private readonly store = inject(StoreService);
   private readonly orchestrator = inject(OrchestratorService);
 
-  showModal = computed(() => this.store.showModal());
-  isBusy = computed(() => this.store.isBusy());
-  progress = computed(() => this.store.progress());
-  error = computed(() => this.store.error());
+  readonly showModal = computed(() => this.store.showModal());
+  readonly isBusy = computed(() => this.store.isBusy());
+  readonly progress = computed(() => this.store.progress());
+  readonly error = computed(() => this.store.error());
 
   startNewAnalysis(formData: AnalysisTargetFormModel): void {
     this.orchestrator.startNewAnalysis(formData);

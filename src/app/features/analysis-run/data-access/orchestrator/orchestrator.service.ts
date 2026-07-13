@@ -19,11 +19,11 @@ interface AnalysisHistoryEntry {
 
 @Service()
 export class OrchestratorService {
-  store = inject(StoreService);
-  storage = inject(StorageService);
-  webSocket = inject(WebSocketService);
-  locker = inject(LockService);
-  logger = inject(LoggerService);
+  private readonly store = inject(StoreService);
+  private readonly storage = inject(StorageService);
+  private readonly webSocket = inject(WebSocketService);
+  private readonly locker = inject(LockService);
+  private readonly logger = inject(LoggerService);
 
   constructor() {
     effect(() => {

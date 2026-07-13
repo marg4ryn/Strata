@@ -17,10 +17,10 @@ export class WebSocketService {
 
   private socket?: WebSocket;
 
-  isBusy = this.store.isBusy;
-  progress = this.store.progress;
-  result = this.store.result;
-  error = this.store.error;
+  private isBusy = this.store.isBusy;
+  private progress = this.store.progress;
+  private result = this.store.result;
+  private error = this.store.error;
 
   connect(params?: Record<string, string>): void {
     const url = this.constructUrl(params);
