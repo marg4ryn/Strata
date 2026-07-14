@@ -13,9 +13,8 @@ export class StoreService {
   readonly result = signal<string | null>(null);
   readonly error = signal<string | null>(null);
 
-  resetState(): void {
+  resetStateOmitShowModal(): void {
     this.pendingAnalysis.set(null);
-    this.showModal.set(false);
     this.isBusy.set(false);
     this.progress.set(null);
     this.result.set(null);

@@ -53,7 +53,7 @@ export class OrchestratorService {
       return;
     }
 
-    this.store.resetState();
+    this.store.resetStateOmitShowModal();
     const sessionId = this.storage.getSessionId();
 
     if (sessionId === null) {
@@ -92,6 +92,7 @@ export class OrchestratorService {
     const initialPendingAnalyses = this.storage.getPendingAnalyses();
 
     if (!initialPendingAnalyses || initialPendingAnalyses.length < 1) {
+      this.store.showModal.set(false);
       this.logger.debug('Orchestrator did not found any pending analysis');
       return;
     }
@@ -241,6 +242,6 @@ export class OrchestratorService {
     this.storage.deleteSessionId();
     this.storage.deletePendingAnalysis(sessionId);
     this.locker.unlock(sessionId);
-    this.store.resetState();
+    this.store.resetStateOmitShowModal();
   }
 }

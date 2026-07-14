@@ -17,6 +17,9 @@ O -> STG: getPendingAnalyses()
 STG -> O: pendingAnalyses
 
 alt pendingAnalyses empty
+    O -> ST: showModal.set(false)
+    ST -> F: emit(showModal)
+    F -> U: emit(showModal)
     note left of O: goto Start New Analysis
 
 else pendingAnalyses exist
@@ -62,7 +65,7 @@ else pendingAnalyses exist
                     STG -> LS: deletePendingAnalysis(sessionId)
                     O -> L: unlockAnalysis(sessionId)
                     O -> N: sendMessageCancel()
-                    O -> ST: resetState()
+                    O -> ST: resetStateOmitShowModal()
                     ST -> F: emit(showModal)
                     F -> U: emit(showModal)
                 end

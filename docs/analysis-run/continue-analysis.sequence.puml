@@ -87,6 +87,6 @@ STG -> SS: deleteSessionId()
 O -> STG: deletePendingAnalysis(sessionId)
 STG -> LS: deletePendingAnalysis(sessionId)
 O -> L: unlockAnalysis(sessionId)
-O -> ST: resetState()
+O -> ST: resetStateOmitShowModal()
 
 @enduml

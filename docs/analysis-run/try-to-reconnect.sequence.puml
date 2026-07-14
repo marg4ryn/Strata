@@ -20,7 +20,7 @@ alt isBusy = true
     note left of O: goto Continue Analysis
 
 else isBusy = false
-    O -> ST: resetState()
+    O -> ST: resetStateOmitShowModal()
     O -> STG: getSessionId()
     STG -> O: sessionId
 
