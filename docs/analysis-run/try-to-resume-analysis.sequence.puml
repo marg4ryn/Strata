@@ -65,7 +65,7 @@ else pendingAnalyses exist
                     STG -> LS: deletePendingAnalysis(sessionId)
                     O -> L: unlockAnalysis(sessionId)
                     O -> N: sendMessageCancel()
-                    O -> ST: resetStateOmitShowModal()
+                    O -> ST: resetAnalysisState()
                     ST -> F: emit(showModal)
                     F -> U: emit(showModal)
                 end

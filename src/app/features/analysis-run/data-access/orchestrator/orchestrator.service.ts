@@ -53,7 +53,7 @@ export class OrchestratorService {
       return;
     }
 
-    this.store.resetStateOmitShowModal();
+    this.store.resetState();
     const sessionId = this.storage.getSessionId();
 
     if (sessionId === null) {
@@ -242,6 +242,6 @@ export class OrchestratorService {
     this.storage.deleteSessionId();
     this.storage.deletePendingAnalysis(sessionId);
     this.locker.unlock(sessionId);
-    this.store.resetStateOmitShowModal();
+    this.store.resetAnalysisState();
   }
 }
