@@ -17,9 +17,13 @@ body {
   --bg-panel: #15130f;
   --bg-hover: #221f1a;
 
-  --accent-primary: #b3540f;
-  --accent-hover: #943f0a;
-  --accent-active: #b3540f;
+  --accent-primary: #b8620d;
+  --accent-hover: #9a5310;
+  --accent-active: #744009;
+
+  --danger-primary: #b8232e;
+  --danger-hover: #c3444d;
+  --danger-active: #9c1e27;
 
   --text-primary: white;
   --text-secondary: #9a948a;
@@ -28,7 +32,80 @@ body {
   --border-subtle: #2e2a24;
   --border-strong: #3d3833;
 
-  --danger: #e5484d;
-
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.btn {
+  padding: 0.625rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  min-width: 8rem;
+
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 400px) {
+    min-width: 7rem;
+  }
+}
+
+.btn--primary {
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
+
+  &:hover {
+    background-color: var(--accent-hover);
+  }
+
+  &:focus-visible {
+    background-color: var(--accent-hover);
+  }
+
+  &:active {
+    background-color: var(--accent-active);
+  }
+}
+
+.btn--secondary {
+  background-color: transparent;
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+
+  &:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &:focus-visible {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &:active {
+    color: var(--text-primary);
+    background-color: transparent;
+  }
+}
+
+.btn--danger {
+  background-color: var(--danger-primary);
+  color: var(--text-primary);
+
+  &:hover {
+    background-color: var(--danger-hover);
+  }
+
+  &:focus-visible {
+    background-color: var(--danger-hover);
+  }
+
+  &:active {
+    background-color: var(--danger-active);
+  }
 }
