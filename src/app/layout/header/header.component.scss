@@ -26,15 +26,14 @@
     transform: scale(1.05);
   }
 
+  &:focus-visible {
+    color: var(--accent-hover);
+    transform: scale(1.05);
+  }
+
   &:active {
     color: var(--accent-active);
     transform: scale(0.9);
-    transition: transform 0.08s ease;
-  }
-
-  &:focus-visible {
-    color: var(--accent-primary);
-    transform: scale(1.05);
   }
 }
 
@@ -52,9 +51,12 @@
 }
 
 .icon-button {
-  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  border: none;
   cursor: pointer;
   width: 33px;
   transition:
@@ -66,15 +68,14 @@
     transform: scale(1.2);
   }
 
+  &:focus-visible {
+    color: var(--accent-hover);
+    transform: scale(1.05);
+  }
+
   &:active {
     color: var(--accent-active);
     transform: scale(0.9);
-    transition: transform 0.08s ease;
-  }
-
-  &:focus-visible {
-    color: var(--accent-primary);
-    transform: scale(1.05);
   }
 }
 
