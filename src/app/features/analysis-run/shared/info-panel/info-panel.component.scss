@@ -1,3 +1,11 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .info-panel {
   position: relative;
   top: 0;
