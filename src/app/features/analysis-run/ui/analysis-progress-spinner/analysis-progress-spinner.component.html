@@ -1,0 +1,19 @@
+<div class="loading-container">
+  <div class="spinner">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring"></div>
+  </div>
+  <p class="loading-label">{{ label() }}</p>
+
+  <button btn="secondary" (click)="abortAnalysis()">Abort</button>
+</div>
+
+<app-info-panel [pendingAnalysis]="pendingAnalysis()"></app-info-panel>
+
+@if (showModal) {
+  <app-confirm-operation-modal
+    (cancel)="onCancel()"
+    (confirm)="onConfirm()"
+  ></app-confirm-operation-modal>
+}

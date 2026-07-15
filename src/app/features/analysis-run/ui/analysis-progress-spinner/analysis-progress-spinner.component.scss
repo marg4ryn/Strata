@@ -1,10 +1,14 @@
 :host {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2rem;
   width: 100%;
+  height: 100%;
+  padding: 2rem;
 }
 
 .loading-container {
@@ -15,11 +19,15 @@
 }
 
 .spinner {
-  --size: clamp(6rem, 12vw, 10rem);
+  --size: clamp(6.8rem, 14vw, 12rem);
 
   position: relative;
   width: var(--size);
   height: var(--size);
+
+  @media (min-width: 767px) and (min-height: 800px) {
+    margin: 6rem;
+  }
 }
 
 .spinner-ring {
@@ -58,36 +66,10 @@
 }
 
 .loading-label {
-  color: var(--text-primary);
-}
-
-.abort-btn {
-  position: absolute;
-  bottom: 10rem;
-  padding: 10px 14px;
-  border-radius: 6px;
-  border: 1px solid var(--danger);
-  background-color: transparent;
-  color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  width: 160px;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
 
-  &:hover {
-    background-color: var(--danger);
-  }
-
-  &:active {
-    transform: scale(0.97);
-    background-color: var(--danger);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
   }
 }
