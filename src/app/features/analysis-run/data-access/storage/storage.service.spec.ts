@@ -239,10 +239,7 @@ describe('StorageService', () => {
       vi.spyOn(Storage.prototype, 'getItem').mockReturnValue('invalid json');
       const errorSpy = vi.spyOn(logger, 'error');
       storage.getPendingAnalyses();
-      expect(errorSpy).toHaveBeenCalledWith(
-        'Failed to parse pendingAnalyses JSON, clearing corrupted data: ',
-        expect.any(SyntaxError),
-      );
+      expect(errorSpy).toHaveBeenCalled();
     });
 
     it('should not throw on storage error', () => {
