@@ -16,6 +16,7 @@ export class WebSocketService {
   private readonly store = inject(StoreService);
 
   private socket?: WebSocket;
+  private intentionalClose: boolean = false;
 
   private readonly isBusy = this.store.isBusy;
   private readonly progress = this.store.progress;
@@ -26,6 +27,7 @@ export class WebSocketService {
     const url = this.constructUrl(params);
     this.logger.debug(`WebSocket Service constructed URL: ${url}`);
 
+    this.intentionalClose = false;
     this.isBusy.set(true);
     this.socket = new WebSocket(url);
 
@@ -64,6 +66,10 @@ export class WebSocketService {
     };
 
     this.socket.onerror = () => {
+      if (this.intentionalClose) {
+        this.logger.debug('WebSocket Service suppressed error during intentional close');
+        return;
+      }
       this.error.set('Connection error');
       this.logger.error('WebSocket Service encountered connection error');
       this.disconnect();
@@ -76,19 +82,26 @@ export class WebSocketService {
   }
 
   abort(): void {
-    if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
-      this.logger.debug(
-        'WebSocket Service did not send an abort message - connection not yet opened',
-      );
+    if (!this.socket) {
       return;
     }
 
-    this.socket.send(
-      JSON.stringify({
-        type: 'abort',
-      }),
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify({ type: 'abort' }));
+      this.logger.info('WebSocket Service sent an abort message');
+      return;
+    }
+
+    if (this.socket.readyState === WebSocket.CONNECTING) {
+      this.logger.debug('WebSocket Service aborting connection before it was established');
+      this.intentionalClose = true;
+      this.disconnect();
+      return;
+    }
+
+    this.logger.debug(
+      'WebSocket Service did not send an abort message - socket already closing/closed',
     );
-    this.logger.info('WebSocket Service send an abort message ');
   }
 
   disconnect(): void {
