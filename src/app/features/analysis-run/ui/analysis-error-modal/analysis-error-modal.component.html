@@ -1,0 +1,16 @@
+<div class="modal">
+  <header class="modal__header">
+    <h2 class="modal__title">Analysis error</h2>
+  </header>
+
+  <div class="modal__body">
+    <p class="error-message">{{ error() }}</p>
+  </div>
+
+  <footer class="modal__footer">
+    <button btn="secondary" (click)="cancelAnalysis()">Cancel</button>
+    <button btn="primary" (click)="retryAnalysis()">Retry</button>
+  </footer>
+</div>
+
+<app-info-panel [pendingAnalysis]="pendingAnalysis()"></app-info-panel>
