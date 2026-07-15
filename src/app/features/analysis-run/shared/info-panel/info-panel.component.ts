@@ -8,34 +8,34 @@ import { PendingAnalysis } from '../../data-access/analysis-run.model';
   styleUrl: './info-panel.component.scss',
 })
 export class InfoPanel {
-  pendingAnalysis = input.required<PendingAnalysis | null>();
+  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
 
-  analysisStartDate = computed(() => {
+  readonly analysisStartDate = computed(() => {
     const startedAt = this.pendingAnalysis()?.startedAt ?? '';
     return new Date(startedAt).toLocaleString();
   });
 
-  targetURL = computed(() => {
+  readonly targetURL = computed(() => {
     return this.pendingAnalysis()?.target.targetURL;
   });
 
-  limitRange = computed(() => {
+  readonly limitRange = computed(() => {
     return this.pendingAnalysis()?.target.limitRange;
   });
 
-  startDate = computed(() => {
+  readonly startDate = computed(() => {
     const date = this.pendingAnalysis()?.target.range?.startDate ?? '';
     return new Date(date).toLocaleDateString();
   });
 
-  endDate = computed(() => {
+  readonly endDate = computed(() => {
     const date = this.pendingAnalysis()?.target.range?.endDate ?? '';
     return new Date(date).toLocaleDateString();
   });
 
-  debouncedAnalysisStartDate = debounced(this.analysisStartDate, 800);
-  debouncedTargetURL = debounced(this.targetURL, 800);
-  debouncedLimitRange = debounced(this.limitRange, 800);
-  debouncedStartDate = debounced(this.startDate, 800);
-  debouncedEndDate = debounced(this.endDate, 800);
+  readonly debouncedAnalysisStartDate = debounced(this.analysisStartDate, 800);
+  readonly debouncedTargetURL = debounced(this.targetURL, 800);
+  readonly debouncedLimitRange = debounced(this.limitRange, 800);
+  readonly debouncedStartDate = debounced(this.startDate, 800);
+  readonly debouncedEndDate = debounced(this.endDate, 800);
 }

@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockInstance } from 'vitest';
-
-import { LoggerService } from './logger.service';
 import { environment } from '@env/environment';
+import { LoggerService } from './logger.service';
 import { LogLevel } from './logger.enum';
 
 vi.mock('@env/environment', () => ({

@@ -1,16 +1,16 @@
 import { inject, Service } from '@angular/core';
-import { PendingAnalysis } from '../analysis-run.model';
 import { LoggerService } from '@app/core/logging/logger.service';
+import { PendingAnalysis } from '../analysis-run.model';
 
 @Service()
 export class StorageService {
   private readonly logger = inject(LoggerService);
-  private readonly SESSION_ID_KEY = 'sessionId';
-  private readonly PENDING_ANALYSES_KEY = 'pendingAnalyses';
+  private readonly sessionIdKey = 'sessionId';
+  private readonly pendingAnalysesKey = 'pendingAnalyses';
 
   saveSessionId(sessionId: string): void {
     try {
-      sessionStorage.setItem(this.SESSION_ID_KEY, sessionId);
+      sessionStorage.setItem(this.sessionIdKey, sessionId);
       this.logger.info(`Storage Service saved sessionId: ${sessionId} to sessionStorage`);
     } catch (error) {
       this.logger.error(`Failed to save sessionId: ${sessionId} to sessionStorage`, error);
@@ -22,7 +22,7 @@ export class StorageService {
     const updatedAnalyses = [...pendingAnalyses, pendingAnalysis];
 
     try {
-      localStorage.setItem(this.PENDING_ANALYSES_KEY, JSON.stringify(updatedAnalyses));
+      localStorage.setItem(this.pendingAnalysesKey, JSON.stringify(updatedAnalyses));
       this.logger.info(
         `Storage Service saved pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
       );
@@ -36,7 +36,7 @@ export class StorageService {
 
   getSessionId(): string | null {
     try {
-      const sessionId = sessionStorage.getItem(this.SESSION_ID_KEY);
+      const sessionId = sessionStorage.getItem(this.sessionIdKey);
       this.logger.debug(`Storage Service returned sessionId: ${sessionId} from sessionStorage`);
       return sessionId;
     } catch (error) {
@@ -48,7 +48,7 @@ export class StorageService {
   getPendingAnalyses(): Array<PendingAnalysis> | null {
     let raw: string | null;
     try {
-      raw = localStorage.getItem(this.PENDING_ANALYSES_KEY);
+      raw = localStorage.getItem(this.pendingAnalysesKey);
     } catch (error) {
       this.logger.error('Failed to read pendingAnalyses from localStorage', error);
       return null;
@@ -74,7 +74,7 @@ export class StorageService {
 
   removePendingAnalysesItem(): void {
     try {
-      localStorage.removeItem(this.PENDING_ANALYSES_KEY);
+      localStorage.removeItem(this.pendingAnalysesKey);
       this.logger.info(`Storage Service removed pendingAnalyses from localStorage`);
     } catch (error) {
       this.logger.error('Failed to remove pendingAnalyses from localStorage', error);
@@ -83,8 +83,8 @@ export class StorageService {
 
   deleteSessionId(): void {
     try {
-      const sessionId = sessionStorage.getItem(this.SESSION_ID_KEY);
-      sessionStorage.removeItem(this.SESSION_ID_KEY);
+      const sessionId = sessionStorage.getItem(this.sessionIdKey);
+      sessionStorage.removeItem(this.sessionIdKey);
       this.logger.info(`Storage Service removed sessionId: ${sessionId} from sessionStorage`);
     } catch (error) {
       this.logger.error('Failed to remove sessionId from sessionStorage', error);
@@ -101,7 +101,7 @@ export class StorageService {
 
     try {
       if (remainingAnalyses.length !== 0) {
-        localStorage.setItem(this.PENDING_ANALYSES_KEY, JSON.stringify(remainingAnalyses));
+        localStorage.setItem(this.pendingAnalysesKey, JSON.stringify(remainingAnalyses));
         this.logger.info(
           `Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
         );

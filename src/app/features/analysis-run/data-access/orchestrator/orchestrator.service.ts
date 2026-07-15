@@ -1,9 +1,9 @@
 import { Service, inject, effect } from '@angular/core';
+import { LoggerService } from '@app/core/logging/logger.service';
 import { StoreService } from '../store/store.service';
 import { StorageService } from '../storage/storage.service';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { LockService } from '../lock/lock.service';
-import { LoggerService } from '@app/core/logging/logger.service';
 import {
   AnalysisTarget,
   AnalysisTargetFormModel,

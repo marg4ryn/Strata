@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonDirective } from '../button-directive/button.directive';
 import { A11yModule } from '@angular/cdk/a11y';
+import { ButtonDirective } from '../button-directive/button.directive';
 
 @Component({
   selector: 'app-confirm-operation-modal',
@@ -9,10 +9,10 @@ import { A11yModule } from '@angular/cdk/a11y';
   styleUrl: './confirm-operation-modal.component.scss',
 })
 export class ConfirmOperationModal {
-  label = input<string>('This operation cannot be undone. Are you sure?');
+  readonly label = input<string>('This operation cannot be undone. Are you sure?');
 
-  cancel = output<void>();
-  confirm = output<void>();
+  readonly cancel = output<void>();
+  readonly confirm = output<void>();
 
   onCancel(): void {
     this.cancel.emit();

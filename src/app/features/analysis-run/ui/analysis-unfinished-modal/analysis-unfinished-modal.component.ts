@@ -1,7 +1,7 @@
 import { Component, input, output, computed } from '@angular/core';
-import { PendingAnalysis } from '../../data-access/analysis-run.model';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
+import { PendingAnalysis } from '../../data-access/analysis-run.model';
 
 @Component({
   selector: 'app-analysis-unfinished-modal',
@@ -10,32 +10,32 @@ import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confi
   styleUrl: './analysis-unfinished-modal.component.scss',
 })
 export class AnalysisUnfinishedModal {
-  pendingAnalysis = input.required<PendingAnalysis | null>();
+  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
 
-  resume = output<void>();
-  abandon = output<void>();
+  readonly resume = output<void>();
+  readonly abandon = output<void>();
 
   showModal: boolean = false;
 
-  analysisStartDate = computed(() => {
+  readonly analysisStartDate = computed(() => {
     const startedAt = this.pendingAnalysis()?.startedAt ?? '';
     return new Date(startedAt).toLocaleString();
   });
 
-  targetURL = computed(() => {
+  readonly targetURL = computed(() => {
     return this.pendingAnalysis()?.target.targetURL;
   });
 
-  limitRange = computed(() => {
+  readonly limitRange = computed(() => {
     return this.pendingAnalysis()?.target.limitRange;
   });
 
-  startDate = computed(() => {
+  readonly startDate = computed(() => {
     const date = this.pendingAnalysis()?.target.range?.startDate ?? '';
     return new Date(date).toLocaleDateString();
   });
 
-  endDate = computed(() => {
+  readonly endDate = computed(() => {
     const date = this.pendingAnalysis()?.target.range?.endDate ?? '';
     return new Date(date).toLocaleDateString();
   });

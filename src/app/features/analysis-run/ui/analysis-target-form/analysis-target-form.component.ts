@@ -1,5 +1,4 @@
 import { Component, signal, output } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import {
   form,
   FormField,
@@ -11,8 +10,9 @@ import {
   SchemaPath,
   debounce,
 } from '@angular/forms/signals';
-import { AnalysisTargetFormModel } from '../../data-access/analysis-run.model';
+import { DatePipe } from '@angular/common';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
+import { AnalysisTargetFormModel } from '../../data-access/analysis-run.model';
 
 @Component({
   selector: 'app-analysis-target-form',
@@ -22,20 +22,20 @@ import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 })
 export class AnalysisTargetForm {
   private readonly datePipe = new DatePipe('en-US');
-  private readonly MIN_DATE = new Date('1970-01-01');
+  private readonly minDate = new Date('1970-01-01');
 
-  private readonly INITIAL_MODEL = (): AnalysisTargetFormModel => ({
+  private readonly initialModel = (): AnalysisTargetFormModel => ({
     targetURL: '',
     limitRange: false,
     startDate: null,
     endDate: null,
   });
 
-  analysisTargetData = output<AnalysisTargetFormModel>();
+  readonly analysisTargetData = output<AnalysisTargetFormModel>();
 
-  analysisTargetModel = signal<AnalysisTargetFormModel>(this.INITIAL_MODEL());
+  readonly analysisTargetModel = signal<AnalysisTargetFormModel>(this.initialModel());
 
-  analysisTargetForm = form(
+  readonly analysisTargetForm = form(
     this.analysisTargetModel,
     (schemaPath) => {
       debounce(schemaPath.targetURL, 300);
@@ -64,13 +64,13 @@ export class AnalysisTargetForm {
 
       afterDate(
         schemaPath.startDate,
-        this.MIN_DATE,
-        `Start date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
+        this.minDate,
+        `Start date cannot be earlier than ${this.datePipe.transform(this.minDate, 'longDate')}`,
       );
       afterDate(
         schemaPath.endDate,
-        this.MIN_DATE,
-        `End date cannot be earlier than ${this.datePipe.transform(this.MIN_DATE, 'longDate')}`,
+        this.minDate,
+        `End date cannot be earlier than ${this.datePipe.transform(this.minDate, 'longDate')}`,
       );
       afterDate(schemaPath.endDate, schemaPath.startDate, 'End date must be after start date');
       beforeDate(schemaPath.startDate, localNowAsUtcMidnight, 'Start date cannot be in the future');
@@ -81,7 +81,7 @@ export class AnalysisTargetForm {
         action: async (field) => {
           const formData = field().value();
           this.analysisTargetData.emit(formData);
-          field().reset(this.INITIAL_MODEL());
+          field().reset(this.initialModel());
         },
         onInvalid: (field) => {
           const firstError = field().errorSummary()[0];
