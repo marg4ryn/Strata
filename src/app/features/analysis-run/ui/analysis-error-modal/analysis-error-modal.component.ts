@@ -24,8 +24,8 @@ export class AnalysisErrorModal implements AfterViewInit, OnDestroy {
 
   readonly firstButton = viewChild.required<ElementRef<HTMLButtonElement>>('firstButton');
 
-  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
-  readonly error = input.required<string | null>();
+  readonly pendingAnalysis = input<PendingAnalysis | null>();
+  readonly error = input<string | null>();
 
   readonly retry = output<void>();
   readonly cancel = output<void>();
