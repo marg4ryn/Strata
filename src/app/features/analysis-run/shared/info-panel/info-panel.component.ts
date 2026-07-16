@@ -8,7 +8,7 @@ import { PendingAnalysis } from '../../data-access/analysis-run.model';
   styleUrl: './info-panel.component.scss',
 })
 export class InfoPanel {
-  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
+  readonly pendingAnalysis = input<PendingAnalysis | null>();
 
   readonly analysisStartDate = computed(() => {
     const startedAt = this.pendingAnalysis()?.startedAt ?? '';
