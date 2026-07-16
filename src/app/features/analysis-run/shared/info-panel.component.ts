@@ -1,5 +1,5 @@
 import { Component, computed, input, debounced } from '@angular/core';
-import { PendingAnalysis } from '../../data-access/analysis-run.model';
+import { PendingAnalysis } from '../data-access/analysis-run.model';
 
 @Component({
   selector: 'app-info-panel',

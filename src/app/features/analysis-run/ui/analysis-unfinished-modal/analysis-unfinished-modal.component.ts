@@ -10,7 +10,7 @@ import { PendingAnalysis } from '../../data-access/analysis-run.model';
   styleUrl: './analysis-unfinished-modal.component.scss',
 })
 export class AnalysisUnfinishedModal {
-  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
+  readonly pendingAnalysis = input<PendingAnalysis | null>();
 
   readonly resume = output<void>();
   readonly abandon = output<void>();

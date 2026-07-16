@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoPanel } from './info-panel.component';
-import { AnalysisTarget, DateRange, PendingAnalysis } from '../../data-access/analysis-run.model';
+import { InfoPanel } from './info-panel/info-panel.component';
+import { AnalysisTarget, DateRange, PendingAnalysis } from '../data-access/analysis-run.model';
 
 describe('InfoPanel', () => {
   let component: InfoPanel;

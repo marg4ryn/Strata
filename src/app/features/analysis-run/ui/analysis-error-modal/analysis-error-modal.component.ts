@@ -11,7 +11,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { PendingAnalysis } from '../../data-access/analysis-run.model';
-import { InfoPanel } from '../../shared/info-panel/info-panel.component';
+import { InfoPanel } from '../../shared/info-panel.component';
 
 @Component({
   selector: 'app-analysis-error-modal',

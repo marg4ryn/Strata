@@ -12,7 +12,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { PendingAnalysis } from '../../data-access/analysis-run.model';
 import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
-import { InfoPanel } from '../../shared/info-panel/info-panel.component';
+import { InfoPanel } from '../../shared/info-panel.component';
 
 @Component({
   selector: 'app-analysis-progress-spinner',
@@ -25,7 +25,7 @@ export class AnalysisProgressSpinner implements AfterViewInit, OnDestroy {
 
   readonly firstButton = viewChild.required<ElementRef<HTMLButtonElement>>('firstButton');
 
-  readonly pendingAnalysis = input.required<PendingAnalysis | null>();
+  readonly pendingAnalysis = input<PendingAnalysis | null>();
   readonly label = input<string>('');
 
   readonly abort = output<void>();
