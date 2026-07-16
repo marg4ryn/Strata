@@ -1,14 +1,10 @@
-import { Directive, HostBinding, input } from '@angular/core';
+import { computed, Directive, HostBinding, input } from '@angular/core';
 
 @Directive({
   selector: 'button[btn]',
-  host: { class: 'btn' },
+  host: { '[class]': 'variantClass()' },
 })
 export class ButtonDirective {
   variant = input<'primary' | 'secondary' | 'danger'>('primary', { alias: 'btn' });
-
-  @HostBinding('class')
-  get variantClass() {
-    return `btn btn--${this.variant()}`;
-  }
+  variantClass = computed(() => `btn btn--${this.variant()}`);
 }
