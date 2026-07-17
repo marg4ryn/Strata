@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.logo-container {
+.logo {
   flex: 1 1 0;
   min-height: 0;
   width: 100%;
@@ -16,7 +16,7 @@
   justify-content: center;
 }
 
-.form-container {
+.analysis-form {
   flex: 1.1 1 0;
   min-height: 0;
   width: 100%;
@@ -25,7 +25,7 @@
   justify-content: center;
 }
 
-.logo {
+.logo__image {
   padding: 12px;
   width: 100px;
   height: 180px;
@@ -41,12 +41,12 @@ form {
   padding: 12px 42px;
 }
 
-label {
+.analysis-form__label {
   color: var(--text-primary);
   cursor: pointer;
 }
 
-input:not([type='checkbox']) {
+.analysis-form__input:not([type='checkbox']) {
   padding: 10px 14px;
   border-radius: 6px;
   border: 1px solid var(--border-subtle);
@@ -69,13 +69,13 @@ input:not([type='checkbox']) {
   }
 }
 
-input[type='checkbox'] {
+.analysis-form__input[type='checkbox'] {
   accent-color: var(--accent-primary);
   cursor: pointer;
   margin-right: 2px;
 }
 
-input[type='date'] {
+.analysis-form__input[type='date'] {
   color: var(--text-primary);
   cursor: text;
 
@@ -85,7 +85,7 @@ input[type='date'] {
   }
 }
 
-.date-range-wrapper {
+.analysis-form__date-range-wrapper {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.3s ease;
@@ -95,12 +95,39 @@ input[type='date'] {
   }
 }
 
-.date-range-container {
+.analysis-form__date-range {
   overflow: hidden;
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.analysis-form__dates {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.analysis-form__submit-btn {
+  padding: 0.535rem 1.5rem;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.analysis-form__error-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--danger-primary);
+  font-size: smaller;
+  list-style-position: outside;
+  padding-left: 1.2em;
 }
 
 .collapsing {
@@ -116,39 +143,12 @@ input[type='date'] {
   }
 }
 
-.dates-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
-}
-
-button {
-  padding: 0.535rem 1.5rem;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.error-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  color: var(--danger-primary);
-  font-size: smaller;
-  list-style-position: outside;
-  padding-left: 1.2em;
-}
-
-@media screen and (max-height: 800px) {
-  .logo-container {
+@media (max-height: 800px) {
+  .logo {
     flex: 1;
   }
 
-  .form-container {
+  .analysis-form {
     flex: 1;
   }
 }

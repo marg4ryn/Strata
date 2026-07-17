@@ -1,4 +1,4 @@
-footer {
+.footer {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -9,11 +9,11 @@ footer {
   border-top: solid 1px var(--border-subtle);
 }
 
-.copyright {
+.footer__copyright {
   font-size: small;
 }
 
-.about-btn {
+.footer__about-btn {
   background-color: var(--bg-primary);
   color: var(--text-secondary);
   border: none;

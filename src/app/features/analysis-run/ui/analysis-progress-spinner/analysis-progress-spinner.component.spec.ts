@@ -44,7 +44,7 @@ describe('AnalysisProgressSpinner', () => {
     setInput('Loading...');
     fixture.detectChanges();
 
-    const label = fixture.nativeElement.querySelector('.loading-label');
+    const label = fixture.nativeElement.querySelector('.loading__label');
     expect(label.textContent).toContain('Loading...');
   });
 

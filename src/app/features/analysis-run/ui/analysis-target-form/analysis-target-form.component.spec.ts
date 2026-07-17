@@ -297,7 +297,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, '');
       await advance(300);
 
-      expect(input.classList.contains('invalid')).toBe(true);
+      expect(input.classList.contains('analysis-form__input--invalid')).toBe(true);
     });
 
     it('should render an error-list item for each URL error', async () => {
@@ -305,7 +305,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, '');
       await advance(300);
 
-      const items = fixture.debugElement.queryAll(By.css('.error-list li'));
+      const items = fixture.debugElement.queryAll(By.css('.analysis-form__error-list li'));
       expect(items.length).toBeGreaterThan(0);
       expect(items[0].nativeElement.textContent).toContain('URL is required');
     });

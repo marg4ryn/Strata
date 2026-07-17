@@ -1,10 +1,10 @@
-<div class="loading-container">
-  <div class="spinner">
-    <div class="spinner-ring"></div>
-    <div class="spinner-ring"></div>
-    <div class="spinner-ring"></div>
+<div class="loading">
+  <div class="loading__spinner">
+    <div class="loading__spinner-ring"></div>
+    <div class="loading__spinner-ring"></div>
+    <div class="loading__spinner-ring"></div>
   </div>
-  <p class="loading-label">{{ label() }}</p>
+  <p class="loading__label">{{ label() }}</p>
 
   <button #firstButton btn="secondary" (click)="abortAnalysis()">Abort</button>
 </div>

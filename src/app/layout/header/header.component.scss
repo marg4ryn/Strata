@@ -6,7 +6,7 @@
   padding: 10px 15px;
 }
 
-.logo-section {
+.header__logo {
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -37,12 +37,12 @@
   }
 }
 
-.logo {
+.header__logo-icon {
   width: 22px;
   height: 40px;
 }
 
-.icon-section {
+.header__actions {
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -50,7 +50,7 @@
   gap: 10px;
 }
 
-.icon-button {
+.header__action {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,6 +79,6 @@
   }
 }
 
-.icon {
+.header__action-icon {
   width: 30px;
 }

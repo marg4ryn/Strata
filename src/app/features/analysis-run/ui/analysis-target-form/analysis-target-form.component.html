@@ -1,52 +1,60 @@
-<div class="logo-container">
-  <img src="/logo.svg" class="logo" alt="" />
+<div class="logo">
+  <img src="/logo.svg" class="logo__image" alt="" />
 </div>
 
-<div class="form-container">
+<div class="analysis-form">
   <form [formRoot]="analysisTargetForm">
-    <label for="analysisTargetURL">Enter link to analysis target</label>
+    <label for="analysisTargetURL" class="analysis-form__label"
+      >Enter link to analysis target</label
+    >
     <input
       type="url"
       id="analysisTargetURL"
+      class="analysis-form__input"
       placeholder="https://github.com/JohnDoe/Project.git"
       [formField]="analysisTargetForm.targetURL"
-      [class.invalid]="isInvalid(analysisTargetForm.targetURL)"
+      [class.analysis-form__input--invalid]="isInvalid(analysisTargetForm.targetURL)"
     />
 
     @if (analysisTargetForm.targetURL().touched() && analysisTargetForm.targetURL().invalid()) {
-      <ul class="error-list">
+      <ul class="analysis-form__error-list">
         @for (error of analysisTargetForm.targetURL().errors(); track error.message) {
           <li>{{ error.message }}</li>
         }
       </ul>
     }
 
-    <label>
+    <label class="analysis-form__checkbox-label">
       <input type="checkbox" [formField]="analysisTargetForm.limitRange" />
       Limit date range
     </label>
 
-    <div class="date-range-wrapper" [class.expanded]="!analysisTargetForm.startDate().hidden()">
+    <div
+      class="analysis-form__date-range-wrapper"
+      [class.analysis-form__date-range-wrapper--expanded]="!analysisTargetForm.startDate().hidden()"
+    >
       @if (!analysisTargetForm.startDate().hidden()) {
-        <div class="date-range-container" animate.leave="collapsing">
-          <div class="dates-container">
+        <div class="analysis-form__date-range" animate.leave="collapsing">
+          <div class="analysis-form__dates">
             <input
               type="date"
+              class="analysis-form__input"
               [formField]="analysisTargetForm.startDate"
-              [class.invalid]="isInvalid(analysisTargetForm.startDate)"
+              [class.analysis-form__input--invalid]="isInvalid(analysisTargetForm.startDate)"
             />
-            <span>–</span>
+            <span class="analysis-form__dates-sep">–</span>
             <input
               type="date"
+              class="analysis-form__input"
               [formField]="analysisTargetForm.endDate"
-              [class.invalid]="isInvalid(analysisTargetForm.endDate)"
+              [class.analysis-form__input--invalid]="isInvalid(analysisTargetForm.endDate)"
             />
           </div>
 
           @if (
             analysisTargetForm.startDate().touched() && analysisTargetForm.startDate().invalid()
           ) {
-            <ul class="error-list">
+            <ul class="analysis-form__error-list">
               @for (error of analysisTargetForm.startDate().errors(); track error.message) {
                 <li>{{ error.message }}</li>
               }
@@ -54,7 +62,7 @@
           }
 
           @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
-            <ul class="error-list">
+            <ul class="analysis-form__error-list">
               @for (error of analysisTargetForm.endDate().errors(); track error.message) {
                 <li>{{ error.message }}</li>
               }
@@ -64,7 +72,12 @@
       }
     </div>
 
-    <button btn="primary" type="submit" [disabled]="analysisTargetForm().submitting()">
+    <button
+      class="analysis-form__submit-btn"
+      btn="primary"
+      type="submit"
+      [disabled]="analysisTargetForm().submitting()"
+    >
       @if (analysisTargetForm().submitting()) {
         Loading ...
       } @else {
