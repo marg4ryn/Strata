@@ -1,10 +1,4 @@
-@if (showModal()) {
-  <app-analysis-unfinished-modal
-    [pendingAnalysis]="pendingAnalysis()"
-    (resume)="resumeAnalysis()"
-    (abandon)="abandonAnalysis()"
-  ></app-analysis-unfinished-modal>
-} @else if (error()) {
+@if (error()) {
   <app-analysis-error-modal
     [error]="error()"
     [pendingAnalysis]="pendingAnalysis()"
@@ -17,6 +11,12 @@
     [pendingAnalysis]="pendingAnalysis()"
     (abort)="abortAnalysis()"
   ></app-analysis-progress-spinner>
+} @else if (showModal()) {
+  <app-analysis-unfinished-modal
+    [pendingAnalysis]="pendingAnalysis()"
+    (resume)="resumeAnalysis()"
+    (abandon)="abandonAnalysis()"
+  ></app-analysis-unfinished-modal>
 } @else {
   <app-analysis-target-form
     (analysisTargetData)="startNewAnalysis($event)"

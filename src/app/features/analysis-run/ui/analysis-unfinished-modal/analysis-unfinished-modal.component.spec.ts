@@ -45,7 +45,7 @@ describe('AnalysisUnfinishedModal', () => {
   function getConfirmModalButtons(): { cancel: HTMLButtonElement; confirm: HTMLButtonElement } {
     const modal = getConfirmModal()!;
     const buttons = modal.querySelectorAll('button');
-    return { cancel: buttons[0], confirm: buttons[1] }; // dopasuj kolejność do realnego template'u
+    return { cancel: buttons[0], confirm: buttons[1] };
   }
 
   function setInput(value: PendingAnalysis): void {
