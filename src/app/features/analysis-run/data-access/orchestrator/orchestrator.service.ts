@@ -9,7 +9,7 @@ import {
   AnalysisTargetFormModel,
   DateRange,
   PendingAnalysis,
-} from '../analysis-run.model';
+} from '../../analysis-run.model';
 
 interface AnalysisHistoryEntry {
   analysisId: string;

@@ -13,7 +13,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { dateToCalendarKey, localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { AnalysisTargetFormModel } from '../../data-access/analysis-run.model';
+import { AnalysisTargetFormModel } from '../../analysis-run.model';
 
 @Component({
   selector: 'app-analysis-target-form',

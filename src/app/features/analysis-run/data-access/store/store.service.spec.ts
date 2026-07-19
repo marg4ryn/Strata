@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { StoreService } from './store.service';
 import { LoggerService } from '@app/core/logging/logger.service';
-import { AnalysisTarget, PendingAnalysis } from '../analysis-run.model';
+import { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 
 describe('StoreService', () => {
   let store: StoreService;

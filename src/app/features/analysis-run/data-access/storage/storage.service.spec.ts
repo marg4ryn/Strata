@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { StorageService } from './storage.service';
 import { LoggerService } from '@app/core/logging/logger.service';
-import { PendingAnalysis, AnalysisTarget, DateRange } from '../analysis-run.model';
+import { PendingAnalysis, AnalysisTarget, DateRange } from '../../analysis-run.model';
 
 describe('StorageService', () => {
   let storage: StorageService;

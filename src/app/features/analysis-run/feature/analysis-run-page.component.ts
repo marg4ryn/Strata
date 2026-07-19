@@ -3,8 +3,8 @@ import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-f
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner.component';
 import { AnalysisErrorModal } from '../ui/analysis-error-modal/analysis-error-modal.component';
 import { AnalysisUnfinishedModal } from '../ui/analysis-unfinished-modal/analysis-unfinished-modal.component';
-import { AnalysisStatus, AnalysisTargetFormModel } from '../data-access/analysis-run.model';
-import { AnalysisRunFacade } from '../data-access/facade/analysis-run.facade';
+import { AnalysisStatus, AnalysisTargetFormModel } from '../analysis-run.model';
+import { AnalysisRunFacade } from '../analysis-run.facade';
 
 @Component({
   selector: 'app-analysis-run-page',

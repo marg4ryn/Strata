@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
-import { AnalysisTarget, DateRange, PendingAnalysis } from '../../data-access/analysis-run.model';
+import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisUnfinishedModal', () => {
   let component: AnalysisUnfinishedModal;

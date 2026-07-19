@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { PendingAnalysis } from '../../data-access/analysis-run.model';
+import { PendingAnalysis } from '../../analysis-run.model';
 import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
-import { InfoPanel } from '../../shared/info-panel.component';
+import { InfoPanel } from '../info-panel/info-panel.component';
 
 @Component({
   selector: 'app-analysis-progress-spinner',

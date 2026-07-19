@@ -2,12 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { AnalysisRunPage } from './analysis-run-page.component';
-import { AnalysisRunFacade } from '../data-access/facade/analysis-run.facade';
-import {
-  AnalysisStatus,
-  AnalysisStatusKey,
-  PendingAnalysis,
-} from '../data-access/analysis-run.model';
+import { AnalysisRunFacade } from '../analysis-run.facade';
+import { AnalysisStatus, AnalysisStatusKey, PendingAnalysis } from '../analysis-run.model';
 
 describe('AnalysisRunPage', () => {
   let component: AnalysisRunPage;
