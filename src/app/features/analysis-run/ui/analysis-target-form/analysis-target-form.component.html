@@ -59,16 +59,16 @@
             analysisTargetForm.startDate().touched() && analysisTargetForm.startDate().invalid()
           ) {
             <ul class="analysis-form__error-list">
-              @for (error of analysisTargetForm.startDate().errors(); track error.message) {
-                <li>{{ error.message }}</li>
+              @for (error of analysisTargetForm.startDate().errors(); track $index) {
+                <li>{{ errorMessage(error) }}</li>
               }
             </ul>
           }
 
           @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
             <ul class="analysis-form__error-list">
-              @for (error of analysisTargetForm.endDate().errors(); track error.message) {
-                <li>{{ error.message }}</li>
+              @for (error of analysisTargetForm.endDate().errors(); track $index) {
+                <li>{{ errorMessage(error) }}</li>
               }
             </ul>
           }

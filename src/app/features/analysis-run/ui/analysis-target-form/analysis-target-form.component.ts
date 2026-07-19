@@ -5,14 +5,14 @@ import {
   FormRoot,
   hidden,
   required,
-  validate,
   maxLength,
-  SchemaPath,
   debounce,
+  ValidationError,
 } from '@angular/forms/signals';
 import { DatePipe } from '@angular/common';
-import { dateToCalendarKey, localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
+import { localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
+import { url, afterDate, beforeDate } from '../../utils/validators';
 import { AnalysisTargetFormModel } from '../../analysis-run.model';
 
 @Component({
@@ -60,7 +60,7 @@ export class AnalysisTargetForm {
         when: ({ valueOf }) => !valueOf(schemaPath.limitRange),
       });
 
-      url(schemaPath.targetURL);
+      url(schemaPath.targetURL, 'Enter a valid URL');
       maxLength(schemaPath.targetURL, 500);
 
       afterDate(
@@ -95,53 +95,8 @@ export class AnalysisTargetForm {
   isInvalid(field: () => any): boolean {
     return field().touched() && field().invalid();
   }
-}
 
-function url(path: SchemaPath<string>, options?: { message?: string }) {
-  validate(path, ({ value }) => {
-    if (!value()) return null;
-    try {
-      new URL(value());
-      return null;
-    } catch {
-      return {
-        kind: 'url',
-        message: options?.message ?? 'Enter a valid URL',
-      };
-    }
-  });
-}
-
-function afterDate(
-  path: SchemaPath<Date | null>,
-  min: Date | SchemaPath<Date | null>,
-  message: string,
-) {
-  validate(path, ({ value, valueOf }) => {
-    const date = value();
-    const minDate = min instanceof Date ? min : valueOf(min);
-    if (!date || !minDate) return null;
-
-    if (dateToCalendarKey(date) < dateToCalendarKey(minDate)) {
-      return { kind: 'date', message };
-    }
-    return null;
-  });
-}
-
-function beforeDate(
-  path: SchemaPath<Date | null>,
-  max: Date | (() => Date) | SchemaPath<Date | null>,
-  message: string,
-) {
-  validate(path, ({ value, valueOf }) => {
-    const date = value();
-    const maxDate = max instanceof Date ? max : typeof max === 'function' ? max() : valueOf(max);
-    if (!date || !maxDate) return null;
-
-    if (dateToCalendarKey(date) > dateToCalendarKey(maxDate)) {
-      return { kind: 'date', message };
-    }
-    return null;
-  });
+  errorMessage(error: ValidationError): string | null {
+    return error.message ?? 'Enter a valid date';
+  }
 }

@@ -1,4 +1,3 @@
-import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -292,6 +291,23 @@ describe('AnalysisTargetForm', () => {
       const items = fixture.debugElement.queryAll(By.css('.analysis-form__error-list li'));
       expect(items.length).toBeGreaterThan(0);
       expect(items[0].nativeElement.textContent).toContain('URL is required');
+    });
+  });
+
+  describe('errorMessage', () => {
+    it('returns the message when the error has one', () => {
+      const error = { kind: 'required', message: 'Field is required' } as any;
+      expect(component.errorMessage(error)).toBe('Field is required');
+    });
+
+    it('returns fallback message when error has no message', () => {
+      const error = { kind: 'parse' } as any;
+      expect(component.errorMessage(error)).toBe('Enter a valid date');
+    });
+
+    it('prefers the original message over the fallback', () => {
+      const error = { kind: 'parse', message: 'Custom parse message' } as any;
+      expect(component.errorMessage(error)).toBe('Custom parse message');
     });
   });
 });
