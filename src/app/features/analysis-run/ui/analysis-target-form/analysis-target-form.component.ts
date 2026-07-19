@@ -11,6 +11,7 @@ import {
   debounce,
 } from '@angular/forms/signals';
 import { DatePipe } from '@angular/common';
+import { dateToCalendarKey, localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { AnalysisTargetFormModel } from '../../data-access/analysis-run.model';
 
@@ -121,7 +122,7 @@ function afterDate(
     const minDate = min instanceof Date ? min : valueOf(min);
     if (!date || !minDate) return null;
 
-    if (toCalendarKey(date) < toCalendarKey(minDate)) {
+    if (dateToCalendarKey(date) < dateToCalendarKey(minDate)) {
       return { kind: 'date', message };
     }
     return null;
@@ -138,18 +139,9 @@ function beforeDate(
     const maxDate = max instanceof Date ? max : typeof max === 'function' ? max() : valueOf(max);
     if (!date || !maxDate) return null;
 
-    if (toCalendarKey(date) > toCalendarKey(maxDate)) {
+    if (dateToCalendarKey(date) > dateToCalendarKey(maxDate)) {
       return { kind: 'date', message };
     }
     return null;
   });
-}
-
-function toCalendarKey(date: Date): number {
-  return date.getUTCFullYear() * 10000 + date.getUTCMonth() * 100 + date.getUTCDate();
-}
-
-function localNowAsUtcMidnight(): Date {
-  const now = new Date();
-  return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 }

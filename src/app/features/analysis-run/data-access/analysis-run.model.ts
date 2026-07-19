@@ -1,3 +1,5 @@
+import type { ISODateString } from '@app/shared/date-utils/date.utils';
+
 export enum AnalysisStatus {
   QUEUED = 'Queued',
   CLONING = 'Cloning',
@@ -15,8 +17,6 @@ export interface AnalysisTargetFormModel {
   startDate: Date | null;
   endDate: Date | null;
 }
-
-export type ISODateString = string; // Alias ​​for readability - "YYYY-MM-DD"
 
 export interface DateRange {
   startDate: ISODateString;

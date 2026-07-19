@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
+import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../data-access/analysis-run.model';
 
 describe('AnalysisUnfinishedModal', () => {
@@ -64,8 +65,8 @@ describe('AnalysisUnfinishedModal', () => {
     });
     fixture.detectChanges();
 
-    expect(component.startDate()).toBe(new Date('').toLocaleDateString());
-    expect(component.endDate()).toBe(new Date('').toLocaleDateString());
+    expect(component.startDate()).toBe('');
+    expect(component.endDate()).toBe('');
   });
 
   it('immediately updates computed signals', () => {
@@ -75,8 +76,8 @@ describe('AnalysisUnfinishedModal', () => {
     expect(component.targetURL()).toBe(target.targetURL);
     expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString());
     expect(component.limitRange()).toBeTruthy();
-    expect(component.startDate()).toBe(new Date(range.startDate).toLocaleDateString());
-    expect(component.endDate()).toBe(new Date(range.endDate).toLocaleDateString());
+    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate));
+    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate));
   });
 
   it('should display analysis data via inputs', () => {
@@ -98,7 +99,7 @@ describe('AnalysisUnfinishedModal', () => {
 
     const rangeEl = fixture.nativeElement.querySelector('.details__range');
     expect(rangeEl).toBeTruthy();
-    expect(rangeEl.textContent).toContain(new Date(range.startDate).toLocaleDateString());
+    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate));
   });
 
   it('does not show date range section when limitRange is false', async () => {

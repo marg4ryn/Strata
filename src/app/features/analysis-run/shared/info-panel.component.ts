@@ -1,4 +1,5 @@
 import { Component, computed, input, debounced } from '@angular/core';
+import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { PendingAnalysis } from '../data-access/analysis-run.model';
 
 @Component({
@@ -24,13 +25,13 @@ export class InfoPanel {
   });
 
   readonly startDate = computed(() => {
-    const date = this.pendingAnalysis()?.target.range?.startDate ?? '';
-    return new Date(date).toLocaleDateString();
+    const iso = this.pendingAnalysis()?.target.range?.startDate ?? '';
+    return isoDateToLocaleString(iso);
   });
 
   readonly endDate = computed(() => {
-    const date = this.pendingAnalysis()?.target.range?.endDate ?? '';
-    return new Date(date).toLocaleDateString();
+    const iso = this.pendingAnalysis()?.target.range?.endDate;
+    return isoDateToLocaleString(iso);
   });
 
   readonly debouncedAnalysisStartDate = debounced(this.analysisStartDate, 800);

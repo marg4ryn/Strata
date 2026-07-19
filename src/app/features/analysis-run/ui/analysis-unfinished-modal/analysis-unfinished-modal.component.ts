@@ -1,4 +1,5 @@
 import { Component, input, output, computed } from '@angular/core';
+import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
 import { PendingAnalysis } from '../../data-access/analysis-run.model';
@@ -31,13 +32,13 @@ export class AnalysisUnfinishedModal {
   });
 
   readonly startDate = computed(() => {
-    const date = this.pendingAnalysis()?.target.range?.startDate ?? '';
-    return new Date(date).toLocaleDateString();
+    const iso = this.pendingAnalysis()?.target.range?.startDate ?? '';
+    return isoDateToLocaleString(iso);
   });
 
   readonly endDate = computed(() => {
-    const date = this.pendingAnalysis()?.target.range?.endDate ?? '';
-    return new Date(date).toLocaleDateString();
+    const iso = this.pendingAnalysis()?.target.range?.endDate ?? '';
+    return isoDateToLocaleString(iso);
   });
 
   onCancel(): void {

@@ -166,7 +166,7 @@ describe('AnalysisTargetForm', () => {
 
     it('should reject start date before 1970-01-01', () => {
       const [startInput] = getDateInputs();
-      setInputValue(startInput, '1960-01-01');
+      setInputValue(startInput, '1969-12-31');
 
       expect(component.analysisTargetForm.startDate().invalid()).toBe(true);
       const messages = component.analysisTargetForm
@@ -178,7 +178,7 @@ describe('AnalysisTargetForm', () => {
 
     it('should reject end date before 1970-01-01', () => {
       const [, endInput] = getDateInputs();
-      setInputValue(endInput, '1960-01-01');
+      setInputValue(endInput, '1969-12-31');
 
       expect(component.analysisTargetForm.endDate().invalid()).toBe(true);
     });
@@ -226,8 +226,8 @@ describe('AnalysisTargetForm', () => {
 
     it('should accept a valid date range', () => {
       const [startInput, endInput] = getDateInputs();
-      setInputValue(startInput, '2024-01-01');
-      setInputValue(endInput, '2024-06-15');
+      setInputValue(startInput, '1970-01-01');
+      setInputValue(endInput, '1970-01-01');
 
       expect(component.analysisTargetForm.startDate().invalid()).toBe(false);
       expect(component.analysisTargetForm.endDate().invalid()).toBe(false);
@@ -281,7 +281,7 @@ describe('AnalysisTargetForm', () => {
       setInputValue(input, '');
       await advance(300);
 
-      expect(input.classList.contains('analysis-form__input--invalid')).toBe(true);
+      expect(input.classList.contains('invalid')).toBe(true);
     });
 
     it('should render an error-list item for each URL error', async () => {

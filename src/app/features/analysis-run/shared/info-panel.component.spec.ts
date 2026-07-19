@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InfoPanel } from './info-panel.component';
+import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../data-access/analysis-run.model';
 
 describe('InfoPanel', () => {
@@ -54,8 +55,8 @@ describe('InfoPanel', () => {
     expect(component.targetURL()).toBe(target.targetURL);
     expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString());
     expect(component.limitRange()).toBeTruthy();
-    expect(component.startDate()).toBe(new Date(range.startDate).toLocaleDateString());
-    expect(component.endDate()).toBe(new Date(range.endDate).toLocaleDateString());
+    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate));
+    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate));
   });
 
   it('does not update debounced signals before 800ms', async () => {
@@ -70,12 +71,8 @@ describe('InfoPanel', () => {
       new Date(analysis.startedAt).toLocaleString(),
     );
     expect(component.debouncedLimitRange.value()).not.toBeTruthy();
-    expect(component.debouncedStartDate.value()).not.toBe(
-      new Date('2000-01-01').toLocaleDateString(),
-    );
-    expect(component.debouncedEndDate.value()).not.toBe(
-      new Date('2000-01-01').toLocaleDateString(),
-    );
+    expect(component.debouncedStartDate.value()).not.toBe(isoDateToLocaleString('2000-01-01'));
+    expect(component.debouncedEndDate.value()).not.toBe(isoDateToLocaleString('2000-01-01'));
   });
 
   it('updates debounced signals after 800ms', async () => {
@@ -90,10 +87,8 @@ describe('InfoPanel', () => {
       new Date(analysis.startedAt).toLocaleString(),
     );
     expect(component.debouncedLimitRange.value()).toBeTruthy();
-    expect(component.debouncedStartDate.value()).toBe(
-      new Date(range.startDate).toLocaleDateString(),
-    );
-    expect(component.debouncedEndDate.value()).toBe(new Date(range.endDate).toLocaleDateString());
+    expect(component.debouncedStartDate.value()).toBe(isoDateToLocaleString(range.startDate));
+    expect(component.debouncedEndDate.value()).toBe(isoDateToLocaleString(range.endDate));
   });
 
   it('renders target URL after debounce', async () => {
@@ -116,7 +111,7 @@ describe('InfoPanel', () => {
 
     const rangeEl = fixture.nativeElement.querySelector('.details__range');
     expect(rangeEl).toBeTruthy();
-    expect(rangeEl.textContent).toContain(new Date(range.startDate).toLocaleDateString());
+    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate));
   });
 
   it('does not show date range section when limitRange is false', async () => {
