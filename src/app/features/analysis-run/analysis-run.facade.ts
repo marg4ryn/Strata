@@ -15,12 +15,12 @@ export class AnalysisRunFacade {
   readonly pendingAnalysis = computed(() => this.store.pendingAnalysis());
 
   startNewAnalysis(formData: AnalysisTargetFormModel): void {
-    this.orchestrator.startNewAnalysis(formData);
+    void this.orchestrator.startNewAnalysis(formData);
   }
 
   // attempt to resume unfinished analysis
   tryToReconnect(): void {
-    this.orchestrator.tryToReconnect();
+    void this.orchestrator.tryToReconnect();
   }
 
   // actually taking up the unfinished analysis
@@ -35,16 +35,16 @@ export class AnalysisRunFacade {
 
   // abandoning analysis after an error
   cancelAnalysis(): void {
-    this.orchestrator.cancelAnalysis();
+    void this.orchestrator.cancelAnalysis();
   }
 
   // abandoning a previously unfinished analysis
   abandonAnalysis(): void {
-    this.orchestrator.abandonAnalysis();
+    void this.orchestrator.abandonAnalysis();
   }
 
   // abandoning an ongoing analysis
   abortAnalysis(): void {
-    this.orchestrator.abortAnalysis();
+    void this.orchestrator.abortAnalysis();
   }
 }

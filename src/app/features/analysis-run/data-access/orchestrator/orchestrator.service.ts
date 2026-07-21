@@ -35,7 +35,7 @@ export class OrchestratorService {
         // sendMessageSuccess()
         // call history feature
         // call analysis-results feature
-        this.clearData();
+        void this.clearData(); // not waiting for Promise on purpose
       }
 
       if (error !== null) {
@@ -66,7 +66,7 @@ export class OrchestratorService {
     if (!acquired) {
       this.logger.debug('Orchestrator found an ongoing analysis, but another card took over');
       this.storage.deleteSessionId();
-      return this.tryToResumeAnalysis();
+      return await this.tryToResumeAnalysis();
     }
 
     const pendingAnalyses = this.storage.getPendingAnalyses();
@@ -78,7 +78,7 @@ export class OrchestratorService {
       this.logger.debug('Orchestrator found an ongoing analysis, but another card took over');
       this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
-      return this.tryToResumeAnalysis();
+      return await this.tryToResumeAnalysis();
     }
 
     this.logger.info('Orchestrator reconnected to an ongoing analysis');
@@ -161,7 +161,7 @@ export class OrchestratorService {
     );
     // sendMessageCancel()
     await this.clearData();
-    return await this.tryToResumeAnalysis();
+    await this.tryToResumeAnalysis();
   }
 
   async abortAnalysis(): Promise<void> {
@@ -191,6 +191,15 @@ export class OrchestratorService {
     this.store.error.set(null);
     // sendMessageCancel()
     await this.clearData();
+  }
+
+  private async clearData(): Promise<void> {
+    const sessionId = this.store.pendingAnalysis()!.sessionId;
+    this.logger.info(`Orchestrator deleted data of analysis with sessionId: ${sessionId}`);
+    this.storage.deleteSessionId();
+    this.storage.deletePendingAnalysis(sessionId);
+    await this.locker.unlock(sessionId);
+    this.store.resetAnalysisState();
   }
 
   private constructPendingAnalysis(formData: AnalysisTargetFormModel): PendingAnalysis {
@@ -234,14 +243,5 @@ export class OrchestratorService {
     }
 
     return params;
-  }
-
-  private async clearData(): Promise<void> {
-    const sessionId = this.store.pendingAnalysis()!.sessionId;
-    this.logger.info(`Orchestrator deleted data of analysis with sessionId: ${sessionId}`);
-    this.storage.deleteSessionId();
-    this.storage.deletePendingAnalysis(sessionId);
-    await this.locker.unlock(sessionId);
-    this.store.resetAnalysisState();
   }
 }
