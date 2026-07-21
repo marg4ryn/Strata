@@ -193,7 +193,7 @@ export class OrchestratorService {
     await this.clearData();
   }
 
-  private async clearData(): Promise<void> {
+  async clearData(): Promise<void> {
     const sessionId = this.store.pendingAnalysis()!.sessionId;
     this.logger.info(`Orchestrator deleted data of analysis with sessionId: ${sessionId}`);
     this.storage.deleteSessionId();
@@ -202,7 +202,7 @@ export class OrchestratorService {
     this.store.resetAnalysisState();
   }
 
-  private constructPendingAnalysis(formData: AnalysisTargetFormModel): PendingAnalysis {
+  constructPendingAnalysis(formData: AnalysisTargetFormModel): PendingAnalysis {
     const sessionId = crypto.randomUUID();
     const startedAt = Date.now();
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -230,7 +230,7 @@ export class OrchestratorService {
     return pendingAnalysis;
   }
 
-  private constructConnectionParams(pendingAnalysis: PendingAnalysis): Record<string, string> {
+  constructConnectionParams(pendingAnalysis: PendingAnalysis): Record<string, string> {
     const params: Record<string, string> = {
       sessionId: pendingAnalysis.sessionId,
       repositoryUrl: pendingAnalysis.target.targetURL,
