@@ -1,4 +1,5 @@
 import { Component, inject, computed, debounced } from '@angular/core';
+
 import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-form.component';
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner.component';
 import { AnalysisErrorModal } from '../ui/analysis-error-modal/analysis-error-modal.component';

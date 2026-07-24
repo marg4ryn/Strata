@@ -9,10 +9,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
+
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { LoadingSpinner } from '@app/shared/loading-spinner/loading-spinner.component';
-import { PendingAnalysis } from '../../analysis-run.model';
 import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
+import { PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanel } from '../info-panel/info-panel.component';
 
 @Component({

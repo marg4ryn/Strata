@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
+
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanel } from '../info-panel/info-panel.component';
