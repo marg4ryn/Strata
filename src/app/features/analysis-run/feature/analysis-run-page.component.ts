@@ -23,6 +23,7 @@ export class AnalysisRunPage {
   readonly pendingAnalysis = this.facade.pendingAnalysis;
   readonly progress = this.facade.progress;
   readonly error = this.facade.error;
+  readonly errorType = this.facade.errorType;
   readonly isBusy = this.facade.isBusy;
   readonly showModal = this.facade.showModal;
 

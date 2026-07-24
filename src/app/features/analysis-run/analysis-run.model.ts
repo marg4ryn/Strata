@@ -11,6 +11,8 @@ export enum AnalysisStatus {
 
 export type AnalysisStatusKey = keyof typeof AnalysisStatus;
 
+export type ErrorType = 'server' | 'connection';
+
 export interface AnalysisTargetFormModel {
   targetURL: string;
   limitRange: boolean;

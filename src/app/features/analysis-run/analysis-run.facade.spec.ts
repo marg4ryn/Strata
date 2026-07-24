@@ -9,6 +9,7 @@ import {
   AnalysisStatusKey,
   PendingAnalysis,
   AnalysisTarget,
+  ErrorType,
 } from './analysis-run.model';
 
 describe('AnalysisRunFacade', () => {
@@ -18,6 +19,7 @@ describe('AnalysisRunFacade', () => {
     pendingAnalysis: ReturnType<typeof signal<PendingAnalysis | null>>;
     progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
     error: ReturnType<typeof signal<string | null>>;
+    errorType: ReturnType<typeof signal<ErrorType | null>>;
     isBusy: ReturnType<typeof signal<boolean>>;
     showModal: ReturnType<typeof signal<boolean>>;
   };
@@ -37,6 +39,7 @@ describe('AnalysisRunFacade', () => {
       pendingAnalysis: signal(null),
       progress: signal(null),
       error: signal(null),
+      errorType: signal(null),
       isBusy: signal(false),
       showModal: signal(false),
     };
@@ -80,12 +83,14 @@ describe('AnalysisRunFacade', () => {
     store.showModal.set(true);
     store.progress.set('ANALYZING');
     store.error.set('Error');
+    store.errorType.set('server');
     store.pendingAnalysis.set(pendingAnalysis);
 
     expect(service.isBusy()).toBeTruthy();
     expect(service.showModal()).toBeTruthy();
     expect(service.progress()).toBe('ANALYZING');
     expect(service.error()).toBe('Error');
+    expect(service.errorType()).toBe('server');
     expect(service.pendingAnalysis()).toBe(pendingAnalysis);
   });
 

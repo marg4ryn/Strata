@@ -1,6 +1,7 @@
 @if (error()) {
   <app-analysis-error-modal
     [error]="error()"
+    [errorType]="errorType()"
     [pendingAnalysis]="pendingAnalysis()"
     (retry)="retryAnalysis()"
     (cancel)="cancelAnalysis()"

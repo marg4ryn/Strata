@@ -1,3 +1,4 @@
+import { computed } from '@angular/core';
 import {
   AfterViewInit,
   ElementRef,
@@ -10,7 +11,7 @@ import {
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { PendingAnalysis } from '../../analysis-run.model';
+import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanel } from '../info-panel/info-panel.component';
 
 @Component({
@@ -22,20 +23,30 @@ import { InfoPanel } from '../info-panel/info-panel.component';
 export class AnalysisErrorModal implements AfterViewInit, OnDestroy {
   private readonly focusMonitor = inject(FocusMonitor);
 
-  readonly firstButton = viewChild.required<ElementRef<HTMLButtonElement>>('firstButton');
+  readonly cancelButton = viewChild<ElementRef<HTMLButtonElement>>('cancelButton');
+  readonly retryButton = viewChild<ElementRef<HTMLButtonElement>>('retryButton');
 
   readonly pendingAnalysis = input<PendingAnalysis | null>();
   readonly error = input<string | null>();
+  readonly errorType = input<ErrorType | null>();
+
+  readonly showRetry = computed(() => this.errorType() === 'connection');
 
   readonly retry = output<void>();
   readonly cancel = output<void>();
 
+  private get focusTarget(): ElementRef<HTMLButtonElement> | undefined {
+    return this.retryButton() ?? this.cancelButton();
+  }
+
   ngAfterViewInit(): void {
-    this.focusMonitor.focusVia(this.firstButton(), 'program');
+    const button = this.focusTarget;
+    this.focusMonitor.focusVia(button!, 'program');
   }
 
   ngOnDestroy(): void {
-    this.focusMonitor.stopMonitoring(this.firstButton());
+    const button = this.focusTarget;
+    this.focusMonitor.stopMonitoring(button!);
   }
 
   retryAnalysis(): void {

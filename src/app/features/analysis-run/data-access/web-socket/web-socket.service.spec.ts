@@ -40,6 +40,7 @@ describe('WebSocketService', () => {
     progress: ReturnType<typeof signal<any>>;
     result: ReturnType<typeof signal<any>>;
     error: ReturnType<typeof signal<any>>;
+    errorType: ReturnType<typeof signal<any>>;
   };
   let logger: Partial<LoggerService>;
 
@@ -52,6 +53,7 @@ describe('WebSocketService', () => {
       progress: signal(null),
       result: signal(null),
       error: signal(null),
+      errorType: signal(null),
     };
 
     logger = {
@@ -129,6 +131,7 @@ describe('WebSocketService', () => {
     const socket = getSocket();
     socket.onmessage?.({ data: JSON.stringify({ type: 'error', data: 'boom' }) } as MessageEvent);
     expect(store.error()).toBe('boom');
+    expect(store.errorType()).toBe('server');
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
@@ -137,6 +140,7 @@ describe('WebSocketService', () => {
     const socket = getSocket();
     socket.onmessage?.({ data: JSON.stringify({ type: 'error', data: '' }) } as MessageEvent);
     expect(store.error()).toBe('Server error');
+    expect(store.errorType()).toBe('server');
   });
 
   it('should warn on unknown message type', () => {
@@ -150,6 +154,7 @@ describe('WebSocketService', () => {
     const socket = getSocket();
     socket.onmessage?.({ data: 'invalid json' } as MessageEvent);
     expect(store.error()).toBe('Failed to parse message');
+    expect(store.errorType()).toBe('server');
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
@@ -158,6 +163,7 @@ describe('WebSocketService', () => {
     const socket = getSocket();
     socket.onerror?.();
     expect(store.error()).toBe('Connection error');
+    expect(store.errorType()).toBe('connection');
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
@@ -168,6 +174,7 @@ describe('WebSocketService', () => {
     service.abort();
     socket.onerror?.();
     expect(store.error()).toBeNull();
+    expect(store.errorType()).toBeNull();
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 

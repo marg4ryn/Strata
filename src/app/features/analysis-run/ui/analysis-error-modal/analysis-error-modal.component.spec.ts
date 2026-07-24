@@ -1,10 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
 import { AnalysisErrorModal } from './analysis-error-modal.component';
 
 describe('AnalysisErrorModal', () => {
   let component: AnalysisErrorModal;
   let fixture: ComponentFixture<AnalysisErrorModal>;
+  let focusMonitor: FocusMonitor;
+  let focusViaSpy: ReturnType<typeof vi.spyOn>;
+  let stopMonitoringSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -13,8 +17,10 @@ describe('AnalysisErrorModal', () => {
 
     fixture = TestBed.createComponent(AnalysisErrorModal);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    await fixture.whenStable();
+
+    focusMonitor = TestBed.inject(FocusMonitor);
+    focusViaSpy = vi.spyOn(focusMonitor, 'focusVia');
+    stopMonitoringSpy = vi.spyOn(focusMonitor, 'stopMonitoring');
   });
 
   function getButtons(): { cancel: HTMLButtonElement; retry: HTMLButtonElement } {
@@ -22,34 +28,96 @@ describe('AnalysisErrorModal', () => {
     return { cancel: buttons[0], retry: buttons[1] };
   }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('default behavior', () => {
+    beforeEach(async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should display error message via input', async () => {
+      fixture.componentRef.setInput('error', 'Server error');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const body = fixture.nativeElement.querySelector('.modal__body');
+      expect(body.textContent).toContain('Server error');
+    });
+
+    it('should emit cancel when cancel button is clicked', () => {
+      const spy = vi.fn();
+      component.cancel.subscribe(spy);
+
+      getButtons().cancel.click();
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
+    it('should emit retry when retry button is clicked during connection error', () => {
+      const spy = vi.fn();
+      component.retry.subscribe(spy);
+      fixture.componentRef.setInput('errorType', 'connection');
+      fixture.detectChanges();
+
+      getButtons().retry.click();
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
+    it('should not be able to emit retry when server error occurs', () => {
+      const spy = vi.fn();
+      component.retry.subscribe(spy);
+      fixture.componentRef.setInput('errorType', 'server');
+      fixture.detectChanges();
+
+      expect(getButtons().retry).toBeUndefined();
+    });
+
+    it('should focus cancel button on init when retry button does not exist', () => {
+      expect(focusViaSpy).toHaveBeenCalledOnce();
+      expect(focusViaSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ nativeElement: getButtons().cancel }),
+        'program',
+      );
+    });
+
+    it('should stop monitoring cancel button on destroy', () => {
+      const cancelButton = getButtons().cancel;
+      fixture.destroy();
+
+      expect(stopMonitoringSpy).toHaveBeenCalledOnce();
+      expect(stopMonitoringSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ nativeElement: cancelButton }),
+      );
+    });
   });
 
-  it('should display error message via input', async () => {
-    fixture.componentRef.setInput('error', 'Server error');
-    fixture.detectChanges();
-    await fixture.whenStable();
+  describe('connection error on init', () => {
+    beforeEach(async () => {
+      fixture.componentRef.setInput('errorType', 'connection');
+      fixture.detectChanges();
+      await fixture.whenStable();
+    });
 
-    const body = fixture.nativeElement.querySelector('.modal__body');
-    expect(body.textContent).toContain('Server error');
-  });
+    it('should focus retry button on init when retry button exists', () => {
+      expect(focusViaSpy).toHaveBeenCalledOnce();
+      expect(focusViaSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ nativeElement: getButtons().retry }),
+        'program',
+      );
+    });
 
-  it('should emit cancel when cancel button is clicked', () => {
-    const spy = vi.fn();
-    component.cancel.subscribe(spy);
+    it('should stop monitoring retry button on destroy', () => {
+      const retryButton = getButtons().retry;
+      fixture.destroy();
 
-    getButtons().cancel.click();
-
-    expect(spy).toHaveBeenCalledOnce();
-  });
-
-  it('should emit retry when retry button is clicked', () => {
-    const spy = vi.fn();
-    component.retry.subscribe(spy);
-
-    getButtons().retry.click();
-
-    expect(spy).toHaveBeenCalledOnce();
+      expect(stopMonitoringSpy).toHaveBeenCalledOnce();
+      expect(stopMonitoringSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ nativeElement: retryButton }),
+      );
+    });
   });
 });

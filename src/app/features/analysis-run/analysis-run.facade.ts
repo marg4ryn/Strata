@@ -12,6 +12,7 @@ export class AnalysisRunFacade {
   readonly isBusy = computed(() => this.store.isBusy());
   readonly progress = computed(() => this.store.progress());
   readonly error = computed(() => this.store.error());
+  readonly errorType = computed(() => this.store.errorType());
   readonly pendingAnalysis = computed(() => this.store.pendingAnalysis());
 
   startNewAnalysis(formData: AnalysisTargetFormModel): void {

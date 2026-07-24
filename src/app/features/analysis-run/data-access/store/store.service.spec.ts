@@ -31,6 +31,7 @@ describe('StoreService', () => {
       store.progress.set('QUEUED');
       store.result.set('foo');
       store.error.set('bar');
+      store.errorType.set('server');
       store.showModal.set(true);
       store.isBusy.set(true);
 
@@ -40,6 +41,7 @@ describe('StoreService', () => {
       expect(store.progress()).toBeNull();
       expect(store.result()).toBeNull();
       expect(store.error()).toBeNull();
+      expect(store.errorType()).toBeNull();
       expect(store.showModal()).toBeFalsy();
       expect(store.isBusy()).toBeFalsy();
     });
@@ -57,6 +59,7 @@ describe('StoreService', () => {
       store.progress.set('QUEUED');
       store.result.set('foo');
       store.error.set('bar');
+      store.errorType.set('server');
 
       store.resetAnalysisState();
 
@@ -64,6 +67,7 @@ describe('StoreService', () => {
       expect(store.progress()).toBeNull();
       expect(store.result()).toBeNull();
       expect(store.error()).toBeNull();
+      expect(store.errorType()).toBeNull();
     });
 
     it('should omit non analysis data', () => {

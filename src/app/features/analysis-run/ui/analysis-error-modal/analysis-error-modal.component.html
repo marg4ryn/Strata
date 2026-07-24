@@ -8,8 +8,11 @@
   </div>
 
   <footer class="modal__footer">
-    <button btn="secondary" (click)="cancelAnalysis()">Cancel</button>
-    <button #firstButton btn="primary" (click)="retryAnalysis()">Retry</button>
+    <button #cancelButton btn="secondary" (click)="cancelAnalysis()">Cancel</button>
+
+    @if (showRetry()) {
+      <button #retryButton btn="primary" (click)="retryAnalysis()">Retry</button>
+    }
   </footer>
 </div>
 

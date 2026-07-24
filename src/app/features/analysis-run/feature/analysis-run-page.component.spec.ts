@@ -3,7 +3,12 @@ import { signal } from '@angular/core';
 
 import { AnalysisRunPage } from './analysis-run-page.component';
 import { AnalysisRunFacade } from '../analysis-run.facade';
-import { AnalysisStatus, AnalysisStatusKey, PendingAnalysis } from '../analysis-run.model';
+import {
+  AnalysisStatus,
+  AnalysisStatusKey,
+  ErrorType,
+  PendingAnalysis,
+} from '../analysis-run.model';
 
 describe('AnalysisRunPage', () => {
   let component: AnalysisRunPage;
@@ -12,6 +17,7 @@ describe('AnalysisRunPage', () => {
     pendingAnalysis: ReturnType<typeof signal<PendingAnalysis | null>>;
     progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
     error: ReturnType<typeof signal<string | null>>;
+    errorType: ReturnType<typeof signal<ErrorType | null>>;
     isBusy: ReturnType<typeof signal<boolean>>;
     showModal: ReturnType<typeof signal<boolean>>;
     tryToReconnect: ReturnType<typeof vi.fn>;
@@ -28,6 +34,7 @@ describe('AnalysisRunPage', () => {
       pendingAnalysis: signal(null),
       progress: signal(null),
       error: signal(null),
+      errorType: signal(null),
       isBusy: signal(false),
       showModal: signal(false),
       tryToReconnect: vi.fn(),
@@ -65,6 +72,7 @@ describe('AnalysisRunPage', () => {
   describe('conditional rendering', () => {
     it('shows error modal when error is set', () => {
       facade.error.set('Server error');
+      facade.errorType.set('server');
       fixture.detectChanges();
 
       expect(query('app-analysis-error-modal')).toBeTruthy();
@@ -76,6 +84,7 @@ describe('AnalysisRunPage', () => {
     it('prioritizes error modal over unfinished modal', () => {
       facade.showModal.set(true);
       facade.error.set('Server error');
+      facade.errorType.set('server');
       fixture.detectChanges();
 
       expect(query('app-analysis-error-modal')).toBeTruthy();
@@ -113,8 +122,23 @@ describe('AnalysisRunPage', () => {
   });
 
   describe('event handling via real child components', () => {
-    it('should call retryAnalysis when retry button in error modal is clicked', () => {
+    it('should not be able to call retryAnalysis when error type is server', () => {
       facade.error.set('Server error');
+      facade.errorType.set('server');
+      fixture.detectChanges();
+
+      const buttons = query<HTMLElement>('app-analysis-error-modal')!.querySelectorAll('button');
+      const button = buttons[0] as HTMLButtonElement;
+      button.click();
+
+      expect(facade.retryAnalysis).not.toHaveBeenCalled();
+      expect(facade.cancelAnalysis).toHaveBeenCalledOnce();
+      expect(buttons.length).toBe(1);
+    });
+
+    it('should call retryAnalysis when retry button in error modal is clicked', () => {
+      facade.error.set('Connection error');
+      facade.errorType.set('connection');
       fixture.detectChanges();
 
       const buttons = query<HTMLElement>('app-analysis-error-modal')!.querySelectorAll('button');
@@ -126,6 +150,7 @@ describe('AnalysisRunPage', () => {
 
     it('should call cancelAnalysis when cancel button in error modal is clicked', () => {
       facade.error.set('Server error');
+      facade.errorType.set('server');
       fixture.detectChanges();
 
       const buttons = query<HTMLElement>('app-analysis-error-modal')!.querySelectorAll('button');

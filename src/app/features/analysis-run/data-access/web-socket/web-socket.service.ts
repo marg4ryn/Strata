@@ -22,6 +22,7 @@ export class WebSocketService {
   private readonly progress = this.store.progress;
   private readonly result = this.store.result;
   private readonly error = this.store.error;
+  private readonly errorType = this.store.errorType;
 
   connect(params?: Record<string, string>): void {
     const url = this.constructUrl(params);
@@ -53,6 +54,7 @@ export class WebSocketService {
             break;
           case 'error':
             this.error.set(message.data || 'Server error');
+            this.errorType.set('server');
             this.disconnect();
             break;
           default:
@@ -60,6 +62,7 @@ export class WebSocketService {
         }
       } catch (error) {
         this.error.set('Failed to parse message');
+        this.errorType.set('server');
         this.logger.error('WebSocket Service failed to parse message', error);
         this.disconnect();
       }
@@ -71,6 +74,7 @@ export class WebSocketService {
         return;
       }
       this.error.set('Connection error');
+      this.errorType.set('connection');
       this.logger.error('WebSocket Service encountered connection error');
       this.disconnect();
     };
