@@ -214,7 +214,7 @@ describe('AnalysisRunPage', () => {
       fixture.detectChanges();
 
       const urlInput = query<HTMLInputElement>('#analysisTargetURL')!;
-      urlInput.value = 'https://example.com';
+      urlInput.value = 'https://example.com/Project.git';
       urlInput.dispatchEvent(new Event('input'));
       urlInput.dispatchEvent(new Event('blur'));
       fixture.detectChanges();

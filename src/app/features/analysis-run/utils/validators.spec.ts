@@ -20,12 +20,19 @@ describe('url validator', () => {
   });
 
   it('returns no error for a valid URL', () => {
-    const f = setup('https://example.com');
+    const f = setup('https://example.com/Project.git');
     expect(f.targetURL().errors()).toEqual([]);
   });
 
   it('returns an error for an invalid URL', () => {
     const f = setup('invalid-url');
+    const errors = f.targetURL().errors();
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatchObject({ kind: 'url', message: 'Enter a valid URL' });
+  });
+
+  it('returns an error for an URL without .git extension', () => {
+    const f = setup('https://example.com');
     const errors = f.targetURL().errors();
     expect(errors).toHaveLength(1);
     expect(errors[0]).toMatchObject({ kind: 'url', message: 'Enter a valid URL' });

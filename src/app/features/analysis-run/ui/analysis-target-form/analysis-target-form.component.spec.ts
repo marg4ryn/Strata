@@ -85,14 +85,14 @@ describe('AnalysisTargetForm', () => {
 
     it('should be valid for a well-formed URL', async () => {
       const input = getUrlInput();
-      setInputValue(input, 'https://example.com');
+      setInputValue(input, 'https://example.com/Project.git');
       await advance(300);
 
       expect(component.analysisTargetForm.targetURL().invalid()).toBe(false);
     });
 
     it('should be invalid when exceeding max length of 500 characters', async () => {
-      const longUrl = 'https://example.com/' + 'a'.repeat(500);
+      const longUrl = 'https://example.com/' + 'a'.repeat(500) + '.git';
       const input = getUrlInput();
       setInputValue(input, longUrl);
       await advance(300);
@@ -244,7 +244,7 @@ describe('AnalysisTargetForm', () => {
 
     it('should disable the submit button while submitting', async () => {
       const input = getUrlInput();
-      setInputValue(input, 'https://example.com');
+      setInputValue(input, 'https://example.com/Project.git');
       await advance(300);
 
       const button: HTMLButtonElement = fixture.debugElement.query(

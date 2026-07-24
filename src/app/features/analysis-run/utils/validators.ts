@@ -5,7 +5,10 @@ export function url(path: SchemaPath<string>, message: string) {
   validate(path, ({ value }) => {
     if (!value()) return null;
     try {
-      new URL(value());
+      const parsed = new URL(value());
+      if (!parsed.pathname.endsWith('.git')) {
+        return { kind: 'url', message };
+      }
       return null;
     } catch {
       return { kind: 'url', message };
