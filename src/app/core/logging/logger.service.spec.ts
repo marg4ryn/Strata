@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockInstance } from 'vitest';
+
 import { environment } from '@env/environment';
 import { LoggerService } from './logger.service';
 import { LogLevel } from './logger.enum';
@@ -7,14 +8,14 @@ import { LogLevel } from './logger.enum';
 vi.mock('@env/environment', () => ({
   environment: {
     production: false,
-    apiUrl: '',
+    apiUrl: 'http://localhost:8080/api/',
     enableLogging: true,
     logLevel: LogLevel.DEBUG,
   },
 }));
 
 describe('LoggerService', () => {
-  let logger: LoggerService;
+  let service: LoggerService;
   let consoleDebugSpy: MockInstance;
   let consoleInfoSpy: MockInstance;
   let consoleWarnSpy: MockInstance;
@@ -22,6 +23,9 @@ describe('LoggerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
+
+    service = TestBed.inject(LoggerService);
+
     consoleDebugSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -37,30 +41,30 @@ describe('LoggerService', () => {
       environment.production = false;
       environment.enableLogging = true;
       environment.logLevel = LogLevel.DEBUG;
-      logger = new LoggerService();
+      service = new LoggerService();
     });
 
-    it('should log debug', () => {
-      logger.debug('foo');
+    it('logs debug', () => {
+      service.debug('foo');
       expect(consoleDebugSpy).toHaveBeenCalled();
     });
 
-    it('should log info', () => {
-      logger.info('foo');
+    it('logs info', () => {
+      service.info('foo');
       expect(consoleInfoSpy).toHaveBeenCalled();
     });
 
-    it('should log warn', () => {
-      logger.warn('foo');
+    it('logs warn', () => {
+      service.warn('foo');
       expect(consoleWarnSpy).toHaveBeenCalled();
     });
 
-    it('should log error', () => {
-      logger.error('foo');
+    it('logs error', () => {
+      service.error('foo');
       expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
-    it('should display proper message', () => {
+    it('displays proper message', () => {
       const date = new Date(Date.UTC(2000, 0, 1, 1, 1, 1, 1));
       const objectOne = { foo: 'foo' };
       const objectTwo = { bar: 'bar' };
@@ -68,7 +72,7 @@ describe('LoggerService', () => {
       vi.useFakeTimers();
       vi.setSystemTime(date);
 
-      logger.debug(message, objectOne, objectTwo);
+      service.debug(message, objectOne, objectTwo);
 
       expect(consoleDebugSpy).toHaveBeenCalledWith(
         `[2000-01-01T01:01:01.001Z] [DEBUG]`,
@@ -80,22 +84,22 @@ describe('LoggerService', () => {
       vi.useRealTimers();
     });
 
-    it('should not log when log level is higher', () => {
+    it('does not log when the log level is higher than the environment level', () => {
       environment.logLevel = LogLevel.WARN;
-      logger = new LoggerService();
-      logger.info('foo');
+      service = new LoggerService();
+      service.info('foo');
       expect(consoleInfoSpy).not.toHaveBeenCalled();
     });
 
-    it('should not log when logging is disabled', () => {
+    it('does not log when logging is disabled', () => {
       environment.enableLogging = false;
-      logger = new LoggerService();
-      logger.debug('foo');
+      service = new LoggerService();
+      service.debug('foo');
       expect(consoleDebugSpy).not.toHaveBeenCalled();
     });
 
-    it('should not log and not throw for invalid log level', () => {
-      expect(() => (logger as any).log(999, 'foo')).not.toThrow();
+    it('does not log and not throw for invalid log level', () => {
+      expect(() => (service as any).log(999, 'foo')).not.toThrow();
       expect(consoleDebugSpy).not.toHaveBeenCalled();
       expect(consoleInfoSpy).not.toHaveBeenCalled();
       expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -108,26 +112,26 @@ describe('LoggerService', () => {
       environment.production = true;
       environment.enableLogging = false;
       environment.logLevel = LogLevel.ERROR;
-      logger = new LoggerService();
+      service = new LoggerService();
     });
 
-    it('should not log debug', () => {
-      logger.debug('foo');
+    it('does not log debug', () => {
+      service.debug('foo');
       expect(consoleDebugSpy).not.toHaveBeenCalled();
     });
 
-    it('should not log info', () => {
-      logger.info('foo');
+    it('does not log info', () => {
+      service.info('foo');
       expect(consoleInfoSpy).not.toHaveBeenCalled();
     });
 
-    it('should not log warn', () => {
-      logger.warn('foo');
+    it('does not log warn', () => {
+      service.warn('foo');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
-    it('should not log error', () => {
-      logger.error('foo');
+    it('does not log error', () => {
+      service.error('foo');
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
   });

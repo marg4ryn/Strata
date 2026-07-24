@@ -34,17 +34,17 @@ export class AnalysisRunFacade {
     this.orchestrator.retryAnalysis();
   }
 
-  // abandoning analysis after an error
+  // cancelling analysis after an error
   cancelAnalysis(): void {
     void this.orchestrator.cancelAnalysis();
   }
 
-  // abandoning a previously unfinished analysis
+  // cancelling a previously unfinished analysis
   abandonAnalysis(): void {
     void this.orchestrator.abandonAnalysis();
   }
 
-  // abandoning an ongoing analysis
+  // cancelling an ongoing analysis
   abortAnalysis(): void {
     void this.orchestrator.abortAnalysis();
   }

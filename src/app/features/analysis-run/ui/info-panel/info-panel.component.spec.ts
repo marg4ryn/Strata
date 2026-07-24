@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InfoPanel } from './info-panel.component';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
+import { InfoPanel } from './info-panel.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('InfoPanel', () => {
@@ -14,7 +14,7 @@ describe('InfoPanel', () => {
     timezone: 'Europe/Warsaw',
   };
   const target: AnalysisTarget = {
-    targetURL: 'https://example.com',
+    targetURL: 'https://example.com/Project.git',
     limitRange: true,
     range: range,
   };
@@ -42,11 +42,6 @@ describe('InfoPanel', () => {
   function setInput(value: PendingAnalysis): void {
     fixture.componentRef.setInput('pendingAnalysis', value);
   }
-
-  it('should create', () => {
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
-  });
 
   it('immediately updates computed signals', () => {
     fixture.detectChanges();

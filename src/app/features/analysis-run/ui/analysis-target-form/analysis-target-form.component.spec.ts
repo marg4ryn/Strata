@@ -57,7 +57,7 @@ describe('AnalysisTargetForm', () => {
   }
 
   describe('URL validation', () => {
-    it('should be invalid and required when empty', async () => {
+    it('is invalid and required when empty', async () => {
       const input = getUrlInput();
       setInputValue(input, '');
       await advance(300);
@@ -70,7 +70,7 @@ describe('AnalysisTargetForm', () => {
       expect(messages).toContain('URL is required');
     });
 
-    it('should be invalid for a malformed URL', async () => {
+    it('is invalid for a malformed URL', async () => {
       const input = getUrlInput();
       setInputValue(input, 'invalid-url');
       await advance(300);
@@ -83,7 +83,7 @@ describe('AnalysisTargetForm', () => {
       expect(messages).toContain('Enter a valid URL');
     });
 
-    it('should be valid for a well-formed URL', async () => {
+    it('is valid for a well-formed URL', async () => {
       const input = getUrlInput();
       setInputValue(input, 'https://example.com/Project.git');
       await advance(300);
@@ -91,7 +91,7 @@ describe('AnalysisTargetForm', () => {
       expect(component.analysisTargetForm.targetURL().invalid()).toBe(false);
     });
 
-    it('should be invalid when exceeding max length of 500 characters', async () => {
+    it('is invalid when exceeding max length of 500 characters', async () => {
       const longUrl = 'https://example.com/' + 'a'.repeat(500) + '.git';
       const input = getUrlInput();
       setInputValue(input, longUrl);
@@ -100,7 +100,7 @@ describe('AnalysisTargetForm', () => {
       expect(component.analysisTargetForm.targetURL().invalid()).toBe(true);
     });
 
-    it('should debounce validation by 300ms', async () => {
+    it('debounces validation by 300ms', async () => {
       const input = getUrlInput();
       input.value = 'invalid-url';
       input.dispatchEvent(new Event('input'));
@@ -121,14 +121,14 @@ describe('AnalysisTargetForm', () => {
   });
 
   describe('limitRange checkbox', () => {
-    it('should hide and not require date fields when unchecked', () => {
+    it('hides and does not require date fields when unchecked', () => {
       expect(component.analysisTargetForm.limitRange().value()).toBe(false);
       expect(component.analysisTargetForm.startDate().hidden()).toBe(true);
       expect(component.analysisTargetForm.endDate().hidden()).toBe(true);
       expect(getDateInputs().length).toBe(0);
     });
 
-    it('should show and require date fields when checked', () => {
+    it('shows and requires date fields when checked', () => {
       const checkbox = getCheckbox();
       checkbox.click();
       fixture.detectChanges();
@@ -143,7 +143,7 @@ describe('AnalysisTargetForm', () => {
       expect(component.analysisTargetForm.endDate().invalid()).toBe(true);
     });
 
-    it('should stop requiring dates again after unchecking', () => {
+    it('stops requiring dates again after unchecking', () => {
       const checkbox = getCheckbox();
       checkbox.click();
       fixture.detectChanges();
@@ -163,7 +163,7 @@ describe('AnalysisTargetForm', () => {
       fixture.detectChanges();
     });
 
-    it('should reject start date before 1970-01-01', () => {
+    it('rejects start date before 1970-01-01', () => {
       const [startInput] = getDateInputs();
       setInputValue(startInput, '1969-12-31');
 
@@ -175,14 +175,14 @@ describe('AnalysisTargetForm', () => {
       expect(messages.some((m: string) => m.includes('cannot be earlier than'))).toBe(true);
     });
 
-    it('should reject end date before 1970-01-01', () => {
+    it('rejects end date before 1970-01-01', () => {
       const [, endInput] = getDateInputs();
       setInputValue(endInput, '1969-12-31');
 
       expect(component.analysisTargetForm.endDate().invalid()).toBe(true);
     });
 
-    it('should reject a start date in the future', () => {
+    it('rejects a start date in the future', () => {
       const [startInput] = getDateInputs();
       const future = new Date();
       future.setFullYear(future.getFullYear() + 1);
@@ -196,7 +196,7 @@ describe('AnalysisTargetForm', () => {
       expect(messages).toContain('Start date cannot be in the future');
     });
 
-    it('should reject an end date in the future', () => {
+    it('rejects an end date in the future', () => {
       const [, endInput] = getDateInputs();
       const future = new Date();
       future.setFullYear(future.getFullYear() + 1);
@@ -210,7 +210,7 @@ describe('AnalysisTargetForm', () => {
       expect(messages).toContain('End date cannot be in the future');
     });
 
-    it('should reject end date earlier than start date', () => {
+    it('rejects end date earlier than start date', () => {
       const [startInput, endInput] = getDateInputs();
       setInputValue(startInput, '2024-06-15');
       setInputValue(endInput, '2024-01-01');
@@ -223,7 +223,7 @@ describe('AnalysisTargetForm', () => {
       expect(messages).toContain('End date must be after start date');
     });
 
-    it('should accept a valid date range', () => {
+    it('accepts a valid date range', () => {
       const [startInput, endInput] = getDateInputs();
       setInputValue(startInput, '1970-01-01');
       setInputValue(endInput, '1970-01-01');
@@ -234,7 +234,7 @@ describe('AnalysisTargetForm', () => {
   });
 
   describe('form submission', () => {
-    it('should focus the first invalid control and not submit when form is invalid', () => {
+    it('focuses the first invalid control and does not submit when form is invalid', () => {
       submitForm();
       fixture.detectChanges();
 
@@ -242,7 +242,7 @@ describe('AnalysisTargetForm', () => {
       expect(document.activeElement).toBe(getUrlInput());
     });
 
-    it('should disable the submit button while submitting', async () => {
+    it('disables the submit button while submitting', async () => {
       const input = getUrlInput();
       setInputValue(input, 'https://example.com/Project.git');
       await advance(300);
@@ -263,11 +263,11 @@ describe('AnalysisTargetForm', () => {
   });
 
   describe('isInvalid helper', () => {
-    it('should return false when field is untouched, even if invalid', () => {
+    it('returns false when field is untouched, even if invalid', () => {
       expect(component.isInvalid(component.analysisTargetForm.targetURL)).toBe(false);
     });
 
-    it('should return true only after the field has been touched and is invalid', async () => {
+    it('returns true only after the field has been touched and is invalid', async () => {
       const input = getUrlInput();
       setInputValue(input, '');
       await advance(300);
@@ -275,7 +275,7 @@ describe('AnalysisTargetForm', () => {
       expect(component.isInvalid(component.analysisTargetForm.targetURL)).toBe(true);
     });
 
-    it('should add the "invalid" class to the URL input when isInvalid is true', async () => {
+    it('adds the "invalid" class to the URL input when isInvalid is true', async () => {
       const input = getUrlInput();
       setInputValue(input, '');
       await advance(300);
@@ -283,7 +283,7 @@ describe('AnalysisTargetForm', () => {
       expect(input.classList.contains('invalid')).toBe(true);
     });
 
-    it('should render an error-list item for each URL error', async () => {
+    it('renders an error-list item for each URL error', async () => {
       const input = getUrlInput();
       setInputValue(input, '');
       await advance(300);

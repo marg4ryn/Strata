@@ -24,7 +24,7 @@ describe('ButtonDirective', () => {
     fixture.detectChanges();
   });
 
-  it('should apply default class', () => {
+  it('applies default class', () => {
     const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
 
     expect(button.classList.contains('btn')).toBeTruthy();
@@ -33,7 +33,7 @@ describe('ButtonDirective', () => {
     expect(button.classList.contains('btn--danger')).toBeFalsy();
   });
 
-  it('should apply secondary class', () => {
+  it('applies secondary class', () => {
     fixture.componentInstance.variant.set('secondary');
     fixture.detectChanges();
 
@@ -45,7 +45,7 @@ describe('ButtonDirective', () => {
     expect(button.classList.contains('btn--danger')).toBeFalsy();
   });
 
-  it('should apply danger class', () => {
+  it('applies danger class', () => {
     fixture.componentInstance.variant.set('danger');
     fixture.detectChanges();
 
@@ -57,7 +57,7 @@ describe('ButtonDirective', () => {
     expect(button.classList.contains('btn--danger')).toBeTruthy();
   });
 
-  it('should expose directive instance', () => {
+  it('exposes directive instance', () => {
     const directive = fixture.debugElement
       .query(By.directive(ButtonDirective))
       .injector.get(ButtonDirective);
@@ -65,7 +65,7 @@ describe('ButtonDirective', () => {
     expect(directive.variant()).toBe('primary');
   });
 
-  it('should update input value on host change', () => {
+  it('updates input value on host change', () => {
     fixture.componentInstance.variant.set('secondary');
     fixture.detectChanges();
 

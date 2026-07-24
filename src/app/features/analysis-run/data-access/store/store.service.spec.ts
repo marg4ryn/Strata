@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StoreService } from './store.service';
 import { LoggerService } from '@app/core/logging/logger.service';
+import { StoreService } from './store.service';
 import { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 
 describe('StoreService', () => {
   let store: StoreService;
-  let logger: LoggerService;
+  let logger: Partial<LoggerService>;
 
   const target: AnalysisTarget = {
-    targetURL: 'https://example.com',
+    targetURL: 'https://example.com/Project.git',
     limitRange: false,
     range: null,
   };
@@ -20,13 +20,22 @@ describe('StoreService', () => {
   };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    logger = {
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: LoggerService, useValue: logger }],
+    });
+
     store = TestBed.inject(StoreService);
-    logger = TestBed.inject(LoggerService);
   });
 
   describe('resetState', () => {
-    it('should reset state', () => {
+    it('resets state', () => {
       store.pendingAnalysis.set(pendingAnalysis);
       store.progress.set('QUEUED');
       store.result.set('foo');
@@ -46,15 +55,14 @@ describe('StoreService', () => {
       expect(store.isBusy()).toBeFalsy();
     });
 
-    it('should log on state reset', () => {
-      const infoSpy = vi.spyOn(logger, 'info');
+    it('logs on state reset', () => {
       store.resetState();
-      expect(infoSpy).toHaveBeenCalled();
+      expect(logger.info).toHaveBeenCalled();
     });
   });
 
   describe('resetAnalysisState', () => {
-    it('should reset analysis state', () => {
+    it('resets analysis state', () => {
       store.pendingAnalysis.set(pendingAnalysis);
       store.progress.set('QUEUED');
       store.result.set('foo');
@@ -70,7 +78,7 @@ describe('StoreService', () => {
       expect(store.errorType()).toBeNull();
     });
 
-    it('should omit non analysis data', () => {
+    it('omits non analysis data', () => {
       store.showModal.set(true);
       store.isBusy.set(true);
       store.resetAnalysisState();
@@ -78,10 +86,9 @@ describe('StoreService', () => {
       expect(store.isBusy()).toBeTruthy();
     });
 
-    it('should log on analysis state reset', () => {
-      const infoSpy = vi.spyOn(logger, 'info');
+    it('logs on analysis state reset', () => {
       store.resetAnalysisState();
-      expect(infoSpy).toHaveBeenCalled();
+      expect(logger.info).toHaveBeenCalled();
     });
   });
 });

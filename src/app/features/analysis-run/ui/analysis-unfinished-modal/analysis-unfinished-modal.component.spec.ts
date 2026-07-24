@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
+import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisUnfinishedModal', () => {
@@ -14,7 +14,7 @@ describe('AnalysisUnfinishedModal', () => {
     timezone: 'Europe/Warsaw',
   };
   const target: AnalysisTarget = {
-    targetURL: 'https://example.com',
+    targetURL: 'https://example.com/Project.git',
     limitRange: true,
     range: range,
   };
@@ -53,10 +53,6 @@ describe('AnalysisUnfinishedModal', () => {
     fixture.componentRef.setInput('pendingAnalysis', value);
   }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('computes default date values when pendingAnalysis range is not set', () => {
     fixture.detectChanges();
     setInput({
@@ -80,7 +76,7 @@ describe('AnalysisUnfinishedModal', () => {
     expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate));
   });
 
-  it('should display analysis data via inputs', () => {
+  it('displays analysis data via inputs', () => {
     fixture.detectChanges();
     setInput(analysis);
     fixture.detectChanges();
@@ -114,7 +110,7 @@ describe('AnalysisUnfinishedModal', () => {
     expect(range).toBeNull();
   });
 
-  it('should not emit abandon when abandon button is clicked', () => {
+  it('does not emit abandon when abandon button is clicked', () => {
     const spy = vi.fn();
     component.abandon.subscribe(spy);
 
@@ -123,7 +119,7 @@ describe('AnalysisUnfinishedModal', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('should emit resume when resume button is clicked', () => {
+  it('emits resume when resume button is clicked', () => {
     const spy = vi.fn();
     component.resume.subscribe(spy);
 
@@ -132,11 +128,11 @@ describe('AnalysisUnfinishedModal', () => {
     expect(spy).toHaveBeenCalledOnce();
   });
 
-  it('should not render confirm modal initially', () => {
+  it('does not render confirm modal initially', () => {
     expect(getConfirmModal()).toBeNull();
   });
 
-  it('should show confirm modal when abandon button is clicked', () => {
+  it('shows confirm modal when abandon button is clicked', () => {
     getButtons().abandon.click();
     fixture.detectChanges();
 
@@ -144,7 +140,7 @@ describe('AnalysisUnfinishedModal', () => {
     expect(getConfirmModal()).not.toBeNull();
   });
 
-  it('should hide confirm modal and not emit abandon on cancel', () => {
+  it('hides confirm modal and does not emit abandon on cancel', () => {
     const spy = vi.fn();
     component.abandon.subscribe(spy);
 
@@ -159,7 +155,7 @@ describe('AnalysisUnfinishedModal', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('should hide confirm modal and emit abandon on confirm', () => {
+  it('hides confirm modal and emits abandon on confirm', () => {
     const spy = vi.fn();
     component.abandon.subscribe(spy);
 

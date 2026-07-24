@@ -64,13 +64,9 @@ describe('AnalysisRunFacade', () => {
     service = TestBed.inject(AnalysisRunFacade);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  it('should update computed signals', () => {
+  it('updates computed signals', () => {
     const target: AnalysisTarget = {
-      targetURL: 'https://example.com',
+      targetURL: 'https://example.com/Project.git',
       limitRange: false,
       range: null,
     };
@@ -94,9 +90,9 @@ describe('AnalysisRunFacade', () => {
     expect(service.pendingAnalysis()).toBe(pendingAnalysis);
   });
 
-  it('should handle startNewAnalysis with formData', () => {
+  it('handles startNewAnalysis with formData', () => {
     const data = {
-      targetURL: 'https://example.com',
+      targetURL: 'https://example.com/Project.git',
       limitRange: false,
       startDate: null,
       endDate: null,
@@ -106,32 +102,32 @@ describe('AnalysisRunFacade', () => {
     expect(orchestrator.startNewAnalysis).toHaveBeenCalledWith(data);
   });
 
-  it('should handle tryToReconnect', () => {
+  it('handles tryToReconnect', () => {
     service.tryToReconnect();
     expect(orchestrator.tryToReconnect).toHaveBeenCalledOnce();
   });
 
-  it('should handle resumeAnalysis', () => {
+  it('handles resumeAnalysis', () => {
     service.resumeAnalysis();
     expect(orchestrator.resumeAnalysis).toHaveBeenCalledOnce();
   });
 
-  it('should handle retryAnalysis', () => {
+  it('handles retryAnalysis', () => {
     service.retryAnalysis();
     expect(orchestrator.retryAnalysis).toHaveBeenCalledOnce();
   });
 
-  it('should handle cancelAnalysis', () => {
+  it('handles cancelAnalysis', () => {
     service.cancelAnalysis();
     expect(orchestrator.cancelAnalysis).toHaveBeenCalledOnce();
   });
 
-  it('should handle abandonAnalysis', () => {
+  it('handles abandonAnalysis', () => {
     service.abandonAnalysis();
     expect(orchestrator.abandonAnalysis).toHaveBeenCalledOnce();
   });
 
-  it('should handle abortAnalysis', () => {
+  it('handles abortAnalysis', () => {
     service.abortAnalysis();
     expect(orchestrator.abortAnalysis).toHaveBeenCalledOnce();
   });

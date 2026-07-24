@@ -105,12 +105,8 @@ describe('OrchestratorService', () => {
     store.pendingAnalysis.set({ sessionId: sessionId } as unknown as PendingAnalysis);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
   describe('effect', () => {
-    it('should handle result change', () => {
+    it('handles result change', () => {
       const clearDataSpy = vi.spyOn(service, 'clearData');
 
       store.result.set('123');
@@ -120,7 +116,7 @@ describe('OrchestratorService', () => {
       expect(logger.info).toHaveBeenCalledWith('Orchestrator handled the analysis results');
     });
 
-    it('should handle error change', () => {
+    it('handles error change', () => {
       store.error.set('Error');
       TestBed.tick();
       expect(logger.info).toHaveBeenCalledWith('Orchestrator handled an analysis error');
@@ -128,7 +124,7 @@ describe('OrchestratorService', () => {
   });
 
   describe('tryToReconnect', () => {
-    it('should return when there is an ongoing analysis', async () => {
+    it('returns when there is an ongoing analysis', async () => {
       store.isBusy.set(true);
 
       await service.tryToReconnect();
@@ -140,7 +136,7 @@ describe('OrchestratorService', () => {
       expect(store.resetState).not.toHaveBeenCalled();
     });
 
-    it('should call tryToResumeAnalysis when no analysis was processed in this tab', async () => {
+    it('calls tryToResumeAnalysis when no analysis was processed in this tab', async () => {
       const resumeAnalysisSpy = vi
         .spyOn(service, 'tryToResumeAnalysis')
         .mockImplementation(async () => {});
@@ -154,7 +150,7 @@ describe('OrchestratorService', () => {
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
     });
 
-    it('should call tryToResumeAnalysis when other tab took over analysis', async () => {
+    it('calls tryToResumeAnalysis when other tab took over analysis', async () => {
       const resumeAnalysisSpy = vi
         .spyOn(service, 'tryToResumeAnalysis')
         .mockImplementation(async () => {});
@@ -172,7 +168,7 @@ describe('OrchestratorService', () => {
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
     });
 
-    it('should call tryToResumeAnalysis when other tab finished analysis', async () => {
+    it('calls tryToResumeAnalysis when other tab finished analysis', async () => {
       const resumeAnalysisSpy = vi
         .spyOn(service, 'tryToResumeAnalysis')
         .mockImplementation(async () => {});
@@ -192,7 +188,7 @@ describe('OrchestratorService', () => {
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
     });
 
-    it('should reconnect to unfinished analysis', async () => {
+    it('reconnects to unfinished analysis', async () => {
       storage.getSessionId.mockReturnValue(sessionId);
       store.isBusy.set(false);
       locker.lock.mockReturnValue(true);
@@ -208,7 +204,7 @@ describe('OrchestratorService', () => {
   });
 
   describe('tryToResumeAnalysis', () => {
-    it('should hide modal when there is no pending analysis', async () => {
+    it('hides modal when there is no pending analysis', async () => {
       storage.getPendingAnalyses.mockReturnValue(null);
 
       await service.tryToResumeAnalysis();
@@ -221,7 +217,7 @@ describe('OrchestratorService', () => {
       expect(store.showModal()).toBeFalsy();
     });
 
-    it('should return when the only pending analysis is taken', async () => {
+    it('returns when the only pending analysis is taken', async () => {
       const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
       storage.getPendingAnalyses.mockReturnValue([pendingAnalysis]);
       locker.lock.mockReturnValue(false);
@@ -237,7 +233,7 @@ describe('OrchestratorService', () => {
       expect(locker.lock).toHaveBeenCalledWith(sessionId);
     });
 
-    it('should return when the only pending was finished in this moment', async () => {
+    it('returns when the only pending analysis was finished in this moment', async () => {
       const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
       storage.getPendingAnalyses.mockReturnValueOnce([pendingAnalysis]);
       locker.lock.mockReturnValue(true);
@@ -251,7 +247,7 @@ describe('OrchestratorService', () => {
       expect(locker.unlock).toHaveBeenCalledWith(sessionId);
     });
 
-    it('should show modal when successfully locked an unfinished analysis', async () => {
+    it('shows modal when successfully locked an unfinished analysis', async () => {
       const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
       storage.getPendingAnalyses.mockReturnValue([pendingAnalysis]);
       locker.lock.mockReturnValue(true);
@@ -265,7 +261,7 @@ describe('OrchestratorService', () => {
       expect(store.showModal()).toBeTruthy();
     });
 
-    it('should show modal when successfully locked an unfinished analysis when there are more analyses', async () => {
+    it('shows modal when successfully locked an unfinished analysis despite there are more analyses', async () => {
       const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
       const secondAnalysis = { sessionId: '124' } as PendingAnalysis;
       storage.getPendingAnalyses.mockReturnValue([pendingAnalysis, secondAnalysis]);
@@ -281,7 +277,7 @@ describe('OrchestratorService', () => {
       expect(store.showModal()).toBeTruthy();
     });
 
-    it('should lock first available analysis', async () => {
+    it('locks first available analysis', async () => {
       const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
       const secondAnalysis = { sessionId: '124' } as PendingAnalysis;
       storage.getPendingAnalyses.mockReturnValue([pendingAnalysis, secondAnalysis]);
@@ -298,12 +294,12 @@ describe('OrchestratorService', () => {
     });
   });
 
-  it('should start new analysis', async () => {
+  it('starts new analysis', async () => {
     const constructAnalysisSpy = vi.spyOn(service, 'constructPendingAnalysis');
     const constructParamsSpy = vi.spyOn(service, 'constructConnectionParams');
 
     const formData: AnalysisTargetFormModel = {
-      targetURL: 'https://example.com',
+      targetURL: 'https://example.com/Project.git',
       limitRange: true,
       startDate: new Date('2000-01-01'),
       endDate: new Date('2000-06-01'),
@@ -323,7 +319,7 @@ describe('OrchestratorService', () => {
     expect(websocket.connect).toHaveBeenCalledOnce();
   });
 
-  it('should resume analysis', () => {
+  it('resumes analysis', () => {
     service.resumeAnalysis();
 
     expect(store.showModal()).toBeFalsy();
@@ -334,7 +330,7 @@ describe('OrchestratorService', () => {
     );
   });
 
-  it('should abandon analysis', async () => {
+  it('abandons analysis', async () => {
     const clearDataSpy = vi.spyOn(service, 'clearData');
     const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
 
@@ -347,7 +343,7 @@ describe('OrchestratorService', () => {
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
   });
 
-  it('should abort analysis', async () => {
+  it('aborts analysis', async () => {
     const clearDataSpy = vi.spyOn(service, 'clearData');
 
     await service.abortAnalysis();
@@ -359,7 +355,7 @@ describe('OrchestratorService', () => {
     expect(clearDataSpy).toHaveBeenCalledOnce();
   });
 
-  it('should retry analysis', () => {
+  it('retries analysis', () => {
     store.error.set('Error');
 
     service.retryAnalysis();
@@ -371,7 +367,7 @@ describe('OrchestratorService', () => {
     );
   });
 
-  it('should cancel analysis', async () => {
+  it('cancels analysis', async () => {
     const clearDataSpy = vi.spyOn(service, 'clearData');
     store.error.set('Error');
 
@@ -384,7 +380,7 @@ describe('OrchestratorService', () => {
     expect(clearDataSpy).toHaveBeenCalledOnce();
   });
 
-  it('should clear data', async () => {
+  it('clears data', async () => {
     await service.clearData();
 
     expect(storage.deleteSessionId).toHaveBeenCalledOnce();
@@ -397,12 +393,12 @@ describe('OrchestratorService', () => {
   });
 
   describe('constructPendingAnalysis', () => {
-    it('should construct pending analysis with date range', () => {
+    it('constructs pending analysis with date range', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-01-01'));
 
       const formData: AnalysisTargetFormModel = {
-        targetURL: 'https://example.com',
+        targetURL: 'https://example.com/Project.git',
         limitRange: true,
         startDate: new Date('2000-01-01'),
         endDate: new Date('2000-06-01'),
@@ -429,12 +425,12 @@ describe('OrchestratorService', () => {
       vi.useRealTimers();
     });
 
-    it('should construct pending analysis without date range', () => {
+    it('constructs pending analysis without date range', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-01-01'));
 
       const formData: AnalysisTargetFormModel = {
-        targetURL: 'https://example.com',
+        targetURL: 'https://example.com/Project.git',
         limitRange: false,
         startDate: null,
         endDate: null,
@@ -459,7 +455,7 @@ describe('OrchestratorService', () => {
   });
 
   describe('constructConnectionParams', () => {
-    it('should construct connection params with date range', () => {
+    it('constructs connection params with date range', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-01-01'));
 
@@ -467,7 +463,7 @@ describe('OrchestratorService', () => {
         sessionId: '123',
         startedAt: Date.now(),
         target: {
-          targetURL: 'https://example.com',
+          targetURL: 'https://example.com/Project.git',
           limitRange: true,
           range: {
             startDate: '2000-01-01',
@@ -490,7 +486,7 @@ describe('OrchestratorService', () => {
       vi.useRealTimers();
     });
 
-    it('should construct connection params without date range', () => {
+    it('constructs connection params without date range', () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-01-01'));
 
@@ -498,7 +494,7 @@ describe('OrchestratorService', () => {
         sessionId: '123',
         startedAt: Date.now(),
         target: {
-          targetURL: 'https://example.com',
+          targetURL: 'https://example.com/Project.git',
           limitRange: false,
           range: null,
         },

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LockService } from './lock.service';
 import { LoggerService } from '@app/core/logging/logger.service';
+import { LockService } from './lock.service';
 
 class MockLockManager {
   locks = new Set<string>();
@@ -54,20 +54,16 @@ describe('LockService', () => {
     vi.unstubAllGlobals();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
   const sessionId = '123';
 
-  it('should lock available sessionId', async () => {
+  it('locks available sessionId', async () => {
     const res = await service.lock(sessionId);
 
     expect(res).toBeTruthy();
     expect(logger.info).toHaveBeenCalledWith(`Lock Service locked sessionId: ${sessionId}`);
   });
 
-  it('should not lock sessionId that is already tracked internally', async () => {
+  it('does not lock sessionId that is already tracked internally', async () => {
     await service.lock(sessionId);
     const res = await service.lock(sessionId);
 
@@ -77,7 +73,7 @@ describe('LockService', () => {
     );
   });
 
-  it('should not lock sessionId held by Web Locks API but not tracked internally', async () => {
+  it('does not lock sessionId held by Web Locks API but not tracked internally', async () => {
     lockManager.locks.add(`session-${sessionId}`);
 
     const res = await service.lock(sessionId);
@@ -88,7 +84,7 @@ describe('LockService', () => {
     );
   });
 
-  it('should return false when Web Locks API is not supported', async () => {
+  it('returns false when Web Locks API is not supported', async () => {
     vi.stubGlobal('navigator', {});
 
     const res = await service.lock(sessionId);
@@ -99,7 +95,7 @@ describe('LockService', () => {
     );
   });
 
-  it('should handle error thrown by navigator.locks.request', async () => {
+  it('handles error thrown by navigator.locks.request', async () => {
     const error = new Error('boom');
     vi.spyOn(lockManager, 'request').mockRejectedValue(error);
 
@@ -112,7 +108,7 @@ describe('LockService', () => {
     );
   });
 
-  it('should unlock a locked sessionId', async () => {
+  it('unlocks a locked sessionId', async () => {
     await service.lock(sessionId);
 
     await service.unlock(sessionId);
@@ -121,7 +117,7 @@ describe('LockService', () => {
     expect(lockManager.locks.has(`session-${sessionId}`)).toBeFalsy();
   });
 
-  it('should allow re-locking sessionId after unlock', async () => {
+  it('allows re-locking sessionId after unlock', async () => {
     await service.lock(sessionId);
     await service.unlock(sessionId);
 
@@ -130,7 +126,7 @@ describe('LockService', () => {
     expect(res).toBeTruthy();
   });
 
-  it('should do nothing when unlocking sessionId with no active lock', () => {
+  it('does nothing when unlocking sessionId with no active lock', () => {
     service.unlock(sessionId);
 
     expect(logger.debug).toHaveBeenCalledWith(
@@ -139,7 +135,7 @@ describe('LockService', () => {
     expect(logger.info).not.toHaveBeenCalled();
   });
 
-  it('should handle error thrown by release function during unlock', async () => {
+  it('handles error thrown by release function during unlock', async () => {
     await service.lock(sessionId);
 
     const error = new Error('release failed');

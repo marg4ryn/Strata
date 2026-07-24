@@ -59,12 +59,7 @@ describe('AnalysisRunPage', () => {
     return fixture.nativeElement.querySelector(selector);
   }
 
-  it('should create', () => {
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
-  });
-
-  it('should call tryToReconnect on init', () => {
+  it('calls tryToReconnect on init', () => {
     fixture.detectChanges();
     expect(facade.tryToReconnect).toHaveBeenCalledOnce();
   });
@@ -122,7 +117,7 @@ describe('AnalysisRunPage', () => {
   });
 
   describe('event handling via real child components', () => {
-    it('should not be able to call retryAnalysis when error type is server', () => {
+    it('does not call retryAnalysis when the error type is server', () => {
       facade.error.set('Server error');
       facade.errorType.set('server');
       fixture.detectChanges();
@@ -136,7 +131,7 @@ describe('AnalysisRunPage', () => {
       expect(buttons.length).toBe(1);
     });
 
-    it('should call retryAnalysis when retry button in error modal is clicked', () => {
+    it('calls retryAnalysis when retry button in error modal is clicked', () => {
       facade.error.set('Connection error');
       facade.errorType.set('connection');
       fixture.detectChanges();
@@ -148,7 +143,7 @@ describe('AnalysisRunPage', () => {
       expect(facade.retryAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('should call cancelAnalysis when cancel button in error modal is clicked', () => {
+    it('calls cancelAnalysis when cancel button in error modal is clicked', () => {
       facade.error.set('Server error');
       facade.errorType.set('server');
       fixture.detectChanges();
@@ -160,7 +155,7 @@ describe('AnalysisRunPage', () => {
       expect(facade.cancelAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('should call resumeAnalysis when resume button in unfinished modal is clicked', () => {
+    it('calls resumeAnalysis when resume button in unfinished modal is clicked', () => {
       facade.showModal.set(true);
       fixture.detectChanges();
 
@@ -173,7 +168,7 @@ describe('AnalysisRunPage', () => {
       expect(facade.resumeAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('should call abandonAnalysis after confirming abandon in unfinished modal', () => {
+    it('calls abandonAnalysis after confirming abandon in unfinished modal', () => {
       facade.showModal.set(true);
       fixture.detectChanges();
 
@@ -192,7 +187,7 @@ describe('AnalysisRunPage', () => {
       expect(facade.abandonAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('should call abortAnalysis when spinner emits abort', () => {
+    it('calls abortAnalysis when spinner emits abort', () => {
       facade.isBusy.set(true);
       fixture.detectChanges();
 
@@ -210,7 +205,7 @@ describe('AnalysisRunPage', () => {
       expect(facade.abortAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('should call startNewAnalysis when target form is submitted', () => {
+    it('calls startNewAnalysis when target form is submitted', () => {
       fixture.detectChanges();
 
       const urlInput = query<HTMLInputElement>('#analysisTargetURL')!;

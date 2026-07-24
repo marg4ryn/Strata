@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+
+import { LoggerService } from '@app/core/logging/logger.service';
 import { WebSocketService } from './web-socket.service';
 import { StoreService } from '../store/store.service';
-import { LoggerService } from '@app/core/logging/logger.service';
-import { signal } from '@angular/core';
+import { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];
@@ -36,11 +38,11 @@ class MockWebSocket {
 describe('WebSocketService', () => {
   let service: WebSocketService;
   let store: {
+    progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
+    result: ReturnType<typeof signal<string | null>>;
+    error: ReturnType<typeof signal<string | null>>;
+    errorType: ReturnType<typeof signal<ErrorType | null>>;
     isBusy: ReturnType<typeof signal<boolean>>;
-    progress: ReturnType<typeof signal<any>>;
-    result: ReturnType<typeof signal<any>>;
-    error: ReturnType<typeof signal<any>>;
-    errorType: ReturnType<typeof signal<any>>;
   };
   let logger: Partial<LoggerService>;
 
@@ -79,29 +81,29 @@ describe('WebSocketService', () => {
 
   const getSocket = () => MockWebSocket.instances[0];
 
-  it('should connect and set isBusy true', () => {
+  it('connects and sets isBusy to true', () => {
     service.connect();
     expect(store.isBusy()).toBe(true);
     expect(getSocket()).toBeTruthy();
   });
 
-  it('should build url with query params', () => {
+  it('builds url with query params', () => {
     service.connect({ a: '1', b: '2' });
     expect(getSocket().url).toMatch(/analysis\?a=1&b=2/);
   });
 
-  it('should build url without query params', () => {
+  it('builds url without query params', () => {
     service.connect();
     expect(getSocket().url).toMatch(/analysis/);
   });
 
-  it('should log on open', () => {
+  it('logs on open', () => {
     service.connect();
     getSocket().onopen?.();
     expect(logger.debug).toHaveBeenCalledWith('WebSocket Service opened connection');
   });
 
-  it('should handle progress message', () => {
+  it('handles progress message', () => {
     service.connect();
     getSocket().onmessage?.({
       data: JSON.stringify({ type: 'progress', data: 'RUNNING' }),
@@ -109,7 +111,7 @@ describe('WebSocketService', () => {
     expect(store.progress()).toBe('RUNNING');
   });
 
-  it('should handle success message and disconnect', () => {
+  it('handles success message and disconnects', () => {
     service.connect();
     const socket = getSocket();
     socket.onmessage?.({
@@ -119,14 +121,14 @@ describe('WebSocketService', () => {
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should handle aborted message and disconnect', () => {
+  it('handles aborted message and disconnects', () => {
     service.connect();
     const socket = getSocket();
     socket.onmessage?.({ data: JSON.stringify({ type: 'aborted' }) } as MessageEvent);
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should handle error message with data and disconnect', () => {
+  it('handles error message with data and disconnects', () => {
     service.connect();
     const socket = getSocket();
     socket.onmessage?.({ data: JSON.stringify({ type: 'error', data: 'boom' }) } as MessageEvent);
@@ -135,7 +137,7 @@ describe('WebSocketService', () => {
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should handle error message without data using fallback', () => {
+  it('handles error message without data using fallback', () => {
     service.connect();
     const socket = getSocket();
     socket.onmessage?.({ data: JSON.stringify({ type: 'error', data: '' }) } as MessageEvent);
@@ -143,13 +145,13 @@ describe('WebSocketService', () => {
     expect(store.errorType()).toBe('server');
   });
 
-  it('should warn on unknown message type', () => {
+  it('warns on unknown message type', () => {
     service.connect();
     getSocket().onmessage?.({ data: JSON.stringify({ type: 'unknown' }) } as MessageEvent);
     expect(logger.warn).toHaveBeenCalledWith('WebSocket Service received unknown message type');
   });
 
-  it('should handle invalid JSON message and disconnect', () => {
+  it('handles invalid JSON message and disconnects', () => {
     service.connect();
     const socket = getSocket();
     socket.onmessage?.({ data: 'invalid json' } as MessageEvent);
@@ -158,7 +160,7 @@ describe('WebSocketService', () => {
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should handle connection error and disconnect', () => {
+  it('handles connection error and disconnects', () => {
     service.connect();
     const socket = getSocket();
     socket.onerror?.();
@@ -167,7 +169,7 @@ describe('WebSocketService', () => {
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should handle socket error caused by abort during connecting', () => {
+  it('handles socket error caused by abort during connecting', () => {
     service.connect();
     const socket = getSocket();
     socket.readyState = MockWebSocket.CONNECTING;
@@ -178,13 +180,13 @@ describe('WebSocketService', () => {
     expect(socket.readyState).toBe(MockWebSocket.CLOSED);
   });
 
-  it('should set isBusy false on close', () => {
+  it('sets isBusy to false on close', () => {
     service.connect();
     getSocket().onclose?.();
     expect(store.isBusy()).toBe(false);
   });
 
-  it('should send abort message', () => {
+  it('sends abort message', () => {
     service.connect();
     const socket = getSocket();
     socket.readyState = MockWebSocket.OPEN;
@@ -192,7 +194,7 @@ describe('WebSocketService', () => {
     expect(socket.sent[0]).toBe(JSON.stringify({ type: 'abort' }));
   });
 
-  it('should not send an abort message while disconnecting', () => {
+  it('does not send an abort message while disconnecting', () => {
     service.connect();
     const socket = getSocket();
     socket.readyState = MockWebSocket.CLOSING;
@@ -203,11 +205,11 @@ describe('WebSocketService', () => {
     );
   });
 
-  it('should do nothing on abort if no socket', () => {
+  it('does nothing on abort if no socket exists', () => {
     expect(() => service.abort()).not.toThrow();
   });
 
-  it('should close socket on disconnect', () => {
+  it('closes socket on disconnect', () => {
     service.connect();
     const socket = getSocket();
     service.disconnect();

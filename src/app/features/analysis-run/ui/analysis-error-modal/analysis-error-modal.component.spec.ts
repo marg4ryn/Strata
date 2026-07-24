@@ -34,11 +34,7 @@ describe('AnalysisErrorModal', () => {
       await fixture.whenStable();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('should display error message via input', async () => {
+    it('displays error message via input', async () => {
       fixture.componentRef.setInput('error', 'Server error');
       fixture.detectChanges();
       await fixture.whenStable();
@@ -47,7 +43,7 @@ describe('AnalysisErrorModal', () => {
       expect(body.textContent).toContain('Server error');
     });
 
-    it('should emit cancel when cancel button is clicked', () => {
+    it('emits cancel when cancel button is clicked', () => {
       const spy = vi.fn();
       component.cancel.subscribe(spy);
 
@@ -56,7 +52,7 @@ describe('AnalysisErrorModal', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should emit retry when retry button is clicked during connection error', () => {
+    it('emits retry when retry button is clicked during connection error', () => {
       const spy = vi.fn();
       component.retry.subscribe(spy);
       fixture.componentRef.setInput('errorType', 'connection');
@@ -67,7 +63,7 @@ describe('AnalysisErrorModal', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('should not be able to emit retry when server error occurs', () => {
+    it('does not emit retry when server error occurs', () => {
       const spy = vi.fn();
       component.retry.subscribe(spy);
       fixture.componentRef.setInput('errorType', 'server');
@@ -76,7 +72,7 @@ describe('AnalysisErrorModal', () => {
       expect(getButtons().retry).toBeUndefined();
     });
 
-    it('should focus cancel button on init when retry button does not exist', () => {
+    it('focuses cancel button on init when retry button does not exist', () => {
       expect(focusViaSpy).toHaveBeenCalledOnce();
       expect(focusViaSpy).toHaveBeenCalledWith(
         expect.objectContaining({ nativeElement: getButtons().cancel }),
@@ -84,7 +80,7 @@ describe('AnalysisErrorModal', () => {
       );
     });
 
-    it('should stop monitoring cancel button on destroy', () => {
+    it('stops monitoring cancel button on destroy', () => {
       const cancelButton = getButtons().cancel;
       fixture.destroy();
 
@@ -102,7 +98,7 @@ describe('AnalysisErrorModal', () => {
       await fixture.whenStable();
     });
 
-    it('should focus retry button on init when retry button exists', () => {
+    it('focuses retry button on init when retry button exists', () => {
       expect(focusViaSpy).toHaveBeenCalledOnce();
       expect(focusViaSpy).toHaveBeenCalledWith(
         expect.objectContaining({ nativeElement: getButtons().retry }),
@@ -110,7 +106,7 @@ describe('AnalysisErrorModal', () => {
       );
     });
 
-    it('should stop monitoring retry button on destroy', () => {
+    it('stops monitoring retry button on destroy', () => {
       const retryButton = getButtons().retry;
       fixture.destroy();
 

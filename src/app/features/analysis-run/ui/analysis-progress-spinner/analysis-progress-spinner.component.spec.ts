@@ -35,11 +35,7 @@ describe('AnalysisProgressSpinner', () => {
     fixture.componentRef.setInput('label', value);
   }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should display label via inputs', () => {
+  it('displays label via inputs', () => {
     fixture.detectChanges();
     setInput('Loading...');
     fixture.detectChanges();
@@ -48,11 +44,11 @@ describe('AnalysisProgressSpinner', () => {
     expect(label.textContent).toContain('Loading...');
   });
 
-  it('should not render confirm modal initially', () => {
+  it('does not render confirm modal initially', () => {
     expect(getConfirmModal()).toBeNull();
   });
 
-  it('should show confirm modal when abort button is clicked', () => {
+  it('shows confirm modal when abort button is clicked', () => {
     getButtons().abort.click();
     fixture.detectChanges();
 
@@ -60,7 +56,7 @@ describe('AnalysisProgressSpinner', () => {
     expect(getConfirmModal()).not.toBeNull();
   });
 
-  it('should hide confirm modal and not emit abort on cancel', () => {
+  it('hides confirm modal and does not emit abort on cancel', () => {
     const spy = vi.fn();
     component.abort.subscribe(spy);
 
@@ -75,7 +71,7 @@ describe('AnalysisProgressSpinner', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('should hide confirm modal and emit abort on confirm', () => {
+  it('hides confirm modal and emits abort on confirm', () => {
     const spy = vi.fn();
     component.abort.subscribe(spy);
 

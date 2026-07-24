@@ -22,16 +22,12 @@ describe('ConfirmOperationModal', () => {
     return { cancel: buttons[0], confirm: buttons[1] };
   }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should display default label', () => {
+  it('displays default label', () => {
     const title = fixture.nativeElement.querySelector('.modal__title');
     expect(title.textContent).toContain('This operation cannot be undone. Are you sure?');
   });
 
-  it('should display custom label via input', async () => {
+  it('displays custom label via input', async () => {
     fixture.componentRef.setInput('label', 'Delete this item?');
     fixture.detectChanges();
     await fixture.whenStable();
@@ -40,7 +36,7 @@ describe('ConfirmOperationModal', () => {
     expect(title.textContent).toContain('Delete this item?');
   });
 
-  it('should emit cancel when cancel button is clicked', () => {
+  it('emits cancel when cancel button is clicked', () => {
     const spy = vi.fn();
     component.cancel.subscribe(spy);
 
@@ -49,7 +45,7 @@ describe('ConfirmOperationModal', () => {
     expect(spy).toHaveBeenCalledOnce();
   });
 
-  it('should emit confirm when confirm button is clicked', () => {
+  it('emits confirm when confirm button is clicked', () => {
     const spy = vi.fn();
     component.confirm.subscribe(spy);
 

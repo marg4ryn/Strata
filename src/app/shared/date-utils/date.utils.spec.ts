@@ -5,7 +5,7 @@ describe('isoDateToLocaleString', () => {
     expect(isoDateToLocaleString(undefined)).toBe('');
   });
 
-  it('returns empty string for empty string', () => {
+  it('returns empty string for an empty string', () => {
     expect(isoDateToLocaleString('')).toBe('');
   });
 
@@ -75,7 +75,7 @@ describe('localNowAsUtcMidnight', () => {
     vi.useRealTimers();
   });
 
-  it("returns a Date at UTC midnight matching today's local date components", () => {
+  it('returns a Date at UTC midnight for the current local date', () => {
     const fixedNow = new Date(2026, 6, 18, 15, 30, 45);
     vi.useFakeTimers();
     vi.setSystemTime(fixedNow);
