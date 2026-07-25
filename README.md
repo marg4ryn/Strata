@@ -11,7 +11,7 @@
 
 **Strata** is a tool for analyzing the evolution of software repositories. It uses version control history to reveal how code changes over time, helping teams identify areas with high activity and complexity. Instead of focusing only on the current state of a codebase, Strata examines development patterns to provide insight into how the system evolves and where maintenance effort may be most valuable.
 
-The application's name refers to rock strata – layers that accumulate over time, recording the history of everything that shaped them. In the context of software development, these layers correspond to the evolving history of a codebase, where high complexity coinciding with frequent changes forms so-called **_hotspots_**. Strata highlights these highly active regions that often remain hidden in traditional analyses. By identifying critical points, the tool enables teams to focus their attention and resources where intervention is most needed, reducing the risk of failures and supporting long-term, sustainable system maintenance.
+The application's name refers to rock strata – layers that accumulate over time, recording the history of everything that shaped them. In the context of software development, these layers correspond to the evolving history of a codebase, where high complexity coinciding with frequent changes forms so-called **_hotspots_**. Strata highlights these highly active regions that often remain hidden in traditional analyses. This allows teams to focus their attention and resources on the areas where intervention is most needed, reducing the risk of failures and supporting long-term, sustainable system maintenance.
 
 ## ✨ Features
 
