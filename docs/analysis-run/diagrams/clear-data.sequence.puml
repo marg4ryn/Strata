@@ -1,0 +1,19 @@
+@startuml Continue Analysis
+
+
+participant "Orchestrator" as O
+participant "Lock Service" as L
+participant "Store Service" as ST
+participant "Storage Service" as STG
+
+database "Session Storage" as SS
+database "Local Storage" as LS
+
+O -> STG: deleteSessionId()
+STG -> SS: deleteSessionId()
+O -> STG: deletePendingAnalysis(sessionId)
+STG -> LS: deletePendingAnalysis(sessionId)
+O -> L: unlockAnalysis(sessionId)
+O -> ST: resetAnalysisState()
+
+@enduml

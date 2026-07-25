@@ -11,6 +11,7 @@ export class AnalysisRunFacade {
 
   readonly showModal = computed(() => this.store.showModal());
   readonly isBusy = computed(() => this.store.isBusy());
+  readonly isAborting = computed(() => this.store.isAborting());
   readonly progress = computed(() => this.store.progress());
   readonly error = computed(() => this.store.error());
   readonly errorType = computed(() => this.store.errorType());

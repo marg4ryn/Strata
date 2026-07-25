@@ -1,6 +1,5 @@
 @startuml Start New Analysis
 
-participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
 participant "Lock Service" as L
@@ -12,8 +11,6 @@ participant "Server" as SRV
 database "SessionStorage" as SS
 database "LocalStorage" as LS
 
-U -> F: startNewAnalysis()
-note right of U: args: AnalysisTargetFormModel
 F -> O: startNewAnalysis()
 note right of F: args: AnalysisTargetFormModel
 O -> O: generateSessionId()
@@ -33,6 +30,5 @@ O -> WS: connect(params)
 WS -> SRV: connect(params)
 WS -> ST: isBusy.set(true)
 ST -> F: emit(isBusy)
-F -> U: emit(isBusy)
 
 @enduml

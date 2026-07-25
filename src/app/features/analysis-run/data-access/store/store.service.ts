@@ -15,6 +15,7 @@ export class StoreService {
 
   readonly showModal = signal<boolean>(false);
   readonly isBusy = signal<boolean>(false);
+  readonly isAborting = signal<boolean>(false);
 
   resetAnalysisState(): void {
     this.pendingAnalysis.set(null);
@@ -32,6 +33,7 @@ export class StoreService {
     this.error.set(null);
     this.errorType.set(null);
     this.isBusy.set(false);
+    this.isAborting.set(false);
     this.showModal.set(false);
     this.logger.info('Store Service reset state');
   }

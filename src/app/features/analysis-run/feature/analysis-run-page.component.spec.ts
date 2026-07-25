@@ -19,6 +19,7 @@ describe('AnalysisRunPage', () => {
     error: ReturnType<typeof signal<string | null>>;
     errorType: ReturnType<typeof signal<ErrorType | null>>;
     isBusy: ReturnType<typeof signal<boolean>>;
+    isAborting: ReturnType<typeof signal<boolean>>;
     showModal: ReturnType<typeof signal<boolean>>;
     tryToReconnect: ReturnType<typeof vi.fn>;
     startNewAnalysis: ReturnType<typeof vi.fn>;
@@ -36,6 +37,7 @@ describe('AnalysisRunPage', () => {
       error: signal(null),
       errorType: signal(null),
       isBusy: signal(false),
+      isAborting: signal(false),
       showModal: signal(false),
       tryToReconnect: vi.fn(),
       startNewAnalysis: vi.fn(),
@@ -88,6 +90,7 @@ describe('AnalysisRunPage', () => {
 
     it('shows spinner when isBusy is true and no error', () => {
       facade.isBusy.set(true);
+      facade.isAborting.set(false);
       fixture.detectChanges();
 
       expect(query('app-analysis-error-modal')).toBeNull();
@@ -189,6 +192,7 @@ describe('AnalysisRunPage', () => {
 
     it('calls abortAnalysis when spinner emits abort', () => {
       facade.isBusy.set(true);
+      facade.isAborting.set(false);
       fixture.detectChanges();
 
       const abortButton = query<HTMLElement>('app-analysis-progress-spinner')!.querySelector(

@@ -26,6 +26,7 @@ export class AnalysisRunPage {
   readonly error = this.facade.error;
   readonly errorType = this.facade.errorType;
   readonly isBusy = this.facade.isBusy;
+  readonly isAborting = this.facade.isAborting;
   readonly showModal = this.facade.showModal;
 
   readonly label = computed(() => {

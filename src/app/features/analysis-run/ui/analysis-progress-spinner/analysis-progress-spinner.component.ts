@@ -29,6 +29,7 @@ export class AnalysisProgressSpinner implements AfterViewInit, OnDestroy {
 
   readonly pendingAnalysis = input<PendingAnalysis | null>();
   readonly label = input<string>('');
+  readonly isAborting = input<boolean>(false);
 
   readonly abort = output<void>();
 

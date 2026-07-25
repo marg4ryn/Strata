@@ -43,6 +43,7 @@ describe('StoreService', () => {
       store.errorType.set('server');
       store.showModal.set(true);
       store.isBusy.set(true);
+      store.isAborting.set(true);
 
       store.resetState();
 
@@ -53,6 +54,7 @@ describe('StoreService', () => {
       expect(store.errorType()).toBeNull();
       expect(store.showModal()).toBeFalsy();
       expect(store.isBusy()).toBeFalsy();
+      expect(store.isAborting()).toBeFalsy();
     });
 
     it('logs on state reset', () => {
@@ -81,9 +83,13 @@ describe('StoreService', () => {
     it('omits non analysis data', () => {
       store.showModal.set(true);
       store.isBusy.set(true);
+      store.isAborting.set(true);
+
       store.resetAnalysisState();
+
       expect(store.showModal()).toBeTruthy();
       expect(store.isBusy()).toBeTruthy();
+      expect(store.isAborting()).toBeTruthy();
     });
 
     it('logs on analysis state reset', () => {

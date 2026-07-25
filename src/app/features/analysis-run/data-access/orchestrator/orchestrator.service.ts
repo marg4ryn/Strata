@@ -160,7 +160,7 @@ export class OrchestratorService {
     this.logger.info(
       `Orchestrator received a request to abandon analysis with sessionId: ${sessionId}`,
     );
-    // sendMessageCancel()
+    // sendMessageInfo()
     await this.clearData();
     await this.tryToResumeAnalysis();
   }
@@ -170,9 +170,21 @@ export class OrchestratorService {
     this.logger.info(
       `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
     );
-    this.webSocket.abort();
-    // sendMessageCancel()
-    await this.clearData();
+
+    const confirmed = await this.webSocket.abort();
+
+    if (confirmed) {
+      this.logger.debug(`Abort for sessionId ${sessionId} confirmed by server`);
+      // sendMessageInfo();
+      await this.clearData();
+      await this.tryToResumeAnalysis();
+    } else {
+      this.logger.warn(
+        `Abort for sessionId ${sessionId} not confirmed by server - analysis result already arrived or timed out`,
+      );
+      // sendMessageInfo();
+      await this.locker.unlock(sessionId);
+    }
   }
 
   retryAnalysis(): void {
@@ -190,8 +202,9 @@ export class OrchestratorService {
       `Orchestrator received a request to cancel analysis with sessionId: ${sessionId}`,
     );
     this.store.error.set(null);
-    // sendMessageCancel()
+    // sendMessageInfo()
     await this.clearData();
+    await this.tryToResumeAnalysis();
   }
 
   async clearData(): Promise<void> {

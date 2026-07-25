@@ -1,7 +1,9 @@
 <div class="loading">
   <app-loading-spinner></app-loading-spinner>
   <p class="loading__label">{{ label() }}</p>
-  <button #firstButton btn="secondary" (click)="abortAnalysis()">Abort</button>
+  <button #firstButton btn="secondary" [disabled]="isAborting()" (click)="abortAnalysis()">
+    {{ isAborting() ? 'Aborting...' : 'Abort' }}
+  </button>
 </div>
 
 <app-info-panel [pendingAnalysis]="pendingAnalysis()"></app-info-panel>

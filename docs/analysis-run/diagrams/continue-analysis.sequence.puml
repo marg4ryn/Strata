@@ -1,6 +1,5 @@
 @startuml Continue Analysis
 
-participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
 participant "Lock Service" as L
@@ -12,14 +11,10 @@ participant "Storage Service" as STG
 participant "Web Socket Service" as WS
 participant "Server" as SRV
 
-database "Session Storage" as SS
-database "Local Storage" as LS
-
 loop Until closed
     SRV -> WS: progress
     WS -> ST: progress.set(...)
     ST -> F: emit(progress)
-    F -> U: emit(progress)
 end
 
 alt Analysis Successful
@@ -35,58 +30,51 @@ alt Analysis Successful
     SRV -> WS: connection.close()
     WS -> ST: isBusy.set(false)
     ST -> F: emit(isBusy)
-    F -> U: emit(isBusy)
+    note right of O: goto Clear Data
 
-else User Aborts
-    U -> F: abortAnalysis()
-    F -> O: abortAnalysis()
-    O -> WS: abort()    
-    WS -> SRV: abort()
-    WS -> SRV: connection.close()
-    WS -> ST: isBusy.set(false)
-    ST -> F: emit(isBusy)
-    F -> U: emit(isBusy)
-    O -> N: sendMessageCancel()
+else Analysis Terminated
 
-else Connection / Server Error
-    SRV -> WS: connection.close()
-    WS -> ST: isBusy.set(false)
-    WS -> ST: error.set(...)
-    ST -> F: emit(isBusy)
-    ST -> F: emit(error)
-    F -> U: emit(isBusy)
-    F -> U: emit(error)
-    ST -> O: emit(error)
-    O -> N: sendMessageError()
-
-    alt With Retry
-        U -> F: retryAnalysis()
-        F -> O: retryAnalysis()
-        O -> ST: error.set(null)
-        ST -> F: emit(error)
-        F -> U: emit(error)
-        O -> WS: reconnect(sessionId)
-        WS -> SRV: reconnect(sessionId)
-        WS -> ST: isBusy.set(true)
+    alt User aborts
+        F -> O: abortAnalysis()
+        O -> WS: abort()    
+        WS -> SRV: abort()
+        WS -> SRV: connection.close()
+        WS -> ST: isBusy.set(false)
         ST -> F: emit(isBusy)
-        F -> U: emit(isBusy)
-        note left of O: goto progress loop
+        O -> N: sendMessageInfo()
 
-    else Without Retry
-        U -> F: cancelAnalysis()
-        F -> O: cancelAnalysis()
-        O -> N: sendMessageCancel()
-        O -> ST: error.set(null)
+    else Error
+        SRV -> WS: connection.close()
+        WS -> ST: isBusy.set(false)
+        WS -> ST: error.set(...)
+        ST -> F: emit(isBusy)
         ST -> F: emit(error)
-        F -> U: emit(error)
-    end
-end
+        ST -> O: emit(error)
+        O -> N: sendMessageError()
 
-O -> STG: deleteSessionId()
-STG -> SS: deleteSessionId()
-O -> STG: deletePendingAnalysis(sessionId)
-STG -> LS: deletePendingAnalysis(sessionId)
-O -> L: unlockAnalysis(sessionId)
-O -> ST: resetState()
+        opt Connection Error
+            alt With Retry
+                F -> O: retryAnalysis()
+                O -> ST: error.set(null)
+                ST -> F: emit(error)
+                O -> WS: reconnect(sessionId)
+                WS -> SRV: reconnect(sessionId)
+                WS -> ST: isBusy.set(true)
+                ST -> F: emit(isBusy)
+                note right of O: goto progress loop
+
+            else Without Retry
+                F -> O: cancelAnalysis()
+                O -> N: sendMessageInfo()
+                O -> ST: error.set(null)
+                ST -> F: emit(error)
+            end
+        end
+    end
+
+    note right of O: goto Clear Data
+    note right of O: goto Try To Resume Analysis
+    
+end
 
 @enduml

@@ -31,13 +31,9 @@ describe('AnalysisProgressSpinner', () => {
     return { cancel: buttons[0], confirm: buttons[1] };
   }
 
-  function setInput(value: string): void {
-    fixture.componentRef.setInput('label', value);
-  }
-
   it('displays label via inputs', () => {
     fixture.detectChanges();
-    setInput('Loading...');
+    fixture.componentRef.setInput('label', 'Loading...');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('.loading__label');
@@ -54,6 +50,18 @@ describe('AnalysisProgressSpinner', () => {
 
     expect(component.showModal).toBe(true);
     expect(getConfirmModal()).not.toBeNull();
+  });
+
+  it('disables abort button during aborting', () => {
+    fixture.detectChanges();
+    fixture.componentRef.setInput('isAborting', true);
+    fixture.detectChanges();
+    getButtons().abort.click();
+    fixture.detectChanges();
+
+    expect(getButtons().abort.textContent.trim()).toBe('Aborting...');
+    expect(component.showModal).toBe(false);
+    expect(getConfirmModal()).toBeNull();
   });
 
   it('hides confirm modal and does not emit abort on cancel', () => {

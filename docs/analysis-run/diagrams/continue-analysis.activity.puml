@@ -6,34 +6,38 @@ while (Connection exists?) is (yes)
     :Update progress;
 endwhile (no)
 
-switch (Termination reason)
-
-case (Success)
+if (Analysis successful?) then (yes)
     :Emit analysisResult;
     :Save analysisResult in history;
     :Show results;
+    :Clear data;
+    stop
 
-case (User abort)
-    :Send abort request;
-    :Close connection;
-    :Show confirmation;
+else (no)
+    switch (Termination reason)
 
-case (Connection or server error)
-    :Notify user about the error;
-    :Ask whether to retry analysis;
+    case (User abort)
+        :Send abort request;
+        :Close connection;
+        :Show confirmation;
 
-    if (Retry?) then (yes)
-       :Delete error;
-       :Continue analysis;
-       stop
-    endif
+    case (Error)
+        :Notify user about the error;
+            
+        if (Connection error) then (yes)
+            :Ask whether to retry analysis;
 
-endswitch
-
-:Delete pendingAnalysis from localStorage;
-:Delete sessionId from sessionStorage;
-:Release lock;
-:Reset state;
-stop
+            if (Retry?) then (yes)
+            :Delete error;
+            :Continue analysis;
+            stop
+            endif
+        endif
+    endswitch
+    
+    :Clear data;
+    :Try to resume analysis;
+    stop
+endif
 
 @enduml

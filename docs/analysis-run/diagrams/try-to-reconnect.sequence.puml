@@ -1,6 +1,5 @@
 @startuml Try To Reconnect
 
-participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
 participant "Lock Service" as L
@@ -11,13 +10,12 @@ participant "Server" as SRV
 
 database "Session Storage" as SS
 
-note right of U: ngOnInit
-U -> F: tryToReconnect()
+note right of F: ngOnInit
 F -> O: tryToReconnect()
 O -> ST: read isBusy
 
 alt isBusy = true
-    note left of O: goto Continue Analysis
+    note right of O: goto Continue Analysis
 
 else isBusy = false
     O -> ST: resetState()
@@ -25,7 +23,7 @@ else isBusy = false
     STG -> O: sessionId
 
     alt sessionId does not exist
-        note left of O: goto Try To Resume Analysis
+        note right of O: goto Try To Resume Analysis
 
     else sessionId exists
         O -> L: lock(sessionId)
@@ -34,7 +32,7 @@ else isBusy = false
         alt Lock unavailable
             O -> STG: deleteSessionId()
             STG -> SS: deleteSessionId()
-            note left of O: goto Try To Resume Analysis
+            note right of O: goto Try To Resume Analysis
 
         else Lock acquired
             O -> STG: getPendingAnalyses()
@@ -44,19 +42,17 @@ else isBusy = false
                 O -> STG: deleteSessionId()
                 STG -> SS: deleteSessionId()
                 O -> L: unlock(sessionId)
-                note left of O: goto Try To Resume Analysis
+                note right of O: goto Try To Resume Analysis
 
             else sessionId in pendingAnalyses
                 O -> WS: reconnect(sessionId)
                 WS -> SRV: reconnect(sessionId)
                 WS -> ST: isBusy.set(true)
                 ST -> F: emit(isBusy)
-                F -> U: emit(isBusy)
                 SRV -> WS: progresss
                 WS -> ST: progress.set(...)
                 ST -> F: emit(progress)
-                F -> U: emit(progress)
-                note left of O: goto Continue Analysis
+                note right of O: goto Continue Analysis
             end
         end
     end

@@ -343,16 +343,38 @@ describe('OrchestratorService', () => {
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
   });
 
-  it('aborts analysis', async () => {
-    const clearDataSpy = vi.spyOn(service, 'clearData');
+  describe('abortAnalysis', () => {
+    it('aborts analysis', async () => {
+      const clearDataSpy = vi.spyOn(service, 'clearData');
+      const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+      websocket.abort.mockReturnValue(true);
 
-    await service.abortAnalysis();
+      await service.abortAnalysis();
 
-    expect(websocket.abort).toHaveBeenCalledOnce();
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
-    );
-    expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(websocket.abort).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalledWith(
+        `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
+      );
+      expect(logger.warn).not.toHaveBeenCalled();
+      expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+    });
+
+    it('aborts analysis on timeout without deleting analysis data', async () => {
+      const clearDataSpy = vi.spyOn(service, 'clearData');
+      const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+      websocket.abort.mockReturnValue(false);
+
+      await service.abortAnalysis();
+
+      expect(websocket.abort).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalledWith(
+        `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
+      );
+      expect(logger.warn).toHaveBeenCalled();
+      expect(clearDataSpy).not.toHaveBeenCalled();
+      expect(resumeAnalysisSpy).not.toHaveBeenCalled();
+    });
   });
 
   it('retries analysis', () => {
@@ -369,6 +391,7 @@ describe('OrchestratorService', () => {
 
   it('cancels analysis', async () => {
     const clearDataSpy = vi.spyOn(service, 'clearData');
+    const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
     store.error.set('Error');
 
     await service.cancelAnalysis();
@@ -378,6 +401,7 @@ describe('OrchestratorService', () => {
       `Orchestrator received a request to cancel analysis with sessionId: ${sessionId}`,
     );
     expect(clearDataSpy).toHaveBeenCalledOnce();
+    expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
   });
 
   it('clears data', async () => {

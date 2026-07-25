@@ -17,8 +17,9 @@ export class WebSocketService {
   private readonly store = inject(StoreService);
 
   private socket?: WebSocket;
-  private intentionalClose: boolean = false;
+  private abortResolver: ((confirmed: boolean) => void) | null = null;
 
+  private readonly isAborting = this.store.isAborting;
   private readonly isBusy = this.store.isBusy;
   private readonly progress = this.store.progress;
   private readonly result = this.store.result;
@@ -30,7 +31,7 @@ export class WebSocketService {
     this.logger.debug(`WebSocket Service constructed URL: ${url}`);
 
     this.isBusy.set(true);
-    this.intentionalClose = false;
+    this.isAborting.set(false);
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
@@ -46,16 +47,19 @@ export class WebSocketService {
           case 'progress':
             this.progress.set(message.data);
             break;
-          case 'success':
-            this.result.set(message.data);
+          case 'aborted':
+            this.resolveAbort(true);
             this.disconnect();
             break;
-          case 'aborted':
+          case 'success':
+            this.result.set(message.data);
+            this.resolveAbort(false);
             this.disconnect();
             break;
           case 'error':
             this.error.set(message.data || 'Server error');
             this.errorType.set('server');
+            this.resolveAbort(false);
             this.disconnect();
             break;
           default:
@@ -64,13 +68,13 @@ export class WebSocketService {
       } catch (error) {
         this.error.set('Failed to parse message');
         this.errorType.set('server');
-        this.logger.error('WebSocket Service failed to parse message', error);
         this.disconnect();
+        this.logger.error('WebSocket Service failed to parse message', error);
       }
     };
 
     this.socket.onerror = () => {
-      if (this.intentionalClose) {
+      if (this.isAborting()) {
         this.logger.debug('WebSocket Service suppressed error during intentional close');
         return;
       }
@@ -83,30 +87,53 @@ export class WebSocketService {
     this.socket.onclose = () => {
       this.logger.debug('WebSocket Service closed connection');
       this.isBusy.set(false);
+      this.resolveAbort(false);
     };
   }
 
-  abort(): void {
+  abort(): Promise<boolean> {
     if (!this.socket) {
-      return;
+      return Promise.resolve(false);
     }
 
+    this.isAborting.set(true);
+
     if (this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ type: 'abort' }));
-      this.logger.info('WebSocket Service sent an abort message');
-      return;
+      return new Promise<boolean>((resolve) => {
+        const timeout = setTimeout(() => {
+          this.logger.warn('WebSocket Service timed out waiting for abort confirmation');
+          this.abortResolver = null;
+          this.disconnect();
+          resolve(false);
+        }, 5000);
+
+        this.abortResolver = (confirmed: boolean) => {
+          clearTimeout(timeout);
+          resolve(confirmed);
+        };
+
+        this.socket!.send(JSON.stringify({ type: 'abort' }));
+        this.logger.info('WebSocket Service sent an abort message');
+      });
     }
 
     if (this.socket.readyState === WebSocket.CONNECTING) {
-      this.logger.debug('WebSocket Service aborting connection before it was established');
-      this.intentionalClose = true;
+      this.logger.debug('WebSocket Service aborted connection before it was established');
       this.disconnect();
-      return;
+      return Promise.resolve(true);
     }
 
     this.logger.debug(
       'WebSocket Service did not send an abort message - socket already closing/closed',
     );
+    return Promise.resolve(false);
+  }
+
+  resolveAbort(confirmed: boolean): void {
+    if (this.abortResolver) {
+      this.abortResolver(confirmed);
+      this.abortResolver = null;
+    }
   }
 
   disconnect(): void {

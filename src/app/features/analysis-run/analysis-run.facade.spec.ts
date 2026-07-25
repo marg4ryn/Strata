@@ -21,6 +21,7 @@ describe('AnalysisRunFacade', () => {
     error: ReturnType<typeof signal<string | null>>;
     errorType: ReturnType<typeof signal<ErrorType | null>>;
     isBusy: ReturnType<typeof signal<boolean>>;
+    isAborting: ReturnType<typeof signal<boolean>>;
     showModal: ReturnType<typeof signal<boolean>>;
   };
 
@@ -41,6 +42,7 @@ describe('AnalysisRunFacade', () => {
       error: signal(null),
       errorType: signal(null),
       isBusy: signal(false),
+      isAborting: signal(false),
       showModal: signal(false),
     };
 
@@ -76,6 +78,7 @@ describe('AnalysisRunFacade', () => {
       target: target,
     };
     store.isBusy.set(true);
+    store.isAborting.set(true);
     store.showModal.set(true);
     store.progress.set('ANALYZING');
     store.error.set('Error');
@@ -83,6 +86,7 @@ describe('AnalysisRunFacade', () => {
     store.pendingAnalysis.set(pendingAnalysis);
 
     expect(service.isBusy()).toBeTruthy();
+    expect(service.isAborting()).toBeTruthy();
     expect(service.showModal()).toBeTruthy();
     expect(service.progress()).toBe('ANALYZING');
     expect(service.error()).toBe('Error');

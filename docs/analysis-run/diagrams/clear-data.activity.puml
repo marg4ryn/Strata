@@ -1,0 +1,8 @@
+@startuml Continue Analysis
+
+:Delete pendingAnalysis from localStorage;
+:Delete sessionId from sessionStorage;
+:Release lock;
+:Reset state;
+
+@enduml

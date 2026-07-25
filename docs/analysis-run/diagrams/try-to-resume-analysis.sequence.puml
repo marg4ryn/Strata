@@ -1,6 +1,5 @@
 @startuml Try To Resume Analysis
 
-participant "UI" as U
 participant "Facade" as F
 participant "Orchestrator" as O
 participant "Lock Service" as L
@@ -19,8 +18,7 @@ STG -> O: pendingAnalyses
 alt pendingAnalyses empty
     O -> ST: showModal.set(false)
     ST -> F: emit(showModal)
-    F -> U: emit(showModal)
-    note left of O: goto Start New Analysis
+    note right of O: goto Start New Analysis
 
 else pendingAnalyses exist
     loop Unprocessed pendingAnalysis?
@@ -37,10 +35,8 @@ else pendingAnalyses exist
             else Locked sessionId still in pendingAnalyses
                 O -> ST: showModal.set(true)
                 ST -> F: emit(showModal)
-                F -> U: emit(showModal)
 
                 alt User wants to continue
-                    U -> F: resumeAnalysis()
                     F -> O: resumeAnalysis()
                     O -> STG: saveSessionId(sessionId)
                     STG -> SS: sessionId
@@ -48,32 +44,27 @@ else pendingAnalyses exist
                     WS -> SRV: reconnect(sessionId)
                     WS -> ST: isBusy.set(true)
                     ST -> F: emit(isBusy)
-                    F -> U: emit(isBusy)
                     O -> ST: showModal.set(false)
                     ST -> F: emit(showModal)
-                    F -> U: emit(showModal)
                     SRV -> WS: progresss
                     WS -> ST: progress.set(...)
                     ST -> F: emit(progress)
-                    F -> U: emit(progress)
-                    note left of O: goto Continue Analysis
+                    note right of O: goto Continue Analysis
 
                 else User abandons analysis
-                    U -> F: abandonAnalysis();
                     F -> O: abandonAnalysis();
                     O -> STG: deletePendingAnalysis(sessionId)
                     STG -> LS: deletePendingAnalysis(sessionId)
                     O -> L: unlockAnalysis(sessionId)
-                    O -> N: sendMessageCancel()
+                    O -> N: sendMessageInfo()
                     O -> ST: resetAnalysisState()
-                    ST -> F: emit(showModal)
-                    F -> U: emit(showModal)
+                    note right of O: goto Try To Resume Analysis
                 end
             end
         end
     end
 
-   note left of O: goto Start New Analysis
+   note right of O: goto Start New Analysis
 end
 
 @enduml

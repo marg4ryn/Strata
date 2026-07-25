@@ -9,6 +9,7 @@
 } @else if (isBusy()) {
   <app-analysis-progress-spinner
     [label]="debouncedLabel.value()"
+    [isAborting]="isAborting()"
     [pendingAnalysis]="pendingAnalysis()"
     (abort)="abortAnalysis()"
   ></app-analysis-progress-spinner>
