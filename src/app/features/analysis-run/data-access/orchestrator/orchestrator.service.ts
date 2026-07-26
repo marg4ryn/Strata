@@ -183,6 +183,7 @@ export class OrchestratorService {
         `Abort for sessionId ${sessionId} not confirmed by server - analysis result already arrived or timed out`,
       );
       // sendMessageInfo();
+      this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
     }
   }

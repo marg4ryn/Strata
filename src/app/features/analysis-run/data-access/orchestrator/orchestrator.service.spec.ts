@@ -372,6 +372,8 @@ describe('OrchestratorService', () => {
         `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
       );
       expect(logger.warn).toHaveBeenCalled();
+      expect(storage.deleteSessionId).toHaveBeenCalledOnce();
+      expect(locker.unlock).toHaveBeenCalledWith(sessionId);
       expect(clearDataSpy).not.toHaveBeenCalled();
       expect(resumeAnalysisSpy).not.toHaveBeenCalled();
     });
