@@ -18,8 +18,15 @@ else (no)
 
     case (User abort)
         :Send abort request;
-        :Close connection;
-        :Show confirmation;
+
+        if (Server confirms?) then (yes)
+            :Show confirmation;        
+        else (no)
+            :Delete sessionId from sessionStorage;
+            :Release lock;
+            :Show warning;
+            stop
+        endif
 
     case (Error)
         :Notify user about the error;

@@ -21,7 +21,7 @@ alt Analysis Successful
     SRV -> WS: result
     WS -> ST: result.set(analysisId)
     ST -> O: emit(result)
-    O -> N: sendMessageSuccess()
+    O -> N: sendNotificationSuccess()
     O -> O: constructAnalysisHistoryEntry()
     note right of O: args: PendingAnalysis
     O -> H: saveAnalysisToHistory()
@@ -38,10 +38,23 @@ else Analysis Terminated
         F -> O: abortAnalysis()
         O -> WS: abort()    
         WS -> SRV: abort()
-        WS -> SRV: connection.close()
-        WS -> ST: isBusy.set(false)
-        ST -> F: emit(isBusy)
-        O -> N: sendMessageInfo()
+
+        alt Server confirms
+            WS -> SRV: connection.close()
+            WS -> ST: isBusy.set(false)
+            ST -> F: emit(isBusy)
+            O -> N: sendNotificationInfo()
+            
+        else Timeout
+            WS -> SRV: connection.close()
+            WS -> ST: isBusy.set(false)
+            ST -> F: emit(isBusy)
+            O -> N: sendNotificationInfo()
+            O -> STG: deleteSessionId()
+            STG -> SS: deleteSessionId()
+            O -> L: unlockAnalysis(sessionId)
+            note right of O: goto Start New Analysis
+        end
 
     else Error
         SRV -> WS: connection.close()
@@ -50,7 +63,7 @@ else Analysis Terminated
         ST -> F: emit(isBusy)
         ST -> F: emit(error)
         ST -> O: emit(error)
-        O -> N: sendMessageError()
+        O -> N: sendNotificationError()
 
         opt Connection Error
             alt With Retry
@@ -65,7 +78,7 @@ else Analysis Terminated
 
             else Without Retry
                 F -> O: cancelAnalysis()
-                O -> N: sendMessageInfo()
+                O -> N: sendNotificationInfo()
                 O -> ST: error.set(null)
                 ST -> F: emit(error)
             end

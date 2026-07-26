@@ -56,7 +56,7 @@ else pendingAnalyses exist
                     O -> STG: deletePendingAnalysis(sessionId)
                     STG -> LS: deletePendingAnalysis(sessionId)
                     O -> L: unlockAnalysis(sessionId)
-                    O -> N: sendMessageInfo()
+                    O -> N: sendNotificationInfo()
                     O -> ST: resetAnalysisState()
                     note right of O: goto Try To Resume Analysis
                 end
