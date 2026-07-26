@@ -23,7 +23,7 @@ export class StoreService {
     this.result.set(null);
     this.error.set(null);
     this.errorType.set(null);
-    this.logger.info('Store Service reset analysis state');
+    this.logger.info('Analysis Run Store reset analysis state');
   }
 
   resetState(): void {
@@ -35,6 +35,6 @@ export class StoreService {
     this.isBusy.set(false);
     this.isAborting.set(false);
     this.showModal.set(false);
-    this.logger.info('Store Service reset state');
+    this.logger.info('Analysis Run Store reset state');
   }
 }

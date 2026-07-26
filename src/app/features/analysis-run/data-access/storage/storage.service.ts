@@ -12,9 +12,12 @@ export class StorageService {
   saveSessionId(sessionId: string): void {
     try {
       sessionStorage.setItem(this.sessionIdKey, sessionId);
-      this.logger.info(`Storage Service saved sessionId: ${sessionId} to sessionStorage`);
+      this.logger.info(`Analysis Run Storage saved sessionId: ${sessionId} to sessionStorage`);
     } catch (error) {
-      this.logger.error(`Failed to save sessionId: ${sessionId} to sessionStorage`, error);
+      this.logger.error(
+        `Analysis Run Storage failed to save sessionId: ${sessionId} to sessionStorage`,
+        error,
+      );
     }
   }
 
@@ -25,11 +28,11 @@ export class StorageService {
     try {
       localStorage.setItem(this.pendingAnalysesKey, JSON.stringify(updatedAnalyses));
       this.logger.info(
-        `Storage Service saved pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
+        `Analysis Run Storage saved pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
       );
     } catch (error) {
       this.logger.error(
-        `Failed to save pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
+        `Analysis Run Storage failed to save pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
         error,
       );
     }
@@ -38,10 +41,12 @@ export class StorageService {
   getSessionId(): string | null {
     try {
       const sessionId = sessionStorage.getItem(this.sessionIdKey);
-      this.logger.debug(`Storage Service returned sessionId: ${sessionId} from sessionStorage`);
+      this.logger.debug(
+        `Analysis Run Storage returned sessionId: ${sessionId} from sessionStorage`,
+      );
       return sessionId;
     } catch (error) {
-      this.logger.error('Failed to read sessionId from sessionStorage', error);
+      this.logger.error('Analysis Run Storage failed to read sessionId from sessionStorage', error);
       return null;
     }
   }
@@ -51,23 +56,27 @@ export class StorageService {
     try {
       raw = localStorage.getItem(this.pendingAnalysesKey);
     } catch (error) {
-      this.logger.error('Failed to read pendingAnalyses from localStorage', error);
+      this.logger.error(
+        'Analysis Run Storage failed to read pendingAnalyses from localStorage',
+        error,
+      );
       return null;
     }
 
-    if (raw === null) {
-      return null;
-    }
+    if (raw === null) return null;
 
     try {
       const pendingAnalyses = JSON.parse(raw) as PendingAnalysis[];
       this.logger.debug(
-        'Storage Service returned pendingAnalyses from localStorage',
+        'Analysis Run Storage returned pendingAnalyses from localStorage',
         pendingAnalyses,
       );
       return pendingAnalyses;
     } catch (error) {
-      this.logger.error('Failed to parse pendingAnalyses JSON, clearing corrupted data', error);
+      this.logger.error(
+        'Analysis Run Storage failed to parse pendingAnalyses JSON, clearing corrupted data',
+        error,
+      );
       this.removePendingAnalysesItem();
       return null;
     }
@@ -76,9 +85,12 @@ export class StorageService {
   removePendingAnalysesItem(): void {
     try {
       localStorage.removeItem(this.pendingAnalysesKey);
-      this.logger.info(`Storage Service removed pendingAnalyses from localStorage`);
+      this.logger.info(`Analysis Run Storage removed pendingAnalyses from localStorage`);
     } catch (error) {
-      this.logger.error('Failed to remove pendingAnalyses from localStorage', error);
+      this.logger.error(
+        'Analysis Run Storage failed to remove pendingAnalyses from localStorage',
+        error,
+      );
     }
   }
 
@@ -86,34 +98,37 @@ export class StorageService {
     try {
       const sessionId = sessionStorage.getItem(this.sessionIdKey);
       sessionStorage.removeItem(this.sessionIdKey);
-      this.logger.info(`Storage Service removed sessionId: ${sessionId} from sessionStorage`);
+      this.logger.info(`Analysis Run Storage removed sessionId: ${sessionId} from sessionStorage`);
     } catch (error) {
-      this.logger.error('Failed to remove sessionId from sessionStorage', error);
+      this.logger.error(
+        'Analysis Run Storage failed to remove sessionId from sessionStorage',
+        error,
+      );
     }
   }
 
   deletePendingAnalysis(sessionId: string): void {
     const pendingAnalyses = this.getPendingAnalyses();
-    if (pendingAnalyses === null) return;
+    if (!pendingAnalyses) return;
 
     const remainingAnalyses = pendingAnalyses.filter(
       (analysis) => analysis.sessionId !== sessionId,
     );
 
-    try {
-      if (remainingAnalyses.length !== 0) {
+    if (remainingAnalyses.length < 1) {
+      this.removePendingAnalysesItem();
+    } else {
+      try {
         localStorage.setItem(this.pendingAnalysesKey, JSON.stringify(remainingAnalyses));
         this.logger.info(
-          `Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
+          `Analysis Run Storage removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
         );
-      } else {
-        this.removePendingAnalysesItem();
+      } catch (error) {
+        this.logger.error(
+          `Analysis Run Storage failed to remove pendingAnalysis with sessionId: ${sessionId} from localStorage`,
+          error,
+        );
       }
-    } catch (error) {
-      this.logger.error(
-        `Failed to remove pendingAnalysis with sessionId: ${sessionId} from localStorage`,
-        error,
-      );
     }
   }
 }
