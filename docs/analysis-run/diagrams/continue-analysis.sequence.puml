@@ -49,7 +49,7 @@ else Analysis Terminated
             WS -> SRV: connection.close()
             WS -> ST: isBusy.set(false)
             ST -> F: emit(isBusy)
-            O -> N: sendNotificationInfo()
+            O -> N: sendNotificationWarning()
             O -> STG: deleteSessionId()
             STG -> SS: deleteSessionId()
             O -> L: unlockAnalysis(sessionId)
