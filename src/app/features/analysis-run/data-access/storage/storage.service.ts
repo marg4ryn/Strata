@@ -46,7 +46,7 @@ export class StorageService {
     }
   }
 
-  getPendingAnalyses(): Array<PendingAnalysis> | null {
+  getPendingAnalyses(): PendingAnalysis[] | null {
     let raw: string | null;
     try {
       raw = localStorage.getItem(this.pendingAnalysesKey);
@@ -60,7 +60,7 @@ export class StorageService {
     }
 
     try {
-      const pendingAnalyses = JSON.parse(raw) as Array<PendingAnalysis>;
+      const pendingAnalyses = JSON.parse(raw) as PendingAnalysis[];
       this.logger.debug(
         'Storage Service returned pendingAnalyses from localStorage',
         pendingAnalyses,
