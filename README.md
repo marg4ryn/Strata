@@ -7,6 +7,8 @@
 ![D3.js](https://img.shields.io/badge/D3.js-orange?style=for-the-badge&logo=D3&logoColor=white)
 ![Chart.js](https://img.shields.io/badge/Chart.js-white?style=for-the-badge&logo=chart.js&logoColor=red)
 
+🔗 Backend Repository: https://github.com/marg4ryn/Strata-Backend
+
 ## 🧭 About
 
 **Strata** is a tool for analyzing the evolution of software repositories. It uses version control history to reveal how code changes over time, helping teams identify areas with high activity and complexity. Instead of focusing only on the current state of a codebase, Strata examines development patterns to provide insight into how the system evolves and where maintenance effort may be most valuable.
