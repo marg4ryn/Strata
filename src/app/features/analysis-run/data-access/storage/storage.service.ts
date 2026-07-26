@@ -63,7 +63,7 @@ export class StorageService {
       return null;
     }
 
-    if (raw === null) return null;
+    if (!raw) return null;
 
     try {
       const pendingAnalyses = JSON.parse(raw) as PendingAnalysis[];

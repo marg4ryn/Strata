@@ -105,6 +105,10 @@ describe('OrchestratorService', () => {
     store.pendingAnalysis.set({ sessionId: sessionId } as unknown as PendingAnalysis);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('effect', () => {
     it('handles result change', () => {
       const clearDataSpy = vi.spyOn(service, 'clearData');

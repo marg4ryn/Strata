@@ -34,6 +34,10 @@ describe('StoreService', () => {
     store = TestBed.inject(StoreService);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('resetState', () => {
     it('resets state', () => {
       store.pendingAnalysis.set(pendingAnalysis);

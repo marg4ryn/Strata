@@ -269,7 +269,6 @@ describe('StorageService', () => {
     });
 
     it('does not throw on storage error', () => {
-      vi.spyOn(service, 'getPendingAnalyses').mockReturnValue([pendingAnalysis]);
       vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
         throw new Error('Storage error');
       });
