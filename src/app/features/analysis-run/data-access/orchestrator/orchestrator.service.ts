@@ -1,4 +1,4 @@
-import { Service, inject, effect } from '@angular/core';
+import { Service, inject, effect, untracked } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { StoreService } from '../store/store.service';
@@ -34,18 +34,24 @@ export class OrchestratorService {
       const error = this.store.error();
 
       if (result !== null) {
-        this.logger.info('Orchestrator handled the analysis results');
-        this.notifications.sendNotificationSuccess(`${this.getRepoName()} analysis was successful`);
-        // call history feature
-        // call analysis-results feature
-        void this.clearData(); // not waiting for Promise on purpose
+        untracked(() => {
+          this.logger.info('Orchestrator handled the analysis results');
+          this.notifications.sendNotificationSuccess(
+            `${this.getRepoName()} analysis was successful`,
+          );
+          // call history feature
+          // call analysis-results feature
+          void this.clearData(); // not waiting for Promise on purpose
+        });
       }
 
       if (error !== null) {
-        this.logger.info('Orchestrator handled an analysis error');
-        this.notifications.sendNotificationError(
-          `${this.getRepoName()} analysis ended with an error`,
-        );
+        untracked(() => {
+          this.logger.info('Orchestrator handled an analysis error');
+          this.notifications.sendNotificationError(
+            `${this.getRepoName()} analysis ended with an error`,
+          );
+        });
       }
     });
   }
