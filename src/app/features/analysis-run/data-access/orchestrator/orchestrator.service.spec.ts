@@ -14,6 +14,7 @@ import { StoreService } from '../store/store.service';
 import { StorageService } from '../storage/storage.service';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { LockService } from '../lock/lock.service';
+import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 
 describe('OrchestratorService', () => {
   let service: OrchestratorService;
@@ -50,6 +51,13 @@ describe('OrchestratorService', () => {
     unlock: ReturnType<typeof vi.fn>;
   };
 
+  let notifications: {
+    sendNotificationSuccess: ReturnType<typeof vi.fn>;
+    sendNotificationInfo: ReturnType<typeof vi.fn>;
+    sendNotificationWarning: ReturnType<typeof vi.fn>;
+    sendNotificationError: ReturnType<typeof vi.fn>;
+  };
+
   const sessionId = '123';
 
   beforeEach(() => {
@@ -84,6 +92,13 @@ describe('OrchestratorService', () => {
       unlock: vi.fn(),
     };
 
+    notifications = {
+      sendNotificationSuccess: vi.fn(),
+      sendNotificationInfo: vi.fn(),
+      sendNotificationWarning: vi.fn(),
+      sendNotificationError: vi.fn(),
+    };
+
     logger = {
       debug: vi.fn(),
       info: vi.fn(),
@@ -98,6 +113,7 @@ describe('OrchestratorService', () => {
         { provide: WebSocketService, useValue: websocket },
         { provide: LockService, useValue: locker },
         { provide: LoggerService, useValue: logger },
+        { provide: NotificationsFacade, useValue: notifications },
       ],
     });
 
@@ -117,12 +133,14 @@ describe('OrchestratorService', () => {
       TestBed.tick();
 
       expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalledWith('Orchestrator handled the analysis results');
     });
 
     it('handles error change', () => {
       store.error.set('Error');
       TestBed.tick();
+      expect(notifications.sendNotificationError).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalledWith('Orchestrator handled an analysis error');
     });
   });
@@ -343,6 +361,7 @@ describe('OrchestratorService', () => {
     expect(logger.info).toHaveBeenCalledWith(
       `Orchestrator received a request to abandon analysis with sessionId: ${sessionId}`,
     );
+    expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
     expect(clearDataSpy).toHaveBeenCalledOnce();
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
   });
@@ -360,6 +379,7 @@ describe('OrchestratorService', () => {
         `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
       );
       expect(logger.warn).not.toHaveBeenCalled();
+      expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
       expect(clearDataSpy).toHaveBeenCalledOnce();
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
     });
@@ -376,6 +396,7 @@ describe('OrchestratorService', () => {
         `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
       );
       expect(logger.warn).toHaveBeenCalled();
+      expect(notifications.sendNotificationWarning).toHaveBeenCalledOnce();
       expect(storage.deleteSessionId).toHaveBeenCalledOnce();
       expect(locker.unlock).toHaveBeenCalledWith(sessionId);
       expect(clearDataSpy).not.toHaveBeenCalled();
@@ -406,6 +427,7 @@ describe('OrchestratorService', () => {
     expect(logger.info).toHaveBeenCalledWith(
       `Orchestrator received a request to cancel analysis with sessionId: ${sessionId}`,
     );
+    expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
     expect(clearDataSpy).toHaveBeenCalledOnce();
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
   });
@@ -538,6 +560,99 @@ describe('OrchestratorService', () => {
       });
 
       vi.useRealTimers();
+    });
+  });
+
+  describe('getRepoName', () => {
+    it('extracts repo name from git url', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project.git',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
+    });
+
+    it('extracts repo name from url without .git suffix', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
+    });
+
+    it('returns empty string when url is empty', () => {
+      const target: AnalysisTarget = {
+        targetURL: '',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('returns empty string when pending analysis is missing', () => {
+      store.pendingAnalysis.set(null);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('returns empty string when url ends with slash', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project/',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('extracts nested repository name', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/group/subgroup/Project.git',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
     });
   });
 });

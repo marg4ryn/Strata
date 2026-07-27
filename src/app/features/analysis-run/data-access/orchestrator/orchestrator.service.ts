@@ -11,6 +11,7 @@ import {
   DateRange,
   PendingAnalysis,
 } from '../../analysis-run.model';
+import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 
 interface AnalysisHistoryEntry {
   analysisId: string;
@@ -25,6 +26,7 @@ export class OrchestratorService {
   private readonly webSocket = inject(WebSocketService);
   private readonly locker = inject(LockService);
   private readonly logger = inject(LoggerService);
+  private readonly notifications = inject(NotificationsFacade);
 
   constructor() {
     effect(() => {
@@ -33,7 +35,7 @@ export class OrchestratorService {
 
       if (result !== null) {
         this.logger.info('Orchestrator handled the analysis results');
-        // sendMessageSuccess()
+        this.notifications.sendNotificationSuccess(`${this.getRepoName()} analysis was successful`);
         // call history feature
         // call analysis-results feature
         void this.clearData(); // not waiting for Promise on purpose
@@ -41,7 +43,9 @@ export class OrchestratorService {
 
       if (error !== null) {
         this.logger.info('Orchestrator handled an analysis error');
-        // sendMessageError()
+        this.notifications.sendNotificationError(
+          `${this.getRepoName()} analysis ended with an error`,
+        );
       }
     });
   }
@@ -160,7 +164,7 @@ export class OrchestratorService {
     this.logger.info(
       `Orchestrator received a request to abandon analysis with sessionId: ${sessionId}`,
     );
-    // sendMessageInfo()
+    this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis abandoned`);
     await this.clearData();
     await this.tryToResumeAnalysis();
   }
@@ -175,14 +179,16 @@ export class OrchestratorService {
 
     if (confirmed) {
       this.logger.debug(`Abort for sessionId ${sessionId} confirmed by server`);
-      // sendMessageInfo();
+      this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis aborted`);
       await this.clearData();
       await this.tryToResumeAnalysis();
     } else {
       this.logger.warn(
         `Abort for sessionId ${sessionId} not confirmed by server - analysis result already arrived or timed out`,
       );
-      // sendMessageInfo();
+      this.notifications.sendNotificationWarning(
+        `${this.getRepoName()} analysis abort failed - server not responding`,
+      );
       this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
     }
@@ -203,7 +209,7 @@ export class OrchestratorService {
       `Orchestrator received a request to cancel analysis with sessionId: ${sessionId}`,
     );
     this.store.error.set(null);
-    // sendMessageInfo()
+    this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis cancelled`);
     await this.clearData();
     await this.tryToResumeAnalysis();
   }
@@ -258,5 +264,11 @@ export class OrchestratorService {
     }
 
     return params;
+  }
+
+  getRepoName(): string {
+    const targetUrl = this.store.pendingAnalysis()?.target?.targetURL ?? '';
+    const repoName = targetUrl.split('/').pop() || '';
+    return repoName?.replace(/\.git$/, '');
   }
 }
