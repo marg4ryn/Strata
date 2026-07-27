@@ -1,0 +1,54 @@
+@if (facade.showPanel()) {
+  <div class="notifications-panel" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+    <div class="notifications-panel__header">
+      <span class="notifications-panel__title">Notifications</span>
+
+      <div class="notifications-panel__actions">
+        @if (facade.notifications()?.length) {
+          <button
+            type="button"
+            class="notifications-panel__clear-all"
+            title="Remove all notifications"
+            aria-label="Remove all notifications"
+            (click)="facade.clearNotifications()"
+          >
+            Clear all
+          </button>
+        }
+        <button
+          type="button"
+          class="notifications-panel__close"
+          title="Close notifications"
+          aria-label="Close notifications"
+          (click)="facade.closePanel()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="16" y1="4" x2="4" y2="16"></line>
+            <line x1="4" y1="4" x2="16" y2="16"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="notifications-panel__list">
+      @if (facade.notifications()?.length) {
+        @for (n of facade.notifications(); track n.sentAt) {
+          <app-notification-item [notification]="n" (remove)="facade.removeNotification($event)" />
+        }
+      } @else {
+        <div class="notifications-panel__empty">
+          <p>No notifications</p>
+        </div>
+      }
+    </div>
+  </div>
+}
