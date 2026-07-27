@@ -77,6 +77,10 @@
     color: var(--accent-active);
     transform: scale(0.9);
   }
+
+  &--active {
+    color: var(--accent-primary);
+  }
 }
 
 .header__action-icon {

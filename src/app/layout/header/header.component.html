@@ -4,7 +4,15 @@
 </button>
 
 <div class="header__actions">
-  <button class="header__action" title="Notifications" aria-label="Notifications">
+  <button
+    #notifBtn
+    class="header__action"
+    title="Notifications"
+    aria-label="Notifications"
+    [class.header__action--active]="notifications.showPanel()"
+    [attr.aria-expanded]="notifications.showPanel()"
+    (click)="toggleNotificationsPanel()"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
