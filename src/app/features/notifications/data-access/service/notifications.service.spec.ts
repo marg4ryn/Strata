@@ -12,10 +12,11 @@ describe('NotificationsService', () => {
   let logger: Partial<LoggerService>;
 
   let store: {
+    unreadNotificationsCount: ReturnType<typeof signal<number>>;
     notifications: ReturnType<typeof signal<Notification[] | null>>;
+    showPanel: ReturnType<typeof signal<boolean>>;
     addNotification: ReturnType<typeof vi.fn>;
     removeNotification: ReturnType<typeof vi.fn>;
-    clearNotifications: ReturnType<typeof vi.fn>;
   };
 
   let storage: {
@@ -23,20 +24,18 @@ describe('NotificationsService', () => {
     saveNotification: ReturnType<typeof vi.fn>;
     removeNotification: ReturnType<typeof vi.fn>;
     clearNotifications: ReturnType<typeof vi.fn>;
-  };
-
-  const notification: Notification = {
-    type: 'success',
-    message: 'foo',
-    sentAt: 42,
+    getUnreadNotificationsCount: ReturnType<typeof vi.fn>;
+    saveUnreadNotificationsCount: ReturnType<typeof vi.fn>;
+    clearUnreadNotificationsCount: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
     store = {
+      unreadNotificationsCount: signal(0),
       notifications: signal(null),
+      showPanel: signal(false),
       addNotification: vi.fn(),
       removeNotification: vi.fn(),
-      clearNotifications: vi.fn(),
     };
 
     storage = {
@@ -44,6 +43,9 @@ describe('NotificationsService', () => {
       saveNotification: vi.fn(),
       removeNotification: vi.fn(),
       clearNotifications: vi.fn(),
+      getUnreadNotificationsCount: vi.fn(),
+      saveUnreadNotificationsCount: vi.fn(),
+      clearUnreadNotificationsCount: vi.fn(),
     };
 
     logger = {
@@ -67,29 +69,65 @@ describe('NotificationsService', () => {
     vi.restoreAllMocks();
   });
 
+  const notification: Notification = {
+    type: 'success',
+    message: 'foo',
+    sentAt: 42,
+  };
+
   describe('loadNotifications', () => {
     it('loads notifications', () => {
       vi.spyOn(storage, 'getNotifications').mockReturnValue([notification]);
+      vi.spyOn(storage, 'getUnreadNotificationsCount').mockReturnValue(1);
       service.loadNotifications();
       expect(store.notifications()).toEqual([notification]);
+      expect(store.unreadNotificationsCount()).toBe(1);
     });
 
     it('loads notifications when empty', () => {
       vi.spyOn(storage, 'getNotifications').mockReturnValue(null);
+      vi.spyOn(storage, 'getUnreadNotificationsCount').mockReturnValue(null);
       service.loadNotifications();
       expect(store.notifications()).toBeNull();
+      expect(store.unreadNotificationsCount()).toBe(0);
     });
   });
 
-  it('removes notification', () => {
-    service.removeNotification(notification.sentAt);
-    expect(store.removeNotification).toHaveBeenCalledWith(notification.sentAt);
-    expect(storage.removeNotification).toHaveBeenCalledWith(notification.sentAt);
+  describe('panel toggling', () => {
+    it('handles notifications panel opening', () => {
+      store.unreadNotificationsCount.set(1);
+      service.openPanel();
+      expect(store.showPanel()).toBeTruthy();
+      expect(store.unreadNotificationsCount()).toBe(0);
+      expect(storage.clearUnreadNotificationsCount).toHaveBeenCalled();
+    });
+
+    it('handles notifications panel closing', () => {
+      service.closePanel();
+      expect(store.showPanel()).toBeFalsy();
+    });
+  });
+
+  describe('removeNotification', () => {
+    it('removes notification', () => {
+      store.notifications.set([notification]);
+      service.removeNotification(notification.sentAt);
+      expect(store.removeNotification).toHaveBeenCalledWith(notification.sentAt);
+      expect(storage.removeNotification).toHaveBeenCalledWith(notification.sentAt);
+    });
+
+    it('removes notification that does not exist', () => {
+      store.notifications.set(null);
+      service.removeNotification(notification.sentAt);
+      expect(store.removeNotification).toHaveBeenCalledWith(notification.sentAt);
+      expect(storage.removeNotification).toHaveBeenCalledWith(notification.sentAt);
+    });
   });
 
   it('clears notifications', () => {
+    store.notifications.set([notification]);
     service.clearNotifications();
-    expect(store.clearNotifications).toHaveBeenCalled();
+    expect(store.notifications()).toBeNull();
     expect(storage.clearNotifications).toHaveBeenCalled();
   });
 
@@ -103,51 +141,51 @@ describe('NotificationsService', () => {
     });
 
     it('adds success notification', () => {
-      const notification: Notification = {
+      const successNotification: Notification = {
         type: 'success',
         message: 'foo',
         sentAt: 42,
       };
-      vi.setSystemTime(notification.sentAt);
-      service.addNotificationSuccess(notification.message);
-      expect(store.addNotification).toHaveBeenCalledWith(notification);
-      expect(storage.saveNotification).toHaveBeenCalledWith(notification);
+      vi.setSystemTime(successNotification.sentAt);
+      service.addNotificationSuccess(successNotification.message);
+      expect(store.addNotification).toHaveBeenCalledWith(successNotification);
+      expect(storage.saveNotification).toHaveBeenCalledWith(successNotification);
     });
 
     it('adds info notification', () => {
-      const notification: Notification = {
+      const infoNotification: Notification = {
         type: 'info',
         message: 'foo',
         sentAt: 42,
       };
-      vi.setSystemTime(notification.sentAt);
-      service.addNotificationInfo(notification.message);
-      expect(store.addNotification).toHaveBeenCalledWith(notification);
-      expect(storage.saveNotification).toHaveBeenCalledWith(notification);
+      vi.setSystemTime(infoNotification.sentAt);
+      service.addNotificationInfo(infoNotification.message);
+      expect(store.addNotification).toHaveBeenCalledWith(infoNotification);
+      expect(storage.saveNotification).toHaveBeenCalledWith(infoNotification);
     });
 
     it('adds warning notification', () => {
-      const notification: Notification = {
+      const warningNotification: Notification = {
         type: 'warning',
         message: 'foo',
         sentAt: 42,
       };
-      vi.setSystemTime(notification.sentAt);
-      service.addNotificationWarning(notification.message);
-      expect(store.addNotification).toHaveBeenCalledWith(notification);
-      expect(storage.saveNotification).toHaveBeenCalledWith(notification);
+      vi.setSystemTime(warningNotification.sentAt);
+      service.addNotificationWarning(warningNotification.message);
+      expect(store.addNotification).toHaveBeenCalledWith(warningNotification);
+      expect(storage.saveNotification).toHaveBeenCalledWith(warningNotification);
     });
 
     it('adds error notification', () => {
-      const notification: Notification = {
+      const errorNotification: Notification = {
         type: 'error',
         message: 'foo',
         sentAt: 42,
       };
-      vi.setSystemTime(notification.sentAt);
-      service.addNotificationError(notification.message);
-      expect(store.addNotification).toHaveBeenCalledWith(notification);
-      expect(storage.saveNotification).toHaveBeenCalledWith(notification);
+      vi.setSystemTime(errorNotification.sentAt);
+      service.addNotificationError(errorNotification.message);
+      expect(store.addNotification).toHaveBeenCalledWith(errorNotification);
+      expect(storage.saveNotification).toHaveBeenCalledWith(errorNotification);
     });
   });
 });

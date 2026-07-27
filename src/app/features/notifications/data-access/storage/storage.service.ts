@@ -7,6 +7,38 @@ import { LoggerService } from '@app/core/logging/logger.service';
 export class StorageService {
   private readonly logger = inject(LoggerService);
   private readonly notificationsKey = 'notifications';
+  private readonly unreadNotificationsCountKey = 'unreadNotificationsCount';
+
+  getUnreadNotificationsCount(): number | null {
+    let raw: string | null;
+    try {
+      raw = sessionStorage.getItem(this.unreadNotificationsCountKey);
+    } catch (error) {
+      this.logger.error(
+        'Notifications Storage failed to read unread notifications count from sessionStorage',
+        error,
+      );
+      return null;
+    }
+
+    if (!raw) return null;
+
+    try {
+      const unreadNotificationsCount = JSON.parse(raw) as number;
+      this.logger.debug(
+        'Notifications Storage returned unread notifications count from sessionStorage',
+        unreadNotificationsCount,
+      );
+      return unreadNotificationsCount;
+    } catch (error) {
+      this.logger.error(
+        'Notifications Storage failed to parse unread notifications count JSON, clearing corrupted data',
+        error,
+      );
+      this.clearUnreadNotificationsCount();
+      return null;
+    }
+  }
 
   getNotifications(): Notification[] | null {
     let raw: string | null;
@@ -36,6 +68,18 @@ export class StorageService {
       );
       this.clearNotifications();
       return null;
+    }
+  }
+
+  saveUnreadNotificationsCount(count: number): void {
+    try {
+      sessionStorage.setItem(this.unreadNotificationsCountKey, JSON.stringify(count));
+      this.logger.info('Notifications Storage saved unread notifications count to sessionStorage');
+    } catch (error) {
+      this.logger.error(
+        `Notifications Storage failed to save unread notifications count to sessionStorage`,
+        error,
+      );
     }
   }
 
@@ -74,6 +118,20 @@ export class StorageService {
           error,
         );
       }
+    }
+  }
+
+  clearUnreadNotificationsCount(): void {
+    try {
+      sessionStorage.removeItem(this.unreadNotificationsCountKey);
+      this.logger.info(
+        'Notifications Storage removed unread notifications count from sessionStorage',
+      );
+    } catch (error) {
+      this.logger.error(
+        'Notifications Storage failed to remove unread notifications count from sessionStorage',
+        error,
+      );
     }
   }
 

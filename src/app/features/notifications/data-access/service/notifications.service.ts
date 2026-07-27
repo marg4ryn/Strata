@@ -1,4 +1,4 @@
-import { inject, Service } from '@angular/core';
+import { Service, inject, untracked } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { StoreService } from '../store/store.service';
@@ -12,9 +12,27 @@ export class NotificationsService {
   private readonly storage = inject(StorageService);
 
   loadNotifications(): void {
+    this.logger.debug('Notifications Service is loading notifications');
     const notifications = this.storage.getNotifications();
-    this.logger.info('Notifications Service loaded notifications: ', notifications);
     this.store.notifications.set(notifications);
+
+    const unreadNotificationsCount = this.storage.getUnreadNotificationsCount();
+    this.store.unreadNotificationsCount.set(unreadNotificationsCount ?? 0);
+  }
+
+  openPanel(): void {
+    this.logger.debug('Notifications Service opened notifications panel');
+    this.store.showPanel.set(true);
+
+    if (this.store.unreadNotificationsCount() > 0) {
+      this.store.unreadNotificationsCount.set(0);
+      this.storage.clearUnreadNotificationsCount();
+    }
+  }
+
+  closePanel(): void {
+    this.logger.debug('Notifications Service closed notifications panel');
+    this.store.showPanel.set(false);
   }
 
   removeNotification(sentAt: number): void {
@@ -28,7 +46,7 @@ export class NotificationsService {
   clearNotifications(): void {
     this.logger.debug('Notifications Service received request to remove all notifications');
     this.storage.clearNotifications();
-    this.store.clearNotifications();
+    this.store.notifications.set(null);
   }
 
   addNotificationSuccess(message: string): void {
@@ -51,6 +69,15 @@ export class NotificationsService {
     const notification = this.constructNotification(type, message);
     this.storage.saveNotification(notification);
     this.store.addNotification(notification);
+
+    if (!this.store.showPanel()) {
+      const unreadNotificationsCount = untracked(() => this.store.unreadNotificationsCount()) + 1;
+      this.store.unreadNotificationsCount.set(unreadNotificationsCount);
+      this.storage.saveUnreadNotificationsCount(unreadNotificationsCount);
+      this.logger.debug(
+        `Notifications Service increased unread notifications count to: ${unreadNotificationsCount}`,
+      );
+    }
   }
 
   private constructNotification(type: NotificationType, message: string): Notification {

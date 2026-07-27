@@ -37,21 +37,14 @@ describe('StoreService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('showPanel', () => {
-    it('initially panel is closed', () => {
-      expect(service.showPanel()).toBeFalsy();
-    });
+  it('updates computed signals', () => {
+    service.unreadNotificationsCount.set(1);
+    service.notifications.set([firstNotification]);
+    service.showPanel.set(true);
 
-    it('opens panel', () => {
-      service.openPanel();
-      expect(service.showPanel()).toBeTruthy();
-    });
-
-    it('closes panel', () => {
-      service.openPanel();
-      service.closePanel();
-      expect(service.showPanel()).toBeFalsy();
-    });
+    expect(service.unreadNotificationsCount()).toBe(1);
+    expect(service.notifications()).toEqual([firstNotification]);
+    expect(service.showPanel()).toBeTruthy();
   });
 
   describe('addNotification', () => {
@@ -93,22 +86,6 @@ describe('StoreService', () => {
     it('does not throw on not existing notification', () => {
       service.notifications.set([secondNotification]);
       expect(() => service.removeNotification(firstNotification.sentAt)).not.toThrow();
-    });
-  });
-
-  describe('clearNotifications', () => {
-    it('clears notifications', () => {
-      service.notifications.set([firstNotification]);
-      service.clearNotifications();
-      expect(service.notifications()).toBeNull();
-      expect(logger.info).toHaveBeenCalled();
-    });
-
-    it('clears empty notifications', () => {
-      service.notifications.set(null);
-      service.clearNotifications();
-      expect(service.notifications()).toBeNull();
-      expect(logger.info).toHaveBeenCalled();
     });
   });
 });

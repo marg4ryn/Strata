@@ -10,13 +10,14 @@ describe('NotificationsFacade', () => {
   let service: NotificationsFacade;
 
   let store: {
+    unreadNotificationsCount: ReturnType<typeof signal<number>>;
     notifications: ReturnType<typeof signal<Notification[] | null>>;
     showPanel: ReturnType<typeof signal<boolean>>;
-    openPanel: ReturnType<typeof vi.fn>;
-    closePanel: ReturnType<typeof vi.fn>;
   };
 
   let notificationsService: {
+    openPanel: ReturnType<typeof vi.fn>;
+    closePanel: ReturnType<typeof vi.fn>;
     loadNotifications: ReturnType<typeof vi.fn>;
     removeNotification: ReturnType<typeof vi.fn>;
     clearNotifications: ReturnType<typeof vi.fn>;
@@ -28,13 +29,14 @@ describe('NotificationsFacade', () => {
 
   beforeEach(() => {
     store = {
+      unreadNotificationsCount: signal(0),
       notifications: signal(null),
       showPanel: signal(false),
-      openPanel: vi.fn(),
-      closePanel: vi.fn(),
     };
 
     notificationsService = {
+      openPanel: vi.fn(),
+      closePanel: vi.fn(),
       loadNotifications: vi.fn(),
       removeNotification: vi.fn(),
       clearNotifications: vi.fn(),
@@ -60,21 +62,23 @@ describe('NotificationsFacade', () => {
       message: 'foo',
       sentAt: 42,
     };
+    store.unreadNotificationsCount.set(1);
     store.notifications.set([notification]);
     store.showPanel.set(true);
 
+    expect(service.unreadNotificationsCount()).toBe(1);
     expect(service.notifications()).toEqual([notification]);
     expect(service.showPanel()).toBeTruthy();
   });
 
   it('handles openPanel', () => {
     service.openPanel();
-    expect(store.openPanel).toHaveBeenCalledOnce();
+    expect(notificationsService.openPanel).toHaveBeenCalledOnce();
   });
 
   it('handles closePanel', () => {
     service.closePanel();
-    expect(store.closePanel).toHaveBeenCalledOnce();
+    expect(notificationsService.closePanel).toHaveBeenCalledOnce();
   });
 
   it('handles loadNotifications', () => {

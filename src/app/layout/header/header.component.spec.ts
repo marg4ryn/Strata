@@ -9,6 +9,7 @@ describe('Header', () => {
   let fixture: ComponentFixture<Header>;
 
   let notifications: {
+    unreadNotificationsCount: ReturnType<typeof signal<number>>;
     showPanel: ReturnType<typeof signal<boolean>>;
     openPanel: ReturnType<typeof vi.fn>;
     closePanel: ReturnType<typeof vi.fn>;
@@ -17,6 +18,7 @@ describe('Header', () => {
 
   beforeEach(async () => {
     notifications = {
+      unreadNotificationsCount: signal(0),
       showPanel: signal(false),
       openPanel: vi.fn(),
       closePanel: vi.fn(),

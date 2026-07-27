@@ -25,6 +25,11 @@
         fill="currentColor"
       />
     </svg>
+    @if (unreadNotificationsCount() > 0) {
+      <span class="header__action-badge">
+        {{ unreadNotificationsCount() > 99 ? '99+' : unreadNotificationsCount() }}
+      </span>
+    }
   </button>
 
   <button class="header__action" title="Analysis history" aria-label="Analysis history">

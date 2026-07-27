@@ -7,18 +7,9 @@ import { Notification } from '../../notifications.model';
 export class StoreService {
   private readonly logger = inject(LoggerService);
 
+  readonly unreadNotificationsCount = signal<number>(0);
   readonly notifications = signal<Notification[] | null>(null);
   readonly showPanel = signal<boolean>(false);
-
-  openPanel(): void {
-    this.showPanel.set(true);
-    this.logger.debug('Notifications Store opened notifications panel');
-  }
-
-  closePanel(): void {
-    this.showPanel.set(false);
-    this.logger.debug('Notifications Store closed notifications panel');
-  }
 
   addNotification(notification: Notification): void {
     this.notifications.update((notifications) => [...(notifications ?? []), notification]);
@@ -32,10 +23,5 @@ export class StoreService {
     );
     this.notifications.set(filteredNotifications.length < 1 ? null : filteredNotifications);
     this.logger.info(`Notifications Store removed notification sent at: ${sentAt}`);
-  }
-
-  clearNotifications(): void {
-    this.notifications.set(null);
-    this.logger.info('Notifications Store removed all notifications');
   }
 }
