@@ -37,6 +37,23 @@ describe('StoreService', () => {
     vi.restoreAllMocks();
   });
 
+  describe('showPanel', () => {
+    it('initially panel is closed', () => {
+      expect(service.showPanel()).toBeFalsy();
+    });
+
+    it('opens panel', () => {
+      service.openPanel();
+      expect(service.showPanel()).toBeTruthy();
+    });
+
+    it('closes panel', () => {
+      service.openPanel();
+      service.closePanel();
+      expect(service.showPanel()).toBeFalsy();
+    });
+  });
+
   describe('addNotification', () => {
     it('adds first notification', () => {
       service.notifications.set(null);

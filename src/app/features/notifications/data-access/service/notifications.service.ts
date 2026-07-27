@@ -39,8 +39,8 @@ export class NotificationsService {
     this.addNotification('info', message);
   }
 
-  addNotificationWarn(message: string): void {
-    this.addNotification('warn', message);
+  addNotificationWarning(message: string): void {
+    this.addNotification('warning', message);
   }
 
   addNotificationError(message: string): void {

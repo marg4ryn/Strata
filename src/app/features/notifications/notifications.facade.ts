@@ -9,6 +9,15 @@ export class NotificationsFacade {
   private readonly service = inject(NotificationsService);
 
   readonly notifications = computed(() => this.store.notifications());
+  readonly showPanel = computed(() => this.store.showPanel());
+
+  openPanel(): void {
+    this.store.openPanel();
+  }
+
+  closePanel(): void {
+    this.store.closePanel();
+  }
 
   sendNotificationSuccess(message: string): void {
     this.service.addNotificationSuccess(message);
@@ -18,8 +27,8 @@ export class NotificationsFacade {
     this.service.addNotificationInfo(message);
   }
 
-  sendNotificationWarn(message: string): void {
-    this.service.addNotificationWarn(message);
+  sendNotificationWarning(message: string): void {
+    this.service.addNotificationWarning(message);
   }
 
   sendNotificationError(message: string): void {

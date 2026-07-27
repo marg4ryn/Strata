@@ -8,6 +8,17 @@ export class StoreService {
   private readonly logger = inject(LoggerService);
 
   readonly notifications = signal<Notification[] | null>(null);
+  readonly showPanel = signal<boolean>(false);
+
+  openPanel(): void {
+    this.showPanel.set(true);
+    this.logger.debug('Notifications Store opened notifications panel');
+  }
+
+  closePanel(): void {
+    this.showPanel.set(false);
+    this.logger.debug('Notifications Store closed notifications panel');
+  }
 
   addNotification(notification: Notification): void {
     this.notifications.update((notifications) => [...(notifications ?? []), notification]);

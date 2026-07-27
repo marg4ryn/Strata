@@ -126,14 +126,14 @@ describe('NotificationsService', () => {
       expect(storage.saveNotification).toHaveBeenCalledWith(notification);
     });
 
-    it('adds warn notification', () => {
+    it('adds warning notification', () => {
       const notification: Notification = {
-        type: 'warn',
+        type: 'warning',
         message: 'foo',
         sentAt: 42,
       };
       vi.setSystemTime(notification.sentAt);
-      service.addNotificationWarn(notification.message);
+      service.addNotificationWarning(notification.message);
       expect(store.addNotification).toHaveBeenCalledWith(notification);
       expect(storage.saveNotification).toHaveBeenCalledWith(notification);
     });

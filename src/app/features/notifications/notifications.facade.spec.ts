@@ -11,6 +11,9 @@ describe('NotificationsFacade', () => {
 
   let store: {
     notifications: ReturnType<typeof signal<Notification[] | null>>;
+    showPanel: ReturnType<typeof signal<boolean>>;
+    openPanel: ReturnType<typeof vi.fn>;
+    closePanel: ReturnType<typeof vi.fn>;
   };
 
   let notificationsService: {
@@ -19,13 +22,16 @@ describe('NotificationsFacade', () => {
     clearNotifications: ReturnType<typeof vi.fn>;
     addNotificationSuccess: ReturnType<typeof vi.fn>;
     addNotificationInfo: ReturnType<typeof vi.fn>;
-    addNotificationWarn: ReturnType<typeof vi.fn>;
+    addNotificationWarning: ReturnType<typeof vi.fn>;
     addNotificationError: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
     store = {
       notifications: signal(null),
+      showPanel: signal(false),
+      openPanel: vi.fn(),
+      closePanel: vi.fn(),
     };
 
     notificationsService = {
@@ -34,7 +40,7 @@ describe('NotificationsFacade', () => {
       clearNotifications: vi.fn(),
       addNotificationSuccess: vi.fn(),
       addNotificationInfo: vi.fn(),
-      addNotificationWarn: vi.fn(),
+      addNotificationWarning: vi.fn(),
       addNotificationError: vi.fn(),
     };
 
@@ -55,8 +61,20 @@ describe('NotificationsFacade', () => {
       sentAt: 42,
     };
     store.notifications.set([notification]);
+    store.showPanel.set(true);
 
     expect(service.notifications()).toEqual([notification]);
+    expect(service.showPanel()).toBeTruthy();
+  });
+
+  it('handles openPanel', () => {
+    service.openPanel();
+    expect(store.openPanel).toHaveBeenCalledOnce();
+  });
+
+  it('handles closePanel', () => {
+    service.closePanel();
+    expect(store.closePanel).toHaveBeenCalledOnce();
   });
 
   it('handles loadNotifications', () => {
@@ -84,9 +102,9 @@ describe('NotificationsFacade', () => {
     expect(notificationsService.addNotificationInfo).toHaveBeenCalledWith('foo');
   });
 
-  it('handles sendNotificationWarn', () => {
-    service.sendNotificationWarn('foo');
-    expect(notificationsService.addNotificationWarn).toHaveBeenCalledWith('foo');
+  it('handles sendNotificationWarning', () => {
+    service.sendNotificationWarning('foo');
+    expect(notificationsService.addNotificationWarning).toHaveBeenCalledWith('foo');
   });
 
   it('handles sendNotificationError', () => {
