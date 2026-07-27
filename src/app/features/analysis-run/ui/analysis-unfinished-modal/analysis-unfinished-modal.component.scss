@@ -18,7 +18,7 @@
   width: 100%;
   max-width: 32rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     max-width: 40rem;
     padding: 2.5rem;
     gap: 2rem;
@@ -29,7 +29,7 @@
   font-size: 1.25rem;
   font-weight: 600;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     font-size: 1.5rem;
   }
 }
@@ -39,7 +39,7 @@
   flex-direction: column;
   gap: 1.25rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     gap: 1.5rem;
   }
 }
@@ -55,7 +55,7 @@
     letter-spacing: 0.04em;
     color: var(--text-secondary);
 
-    @media (min-width: 768px) {
+    @media (min-width: 800px) {
       font-size: 0.8125rem;
     }
   }
@@ -64,7 +64,7 @@
     font-size: 1rem;
     color: var(--text-primary);
 
-    @media (min-width: 768px) {
+    @media (min-width: 800px) {
       font-size: 1.125rem;
     }
   }

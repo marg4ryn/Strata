@@ -21,7 +21,7 @@
   width: 100%;
   max-width: 32rem;
 
-  @media (min-width: 768px) and (min-height: 800px) {
+  @media (min-width: 800px) and (min-height: 800px) {
     max-width: 40rem;
     padding: 2.5rem;
     gap: 2rem;
@@ -32,7 +32,7 @@
   font-size: 1.25rem;
   font-weight: 600;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     font-size: 1.5rem;
   }
 }
@@ -41,8 +41,9 @@
   font-size: 0.9375rem;
   color: var(--danger-primary);
   line-height: 1.5;
+  word-break: break-word;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     font-size: 1rem;
   }
 }
