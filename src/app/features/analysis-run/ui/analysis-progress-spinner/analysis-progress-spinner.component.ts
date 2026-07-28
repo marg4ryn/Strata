@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   AfterViewInit,
   ElementRef,
   OnDestroy,
@@ -19,6 +20,7 @@ import { InfoPanel } from '../info-panel/info-panel.component';
 @Component({
   selector: 'app-analysis-progress-spinner',
   imports: [ButtonDirective, LoadingSpinner, ConfirmOperationModal, InfoPanel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-progress-spinner.component.html',
   styleUrl: './analysis-progress-spinner.component.scss',
 })

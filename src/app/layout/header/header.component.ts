@@ -1,10 +1,11 @@
-import { Component, inject, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, ElementRef } from '@angular/core';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 
 @Component({
   selector: 'app-header',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

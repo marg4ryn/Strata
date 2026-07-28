@@ -1,4 +1,4 @@
-import { Component, input, output, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
 
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
@@ -8,6 +8,7 @@ import { PendingAnalysis } from '../../analysis-run.model';
 @Component({
   selector: 'app-analysis-unfinished-modal',
   imports: [ButtonDirective, ConfirmOperationModal],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-unfinished-modal.component.html',
   styleUrl: './analysis-unfinished-modal.component.scss',
 })

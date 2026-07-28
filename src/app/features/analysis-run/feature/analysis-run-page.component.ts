@@ -1,4 +1,4 @@
-import { Component, inject, computed, debounced } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, debounced } from '@angular/core';
 
 import { AnalysisTargetForm } from '../ui/analysis-target-form/analysis-target-form.component';
 import { AnalysisProgressSpinner } from '../ui/analysis-progress-spinner/analysis-progress-spinner.component';
@@ -15,6 +15,7 @@ import { AnalysisRunFacade } from '../analysis-run.facade';
     AnalysisErrorModal,
     AnalysisUnfinishedModal,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-run-page.component.html',
   styleUrl: './analysis-run-page.component.scss',
 })

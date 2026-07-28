@@ -1,4 +1,4 @@
-import { Component, computed, input, debounced } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, debounced } from '@angular/core';
 
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { PendingAnalysis } from '../../analysis-run.model';
@@ -6,6 +6,7 @@ import { PendingAnalysis } from '../../analysis-run.model';
 @Component({
   selector: 'app-info-panel',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './info-panel.component.html',
   styleUrl: './info-panel.component.scss',
 })

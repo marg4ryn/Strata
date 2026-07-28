@@ -1,5 +1,5 @@
-import { computed } from '@angular/core';
 import {
+  ChangeDetectionStrategy,
   AfterViewInit,
   ElementRef,
   OnDestroy,
@@ -7,6 +7,7 @@ import {
   input,
   output,
   inject,
+  computed,
   viewChild,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -18,6 +19,7 @@ import { InfoPanel } from '../info-panel/info-panel.component';
 @Component({
   selector: 'app-analysis-error-modal',
   imports: [ButtonDirective, InfoPanel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-error-modal.component.html',
   styleUrl: './analysis-error-modal.component.scss',
 })

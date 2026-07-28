@@ -1,4 +1,4 @@
-import { Component, signal, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
 import {
   form,
   FormField,
@@ -19,6 +19,7 @@ import { AnalysisTargetFormModel } from '../../analysis-run.model';
 @Component({
   selector: 'app-analysis-target-form',
   imports: [FormField, FormRoot, ButtonDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-target-form.component.html',
   styleUrl: './analysis-target-form.component.scss',
 })
