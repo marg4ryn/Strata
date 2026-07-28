@@ -32,39 +32,79 @@ describe('Header', () => {
 
     fixture = TestBed.createComponent(Header);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
-  function getButtons(): {
-    startNewAnalysis: HTMLButtonElement;
-    notifications: HTMLButtonElement;
-    history: HTMLButtonElement;
-    profile: HTMLButtonElement;
-    settings: HTMLButtonElement;
-  } {
-    const buttons = fixture.nativeElement.querySelectorAll('button');
+  function getButtons() {
+    const root: HTMLElement = fixture.nativeElement;
     return {
-      startNewAnalysis: buttons[0],
-      notifications: buttons[1],
-      history: buttons[2],
-      profile: buttons[3],
-      settings: buttons[4],
+      startNewAnalysis: root.querySelector<HTMLButtonElement>(
+        '[aria-label="Start a new analysis"]',
+      )!,
+      notifications: root.querySelector<HTMLButtonElement>('[aria-label="Notifications"]')!,
+      history: root.querySelector<HTMLButtonElement>('[aria-label="Analysis history"]')!,
+      profile: root.querySelector<HTMLButtonElement>('[aria-label="Your profile"]')!,
+      settings: root.querySelector<HTMLButtonElement>('[aria-label="Settings"]')!,
     };
   }
 
   it('calls loadNotifications on init', () => {
-    fixture.detectChanges();
     expect(notifications.loadNotifications).toHaveBeenCalledOnce();
   });
 
-  it('calls notification facade when notifications button is clicked', () => {
-    getButtons().notifications.click();
-    expect(notifications.openPanel).toHaveBeenCalledOnce();
-    notifications.showPanel.set(true);
-    getButtons().notifications.click();
-    expect(notifications.closePanel).toHaveBeenCalledOnce();
-    notifications.showPanel.set(false);
-    getButtons().notifications.click();
-    expect(notifications.openPanel).toHaveBeenCalledTimes(2);
+  describe('notifications button state', () => {
+    it('reflects showPanel in aria-expanded and active class', () => {
+      const btn = getButtons().notifications;
+      expect(btn.getAttribute('aria-expanded')).toBe('false');
+      expect(btn.classList.contains('header__action--active')).toBeFalsy();
+
+      notifications.showPanel.set(true);
+      fixture.detectChanges();
+
+      expect(btn.getAttribute('aria-expanded')).toBe('true');
+      expect(btn.classList.contains('header__action--active')).toBeTruthy();
+    });
+
+    it('does not render badge when unread count is 0', () => {
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.header__action-badge')).toBeNull();
+    });
+
+    it('renders unread count in badge', () => {
+      notifications.unreadNotificationsCount.set(5);
+      fixture.detectChanges();
+
+      const badge = fixture.nativeElement.querySelector('.header__action-badge');
+      expect(badge?.textContent?.trim()).toBe('5');
+    });
+
+    it('renders "99+" when unread count exceeds 99', () => {
+      notifications.unreadNotificationsCount.set(150);
+      fixture.detectChanges();
+
+      const badge = fixture.nativeElement.querySelector('.header__action-badge');
+      expect(badge?.textContent?.trim()).toBe('99+');
+    });
+  });
+
+  describe('toggleNotificationsPanel', () => {
+    it('opens panel when closed', () => {
+      getButtons().notifications.click();
+      expect(notifications.openPanel).toHaveBeenCalledOnce();
+      expect(notifications.closePanel).not.toHaveBeenCalled();
+    });
+
+    it('closes panel and refocuses button when open', () => {
+      notifications.showPanel.set(true);
+      fixture.detectChanges();
+
+      const btn = getButtons().notifications;
+      const focusSpy = vi.spyOn(btn, 'focus');
+
+      btn.click();
+
+      expect(notifications.closePanel).toHaveBeenCalledOnce();
+      expect(focusSpy).toHaveBeenCalledOnce();
+    });
   });
 });

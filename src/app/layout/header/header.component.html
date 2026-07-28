@@ -25,9 +25,13 @@
         fill="currentColor"
       />
     </svg>
-    @if (unreadNotificationsCount() > 0) {
+    @if (notifications.unreadNotificationsCount() > 0) {
       <span class="header__action-badge">
-        {{ unreadNotificationsCount() > 99 ? '99+' : unreadNotificationsCount() }}
+        {{
+          notifications.unreadNotificationsCount() > 99
+            ? '99+'
+            : notifications.unreadNotificationsCount()
+        }}
       </span>
     }
   </button>

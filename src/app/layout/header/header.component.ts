@@ -1,4 +1,4 @@
-import { Component, inject, computed, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 
@@ -12,8 +12,7 @@ export class Header {
   @ViewChild('notifBtn', { read: ElementRef })
   notifBtn!: ElementRef<HTMLButtonElement>;
 
-  readonly notifications = inject(NotificationsFacade);
-  readonly unreadNotificationsCount = computed(() => this.notifications.unreadNotificationsCount());
+  protected readonly notifications = inject(NotificationsFacade);
 
   ngOnInit() {
     this.notifications.loadNotifications();
