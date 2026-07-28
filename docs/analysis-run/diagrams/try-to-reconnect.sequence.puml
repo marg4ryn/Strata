@@ -1,58 +1,58 @@
 @startuml Try To Reconnect
 
 participant "Facade" as F
-participant "Orchestrator" as O
-participant "Lock Service" as L
-participant "Store Service" as ST
-participant "Storage Service" as STG
-participant "Web Socket Service" as WS
+participant "Service" as S
+participant "Lock Service" as LS
+participant "Store Service" as STS
+participant "Storage Service" as SGS
+participant "Web Socket Service" as WSS
 participant "Server" as SRV
 
-database "Session Storage" as SS
+database "Session Storage" as SSG
 
-note right of F: ngOnInit
-F -> O: tryToReconnect()
-O -> ST: read isBusy
+note right of F: ngSnInit
+F -> S: tryToReconnect()
+S -> STS: read isBusy
 
 alt isBusy = true
-    note right of O: goto Continue Analysis
+    note right of S: goto Continue Analysis
 
 else isBusy = false
-    O -> ST: resetState()
-    O -> STG: getSessionId()
-    STG -> O: sessionId
+    S -> STS: resetState()
+    S -> SGS: getSessionId()
+    SGS -> S: sessionId
 
     alt sessionId does not exist
-        note right of O: goto Try To Resume Analysis
+        note right of S: goto Try To Resume Analysis
 
     else sessionId exists
-        O -> L: lock(sessionId)
-        L -> O: acquired
+        S -> LS: lock(sessionId)
+        LS -> S: acquired
 
         alt Lock unavailable
-            O -> STG: deleteSessionId()
-            STG -> SS: deleteSessionId()
-            note right of O: goto Try To Resume Analysis
+            S -> SGS: deleteSessionId()
+            SGS -> SSG: deleteSessionId()
+            note right of S: goto Try To Resume Analysis
 
         else Lock acquired
-            O -> STG: getPendingAnalyses()
-            STG -> O: pendingAnalyses
+            S -> SGS: getPendingAnalyses()
+            SGS -> S: pendingAnalyses
 
             alt sessionId not in pendingAnalyses
-                O -> STG: deleteSessionId()
-                STG -> SS: deleteSessionId()
-                O -> L: unlock(sessionId)
-                note right of O: goto Try To Resume Analysis
+                S -> SGS: deleteSessionId()
+                SGS -> SSG: deleteSessionId()
+                S -> LS: unlock(sessionId)
+                note right of S: goto Try To Resume Analysis
 
             else sessionId in pendingAnalyses
-                O -> WS: reconnect(sessionId)
-                WS -> SRV: reconnect(sessionId)
-                WS -> ST: isBusy.set(true)
-                ST -> F: emit(isBusy)
-                SRV -> WS: progresss
-                WS -> ST: progress.set(...)
-                ST -> F: emit(progress)
-                note right of O: goto Continue Analysis
+                S -> WSS: reconnect(sessionId)
+                WSS -> SRV: reconnect(sessionId)
+                WSS -> STS: isBusy.set(true)
+                STS -> F: emit(isBusy)
+                SRV -> WSS: progresss
+                WSS -> STS: progress.set(...)
+                STS -> F: emit(progress)
+                note right of S: goto Continue Analysis
             end
         end
     end

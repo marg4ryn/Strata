@@ -1,19 +1,19 @@
 @startuml Continue Analysis
 
 
-participant "Orchestrator" as O
-participant "Lock Service" as L
-participant "Store Service" as ST
-participant "Storage Service" as STG
+participant "Service" as S
+participant "Lock Service" as LS
+participant "Store Service" as STS
+participant "Storage Service" as SGS
 
-database "Session Storage" as SS
-database "Local Storage" as LS
+database "Session Storage" as SSG
+database "Local Storage" as LSG
 
-O -> STG: deleteSessionId()
-STG -> SS: deleteSessionId()
-O -> STG: deletePendingAnalysis(sessionId)
-STG -> LS: deletePendingAnalysis(sessionId)
-O -> L: unlockAnalysis(sessionId)
-O -> ST: resetAnalysisState()
+S -> SGS: deleteSessionId()
+SGS -> SSG: deleteSessionId()
+S -> SGS: deletePendingAnalysis(sessionId)
+SGS -> LSG: deletePendingAnalysis(sessionId)
+S -> LS: unlockAnalysis(sessionId)
+S -> STS: resetAnalysisState()
 
 @enduml

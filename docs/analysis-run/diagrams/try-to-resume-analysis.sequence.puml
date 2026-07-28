@@ -1,70 +1,70 @@
 @startuml Try To Resume Analysis
 
 participant "Facade" as F
-participant "Orchestrator" as O
-participant "Lock Service" as L
-participant "Notification Service" as N
-participant "Store Service" as ST
-participant "Storage Service" as STG
-participant "Web Socket Service" as WS
+participant "Service" as S
+participant "Lock Service" as LS
+participant "Notifications Facade" as NS
+participant "Store Service" as STS
+participant "Storage Service" as SGS
+participant "Web Socket Service" as WSS
 participant "Server" as SRV
 
-database "Session Storage" as SS
-database "Local Storage" as LS
+database "Session Storage" as SSG
+database "Local Storage" as LSG
 
-O -> STG: getPendingAnalyses()
-STG -> O: pendingAnalyses
+S -> SGS: getPendingAnalyses()
+SGS -> S: pendingAnalyses
 
 alt pendingAnalyses empty
-    O -> ST: showModal.set(false)
-    ST -> F: emit(showModal)
-    note right of O: goto Start New Analysis
+    S -> STS: showModal.set(false)
+    STS -> F: emit(showModal)
+    note right of S: goto Start New Analysis
 
 else pendingAnalyses exist
     loop Unprocessed pendingAnalysis?
-        O -> L: lock(sessionId)
-        L -> O: acquired
+        S -> LS: lock(sessionId)
+        LS -> S: acquired
 
         opt Lock acquired
-            O -> STG: getPendingAnalyses()
-            STG -> O: pendingAnalyses
+            S -> SGS: getPendingAnalyses()
+            SGS -> S: pendingAnalyses
             
             alt Locked sessionId was deleted from pendingAnalyses
-                O -> L: unlock(sessionId)
+                S -> LS: unlock(sessionId)
 
             else Locked sessionId still in pendingAnalyses
-                O -> ST: showModal.set(true)
-                ST -> F: emit(showModal)
+                S -> STS: showModal.set(true)
+                STS -> F: emit(showModal)
 
                 alt User wants to continue
-                    F -> O: resumeAnalysis()
-                    O -> STG: saveSessionId(sessionId)
-                    STG -> SS: sessionId
-                    O -> WS: reconnect(sessionId)
-                    WS -> SRV: reconnect(sessionId)
-                    WS -> ST: isBusy.set(true)
-                    ST -> F: emit(isBusy)
-                    O -> ST: showModal.set(false)
-                    ST -> F: emit(showModal)
-                    SRV -> WS: progresss
-                    WS -> ST: progress.set(...)
-                    ST -> F: emit(progress)
-                    note right of O: goto Continue Analysis
+                    F -> S: resumeAnalysis()
+                    S -> SGS: saveSessionId(sessionId)
+                    SGS -> SSG: sessionId
+                    S -> WSS: reconnect(sessionId)
+                    WSS -> SRV: reconnect(sessionId)
+                    WSS -> STS: isBusy.set(true)
+                    STS -> F: emit(isBusy)
+                    S -> STS: showModal.set(false)
+                    STS -> F: emit(showModal)
+                    SRV -> WSS: progresss
+                    WSS -> STS: progress.set(...)
+                    STS -> F: emit(progress)
+                    note right of S: goto Continue Analysis
 
                 else User abandons analysis
-                    F -> O: abandonAnalysis();
-                    O -> STG: deletePendingAnalysis(sessionId)
-                    STG -> LS: deletePendingAnalysis(sessionId)
-                    O -> L: unlockAnalysis(sessionId)
-                    O -> N: sendNotificationInfo()
-                    O -> ST: resetAnalysisState()
-                    note right of O: goto Try To Resume Analysis
+                    F -> S: abandonAnalysis();
+                    S -> SGS: deletePendingAnalysis(sessionId)
+                    SGS -> LSG: deletePendingAnalysis(sessionId)
+                    S -> LS: unlockAnalysis(sessionId)
+                    S -> NS: sendNotificationInfo()
+                    S -> STS: resetAnalysisState()
+                    note right of S: goto Try To Resume Analysis
                 end
             end
         end
     end
 
-   note right of O: goto Start New Analysis
+   note right of S: goto Start New Analysis
 end
 
 @enduml

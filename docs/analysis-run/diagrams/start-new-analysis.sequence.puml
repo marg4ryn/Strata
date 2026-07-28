@@ -1,34 +1,34 @@
 @startuml Start New Analysis
 
 participant "Facade" as F
-participant "Orchestrator" as O
-participant "Lock Service" as L
-participant "Store Service" as ST
-participant "Storage Service" as STG
-participant "Web Socket Service" as WS
+participant "Service" as S
+participant "Lock Service" as LS
+participant "Store Service" as STS
+participant "Storage Service" as SGS
+participant "Web Socket Service" as WSS
 participant "Server" as SRV
 
-database "SessionStorage" as SS
-database "LocalStorage" as LS
+database "SessionStorage" as SSG
+database "LocalStorage" as LSG
 
-F -> O: startNewAnalysis()
+F -> S: startNewAnalysis()
 note right of F: args: AnalysisTargetFormModel
-O -> O: generateSessionId()
-O -> O: constructPendingAnalysis()
-note right of O: args: AnalysisTargetFormModel
-O -> L: lock(sessionId)
-O -> ST: pendingAnalysis.set()
-note right of O: args: PendingAnalysis
-O -> STG: savePendingAnalysis()
-note right of O: args: PendingAnalysis
-STG -> LS: pendingAnalysis
-O -> STG: saveSessionId(sessionId)
-STG -> SS: sessionId
-O -> O: constructConnectionParams()
-note right of O: args: PendingAnalysis
-O -> WS: connect(params)
-WS -> SRV: connect(params)
-WS -> ST: isBusy.set(true)
-ST -> F: emit(isBusy)
+S -> S: generateSessionId()
+S -> S: constructPendingAnalysis()
+note right of S: args: AnalysisTargetFormModel
+S -> LS: lock(sessionId)
+S -> STS: pendingAnalysis.set()
+note right of S: args: PendingAnalysis
+S -> SGS: savePendingAnalysis()
+note right of S: args: PendingAnalysis
+SGS -> LSG: pendingAnalysis
+S -> SGS: saveSessionId(sessionId)
+SGS -> SSG: sessionId
+S -> S: constructConnectionParams()
+note right of S: args: PendingAnalysis
+S -> WSS: connect(params)
+WSS -> SRV: connect(params)
+WSS -> STS: isBusy.set(true)
+STS -> F: emit(isBusy)
 
 @enduml

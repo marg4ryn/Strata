@@ -1,92 +1,92 @@
 @startuml Continue Analysis
 
 participant "Facade" as F
-participant "Orchestrator" as O
-participant "Lock Service" as L
-participant "Notification Service" as N
-participant "History Service" as H
-participant "Analysis Results Service" as ARS
-participant "Store Service" as ST
-participant "Storage Service" as STG
-participant "Web Socket Service" as WS
+participant "Service" as S
+participant "Lock Service" as LS
+participant "Notification Service" as NS
+participant "Analysis History Facade" as AHF
+participant "Analysis Results Facade" as ARF
+participant "Store Service" as STS
+participant "Storage Service" as SGS
+participant "Web Socket Service" as WSS
 participant "Server" as SRV
 
 loop Until closed
-    SRV -> WS: progress
-    WS -> ST: progress.set(...)
-    ST -> F: emit(progress)
+    SRV -> WSS: progress
+    WSS -> STS: progress.set(...)
+    STS -> F: emit(progress)
 end
 
 alt Analysis Successful
-    SRV -> WS: result
-    WS -> ST: result.set(analysisId)
-    ST -> O: emit(result)
-    O -> N: sendNotificationSuccess()
-    O -> O: constructAnalysisHistoryEntry()
-    note right of O: args: PendingAnalysis
-    O -> H: saveAnalysisToHistory()
-    note right of O: args: AnalysisHistoryEntry
-    O -> ARS: call analysis results feature
-    SRV -> WS: connection.close()
-    WS -> ST: isBusy.set(false)
-    ST -> F: emit(isBusy)
-    note right of O: goto Clear Data
+    SRV -> WSS: result
+    WSS -> STS: result.set(analysisId)
+    STS -> S: emit(result)
+    S -> NS: sendNotificationSuccess()
+    S -> S: constructAnalysisHistoryEntry()
+    note right of S: args: PendingAnalysis
+    S -> AHF: saveAnalysisToHistory()
+    note right of S: args: AnalysisHistoryEntry
+    S -> ARF: call analysis results facade
+    SRV -> WSS: connection.close()
+    WSS -> STS: isBusy.set(false)
+    STS -> F: emit(isBusy)
+    note right of S: goto Clear Data
 
 else Analysis Terminated
 
     alt User aborts
-        F -> O: abortAnalysis()
-        O -> WS: abort()    
-        WS -> SRV: abort()
+        F -> S: abortAnalysis()
+        S -> WSS: abort()    
+        WSS -> SRV: abort()
 
         alt Server confirms
-            WS -> SRV: connection.close()
-            WS -> ST: isBusy.set(false)
-            ST -> F: emit(isBusy)
-            O -> N: sendNotificationInfo()
+            WSS -> SRV: connection.close()
+            WSS -> STS: isBusy.set(false)
+            STS -> F: emit(isBusy)
+            S -> NS: sendNotificationInfo()
             
         else Timeout
-            WS -> SRV: connection.close()
-            WS -> ST: isBusy.set(false)
-            ST -> F: emit(isBusy)
-            O -> N: sendNotificationWarning()
-            O -> STG: deleteSessionId()
-            STG -> SS: deleteSessionId()
-            O -> L: unlockAnalysis(sessionId)
-            note right of O: goto Start New Analysis
+            WSS -> SRV: connection.close()
+            WSS -> STS: isBusy.set(false)
+            STS -> F: emit(isBusy)
+            S -> NS: sendNotificationWarning()
+            S -> SGS: deleteSessionId()
+            SGS -> SS: deleteSessionId()
+            S -> LS: unlockAnalysis(sessionId)
+            note right of S: goto Start New Analysis
         end
 
     else Error
-        SRV -> WS: connection.close()
-        WS -> ST: isBusy.set(false)
-        WS -> ST: error.set(...)
-        ST -> F: emit(isBusy)
-        ST -> F: emit(error)
-        ST -> O: emit(error)
-        O -> N: sendNotificationError()
+        SRV -> WSS: connection.close()
+        WSS -> STS: isBusy.set(false)
+        WSS -> STS: error.set(...)
+        STS -> F: emit(isBusy)
+        STS -> F: emit(error)
+        STS -> S: emit(error)
+        S -> NS: sendNotificationError()
 
         opt Connection Error
             alt With Retry
-                F -> O: retryAnalysis()
-                O -> ST: error.set(null)
-                ST -> F: emit(error)
-                O -> WS: reconnect(sessionId)
-                WS -> SRV: reconnect(sessionId)
-                WS -> ST: isBusy.set(true)
-                ST -> F: emit(isBusy)
-                note right of O: goto progress loop
+                F -> S: retryAnalysis()
+                S -> STS: error.set(null)
+                STS -> F: emit(error)
+                S -> WSS: reconnect(sessionId)
+                WSS -> SRV: reconnect(sessionId)
+                WSS -> STS: isBusy.set(true)
+                STS -> F: emit(isBusy)
+                note right of S: goto progress loop
 
             else Without Retry
-                F -> O: cancelAnalysis()
-                O -> N: sendNotificationInfo()
-                O -> ST: error.set(null)
-                ST -> F: emit(error)
+                F -> S: cancelAnalysis()
+                S -> NS: sendNotificationInfo()
+                S -> STS: error.set(null)
+                STS -> F: emit(error)
             end
         end
     end
 
-    note right of O: goto Clear Data
-    note right of O: goto Try To Resume Analysis
+    note right of S: goto Clear Data
+    note right of S: goto Try To Resume Analysis
     
 end
 
