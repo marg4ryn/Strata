@@ -1,11 +1,11 @@
 import { Service, inject, computed } from '@angular/core';
 
 import { NotificationsService } from './data-access/service/notifications.service';
-import { StoreService } from './data-access/store/store.service';
+import { NotificationsStoreService } from './data-access/store/notifications-store.service';
 
 @Service()
 export class NotificationsFacade {
-  private readonly store = inject(StoreService);
+  private readonly store = inject(NotificationsStoreService);
   private readonly service = inject(NotificationsService);
 
   readonly unreadNotificationsCount = computed(() => this.store.unreadNotificationsCount());

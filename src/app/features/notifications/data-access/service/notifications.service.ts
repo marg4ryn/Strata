@@ -1,14 +1,14 @@
 import { Service, inject, untracked } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-import { StoreService } from '../store/store.service';
+import { NotificationsStoreService } from '../store/notifications-store.service';
 import { NotificationsStorageService } from '../storage/notifications-storage.service';
 import { NotificationType, Notification } from '../../notifications.model';
 
 @Service()
 export class NotificationsService {
   private readonly logger = inject(LoggerService);
-  private readonly store = inject(StoreService);
+  private readonly store = inject(NotificationsStoreService);
   private readonly storage = inject(NotificationsStorageService);
 
   loadNotifications(): void {

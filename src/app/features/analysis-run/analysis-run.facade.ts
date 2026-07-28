@@ -1,13 +1,13 @@
 import { inject, Service, computed } from '@angular/core';
 
-import { StoreService } from './data-access/store/store.service';
-import { OrchestratorService } from './data-access/orchestrator/orchestrator.service';
+import { AnalysisRunStoreService } from './data-access/store/analysis-run-store.service';
+import { AnalysisRunService } from './data-access/service/analysis-run.service';
 import { AnalysisTargetFormModel } from './analysis-run.model';
 
 @Service()
 export class AnalysisRunFacade {
-  private readonly store = inject(StoreService);
-  private readonly orchestrator = inject(OrchestratorService);
+  private readonly store = inject(AnalysisRunStoreService);
+  private readonly orchestrator = inject(AnalysisRunService);
 
   readonly showModal = computed(() => this.store.showModal());
   readonly isBusy = computed(() => this.store.isBusy());
@@ -21,22 +21,22 @@ export class AnalysisRunFacade {
     void this.orchestrator.startNewAnalysis(formData);
   }
 
-  // attempt to resume unfinished analysis
+  // an attempt to resume an unfinished analysis
   tryToReconnect(): void {
     void this.orchestrator.tryToReconnect();
   }
 
-  // actually taking up the unfinished analysis
+  // actually taking up an unfinished analysis
   resumeAnalysis(): void {
     this.orchestrator.resumeAnalysis();
   }
 
-  // attempt to resume analysis after an error
+  // an attempt to resume analysis after an error
   retryAnalysis(): void {
     this.orchestrator.retryAnalysis();
   }
 
-  // cancelling analysis after an error
+  // cancelling the analysis after an error
   cancelAnalysis(): void {
     void this.orchestrator.cancelAnalysis();
   }

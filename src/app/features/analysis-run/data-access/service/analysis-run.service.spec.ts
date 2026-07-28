@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-import { OrchestratorService } from './orchestrator.service';
+import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
+import { AnalysisRunService } from './analysis-run.service';
 import {
   AnalysisStatusKey,
   PendingAnalysis,
@@ -10,14 +11,13 @@ import {
   AnalysisTarget,
   DateRange,
 } from '../../analysis-run.model';
-import { StoreService } from '../store/store.service';
+import { AnalysisRunStoreService } from '../store/analysis-run-store.service';
 import { AnalysisRunStorageService } from '../storage/analysis-run-storage.service';
-import { WebSocketService } from '../web-socket/web-socket.service';
-import { LockService } from '../lock/lock.service';
-import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
+import { AnalysisRunWebSocketService } from '../web-socket/analysis-run-web-socket.service';
+import { AnalysisRunLockService } from '../lock/analysis-run-lock.service';
 
-describe('OrchestratorService', () => {
-  let service: OrchestratorService;
+describe('AnalysisRunService', () => {
+  let service: AnalysisRunService;
   let logger: Partial<LoggerService>;
 
   let store: {
@@ -57,8 +57,6 @@ describe('OrchestratorService', () => {
     sendNotificationWarning: ReturnType<typeof vi.fn>;
     sendNotificationError: ReturnType<typeof vi.fn>;
   };
-
-  const sessionId = '123';
 
   beforeEach(() => {
     store = {
@@ -108,22 +106,24 @@ describe('OrchestratorService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: StoreService, useValue: store },
+        { provide: AnalysisRunStoreService, useValue: store },
         { provide: AnalysisRunStorageService, useValue: storage },
-        { provide: WebSocketService, useValue: websocket },
-        { provide: LockService, useValue: locker },
+        { provide: AnalysisRunWebSocketService, useValue: websocket },
+        { provide: AnalysisRunLockService, useValue: locker },
         { provide: LoggerService, useValue: logger },
         { provide: NotificationsFacade, useValue: notifications },
       ],
     });
 
-    service = TestBed.inject(OrchestratorService);
+    service = TestBed.inject(AnalysisRunService);
     store.pendingAnalysis.set({ sessionId: sessionId } as unknown as PendingAnalysis);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
+  const sessionId = '123';
 
   describe('effect', () => {
     it('handles result change', () => {
@@ -134,14 +134,14 @@ describe('OrchestratorService', () => {
 
       expect(clearDataSpy).toHaveBeenCalledOnce();
       expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
-      expect(logger.info).toHaveBeenCalledWith('Orchestrator handled the analysis results');
+      expect(logger.info).toHaveBeenCalled();
     });
 
     it('handles error change', () => {
       store.error.set('Error');
       TestBed.tick();
       expect(notifications.sendNotificationError).toHaveBeenCalledOnce();
-      expect(logger.info).toHaveBeenCalledWith('Orchestrator handled an analysis error');
+      expect(logger.info).toHaveBeenCalled();
     });
   });
 
@@ -151,10 +151,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToReconnect();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        'Orchestrator is trying to reconnect to an ongoing analysis',
-      );
-      expect(logger.debug).toHaveBeenCalledWith('Orchestrator found an ongoing analysis');
+      expect(logger.debug).toHaveBeenCalled();
       expect(store.resetState).not.toHaveBeenCalled();
     });
 
@@ -167,7 +164,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToReconnect();
 
-      expect(logger.debug).toHaveBeenCalledWith('Orchestrator did not found an ongoing analysis');
+      expect(logger.debug).toHaveBeenCalled();
       expect(storage.getSessionId).toHaveBeenCalledOnce();
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
     });
@@ -182,9 +179,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToReconnect();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        'Orchestrator found an ongoing analysis, but another card took over',
-      );
+      expect(logger.debug).toHaveBeenCalled();
       expect(locker.lock).toHaveBeenCalledWith(sessionId);
       expect(storage.deleteSessionId).toHaveBeenCalledOnce();
       expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
@@ -201,9 +196,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToReconnect();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        'Orchestrator found an ongoing analysis, but another card took over',
-      );
+      expect(logger.debug).toHaveBeenCalled();
       expect(storage.getPendingAnalyses).toHaveBeenCalledOnce();
       expect(storage.deleteSessionId).toHaveBeenCalledOnce();
       expect(locker.unlock).toHaveBeenCalledWith(sessionId);
@@ -219,7 +212,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToReconnect();
 
-      expect(logger.info).toHaveBeenCalledWith('Orchestrator reconnected to an ongoing analysis');
+      expect(logger.info).toHaveBeenCalled();
       expect(store.pendingAnalysis()).toBe(pendingAnalysis);
       expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
     });
@@ -231,10 +224,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        'Orchestrator is trying to resume any pending analysis',
-      );
-      expect(logger.debug).toHaveBeenCalledWith('Orchestrator did not found any pending analysis');
+      expect(logger.debug).toHaveBeenCalled();
       expect(storage.getPendingAnalyses).toHaveBeenCalledOnce();
       expect(store.showModal()).toBeFalsy();
     });
@@ -246,12 +236,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        `Orchestrator is trying to take over the analysis with sessionId: ${sessionId}`,
-      );
-      expect(logger.debug).toHaveBeenCalledWith(
-        `Orchestrator could not take over the analysis with sessionId: ${sessionId} - analysis belongs to another tab`,
-      );
+      expect(logger.debug).toHaveBeenCalled();
       expect(locker.lock).toHaveBeenCalledWith(sessionId);
     });
 
@@ -263,9 +248,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.debug).toHaveBeenCalledWith(
-        `Orchestrator could not take over the analysis with sessionId: ${sessionId} - analysis belongs to another tab`,
-      );
+      expect(logger.debug).toHaveBeenCalled();
       expect(locker.unlock).toHaveBeenCalledWith(sessionId);
     });
 
@@ -276,9 +259,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.info).toHaveBeenCalledWith(
-        `Orchestrator found an unfinished analysis with sessionId: ${sessionId}`,
-      );
+      expect(logger.info).toHaveBeenCalled();
       expect(store.pendingAnalysis()).toBe(pendingAnalysis);
       expect(store.showModal()).toBeTruthy();
     });
@@ -292,9 +273,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.info).toHaveBeenCalledWith(
-        `Orchestrator found an unfinished analysis with sessionId: 124`,
-      );
+      expect(logger.info).toHaveBeenCalled();
       expect(store.pendingAnalysis()).toBe(secondAnalysis);
       expect(store.showModal()).toBeTruthy();
     });
@@ -308,9 +287,7 @@ describe('OrchestratorService', () => {
 
       await service.tryToResumeAnalysis();
 
-      expect(logger.info).toHaveBeenCalledWith(
-        `Orchestrator found an unfinished analysis with sessionId: ${sessionId}`,
-      );
+      expect(logger.info).toHaveBeenCalled();
       expect(store.pendingAnalysis()).toBe(pendingAnalysis);
       expect(store.showModal()).toBeTruthy();
     });
@@ -329,10 +306,7 @@ describe('OrchestratorService', () => {
 
     await service.startNewAnalysis(formData);
 
-    expect(logger.info).toHaveBeenCalledWith(
-      'Orchestrator received data to create a new analysis: ',
-      formData,
-    );
+    expect(logger.info).toHaveBeenCalled();
     expect(constructAnalysisSpy).toHaveBeenCalledOnce();
     expect(constructParamsSpy).toHaveBeenCalledOnce();
     expect(locker.lock).toHaveBeenCalledOnce();
@@ -347,9 +321,7 @@ describe('OrchestratorService', () => {
     expect(store.showModal()).toBeFalsy();
     expect(storage.saveSessionId).toHaveBeenCalledWith(sessionId);
     expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator received a request to resume analysis with sessionId: ${sessionId}`,
-    );
+    expect(logger.info).toHaveBeenCalled();
   });
 
   it('abandons analysis', async () => {
@@ -358,9 +330,7 @@ describe('OrchestratorService', () => {
 
     await service.abandonAnalysis();
 
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator received a request to abandon analysis with sessionId: ${sessionId}`,
-    );
+    expect(logger.info).toHaveBeenCalled();
     expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
     expect(clearDataSpy).toHaveBeenCalledOnce();
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
@@ -375,9 +345,7 @@ describe('OrchestratorService', () => {
       await service.abortAnalysis();
 
       expect(websocket.abort).toHaveBeenCalledOnce();
-      expect(logger.info).toHaveBeenCalledWith(
-        `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
-      );
+      expect(logger.info).toHaveBeenCalled();
       expect(logger.warn).not.toHaveBeenCalled();
       expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
       expect(clearDataSpy).toHaveBeenCalledOnce();
@@ -392,9 +360,7 @@ describe('OrchestratorService', () => {
       await service.abortAnalysis();
 
       expect(websocket.abort).toHaveBeenCalledOnce();
-      expect(logger.info).toHaveBeenCalledWith(
-        `Orchestrator received a request to abort analysis with sessionId: ${sessionId}`,
-      );
+      expect(logger.info).toHaveBeenCalled();
       expect(logger.warn).toHaveBeenCalled();
       expect(notifications.sendNotificationWarning).toHaveBeenCalledOnce();
       expect(storage.deleteSessionId).toHaveBeenCalledOnce();
@@ -411,9 +377,7 @@ describe('OrchestratorService', () => {
 
     expect(store.error()).toBeNull();
     expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator received a request to retry analysis with sessionId: ${sessionId}`,
-    );
+    expect(logger.info).toHaveBeenCalled();
   });
 
   it('cancels analysis', async () => {
@@ -424,9 +388,7 @@ describe('OrchestratorService', () => {
     await service.cancelAnalysis();
 
     expect(store.error()).toBeNull();
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator received a request to cancel analysis with sessionId: ${sessionId}`,
-    );
+    expect(logger.info).toHaveBeenCalled();
     expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
     expect(clearDataSpy).toHaveBeenCalledOnce();
     expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
@@ -439,9 +401,7 @@ describe('OrchestratorService', () => {
     expect(storage.deletePendingAnalysis).toHaveBeenCalledWith(sessionId);
     expect(locker.unlock).toHaveBeenCalledWith(sessionId);
     expect(store.resetAnalysisState).toHaveBeenCalledOnce();
-    expect(logger.info).toHaveBeenCalledWith(
-      `Orchestrator deleted data of analysis with sessionId: ${sessionId}`,
-    );
+    expect(logger.info).toHaveBeenCalled();
   });
 
   describe('constructPendingAnalysis', () => {

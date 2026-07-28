@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { NotificationsFacade } from './notifications.facade';
-import { StoreService } from './data-access/store/store.service';
+import { NotificationsStoreService } from './data-access/store/notifications-store.service';
 import { NotificationsService } from './data-access/service/notifications.service';
 import { Notification } from './notifications.model';
 
@@ -49,7 +49,7 @@ describe('NotificationsFacade', () => {
     TestBed.configureTestingModule({
       providers: [
         NotificationsFacade,
-        { provide: StoreService, useValue: store },
+        { provide: NotificationsStoreService, useValue: store },
         { provide: NotificationsService, useValue: notificationsService },
       ],
     });

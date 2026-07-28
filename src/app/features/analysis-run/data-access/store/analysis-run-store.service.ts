@@ -4,7 +4,7 @@ import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisStatusKey, PendingAnalysis, ErrorType } from '../../analysis-run.model';
 
 @Service()
-export class StoreService {
+export class AnalysisRunStoreService {
   private readonly logger = inject(LoggerService);
 
   readonly pendingAnalysis = signal<PendingAnalysis | null>(null);
@@ -23,7 +23,7 @@ export class StoreService {
     this.result.set(null);
     this.error.set(null);
     this.errorType.set(null);
-    this.logger.info('Analysis Run Store reset analysis state');
+    this.logger.info('Analysis Run Store Service reset analysis state');
   }
 
   resetState(): void {
@@ -35,6 +35,6 @@ export class StoreService {
     this.isBusy.set(false);
     this.isAborting.set(false);
     this.showModal.set(false);
-    this.logger.info('Analysis Run Store reset state');
+    this.logger.info('Analysis Run Store Service reset state');
   }
 }

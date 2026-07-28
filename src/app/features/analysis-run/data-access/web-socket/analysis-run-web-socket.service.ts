@@ -3,7 +3,7 @@ import { inject, Service } from '@angular/core';
 import { environment } from '@env/environment';
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisStatusKey } from '../../analysis-run.model';
-import { StoreService } from '../store/store.service';
+import { AnalysisRunStoreService } from '../store/analysis-run-store.service';
 
 type WsMessage =
   | { type: 'progress'; data: AnalysisStatusKey }
@@ -12,9 +12,9 @@ type WsMessage =
   | { type: 'aborted' };
 
 @Service()
-export class WebSocketService {
+export class AnalysisRunWebSocketService {
   private readonly logger = inject(LoggerService);
-  private readonly store = inject(StoreService);
+  private readonly store = inject(AnalysisRunStoreService);
 
   private socket?: WebSocket;
   private abortResolver: ((confirmed: boolean) => void) | null = null;
@@ -28,20 +28,20 @@ export class WebSocketService {
 
   connect(params?: Record<string, string>): void {
     const url = this.constructUrl(params);
-    this.logger.debug(`WebSocket Service constructed URL: ${url}`);
+    this.logger.debug(`Analysis Run WebSocket Service constructed URL: ${url}`);
 
     this.isBusy.set(true);
     this.isAborting.set(false);
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
-      this.logger.debug('WebSocket Service opened connection');
+      this.logger.debug('Analysis Run WebSocket Service opened connection');
     };
 
     this.socket.onmessage = (event: MessageEvent) => {
       try {
         const message = JSON.parse(event.data) as WsMessage;
-        this.logger.info('WebSocket Service received message', message);
+        this.logger.info('Analysis Run WebSocket Service received message', message);
 
         switch (message.type) {
           case 'progress':
@@ -63,29 +63,31 @@ export class WebSocketService {
             this.disconnect();
             break;
           default:
-            this.logger.warn('WebSocket Service received unknown message type');
+            this.logger.warn('Analysis Run WebSocket Service received unknown message type');
         }
       } catch (error) {
         this.error.set('Failed to parse message');
         this.errorType.set('server');
         this.disconnect();
-        this.logger.error('WebSocket Service failed to parse message', error);
+        this.logger.error('Analysis Run WebSocket Service failed to parse message', error);
       }
     };
 
     this.socket.onerror = () => {
       if (this.isAborting()) {
-        this.logger.debug('WebSocket Service suppressed error during intentional close');
+        this.logger.debug(
+          'Analysis Run WebSocket Service suppressed error during intentional close',
+        );
         return;
       }
       this.error.set('Connection error');
       this.errorType.set('connection');
-      this.logger.error('WebSocket Service encountered connection error');
+      this.logger.error('Analysis Run WebSocket Service encountered connection error');
       this.disconnect();
     };
 
     this.socket.onclose = () => {
-      this.logger.debug('WebSocket Service closed connection');
+      this.logger.debug('Analysis Run WebSocket Service closed connection');
       this.isBusy.set(false);
       this.resolveAbort(false);
     };
@@ -101,7 +103,9 @@ export class WebSocketService {
     if (this.socket.readyState === WebSocket.OPEN) {
       return new Promise<boolean>((resolve) => {
         const timeout = setTimeout(() => {
-          this.logger.warn('WebSocket Service timed out waiting for abort confirmation');
+          this.logger.warn(
+            'Analysis Run WebSocket Service timed out waiting for abort confirmation',
+          );
           this.abortResolver = null;
           this.disconnect();
           resolve(false);
@@ -113,18 +117,20 @@ export class WebSocketService {
         };
 
         this.socket!.send(JSON.stringify({ type: 'abort' }));
-        this.logger.info('WebSocket Service sent an abort message');
+        this.logger.info('Analysis Run WebSocket Service sent an abort message');
       });
     }
 
     if (this.socket.readyState === WebSocket.CONNECTING) {
-      this.logger.debug('WebSocket Service aborted connection before it was established');
+      this.logger.debug(
+        'Analysis Run WebSocket Service aborted connection before it was established',
+      );
       this.disconnect();
       return Promise.resolve(true);
     }
 
     this.logger.debug(
-      'WebSocket Service did not send an abort message - socket already closing/closed',
+      'Analysis Run WebSocket Service did not send an abort message - socket already closing/closed',
     );
     return Promise.resolve(false);
   }

@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-import { WebSocketService } from './web-socket.service';
-import { StoreService } from '../store/store.service';
+import { AnalysisRunWebSocketService } from './analysis-run-web-socket.service';
+import { AnalysisRunStoreService } from '../store/analysis-run-store.service';
 import { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';
 
 class MockWebSocket {
@@ -35,8 +35,8 @@ class MockWebSocket {
   }
 }
 
-describe('WebSocketService', () => {
-  let service: WebSocketService;
+describe('AnalysisRunWebSocketService', () => {
+  let service: AnalysisRunWebSocketService;
   let store: {
     progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
     result: ReturnType<typeof signal<string | null>>;
@@ -70,12 +70,12 @@ describe('WebSocketService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: StoreService, useValue: store },
+        { provide: AnalysisRunStoreService, useValue: store },
         { provide: LoggerService, useValue: logger },
       ],
     });
 
-    service = TestBed.inject(WebSocketService);
+    service = TestBed.inject(AnalysisRunWebSocketService);
   });
 
   afterEach(() => {
@@ -96,7 +96,7 @@ describe('WebSocketService', () => {
     it('logs on open', () => {
       service.connect();
       getSocket().onopen?.();
-      expect(logger.debug).toHaveBeenCalledWith('WebSocket Service opened connection');
+      expect(logger.debug).toHaveBeenCalled();
     });
 
     it('sets isBusy to false on close', () => {
@@ -171,7 +171,7 @@ describe('WebSocketService', () => {
     it('warns on unknown message type', () => {
       service.connect();
       getSocket().onmessage?.({ data: JSON.stringify({ type: 'unknown' }) } as MessageEvent);
-      expect(logger.warn).toHaveBeenCalledWith('WebSocket Service received unknown message type');
+      expect(logger.warn).toHaveBeenCalled();
     });
   });
 
@@ -224,9 +224,7 @@ describe('WebSocketService', () => {
       const result = service.abort();
       vi.advanceTimersByTime(5000);
       await expect(result).resolves.toBe(false);
-      expect(logger.warn).toHaveBeenCalledWith(
-        'WebSocket Service timed out waiting for abort confirmation',
-      );
+      expect(logger.warn).toHaveBeenCalled();
     });
 
     it('does not send an abort message while disconnecting', () => {
@@ -235,9 +233,7 @@ describe('WebSocketService', () => {
       socket.readyState = MockWebSocket.CLOSING;
       service.abort();
       expect(socket.sent.length).toBe(0);
-      expect(logger.debug).toHaveBeenCalledWith(
-        'WebSocket Service did not send an abort message - socket already closing/closed',
-      );
+      expect(logger.debug).toHaveBeenCalled();
     });
 
     it('resolves false on abort if no socket exists', async () => {

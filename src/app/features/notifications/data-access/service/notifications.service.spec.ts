@@ -3,7 +3,7 @@ import { signal } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsService } from './notifications.service';
-import { StoreService } from '../store/store.service';
+import { NotificationsStoreService } from '../store/notifications-store.service';
 import { NotificationsStorageService } from '../storage/notifications-storage.service';
 import { Notification } from '../../notifications.model';
 
@@ -57,7 +57,7 @@ describe('NotificationsService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: StoreService, useValue: store },
+        { provide: NotificationsStoreService, useValue: store },
         { provide: NotificationsStorageService, useValue: storage },
         { provide: LoggerService, useValue: logger },
       ],
@@ -102,6 +102,12 @@ describe('NotificationsService', () => {
       expect(storage.clearUnreadNotificationsCount).toHaveBeenCalled();
     });
 
+    it('does not reset unread notifications count when it is 0', () => {
+      store.unreadNotificationsCount.set(0);
+      service.openPanel();
+      expect(storage.clearUnreadNotificationsCount).not.toHaveBeenCalled();
+    });
+
     it('handles notifications panel closing', () => {
       service.closePanel();
       expect(store.showPanel()).toBeFalsy();
@@ -124,20 +130,35 @@ describe('NotificationsService', () => {
     });
   });
 
-  it('clears notifications', () => {
-    store.notifications.set([notification]);
-    service.clearNotifications();
-    expect(store.notifications()).toBeNull();
-    expect(storage.clearNotifications).toHaveBeenCalled();
+  describe('clearNotifications', () => {
+    it('clears notifications', () => {
+      store.notifications.set([notification]);
+      service.clearNotifications();
+      expect(store.notifications()).toBeNull();
+      expect(storage.clearNotifications).toHaveBeenCalled();
+    });
   });
 
-  describe('add notification', () => {
+  describe('adds notifications', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
 
     afterEach(() => {
       vi.useRealTimers();
+    });
+
+    it('increases unread notifications count', () => {
+      store.unreadNotificationsCount.set(0);
+      service.addNotificationSuccess(notification.message);
+      expect(store.unreadNotificationsCount()).toBe(1);
+    });
+
+    it('does not increase unread notifications count when panel is opened', () => {
+      store.showPanel.set(true);
+      store.unreadNotificationsCount.set(0);
+      service.addNotificationSuccess(notification.message);
+      expect(store.unreadNotificationsCount()).toBe(0);
     });
 
     it('adds success notification', () => {

@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { AnalysisRunFacade } from './analysis-run.facade';
-import { StoreService } from './data-access/store/store.service';
-import { OrchestratorService } from './data-access/orchestrator/orchestrator.service';
+import { AnalysisRunStoreService } from './data-access/store/analysis-run-store.service';
+import { AnalysisRunService } from './data-access/service/analysis-run.service';
 import {
   AnalysisTargetFormModel,
   AnalysisStatusKey,
@@ -59,8 +59,8 @@ describe('AnalysisRunFacade', () => {
     TestBed.configureTestingModule({
       providers: [
         AnalysisRunFacade,
-        { provide: StoreService, useValue: store },
-        { provide: OrchestratorService, useValue: orchestrator },
+        { provide: AnalysisRunStoreService, useValue: store },
+        { provide: AnalysisRunService, useValue: orchestrator },
       ],
     });
     service = TestBed.inject(AnalysisRunFacade);

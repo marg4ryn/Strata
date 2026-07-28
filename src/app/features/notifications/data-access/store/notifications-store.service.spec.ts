@@ -1,23 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-import { StoreService } from './store.service';
+import { NotificationsStoreService } from './notifications-store.service';
 import { Notification } from '../../notifications.model';
 
-describe('StoreService', () => {
-  let service: StoreService;
+describe('NotificationsStoreService', () => {
+  let service: NotificationsStoreService;
   let logger: Partial<LoggerService>;
-
-  const firstNotification: Notification = {
-    type: 'info',
-    message: 'foo',
-    sentAt: 42,
-  };
-  const secondNotification: Notification = {
-    type: 'success',
-    message: 'bar',
-    sentAt: 43,
-  };
 
   beforeEach(() => {
     logger = {
@@ -30,12 +19,23 @@ describe('StoreService', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: LoggerService, useValue: logger }],
     });
-    service = TestBed.inject(StoreService);
+    service = TestBed.inject(NotificationsStoreService);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
+  const firstNotification: Notification = {
+    type: 'info',
+    message: 'foo',
+    sentAt: 42,
+  };
+  const secondNotification: Notification = {
+    type: 'success',
+    message: 'bar',
+    sentAt: 43,
+  };
 
   it('updates computed signals', () => {
     service.unreadNotificationsCount.set(1);
@@ -71,19 +71,19 @@ describe('StoreService', () => {
       expect(logger.info).toHaveBeenCalled();
     });
 
-    it('removes notification from list', () => {
+    it('keeps the remaining notifications', () => {
       service.notifications.set([firstNotification, secondNotification]);
       service.removeNotification(firstNotification.sentAt);
       expect(service.notifications()).toEqual([secondNotification]);
       expect(logger.info).toHaveBeenCalled();
     });
 
-    it('does not throw on empty notification list', () => {
+    it('does not throw when the notification list is empty', () => {
       service.notifications.set(null);
       expect(() => service.removeNotification(firstNotification.sentAt)).not.toThrow();
     });
 
-    it('does not throw on not existing notification', () => {
+    it('does not throw when the notification does not exist', () => {
       service.notifications.set([secondNotification]);
       expect(() => service.removeNotification(firstNotification.sentAt)).not.toThrow();
     });

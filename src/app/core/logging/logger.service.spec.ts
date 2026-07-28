@@ -68,7 +68,7 @@ describe('LoggerService', () => {
       const date = new Date(Date.UTC(2000, 0, 1, 1, 1, 1, 1));
       const objectOne = { foo: 'foo' };
       const objectTwo = { bar: 'bar' };
-      const message = 'foo';
+      const message = 'baz';
       vi.useFakeTimers();
       vi.setSystemTime(date);
 
