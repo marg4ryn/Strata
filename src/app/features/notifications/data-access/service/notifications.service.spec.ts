@@ -4,7 +4,7 @@ import { signal } from '@angular/core';
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsService } from './notifications.service';
 import { StoreService } from '../store/store.service';
-import { StorageService } from '../storage/storage.service';
+import { NotificationsStorageService } from '../storage/notifications-storage.service';
 import { Notification } from '../../notifications.model';
 
 describe('NotificationsService', () => {
@@ -58,7 +58,7 @@ describe('NotificationsService', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: StoreService, useValue: store },
-        { provide: StorageService, useValue: storage },
+        { provide: NotificationsStorageService, useValue: storage },
         { provide: LoggerService, useValue: logger },
       ],
     });

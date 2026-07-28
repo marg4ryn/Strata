@@ -2,7 +2,7 @@ import { Service, inject, effect, untracked } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { StoreService } from '../store/store.service';
-import { StorageService } from '../storage/storage.service';
+import { AnalysisRunStorageService } from '../storage/analysis-run-storage.service';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { LockService } from '../lock/lock.service';
 import {
@@ -22,7 +22,7 @@ interface AnalysisHistoryEntry {
 @Service()
 export class OrchestratorService {
   private readonly store = inject(StoreService);
-  private readonly storage = inject(StorageService);
+  private readonly storage = inject(AnalysisRunStorageService);
   private readonly webSocket = inject(WebSocketService);
   private readonly locker = inject(LockService);
   private readonly logger = inject(LoggerService);

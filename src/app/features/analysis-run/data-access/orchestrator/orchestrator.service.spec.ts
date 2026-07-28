@@ -11,7 +11,7 @@ import {
   DateRange,
 } from '../../analysis-run.model';
 import { StoreService } from '../store/store.service';
-import { StorageService } from '../storage/storage.service';
+import { AnalysisRunStorageService } from '../storage/analysis-run-storage.service';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { LockService } from '../lock/lock.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
@@ -109,7 +109,7 @@ describe('OrchestratorService', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: StoreService, useValue: store },
-        { provide: StorageService, useValue: storage },
+        { provide: AnalysisRunStorageService, useValue: storage },
         { provide: WebSocketService, useValue: websocket },
         { provide: LockService, useValue: locker },
         { provide: LoggerService, useValue: logger },
