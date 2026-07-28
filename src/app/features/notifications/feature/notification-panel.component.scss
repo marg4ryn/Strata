@@ -1,4 +1,4 @@
-.notifications-panel {
+.notification-panel {
   position: absolute;
   top: 68px;
   right: 0;
@@ -50,6 +50,11 @@
     transition: all 0.1s ease;
 
     &:hover {
+      transform: scale(1.05);
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
       transform: scale(1.05);
       color: var(--text-primary);
     }
@@ -106,7 +111,7 @@
   }
 }
 
-.notifications-panel__list {
+.notification-panel__list {
   overflow-y: auto;
   flex: 1;
   padding: 0.25rem;
@@ -132,7 +137,7 @@
   }
 }
 
-.notifications-panel__empty {
+.notification-panel__empty {
   display: flex;
   flex-direction: column;
   align-items: center;

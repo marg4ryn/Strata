@@ -5,12 +5,12 @@ import { NotificationsFacade } from '../notifications.facade';
 import { NotificationItem } from '../ui/notification-item.component';
 
 @Component({
-  selector: 'app-notifications-panel',
+  selector: 'app-notification-panel',
   imports: [NotificationItem, A11yModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './notifications-panel.component.html',
-  styleUrl: './notifications-panel.component.scss',
+  templateUrl: './notification-panel.component.html',
+  styleUrl: './notification-panel.component.scss',
 })
-export class NotificationsPanel {
+export class NotificationPanel {
   protected readonly facade = inject(NotificationsFacade);
 }
