@@ -13,12 +13,6 @@ import {
   PendingAnalysis,
 } from '../../analysis-run.model';
 
-interface AnalysisHistoryEntry {
-  analysisId: string;
-  startedAt: number;
-  target: AnalysisTarget;
-}
-
 @Service()
 export class AnalysisRunService {
   private readonly store = inject(AnalysisRunStoreService);
