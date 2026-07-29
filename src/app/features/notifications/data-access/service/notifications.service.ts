@@ -37,14 +37,14 @@ export class NotificationsService {
 
   removeNotification(sentAt: number): void {
     this.logger.debug(
-      `Notifications Service received request to remove notification sent at: ${sentAt}`,
+      `Notifications Service received a request to remove notification sent at: ${sentAt}`,
     );
     this.storage.removeNotification(sentAt);
     this.store.removeNotification(sentAt);
   }
 
   clearNotifications(): void {
-    this.logger.debug('Notifications Service received request to remove all notifications');
+    this.logger.debug('Notifications Service received a request to remove all notifications');
     this.storage.clearNotifications();
     this.store.notifications.set(null);
   }
