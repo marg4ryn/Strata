@@ -1,0 +1,45 @@
+<div class="history-panel" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+  <div class="history-panel__header">
+    <span class="history-panel__title">Analysis History</span>
+
+    <div class="history-panel__actions">
+      <button
+        type="button"
+        class="history-panel__close"
+        title="Close analysis history"
+        aria-label="Close analysis history"
+        (click)="facade.closePanel()"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="16" y1="4" x2="4" y2="16"></line>
+          <line x1="4" y1="4" x2="16" y2="16"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="history-panel__list">
+    @if (facade.analysisHistory()?.length) {
+      @for (h of facade.analysisHistory(); track h.analysisId) {
+        <app-analysis-history-item
+          [historyEntry]="h"
+          (remove)="facade.removeAnalysisHistoryEntry($event)"
+          (load)="loadAnalysis($event)"
+        />
+      }
+    } @else {
+      <div class="history-panel__empty">
+        <p>Analysis history is empty</p>
+      </div>
+    }
+  </div>
+</div>
