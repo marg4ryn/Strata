@@ -13,7 +13,6 @@ describe('Header', () => {
     showPanel: ReturnType<typeof signal<boolean>>;
     openPanel: ReturnType<typeof vi.fn>;
     closePanel: ReturnType<typeof vi.fn>;
-    loadNotifications: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -22,7 +21,6 @@ describe('Header', () => {
       showPanel: signal(false),
       openPanel: vi.fn(),
       closePanel: vi.fn(),
-      loadNotifications: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -47,10 +45,6 @@ describe('Header', () => {
       settings: root.querySelector<HTMLButtonElement>('[aria-label="Settings"]')!,
     };
   }
-
-  it('calls loadNotifications on init', () => {
-    expect(notifications.loadNotifications).toHaveBeenCalledOnce();
-  });
 
   describe('notifications button state', () => {
     it('reflects showPanel in aria-expanded and active class', () => {

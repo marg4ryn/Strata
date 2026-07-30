@@ -36,7 +36,15 @@
     }
   </button>
 
-  <button class="header__action" title="Analysis history" aria-label="Analysis history">
+  <button
+    #historyBtn
+    class="header__action"
+    title="Analysis history"
+    aria-label="Analysis history"
+    [class.header__action--active]="history.showPanel()"
+    [attr.aria-expanded]="history.showPanel()"
+    (click)="toggleHistoryPanel()"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
@@ -85,3 +93,11 @@
     </svg>
   </button>
 </div>
+
+<ng-template cdkPortal #notifPortal="cdkPortal">
+  <app-notification-panel />
+</ng-template>
+
+<ng-template cdkPortal #historyPortal="cdkPortal">
+  <app-analysis-history-panel />
+</ng-template>
