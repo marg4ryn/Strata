@@ -2,6 +2,8 @@ import { Service, inject, effect, untracked } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
+import { AnalysisHistoryEntry } from '@app/features/analysis-history/analysis-history.model';
 import { AnalysisRunStoreService } from '../store/analysis-run-store.service';
 import { AnalysisRunStorageService } from '../storage/analysis-run-storage.service';
 import { AnalysisRunWebSocketService } from '../web-socket/analysis-run-web-socket.service';
@@ -21,6 +23,7 @@ export class AnalysisRunService {
   private readonly locker = inject(AnalysisRunLockService);
   private readonly logger = inject(LoggerService);
   private readonly notifications = inject(NotificationsFacade);
+  private readonly history = inject(AnalysisHistoryFacade);
 
   constructor() {
     effect(() => {
@@ -33,7 +36,10 @@ export class AnalysisRunService {
           this.notifications.sendNotificationSuccess(
             `${this.getRepoName()} analysis was successful`,
           );
-          // call history feature
+          const analysisHistoryEntry = this.constructAnalysisHistoryEntry(
+            this.store.pendingAnalysis()!,
+          );
+          this.history.addAnalysisHistoryEntry(analysisHistoryEntry);
           // call analysis-results feature
           void this.clearData(); // not waiting for Promise on purpose
         });
@@ -271,6 +277,14 @@ export class AnalysisRunService {
     }
 
     return params;
+  }
+
+  constructAnalysisHistoryEntry(pendingAnalysis: PendingAnalysis): AnalysisHistoryEntry {
+    return {
+      analysisId: this.store.result()!,
+      completedAt: Date.now(),
+      target: pendingAnalysis.target,
+    };
   }
 
   getRepoName(): string {

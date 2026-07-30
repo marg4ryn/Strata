@@ -3,6 +3,7 @@ import { signal } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisRunService } from './analysis-run.service';
 import {
   AnalysisStatusKey,
@@ -58,6 +59,10 @@ describe('AnalysisRunService', () => {
     sendNotificationError: ReturnType<typeof vi.fn>;
   };
 
+  let history: {
+    addAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(() => {
     store = {
       pendingAnalysis: signal(null),
@@ -97,6 +102,10 @@ describe('AnalysisRunService', () => {
       sendNotificationError: vi.fn(),
     };
 
+    history = {
+      addAnalysisHistoryEntry: vi.fn(),
+    };
+
     logger = {
       debug: vi.fn(),
       info: vi.fn(),
@@ -112,6 +121,7 @@ describe('AnalysisRunService', () => {
         { provide: AnalysisRunLockService, useValue: locker },
         { provide: LoggerService, useValue: logger },
         { provide: NotificationsFacade, useValue: notifications },
+        { provide: AnalysisHistoryFacade, useValue: history },
       ],
     });
 
@@ -134,6 +144,7 @@ describe('AnalysisRunService', () => {
 
       expect(clearDataSpy).toHaveBeenCalledOnce();
       expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
+      expect(history.addAnalysisHistoryEntry).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalled();
     });
 
@@ -613,6 +624,40 @@ describe('AnalysisRunService', () => {
       store.pendingAnalysis.set(pendingAnalysis);
 
       expect(service.getRepoName()).toBe('Project');
+    });
+  });
+
+  describe('constructAnalysisHistoryEntry', () => {
+    it('constructs analysis history entry', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const analysis: PendingAnalysis = {
+        sessionId: '123',
+        startedAt: Date.now(),
+        target: {
+          targetURL: 'https://example.com/Project.git',
+          limitRange: true,
+          range: {
+            startDate: '2000-01-01',
+            endDate: '2000-06-01',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          },
+        },
+      };
+
+      const analysisId = '123';
+      store.result.set(analysisId);
+
+      const result = service.constructAnalysisHistoryEntry(analysis);
+
+      expect(result).toMatchObject({
+        analysisId: analysisId,
+        completedAt: Date.now(),
+        target: analysis.target,
+      });
+
+      vi.useRealTimers();
     });
   });
 });
