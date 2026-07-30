@@ -1,26 +1,16 @@
-:host {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 1000;
-}
-
 .modal {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
+  margin: 1rem;
   border: 1px solid var(--border-subtle);
   background-color: var(--bg-primary);
+  color: var(--text-primary);
   border-radius: 10px;
-  width: 100%;
   max-width: 32rem;
 
-  @media (min-width: 768px) and (min-height: 800px) {
+  @media (min-width: 800px) and (min-height: 800px) {
     max-width: 40rem;
     padding: 2.5rem;
     gap: 2rem;
@@ -31,7 +21,7 @@
   font-size: 1rem;
   font-weight: 500;
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     font-size: 1.25rem;
   }
 }

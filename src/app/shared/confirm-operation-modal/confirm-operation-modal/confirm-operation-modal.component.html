@@ -1,0 +1,22 @@
+<div class="modal" role="dialog" aria-modal="true" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+  <header class="modal__header">
+    <h2 class="modal__title">{{ label() }}</h2>
+  </header>
+
+  <footer class="modal__footer">
+    <button
+      [attr.cdkFocusInitial]="type() === 'danger' ? '' : null"
+      btn="secondary"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+    <button
+      [attr.cdkFocusInitial]="type() === 'confirm' ? '' : null"
+      [btn]="type() === 'confirm' ? 'primary' : 'danger'"
+      (click)="onConfirm()"
+    >
+      Confirm
+    </button>
+  </footer>
+</div>
