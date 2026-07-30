@@ -21,7 +21,6 @@ describe('AnalysisRunPage', () => {
     isBusy: ReturnType<typeof signal<boolean>>;
     isAborting: ReturnType<typeof signal<boolean>>;
     showModal: ReturnType<typeof signal<boolean>>;
-    tryToReconnect: ReturnType<typeof vi.fn>;
     startNewAnalysis: ReturnType<typeof vi.fn>;
     abortAnalysis: ReturnType<typeof vi.fn>;
     resumeAnalysis: ReturnType<typeof vi.fn>;
@@ -39,7 +38,6 @@ describe('AnalysisRunPage', () => {
       isBusy: signal(false),
       isAborting: signal(false),
       showModal: signal(false),
-      tryToReconnect: vi.fn(),
       startNewAnalysis: vi.fn(),
       abortAnalysis: vi.fn(),
       resumeAnalysis: vi.fn(),
@@ -60,11 +58,6 @@ describe('AnalysisRunPage', () => {
   function query<T = HTMLElement>(selector: string): T | null {
     return fixture.nativeElement.querySelector(selector);
   }
-
-  it('calls tryToReconnect on init', () => {
-    fixture.detectChanges();
-    expect(facade.tryToReconnect).toHaveBeenCalledOnce();
-  });
 
   describe('conditional rendering', () => {
     it('shows error modal when error is set', () => {

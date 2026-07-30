@@ -3,11 +3,10 @@ import { RouterOutlet } from '@angular/router';
 
 import { Header } from './layout/header/header.component';
 import { Footer } from './layout/footer/footer.component';
-import { NotificationPanel } from './features/notifications/feature/notification-panel.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, NotificationPanel],
+  imports: [RouterOutlet, Header, Footer],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',

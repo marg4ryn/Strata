@@ -28,8 +28,4 @@ export class AnalysisRunPage {
   });
 
   readonly debouncedLabel = debounced(this.label, 800);
-
-  ngOnInit() {
-    this.facade.tryToReconnect();
-  }
 }
