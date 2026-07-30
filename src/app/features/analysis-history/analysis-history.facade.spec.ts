@@ -18,6 +18,7 @@ describe('AnalysisHistoryFacade', () => {
   let analysisHistoryService: {
     openPanel: ReturnType<typeof vi.fn>;
     closePanel: ReturnType<typeof vi.fn>;
+    loadAnalysis: ReturnType<typeof vi.fn>;
     loadAnalysisHistory: ReturnType<typeof vi.fn>;
     addAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
     removeAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
@@ -32,6 +33,7 @@ describe('AnalysisHistoryFacade', () => {
     analysisHistoryService = {
       openPanel: vi.fn(),
       closePanel: vi.fn(),
+      loadAnalysis: vi.fn(),
       loadAnalysisHistory: vi.fn(),
       addAnalysisHistoryEntry: vi.fn(),
       removeAnalysisHistoryEntry: vi.fn(),
@@ -48,7 +50,7 @@ describe('AnalysisHistoryFacade', () => {
 
   const analysisHistoryEntry: AnalysisHistoryEntry = {
     analysisId: '1',
-    startedAt: 42,
+    completedAt: 42,
     target: null as unknown as AnalysisTarget,
   };
 
@@ -72,6 +74,12 @@ describe('AnalysisHistoryFacade', () => {
   it('handles loadAnalysisHistory', () => {
     service.loadAnalysisHistory();
     expect(analysisHistoryService.loadAnalysisHistory).toHaveBeenCalledOnce();
+  });
+
+  it('handles loadAnalysis', () => {
+    const analysisId = '123';
+    service.loadAnalysis(analysisId);
+    expect(analysisHistoryService.loadAnalysis).toHaveBeenCalledWith(analysisId);
   });
 
   it('handles addAnalysisHistoryEntry', () => {

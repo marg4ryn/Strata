@@ -29,12 +29,12 @@ describe('AnalysisHistoryStoreService', () => {
 
   const firstAnalysisHistoryEntry: AnalysisHistoryEntry = {
     analysisId: '1',
-    startedAt: 42,
+    completedAt: 42,
     target: null as unknown as AnalysisTarget,
   };
   const secondAnalysisHistoryEntry: AnalysisHistoryEntry = {
     analysisId: '2',
-    startedAt: 43,
+    completedAt: 43,
     target: null as unknown as AnalysisTarget,
   };
 

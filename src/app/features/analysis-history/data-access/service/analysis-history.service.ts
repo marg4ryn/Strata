@@ -45,6 +45,13 @@ export class AnalysisHistoryService {
     this.store.analysisHistory.set(analysisHistory);
   }
 
+  loadAnalysis(analysisId: string): void {
+    this.logger.debug(
+      `Analysis History Service received a request to load analysis with analysisId: ${analysisId}`,
+    );
+    // call analysis results feature
+  }
+
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry) {
     this.logger.debug(
       'Analysis History Service received a request to add analysis history entry: ',

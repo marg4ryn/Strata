@@ -85,7 +85,7 @@ describe('AnalysisHistoryService', () => {
 
   const analysisHistoryEntry: AnalysisHistoryEntry = {
     analysisId: '1',
-    startedAt: 42,
+    completedAt: 42,
     target: null as unknown as AnalysisTarget,
   };
 
@@ -100,6 +100,13 @@ describe('AnalysisHistoryService', () => {
       vi.spyOn(storage, 'getAnalysisHistory').mockReturnValue(null);
       service.loadAnalysisHistory();
       expect(store.analysisHistory()).toBeNull();
+    });
+  });
+
+  describe('loadAnalysis', () => {
+    it('loads analysis', () => {
+      service.loadAnalysis('123');
+      expect(logger.debug).toHaveBeenCalled();
     });
   });
 

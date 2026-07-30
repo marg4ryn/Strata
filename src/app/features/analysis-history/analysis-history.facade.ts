@@ -24,6 +24,10 @@ export class AnalysisHistoryFacade {
     this.service.loadAnalysisHistory();
   }
 
+  loadAnalysis(analysisId: string): void {
+    this.service.loadAnalysis(analysisId);
+  }
+
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry): void {
     this.service.addAnalysisHistoryEntry(analysisHistoryEntry);
   }
