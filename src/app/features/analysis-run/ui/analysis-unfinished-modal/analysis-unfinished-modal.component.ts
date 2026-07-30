@@ -1,24 +1,33 @@
-import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+  computed,
+  inject,
+  DestroyRef,
+} from '@angular/core';
 
+import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { ConfirmOperationModal } from '@app/shared/confirm-operation-modal/confirm-operation-modal.component';
 import { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({
   selector: 'app-analysis-unfinished-modal',
-  imports: [ButtonDirective, ConfirmOperationModal],
+  imports: [ButtonDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-unfinished-modal.component.html',
   styleUrl: './analysis-unfinished-modal.component.scss',
 })
 export class AnalysisUnfinishedModal {
+  private readonly confirmModal = inject(ConfirmOperationModalService);
+  private readonly destroyRef = inject(DestroyRef);
+
   readonly pendingAnalysis = input<PendingAnalysis | null>();
 
   readonly resume = output<void>();
   readonly abandon = output<void>();
-
-  showModal: boolean = false;
 
   readonly analysisStartDate = computed(() => {
     const startedAt = this.pendingAnalysis()?.startedAt ?? '';
@@ -43,20 +52,13 @@ export class AnalysisUnfinishedModal {
     return isoDateToLocaleString(iso);
   });
 
-  onCancel(): void {
-    this.showModal = false;
-  }
-
-  onConfirm(): void {
-    this.showModal = false;
-    this.abandon.emit();
-  }
-
   resumeAnalysis(): void {
     this.resume.emit();
   }
 
-  abandonAnalysis(): void {
-    this.showModal = true;
+  async abandonAnalysis(): Promise<void> {
+    const confirmed = await this.confirmModal.confirm(this.destroyRef);
+    if (!confirmed) return;
+    this.abandon.emit();
   }
 }

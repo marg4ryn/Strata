@@ -33,10 +33,3 @@
     <button btn="primary" (click)="resumeAnalysis()">Resume</button>
   </footer>
 </div>
-
-@if (showModal) {
-  <app-confirm-operation-modal
-    (cancel)="onCancel()"
-    (confirm)="onConfirm()"
-  ></app-confirm-operation-modal>
-}
