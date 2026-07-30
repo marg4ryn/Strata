@@ -22,12 +22,12 @@
     transform 0.1s ease;
 
   &:hover {
-    color: var(--accent-hover);
+    color: var(--accent-primary);
     transform: scale(1.05);
   }
 
   &:focus-visible {
-    color: var(--accent-hover);
+    color: var(--accent-primary);
     transform: scale(1.05);
   }
 
@@ -65,12 +65,12 @@
     transform 0.2s ease;
 
   &:hover {
-    color: var(--accent-hover);
+    color: var(--accent-primary);
     transform: scale(1.2);
   }
 
   &:focus-visible {
-    color: var(--accent-hover);
+    color: var(--accent-primary);
     transform: scale(1.05);
   }
 
