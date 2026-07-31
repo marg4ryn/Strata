@@ -7,7 +7,7 @@ import { AnalysisTargetFormModel } from './analysis-run.model';
 @Service()
 export class AnalysisRunFacade {
   private readonly store = inject(AnalysisRunStoreService);
-  private readonly orchestrator = inject(AnalysisRunService);
+  private readonly service = inject(AnalysisRunService);
 
   readonly showModal = computed(() => this.store.showModal());
   readonly isBusy = computed(() => this.store.isBusy());
@@ -18,36 +18,36 @@ export class AnalysisRunFacade {
   readonly pendingAnalysis = computed(() => this.store.pendingAnalysis());
 
   startNewAnalysis(formData: AnalysisTargetFormModel): void {
-    void this.orchestrator.startNewAnalysis(formData);
+    void this.service.startNewAnalysis(formData);
   }
 
   // an attempt to resume an unfinished analysis
   tryToReconnect(): void {
-    void this.orchestrator.tryToReconnect();
+    void this.service.tryToReconnect();
   }
 
   // actually taking up an unfinished analysis
   resumeAnalysis(): void {
-    this.orchestrator.resumeAnalysis();
+    this.service.resumeAnalysis();
   }
 
   // an attempt to resume analysis after an error
   retryAnalysis(): void {
-    this.orchestrator.retryAnalysis();
+    this.service.retryAnalysis();
   }
 
   // cancelling the analysis after an error
   cancelAnalysis(): void {
-    void this.orchestrator.cancelAnalysis();
+    void this.service.cancelAnalysis();
   }
 
   // cancelling a previously unfinished analysis
   abandonAnalysis(): void {
-    void this.orchestrator.abandonAnalysis();
+    void this.service.abandonAnalysis();
   }
 
   // cancelling an ongoing analysis
   abortAnalysis(): void {
-    void this.orchestrator.abortAnalysis();
+    void this.service.abortAnalysis();
   }
 }

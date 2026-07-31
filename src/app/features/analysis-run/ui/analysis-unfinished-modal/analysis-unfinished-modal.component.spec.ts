@@ -1,12 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
+import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisUnfinishedModal', () => {
   let component: AnalysisUnfinishedModal;
   let fixture: ComponentFixture<AnalysisUnfinishedModal>;
+  let confirmModal: { confirm: ReturnType<typeof vi.fn> };
 
   const range: DateRange = {
     startDate: '2000-01-01',
@@ -25,8 +27,11 @@ describe('AnalysisUnfinishedModal', () => {
   };
 
   beforeEach(async () => {
+    confirmModal = { confirm: vi.fn() };
+
     await TestBed.configureTestingModule({
       imports: [AnalysisUnfinishedModal],
+      providers: [{ provide: ConfirmOperationModalService, useValue: confirmModal }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisUnfinishedModal);
@@ -37,16 +42,6 @@ describe('AnalysisUnfinishedModal', () => {
   function getButtons(): { abandon: HTMLButtonElement; resume: HTMLButtonElement } {
     const buttons = fixture.nativeElement.querySelectorAll('button');
     return { abandon: buttons[0], resume: buttons[1] };
-  }
-
-  function getConfirmModal(): HTMLElement | null {
-    return fixture.nativeElement.querySelector('app-confirm-operation-modal');
-  }
-
-  function getConfirmModalButtons(): { cancel: HTMLButtonElement; confirm: HTMLButtonElement } {
-    const modal = getConfirmModal()!;
-    const buttons = modal.querySelectorAll('button');
-    return { cancel: buttons[0], confirm: buttons[1] };
   }
 
   function setInput(value: PendingAnalysis): void {
@@ -110,15 +105,6 @@ describe('AnalysisUnfinishedModal', () => {
     expect(range).toBeNull();
   });
 
-  it('does not emit abandon when abandon button is clicked', () => {
-    const spy = vi.fn();
-    component.abandon.subscribe(spy);
-
-    getButtons().abandon.click();
-
-    expect(spy).not.toHaveBeenCalled();
-  });
-
   it('emits resume when resume button is clicked', () => {
     const spy = vi.fn();
     component.resume.subscribe(spy);
@@ -128,45 +114,33 @@ describe('AnalysisUnfinishedModal', () => {
     expect(spy).toHaveBeenCalledOnce();
   });
 
-  it('does not render confirm modal initially', () => {
-    expect(getConfirmModal()).toBeNull();
-  });
+  it('opens confirm modal when abandon button is clicked', async () => {
+    confirmModal.confirm.mockResolvedValue(false);
 
-  it('shows confirm modal when abandon button is clicked', () => {
     getButtons().abandon.click();
-    fixture.detectChanges();
 
-    expect(component.showModal).toBe(true);
-    expect(getConfirmModal()).not.toBeNull();
+    expect(confirmModal.confirm).toHaveBeenCalledOnce();
   });
 
-  it('hides confirm modal and does not emit abandon on cancel', () => {
+  it('does not emit abandon when confirm modal is cancelled', async () => {
+    confirmModal.confirm.mockResolvedValue(false);
     const spy = vi.fn();
     component.abandon.subscribe(spy);
 
     getButtons().abandon.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
-    getConfirmModalButtons().cancel.click();
-    fixture.detectChanges();
-
-    expect(component.showModal).toBe(false);
-    expect(getConfirmModal()).toBeNull();
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('hides confirm modal and emits abandon on confirm', () => {
+  it('emits abandon when confirm modal is confirmed', async () => {
+    confirmModal.confirm.mockResolvedValue(true);
     const spy = vi.fn();
     component.abandon.subscribe(spy);
 
     getButtons().abandon.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
-    getConfirmModalButtons().confirm.click();
-    fixture.detectChanges();
-
-    expect(component.showModal).toBe(false);
-    expect(getConfirmModal()).toBeNull();
     expect(spy).toHaveBeenCalledOnce();
   });
 });

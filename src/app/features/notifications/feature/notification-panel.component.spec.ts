@@ -47,36 +47,20 @@ describe('NotificationPanel', () => {
     return fixture.nativeElement.querySelector('.notification-panel');
   }
 
-  it('does not render panel when showPanel is false', () => {
-    expect(getPanel()).toBeNull();
+  it('has cdkTrapFocus applied to container', () => {
+    expect(getPanel()?.getAttribute('cdktrapfocus')).not.toBeNull();
   });
 
-  it('renders panel when showPanel is true', () => {
-    facade.showPanel.set(true);
-    fixture.detectChanges();
+  it('calls closePanel when close button is clicked', () => {
+    const closeBtn: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '.notification-panel__close',
+    );
+    closeBtn.click();
 
-    expect(getPanel()).not.toBeNull();
+    expect(facade.closePanel).toHaveBeenCalledOnce();
   });
 
-  describe('when panel is open', () => {
-    beforeEach(() => {
-      facade.showPanel.set(true);
-      fixture.detectChanges();
-    });
-
-    it('has cdkTrapFocus applied to container', () => {
-      expect(getPanel()?.getAttribute('cdktrapfocus')).not.toBeNull();
-    });
-
-    it('calls closePanel when close button is clicked', () => {
-      const closeBtn: HTMLButtonElement = fixture.nativeElement.querySelector(
-        '.notification-panel__close',
-      );
-      closeBtn.click();
-
-      expect(facade.closePanel).toHaveBeenCalledOnce();
-    });
-
+  describe('without notifications', () => {
     it('shows empty state when there are no notifications', () => {
       const empty = fixture.nativeElement.querySelector('.notification-panel__empty');
       expect(empty).not.toBeNull();
@@ -92,41 +76,41 @@ describe('NotificationPanel', () => {
       const items = fixture.nativeElement.querySelectorAll('app-notification-item');
       expect(items.length).toBe(0);
     });
+  });
 
-    describe('with notifications', () => {
-      beforeEach(() => {
-        facade.notifications.set([notification({ sentAt: 1 }), notification({ sentAt: 2 })]);
-        fixture.detectChanges();
-      });
+  describe('with notifications', () => {
+    beforeEach(() => {
+      facade.notifications.set([notification({ sentAt: 1 }), notification({ sentAt: 2 })]);
+      fixture.detectChanges();
+    });
 
-      it('renders one notification item per notification', () => {
-        const items = fixture.nativeElement.querySelectorAll('app-notification-item');
-        expect(items.length).toBe(2);
-      });
+    it('renders one notification item per notification', () => {
+      const items = fixture.nativeElement.querySelectorAll('app-notification-item');
+      expect(items.length).toBe(2);
+    });
 
-      it('does not show empty state', () => {
-        expect(fixture.nativeElement.querySelector('.notification-panel__empty')).toBeNull();
-      });
+    it('does not show empty state', () => {
+      expect(fixture.nativeElement.querySelector('.notification-panel__empty')).toBeNull();
+    });
 
-      it('shows clear all button and calls clearNotifications on click', () => {
-        const clearBtn: HTMLButtonElement = fixture.nativeElement.querySelector(
-          '.notification-panel__clear-all',
-        );
-        expect(clearBtn).not.toBeNull();
+    it('shows clear all button and calls clearNotifications on click', () => {
+      const clearBtn: HTMLButtonElement = fixture.nativeElement.querySelector(
+        '.notification-panel__clear-all',
+      );
+      expect(clearBtn).not.toBeNull();
 
-        clearBtn.click();
-        expect(facade.clearNotifications).toHaveBeenCalledOnce();
-      });
+      clearBtn.click();
+      expect(facade.clearNotifications).toHaveBeenCalledOnce();
+    });
 
-      it('calls removeNotification with sentAt when item emits remove', () => {
-        const item = fixture.debugElement.children
-          .find((el) => el.nativeElement.matches('.notification-panel'))!
-          .query((el) => el.name === 'app-notification-item');
+    it('calls removeNotification with sentAt when item emits remove', () => {
+      const item = fixture.debugElement.children
+        .find((el) => el.nativeElement.matches('.notification-panel'))!
+        .query((el) => el.name === 'app-notification-item');
 
-        item.triggerEventHandler('remove', 1);
+      item.triggerEventHandler('remove', 1);
 
-        expect(facade.removeNotification).toHaveBeenCalledWith(1);
-      });
+      expect(facade.removeNotification).toHaveBeenCalledWith(1);
     });
   });
 });

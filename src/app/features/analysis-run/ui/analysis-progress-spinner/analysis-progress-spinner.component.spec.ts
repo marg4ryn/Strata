@@ -1,19 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
+import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisProgressSpinner } from './analysis-progress-spinner.component';
 
 describe('AnalysisProgressSpinner', () => {
   let component: AnalysisProgressSpinner;
   let fixture: ComponentFixture<AnalysisProgressSpinner>;
+  let confirmModal: { confirm: ReturnType<typeof vi.fn> };
+  let focusMonitor: {
+    focusVia: ReturnType<typeof vi.fn>;
+    stopMonitoring: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(async () => {
+    confirmModal = { confirm: vi.fn() };
+    focusMonitor = { focusVia: vi.fn(), stopMonitoring: vi.fn() };
+
     await TestBed.configureTestingModule({
       imports: [AnalysisProgressSpinner],
+      providers: [
+        { provide: ConfirmOperationModalService, useValue: confirmModal },
+        { provide: FocusMonitor, useValue: focusMonitor },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisProgressSpinner);
     component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
   function getButtons(): { abort: HTMLButtonElement } {
@@ -21,18 +34,24 @@ describe('AnalysisProgressSpinner', () => {
     return { abort: buttons[0] };
   }
 
-  function getConfirmModal(): HTMLElement | null {
-    return fixture.nativeElement.querySelector('app-confirm-operation-modal');
-  }
+  it('focuses the abort button on init via FocusMonitor', () => {
+    fixture.detectChanges();
 
-  function getConfirmModalButtons(): { cancel: HTMLButtonElement; confirm: HTMLButtonElement } {
-    const modal = getConfirmModal()!;
-    const buttons = modal.querySelectorAll('button');
-    return { cancel: buttons[0], confirm: buttons[1] };
-  }
+    expect(focusMonitor.focusVia).toHaveBeenCalledOnce();
+    expect(focusMonitor.focusVia).toHaveBeenCalledWith(component.firstButton(), 'program');
+  });
+
+  it('stops monitoring the abort button on destroy', () => {
+    fixture.detectChanges();
+    const button = component.firstButton();
+
+    fixture.destroy();
+
+    expect(focusMonitor.stopMonitoring).toHaveBeenCalledOnce();
+    expect(focusMonitor.stopMonitoring).toHaveBeenCalledWith(button);
+  });
 
   it('displays label via inputs', () => {
-    fixture.detectChanges();
     fixture.componentRef.setInput('label', 'Loading...');
     fixture.detectChanges();
 
@@ -40,57 +59,63 @@ describe('AnalysisProgressSpinner', () => {
     expect(label.textContent).toContain('Loading...');
   });
 
-  it('does not render confirm modal initially', () => {
-    expect(getConfirmModal()).toBeNull();
-  });
-
-  it('shows confirm modal when abort button is clicked', () => {
-    getButtons().abort.click();
-    fixture.detectChanges();
-
-    expect(component.showModal).toBe(true);
-    expect(getConfirmModal()).not.toBeNull();
-  });
-
-  it('disables abort button during aborting', () => {
-    fixture.detectChanges();
+  it('disables abort button and shows aborting text when isAborting is true', () => {
     fixture.componentRef.setInput('isAborting', true);
     fixture.detectChanges();
-    getButtons().abort.click();
-    fixture.detectChanges();
 
-    expect(getButtons().abort.textContent.trim()).toBe('Aborting...');
-    expect(component.showModal).toBe(false);
-    expect(getConfirmModal()).toBeNull();
+    const button = getButtons().abort;
+    expect(button.disabled).toBe(true);
+    expect(button.textContent.trim()).toBe('Aborting...');
   });
 
-  it('hides confirm modal and does not emit abort on cancel', () => {
-    const spy = vi.fn();
-    component.abort.subscribe(spy);
+  it('enables abort button and shows default text when isAborting is false', () => {
+    fixture.componentRef.setInput('isAborting', false);
+    fixture.detectChanges();
+
+    const button = getButtons().abort;
+    expect(button.disabled).toBe(false);
+    expect(button.textContent.trim()).toBe('Abort');
+  });
+
+  it('opens confirm modal when abort button is clicked', () => {
+    confirmModal.confirm.mockResolvedValue(false);
+    fixture.detectChanges();
 
     getButtons().abort.click();
+
+    expect(confirmModal.confirm).toHaveBeenCalledOnce();
+  });
+
+  it('passes destroyRef to confirm modal service', () => {
+    confirmModal.confirm.mockResolvedValue(false);
     fixture.detectChanges();
 
-    getConfirmModalButtons().cancel.click();
+    getButtons().abort.click();
+
+    expect(confirmModal.confirm).toHaveBeenCalledWith(expect.anything());
+  });
+
+  it('does not emit abort when confirm modal is cancelled', async () => {
+    confirmModal.confirm.mockResolvedValue(false);
+    const spy = vi.fn();
+    component.abort.subscribe(spy);
     fixture.detectChanges();
 
-    expect(component.showModal).toBe(false);
-    expect(getConfirmModal()).toBeNull();
+    getButtons().abort.click();
+    await fixture.whenStable();
+
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('hides confirm modal and emits abort on confirm', () => {
+  it('emits abort when confirm modal is confirmed', async () => {
+    confirmModal.confirm.mockResolvedValue(true);
     const spy = vi.fn();
     component.abort.subscribe(spy);
+    fixture.detectChanges();
 
     getButtons().abort.click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
-    getConfirmModalButtons().confirm.click();
-    fixture.detectChanges();
-
-    expect(component.showModal).toBe(false);
-    expect(getConfirmModal()).toBeNull();
     expect(spy).toHaveBeenCalledOnce();
   });
 });

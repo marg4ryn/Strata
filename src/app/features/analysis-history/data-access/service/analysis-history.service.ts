@@ -49,7 +49,7 @@ export class AnalysisHistoryService {
     this.logger.debug(
       `Analysis History Service received a request to load analysis with analysisId: ${analysisId}`,
     );
-    // call analysis results feature
+    // call analysis-results feature
   }
 
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry) {

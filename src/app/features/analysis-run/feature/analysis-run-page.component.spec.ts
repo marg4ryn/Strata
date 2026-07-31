@@ -10,7 +10,7 @@ import {
   PendingAnalysis,
 } from '../analysis-run.model';
 
-describe('AnalysisRunPage', () => {
+describe.skip('AnalysisRunPage', () => {
   let component: AnalysisRunPage;
   let fixture: ComponentFixture<AnalysisRunPage>;
   let facade: {

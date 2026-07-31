@@ -25,7 +25,7 @@ describe('AnalysisRunFacade', () => {
     showModal: ReturnType<typeof signal<boolean>>;
   };
 
-  let orchestrator: {
+  let analysisRunService: {
     tryToReconnect: ReturnType<typeof vi.fn>;
     startNewAnalysis: ReturnType<typeof vi.fn>;
     abortAnalysis: ReturnType<typeof vi.fn>;
@@ -46,7 +46,7 @@ describe('AnalysisRunFacade', () => {
       showModal: signal(false),
     };
 
-    orchestrator = {
+    analysisRunService = {
       tryToReconnect: vi.fn(),
       startNewAnalysis: vi.fn(),
       abortAnalysis: vi.fn(),
@@ -60,7 +60,7 @@ describe('AnalysisRunFacade', () => {
       providers: [
         AnalysisRunFacade,
         { provide: AnalysisRunStoreService, useValue: store },
-        { provide: AnalysisRunService, useValue: orchestrator },
+        { provide: AnalysisRunService, useValue: analysisRunService },
       ],
     });
     service = TestBed.inject(AnalysisRunFacade);
@@ -103,36 +103,36 @@ describe('AnalysisRunFacade', () => {
     } as AnalysisTargetFormModel;
 
     service.startNewAnalysis(data);
-    expect(orchestrator.startNewAnalysis).toHaveBeenCalledWith(data);
+    expect(analysisRunService.startNewAnalysis).toHaveBeenCalledWith(data);
   });
 
   it('handles tryToReconnect', () => {
     service.tryToReconnect();
-    expect(orchestrator.tryToReconnect).toHaveBeenCalledOnce();
+    expect(analysisRunService.tryToReconnect).toHaveBeenCalledOnce();
   });
 
   it('handles resumeAnalysis', () => {
     service.resumeAnalysis();
-    expect(orchestrator.resumeAnalysis).toHaveBeenCalledOnce();
+    expect(analysisRunService.resumeAnalysis).toHaveBeenCalledOnce();
   });
 
   it('handles retryAnalysis', () => {
     service.retryAnalysis();
-    expect(orchestrator.retryAnalysis).toHaveBeenCalledOnce();
+    expect(analysisRunService.retryAnalysis).toHaveBeenCalledOnce();
   });
 
   it('handles cancelAnalysis', () => {
     service.cancelAnalysis();
-    expect(orchestrator.cancelAnalysis).toHaveBeenCalledOnce();
+    expect(analysisRunService.cancelAnalysis).toHaveBeenCalledOnce();
   });
 
   it('handles abandonAnalysis', () => {
     service.abandonAnalysis();
-    expect(orchestrator.abandonAnalysis).toHaveBeenCalledOnce();
+    expect(analysisRunService.abandonAnalysis).toHaveBeenCalledOnce();
   });
 
   it('handles abortAnalysis', () => {
     service.abortAnalysis();
-    expect(orchestrator.abortAnalysis).toHaveBeenCalledOnce();
+    expect(analysisRunService.abortAnalysis).toHaveBeenCalledOnce();
   });
 });

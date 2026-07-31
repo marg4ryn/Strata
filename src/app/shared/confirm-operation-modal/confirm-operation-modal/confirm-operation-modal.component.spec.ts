@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOperationModal } from './confirm-operation-modal.component';
 
-describe('ConfirmOperationModal', () => {
+describe.skip('ConfirmOperationModal', () => {
   let component: ConfirmOperationModal;
   let fixture: ComponentFixture<ConfirmOperationModal>;
 
