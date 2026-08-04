@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOperationModal } from './confirm-operation-modal.component';
 
-describe.skip('ConfirmOperationModal', () => {
+describe('ConfirmOperationModal', () => {
   let component: ConfirmOperationModal;
   let fixture: ComponentFixture<ConfirmOperationModal>;
 
@@ -22,35 +22,75 @@ describe.skip('ConfirmOperationModal', () => {
     return { cancel: buttons[0], confirm: buttons[1] };
   }
 
-  it('displays default label', () => {
-    const title = fixture.nativeElement.querySelector('.modal__title');
-    expect(title.textContent).toContain('This operation cannot be undone. Are you sure?');
+  describe('label input', () => {
+    it('displays default label', () => {
+      const title = fixture.nativeElement.querySelector('.modal__title');
+      expect(title.textContent).toContain('This operation cannot be undone. Are you sure?');
+    });
+
+    it('displays custom label via input', async () => {
+      fixture.componentRef.setInput('label', 'Delete this item?');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const title = fixture.nativeElement.querySelector('.modal__title');
+      expect(title.textContent).toContain('Delete this item?');
+    });
   });
 
-  it('displays custom label via input', async () => {
-    fixture.componentRef.setInput('label', 'Delete this item?');
-    fixture.detectChanges();
-    await fixture.whenStable();
+  describe('outputs', () => {
+    it('emits cancel when cancel button is clicked', () => {
+      const spy = vi.fn();
+      component.cancel.subscribe(spy);
 
-    const title = fixture.nativeElement.querySelector('.modal__title');
-    expect(title.textContent).toContain('Delete this item?');
+      getButtons().cancel.click();
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
+
+    it('emits confirm when confirm button is clicked', () => {
+      const spy = vi.fn();
+      component.confirm.subscribe(spy);
+
+      getButtons().confirm.click();
+
+      expect(spy).toHaveBeenCalledOnce();
+    });
   });
 
-  it('emits cancel when cancel button is clicked', () => {
-    const spy = vi.fn();
-    component.cancel.subscribe(spy);
+  describe('type input', () => {
+    it('defaults to "danger"', () => {
+      expect(component.type()).toBe('danger');
+    });
 
-    getButtons().cancel.click();
+    it('confirm button gets danger variant, cancel gets initial focus', async () => {
+      fixture.componentRef.setInput('type', 'danger');
+      fixture.detectChanges();
+      await fixture.whenStable();
 
-    expect(spy).toHaveBeenCalledOnce();
-  });
+      const { cancel, confirm } = getButtons();
+      expect(confirm.classList).toContain('btn--danger');
+      expect(cancel.hasAttribute('cdkFocusInitial')).toBe(true);
+      expect(confirm.hasAttribute('cdkFocusInitial')).toBe(false);
+    });
 
-  it('emits confirm when confirm button is clicked', () => {
-    const spy = vi.fn();
-    component.confirm.subscribe(spy);
+    it('confirm button gets primary variant, confirm gets initial focus', async () => {
+      fixture.componentRef.setInput('type', 'confirm');
+      fixture.detectChanges();
+      await fixture.whenStable();
 
-    getButtons().confirm.click();
+      const { cancel, confirm } = getButtons();
+      expect(confirm.classList).toContain('btn--primary');
+      expect(confirm.hasAttribute('cdkFocusInitial')).toBe(true);
+      expect(cancel.hasAttribute('cdkFocusInitial')).toBe(false);
+    });
 
-    expect(spy).toHaveBeenCalledOnce();
+    it('cancel button always has "secondary" variant regardless of type', async () => {
+      fixture.componentRef.setInput('type', 'confirm');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(getButtons().cancel.classList).toContain('btn--secondary');
+    });
   });
 });
