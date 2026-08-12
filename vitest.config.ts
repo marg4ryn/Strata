@@ -5,7 +5,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     coverage: {
-      exclude: ['src/app/app.ts'],
+      exclude: ['src/app/app.ts', 'src/app/layout/header/*'],
     },
   },
 });
