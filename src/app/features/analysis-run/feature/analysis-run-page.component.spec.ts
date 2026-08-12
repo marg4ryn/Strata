@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 import { AnalysisRunPage } from './analysis-run-page.component';
 import { AnalysisRunFacade } from '../analysis-run.facade';
@@ -10,9 +11,12 @@ import {
   PendingAnalysis,
 } from '../analysis-run.model';
 
-describe.skip('AnalysisRunPage', () => {
+describe('AnalysisRunPage', () => {
   let component: AnalysisRunPage;
   let fixture: ComponentFixture<AnalysisRunPage>;
+  let overlayContainer: OverlayContainer;
+  let overlayContainerElement: HTMLElement;
+
   let facade: {
     pendingAnalysis: ReturnType<typeof signal<PendingAnalysis | null>>;
     progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
@@ -52,7 +56,13 @@ describe.skip('AnalysisRunPage', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisRunPage);
+    overlayContainer = TestBed.inject(OverlayContainer);
+    overlayContainerElement = overlayContainer.getContainerElement();
     component = fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    overlayContainer.ngOnDestroy();
   });
 
   function query<T = HTMLElement>(selector: string): T | null {
@@ -164,7 +174,7 @@ describe.skip('AnalysisRunPage', () => {
       expect(facade.resumeAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('calls abandonAnalysis after confirming abandon in unfinished modal', () => {
+    it('calls abandonAnalysis after confirming abandon in unfinished modal', async () => {
       facade.showModal.set(true);
       fixture.detectChanges();
 
@@ -172,32 +182,35 @@ describe.skip('AnalysisRunPage', () => {
       const abandonButton = unfinishedModal.querySelectorAll('button')[0] as HTMLButtonElement;
       abandonButton.click();
       fixture.detectChanges();
+      await fixture.whenStable();
 
-      const confirmModal = fixture.nativeElement.querySelector('app-confirm-operation-modal');
-      expect(confirmModal).toBeTruthy();
+      const confirmBtn = overlayContainerElement.querySelectorAll('button')[1] as HTMLButtonElement;
+      expect(confirmBtn).toBeTruthy();
+      confirmBtn.click();
 
-      const confirmButton = confirmModal!.querySelectorAll('button')[1] as HTMLButtonElement;
-      confirmButton.click();
       fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(facade.abandonAnalysis).toHaveBeenCalledOnce();
     });
 
-    it('calls abortAnalysis when spinner emits abort', () => {
+    it('calls abortAnalysis when spinner emits abort', async () => {
       facade.isBusy.set(true);
       facade.isAborting.set(false);
       fixture.detectChanges();
 
-      const abortButton = query<HTMLElement>('app-analysis-progress-spinner')!.querySelector(
-        'button',
-      );
-      (abortButton as HTMLButtonElement).click();
+      const spinnerComponent = query<HTMLElement>('app-analysis-progress-spinner')!;
+      const abortButton = spinnerComponent.querySelector('button') as HTMLButtonElement;
+      abortButton.click();
       fixture.detectChanges();
+      await fixture.whenStable();
 
-      const confirmButton = query<HTMLElement>('app-confirm-operation-modal')!.querySelectorAll(
-        'button',
-      )[1];
-      (confirmButton as HTMLButtonElement).click();
+      const confirmBtn = overlayContainerElement.querySelectorAll('button')[1] as HTMLButtonElement;
+      expect(confirmBtn).toBeTruthy();
+      confirmBtn.click();
+
+      fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(facade.abortAnalysis).toHaveBeenCalledOnce();
     });
