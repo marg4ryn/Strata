@@ -203,6 +203,14 @@ describe('AnalysisHistoryItem', () => {
         'confirm',
       );
     });
+
+    it('triggers loadAnalysis on host enter keydown', async () => {
+      confirmModalMock.confirm.mockResolvedValue(false);
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      fixture.nativeElement.dispatchEvent(event);
+      await fixture.whenStable();
+      expect(confirmModalMock.confirm).toHaveBeenCalled();
+    });
   });
 
   describe('delete button DOM events', () => {
