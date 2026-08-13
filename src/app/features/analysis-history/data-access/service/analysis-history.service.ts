@@ -1,4 +1,5 @@
 import { Service, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisHistoryStoreService } from '../store/analysis-history-store.service';
@@ -10,6 +11,7 @@ export class AnalysisHistoryService {
   private readonly store = inject(AnalysisHistoryStoreService);
   private readonly storage = inject(AnalysisHistoryStorageService);
   private readonly logger = inject(LoggerService);
+  private readonly router = inject(Router);
 
   private readonly channel = new BroadcastChannel('analysis-history-sync');
 
@@ -49,7 +51,7 @@ export class AnalysisHistoryService {
     this.logger.debug(
       `Analysis History Service received a request to load analysis with analysisId: ${analysisId}`,
     );
-    // call analysis-results feature
+    this.router.navigate(['analysis', analysisId, 'summary']);
   }
 
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry) {
