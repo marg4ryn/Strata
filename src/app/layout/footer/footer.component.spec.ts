@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { Footer } from './footer.component';
 
@@ -9,14 +10,34 @@ describe('Footer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Footer],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Footer);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  it('creates', () => {
-    expect(component).toBeTruthy();
+  it('renders copyright text', () => {
+    const span: HTMLElement = fixture.nativeElement.querySelector('.footer__copyright');
+    expect(span.textContent).toContain('2026 Strata');
+  });
+
+  it('renders about link with routerLink="/about"', () => {
+    const link: HTMLAnchorElement = fixture.nativeElement.querySelector('.footer__about-link');
+    expect(link).toBeTruthy();
+    expect(link.getAttribute('href')).toBe('/about');
+  });
+
+  it('has correct accessibility attributes on link', () => {
+    const link: HTMLAnchorElement = fixture.nativeElement.querySelector('.footer__about-link');
+    expect(link.getAttribute('title')).toBe('About Strata');
+    expect(link.getAttribute('aria-label')).toBe('About Strata');
+  });
+
+  it('renders link text "About"', () => {
+    const link: HTMLAnchorElement = fixture.nativeElement.querySelector('.footer__about-link');
+    expect(link.textContent?.trim()).toBe('About');
   });
 });
