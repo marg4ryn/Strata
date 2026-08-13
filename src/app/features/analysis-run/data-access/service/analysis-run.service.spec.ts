@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
@@ -63,6 +64,10 @@ describe('AnalysisRunService', () => {
     addAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
   };
 
+  let router: {
+    navigate: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(() => {
     store = {
       pendingAnalysis: signal(null),
@@ -106,6 +111,10 @@ describe('AnalysisRunService', () => {
       addAnalysisHistoryEntry: vi.fn(),
     };
 
+    router = {
+      navigate: vi.fn(),
+    };
+
     logger = {
       debug: vi.fn(),
       info: vi.fn(),
@@ -122,6 +131,7 @@ describe('AnalysisRunService', () => {
         { provide: LoggerService, useValue: logger },
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },
+        { provide: Router, useValue: router },
       ],
     });
 
@@ -143,6 +153,7 @@ describe('AnalysisRunService', () => {
       TestBed.tick();
 
       expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(router.navigate).toHaveBeenCalledWith(['analysis', '123', 'summary']);
       expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
       expect(history.addAnalysisHistoryEntry).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalled();

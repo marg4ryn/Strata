@@ -1,4 +1,5 @@
 import { Service, inject, effect, untracked } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
@@ -17,6 +18,7 @@ import {
 
 @Service()
 export class AnalysisRunService {
+  private readonly router = inject(Router);
   private readonly store = inject(AnalysisRunStoreService);
   private readonly storage = inject(AnalysisRunStorageService);
   private readonly webSocket = inject(AnalysisRunWebSocketService);
@@ -40,7 +42,7 @@ export class AnalysisRunService {
             this.store.pendingAnalysis()!,
           );
           this.history.addAnalysisHistoryEntry(analysisHistoryEntry);
-          // call analysis-results feature
+          this.router.navigate(['analysis', result, 'summary']);
           void this.clearData(); // not waiting for Promise on purpose
         });
       }
