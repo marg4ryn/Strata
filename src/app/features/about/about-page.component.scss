@@ -1,9 +1,56 @@
+:host {
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  color: white;
+  border: 0;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: var(--danger-primary);
+    transform: scale(1.2);
+  }
+
+  &:focus-visible {
+    color: var(--danger-primary);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    color: var(--danger-active);
+    transform: scale(0.9);
+  }
+}
+
 .about {
   flex: 1;
   width: 100%;
-  max-width: 900px;
   padding: 3rem 1rem;
   margin: 0 auto;
+  max-width: 900px;
+
+  @media (min-width: 1600px) {
+    max-width: 1600px;
+  }
+
+  @media (min-width: 2400px) {
+    max-width: 2400px;
+  }
+
+  @media (min-width: 3200px) {
+    max-width: 2600px;
+  }
 
   &__header {
     text-align: center;
@@ -26,24 +73,30 @@
 
   &__header-title {
     font-size: 3rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-primary);
     margin: 0;
-    gap: 10px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-left: 0.3em;
+    gap: 1rem;
   }
 
   &__header-logo {
-    width: 40px;
+    width: 30px;
   }
 
   &__content {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
     gap: 1.5rem;
+
+    @media (max-width: 800px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__section {
@@ -106,7 +159,8 @@
       border: 1px solid var(--border-subtle);
       transition: all 0.2s ease;
 
-      &:hover {
+      &:hover,
+      &:has(.about__member-link:focus-visible) {
         border-color: #f59e0b;
         transform: scale(1.02);
       }
@@ -132,7 +186,8 @@
     display: inline-flex;
     transition: transform 0.2s ease;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       transform: translateY(-2px);
     }
   }
@@ -163,5 +218,6 @@
     text-decoration: none;
     color: inherit;
     padding: 1rem;
+    outline: none;
   }
 }

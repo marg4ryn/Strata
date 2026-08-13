@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
+import { Location } from '@angular/common';
 
 interface TeamMember {
   name: string;
@@ -12,10 +13,22 @@ interface TeamMember {
   styleUrl: './about-page.component.scss',
 })
 export default class AboutPage {
+  @ViewChild('backBtn', { read: ElementRef }) backBtn!: ElementRef<HTMLButtonElement>;
+
+  private readonly location = inject(Location);
+
+  ngAfterViewInit() {
+    this.backBtn.nativeElement.focus();
+  }
+
   readonly teamMembers: TeamMember[] = [
     { name: 'Wiktor Piekarski', link: 'https://github.com/Vixoner' },
     { name: 'Jan Powęski', link: 'https://github.com/marg4ryn' },
     { name: 'Michał Sosnowski', link: 'https://github.com/SosnowskiMichal' },
     { name: 'Michał Wąsiński', link: 'https://github.com/micwasi15' },
   ];
+
+  close(): void {
+    this.location.back();
+  }
 }
