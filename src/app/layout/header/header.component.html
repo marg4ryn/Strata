@@ -1,6 +1,11 @@
-<button class="header__logo" title="Start a new analysis" aria-label="Start a new analysis">
+<button
+  class="header__logo"
+  title="Start a new analysis"
+  aria-label="Start a new analysis"
+  (click)="startNewAnalysis()"
+>
   <img src="/logo.svg" class="header__logo-icon" alt="" aria-hidden="true" />
-  <span>STRATA</span>
+  <span class="header__logo-text">Strata</span>
 </button>
 
 <div class="header__actions">

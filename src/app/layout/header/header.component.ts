@@ -7,14 +7,17 @@ import {
   effect,
   EnvironmentInjector,
   runInInjectionContext,
+  DestroyRef,
 } from '@angular/core';
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay';
 import { CdkPortal } from '@angular/cdk/portal';
+import { Router } from '@angular/router';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { NotificationPanel } from '@app/features/notifications/feature/notification-panel.component';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisHistoryPanel } from '@app/features/analysis-history/feature/analysis-history-panel.component';
+import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 
 interface PanelFacade {
   showPanel: () => boolean;
@@ -43,6 +46,9 @@ export class Header {
   @ViewChild('notifPortal') notifPortalRef!: CdkPortal;
   @ViewChild('historyPortal') historyPortalRef!: CdkPortal;
 
+  private readonly router = inject(Router);
+  private readonly confirmModal = inject(ConfirmOperationModalService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly notifications = inject(NotificationsFacade);
   protected readonly history = inject(AnalysisHistoryFacade);
   private readonly injector = inject(EnvironmentInjector);
@@ -72,6 +78,16 @@ export class Header {
         this.panels.forEach((p) => (p.facade.showPanel() ? this.attach(p) : this.detach(p)));
       });
     });
+  }
+
+  async startNewAnalysis(): Promise<void> {
+    const confirmed = await this.confirmModal.confirm(
+      this.destroyRef,
+      `Start a new analysis?`,
+      'confirm',
+    );
+    if (!confirmed) return;
+    this.router.navigate(['']);
   }
 
   private attach(entry: PanelEntry) {

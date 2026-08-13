@@ -42,6 +42,10 @@
   height: 40px;
 }
 
+.header__logo-text {
+  text-transform: uppercase;
+}
+
 .header__actions {
   display: flex;
   flex-direction: row;
