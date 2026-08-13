@@ -46,6 +46,11 @@ form {
   cursor: pointer;
 }
 
+.analysis-form__checkbox-label {
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
 .analysis-form__input:not([type='checkbox']) {
   padding: 10px 14px;
   border-radius: 6px;
