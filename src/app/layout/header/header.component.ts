@@ -96,6 +96,8 @@ export class Header {
     entry.overlayRef = this.overlay.create(this.panelConfig());
     entry.overlayRef.attach(entry.portal);
 
+    entry.overlayRef.detachments().subscribe(() => entry.facade.closePanel());
+
     entry.overlayRef.outsidePointerEvents().subscribe((event) => {
       const target = event.target as HTMLElement;
       const trigger = entry.trigger?.nativeElement;
@@ -122,6 +124,7 @@ export class Header {
   private panelConfig(): OverlayConfig {
     return {
       positionStrategy: this.overlay.position().global().top('0').right('0'),
+      scrollStrategy: this.overlay.scrollStrategies.close(),
       hasBackdrop: false,
     };
   }
