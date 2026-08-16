@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  color: white;
+  color: var(--text-secondary);
   border: 0;
   cursor: pointer;
   transition:
@@ -18,17 +18,16 @@
     transform 0.2s ease;
 
   &:hover {
-    color: var(--danger-primary);
+    color: var(--text-primary);
     transform: scale(1.2);
   }
 
   &:focus-visible {
-    color: var(--danger-primary);
+    color: var(--text-primary);
     transform: scale(1.05);
   }
 
   &:active {
-    color: var(--danger-active);
     transform: scale(0.9);
   }
 }
