@@ -5,16 +5,25 @@ import {
   inject,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideTransloco } from '@ngneat/transloco';
 
+import { routes } from './app.routes';
+import { translocoConfig } from './core/transloco/transloco.config';
+import { TranslocoHttpLoader } from './core/transloco/transloco-loader';
 import { NotificationsFacade } from './features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from './features/analysis-history/analysis-history.facade';
 import { AnalysisRunFacade } from './features/analysis-run/analysis-run.facade';
-import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideHttpClient(),
     provideRouter(routes),
+    provideTransloco({
+      config: translocoConfig,
+      loader: TranslocoHttpLoader,
+    }),
     provideAppInitializer(() => {
       const notifications = inject(NotificationsFacade);
       return notifications.loadNotifications();
