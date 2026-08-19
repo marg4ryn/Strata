@@ -9,16 +9,23 @@ export class LanguageStorageService {
   private readonly logger = inject(LoggerService);
   private readonly storage = inject(StorageService);
 
-  private readonly langPrefKey = 'langPref';
+  private readonly langPreferenceKey = 'langPreference';
 
-  getLangPref(): LangPreference | null {
-    const langPref = this.storage.getItem<LangPreference>(localStorage, this.langPrefKey);
-    this.logger.debug(`Language Storage Service returned langPref: ${langPref} from localStorage`);
-    return langPref;
+  getLangPreference(): LangPreference | null {
+    const langPreference = this.storage.getItem<LangPreference>(
+      localStorage,
+      this.langPreferenceKey,
+    );
+    this.logger.debug(
+      `Language Storage Service returned langPreference: ${langPreference} from localStorage`,
+    );
+    return langPreference;
   }
 
-  saveLangPref(langPref: LangPreference): void {
-    this.storage.setItem<LangPreference>(localStorage, this.langPrefKey, langPref);
-    this.logger.info(`Language Storage Service saved langPref: ${langPref} to localStorage`);
+  saveLangPreference(langPreference: LangPreference): void {
+    this.storage.setItem<LangPreference>(localStorage, this.langPreferenceKey, langPreference);
+    this.logger.info(
+      `Language Storage Service saved langPreference: ${langPreference} to localStorage`,
+    );
   }
 }

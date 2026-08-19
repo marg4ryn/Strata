@@ -41,29 +41,29 @@ describe('LanguageStorageService', () => {
     vi.restoreAllMocks();
   });
 
-  const langPref = 'en';
-  const langPrefKey = 'langPref';
+  const langPreference = 'en';
+  const langPreferenceKey = 'langPreference';
 
-  describe('getLangPref', () => {
-    it('returns langPref', () => {
-      storage.getItem.mockReturnValue(langPref);
-      const res = service.getLangPref();
-      expect(res).toBe(langPref);
-      expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPrefKey);
+  describe('getLangPreference', () => {
+    it('returns langPreference', () => {
+      storage.getItem.mockReturnValue(langPreference);
+      const res = service.getLangPreference();
+      expect(res).toBe(langPreference);
+      expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPreferenceKey);
     });
 
     it('returns null when storage is empty', () => {
       storage.getItem.mockReturnValue(null);
-      const res = service.getLangPref();
+      const res = service.getLangPreference();
       expect(res).toBeNull();
-      expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPrefKey);
+      expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPreferenceKey);
     });
   });
 
-  describe('saveLangPref', () => {
-    it('saves langPref', () => {
-      service.saveLangPref(langPref);
-      expect(storage.setItem).toHaveBeenCalledWith(localStorage, langPrefKey, langPref);
+  describe('saveLangPreference', () => {
+    it('saves langPreference', () => {
+      service.saveLangPreference(langPreference);
+      expect(storage.setItem).toHaveBeenCalledWith(localStorage, langPreferenceKey, langPreference);
     });
   });
 });
