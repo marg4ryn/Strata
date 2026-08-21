@@ -25,4 +25,26 @@ If an error occurs or the WebSocket connection is interrupted, the application a
 
 | Target Form | Loading Screen | Analysis Error | Unfinished Analysis |
 |:---:|:---:|:---:|:---:|
-| <img src="./docs/analysis-run/screens/target_form.png" width="200"/> | <img src="./docs/analysis-run/screens/loading_screen.png" width="200"/> | <img src="./docs/analysis-run/screens/analysis_error.png" width="200"/> | <img src="./docs/analysis-run/screens/unfinished_analysis.png" width="200"/> |
+| <img src="./docs/analysis-run/screens/target_form.png" width="152"/> | <img src="./docs/analysis-run/screens/loading_screen.png" width="152"/> | <img src="./docs/analysis-run/screens/analysis_error.png" width="152"/> | <img src="./docs/analysis-run/screens/unfinished_analysis.png" width="152"/> |
+
+
+### Additional Features
+
+Users can access several application panels directly from the header. All panels are implemented using Angular CDK Overlay, which keeps them independent from the main application layout while providing consistent behavior and accessibility.
+
+Important actions trigger notifications that inform users about the result of an operation. Notifications indicate the message type (`success`, `info`, `warn`, or `error`) and the number of unread notifications is displayed in the application header (see the **Notifications** below).
+
+Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below).
+
+The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below).
+
+| Notifications | Analysis History | Settings |
+|:---:|:---:|:---:|
+| <img src="./docs/common/notifications.png" width="220"/> | <img src="./docs/common/analysis_history.png" width="220"/> | <img src="./docs/common/settings.png" width="220"/> |
+
+
+Users interested in the application can visit the About page, accessible from the footer of the interface. It presents the development team behind the project and the technology stack used to build the system, and it also documents the tool’s limitations to help users better understand Strata’s purpose and scope (see the **About** below).
+
+| About |
+|:---:|
+| <img src="./docs/common/about.png" width="700"/> |
