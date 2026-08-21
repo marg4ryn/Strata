@@ -10,7 +10,12 @@ describe('SettingsStoreService', () => {
     service = TestBed.inject(SettingsStoreService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('initially sets showPanel to false', () => {
+    expect(service.showPanel()).toBeFalsy();
+  });
+
+  it('updates computed signals', () => {
+    service.showPanel.set(true);
+    expect(service.showPanel()).toBeTruthy();
   });
 });
