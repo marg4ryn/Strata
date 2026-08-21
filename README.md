@@ -25,7 +25,7 @@ If an error occurs or the WebSocket connection is interrupted, the application a
 
 | Target Form | Loading Screen | Analysis Error | Unfinished Analysis |
 |:---:|:---:|:---:|:---:|
-| <img src="./docs/analysis-run/screens/target_form.png" width="152"/> | <img src="./docs/analysis-run/screens/loading_screen.png" width="152"/> | <img src="./docs/analysis-run/screens/analysis_error.png" width="152"/> | <img src="./docs/analysis-run/screens/unfinished_analysis.png" width="152"/> |
+| <img src="./docs/analysis-run/screens/target_form.png" width="200"/> | <img src="./docs/analysis-run/screens/loading_screen.png" width="200"/> | <img src="./docs/analysis-run/screens/analysis_error.png" width="200"/> | <img src="./docs/analysis-run/screens/unfinished_analysis.png" width="200"/> |
 
 
 ### Additional Features
@@ -40,11 +40,11 @@ The settings panel allows users to change the application language between Engli
 
 | Notifications | Analysis History | Settings |
 |:---:|:---:|:---:|
-| <img src="./docs/common/notifications.png" width="220"/> | <img src="./docs/common/analysis_history.png" width="220"/> | <img src="./docs/common/settings.png" width="220"/> |
+| <img src="./docs/common/notifications.png" width="300"/> | <img src="./docs/common/analysis_history.png" width="300"/> | <img src="./docs/common/settings.png" width="300"/> |
 
 
 Users interested in the application can visit the About page, accessible from the footer of the interface. It presents the development team behind the project and the technology stack used to build the system, and it also documents the tool’s limitations to help users better understand Strata’s purpose and scope (see the **About** below).
 
 | About |
 |:---:|
-| <img src="./docs/common/about.png" width="700"/> |
+| <img src="./docs/common/about.png" width="900"/> |
