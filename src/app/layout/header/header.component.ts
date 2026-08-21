@@ -17,6 +17,8 @@ import { NotificationsFacade } from '@app/features/notifications/notifications.f
 import { NotificationPanel } from '@app/features/notifications/feature/notification-panel.component';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisHistoryPanel } from '@app/features/analysis-history/feature/analysis-history-panel.component';
+import { SettingsFacade } from '@app/features/settings/settings.facade';
+import { SettingsPanel } from '@app/features/settings/feature/settings-panel/settings-panel.component';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 
 interface PanelFacade {
@@ -34,7 +36,7 @@ interface PanelEntry {
 
 @Component({
   selector: 'app-header',
-  imports: [CdkPortal, NotificationPanel, AnalysisHistoryPanel],
+  imports: [CdkPortal, NotificationPanel, AnalysisHistoryPanel, SettingsPanel],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -42,15 +44,18 @@ interface PanelEntry {
 export class Header {
   @ViewChild('notifBtn', { read: ElementRef }) notifBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('historyBtn', { read: ElementRef }) historyBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('settingsBtn', { read: ElementRef }) settingsBtn!: ElementRef<HTMLButtonElement>;
 
   @ViewChild('notifPortal') notifPortalRef!: CdkPortal;
   @ViewChild('historyPortal') historyPortalRef!: CdkPortal;
+  @ViewChild('settingsPortal') settingsPortalRef!: CdkPortal;
 
   private readonly router = inject(Router);
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly notifications = inject(NotificationsFacade);
   protected readonly history = inject(AnalysisHistoryFacade);
+  protected readonly settings = inject(SettingsFacade);
   private readonly injector = inject(EnvironmentInjector);
 
   private panels: PanelEntry[] = [];
@@ -69,6 +74,12 @@ export class Header {
         facade: this.history,
         portal: this.historyPortalRef,
         trigger: this.historyBtn,
+        overlayRef: null,
+      },
+      {
+        facade: this.settings,
+        portal: this.settingsPortalRef,
+        trigger: this.settingsBtn,
         overlayRef: null,
       },
     ];
@@ -102,8 +113,12 @@ export class Header {
       const target = event.target as HTMLElement;
       const trigger = entry.trigger?.nativeElement;
 
-      if (trigger && trigger.contains(target)) return;
-      if (target.closest('.cdk-overlay-pane')) return;
+      const clickedInsideTrigger = trigger?.contains(target);
+      const clickedInsideOverlay = target.closest('.cdk-overlay-container') !== null;
+
+      if (clickedInsideTrigger || clickedInsideOverlay) {
+        return;
+      }
 
       entry.facade.closePanel();
     });
@@ -148,6 +163,15 @@ export class Header {
     } else {
       this.closeOthers(this.history);
       this.history.openPanel();
+    }
+  }
+
+  toggleSettingsPanel(): void {
+    if (this.settings.showPanel()) {
+      this.settings.closePanel();
+    } else {
+      this.closeOthers(this.settings);
+      this.settings.openPanel();
     }
   }
 }
