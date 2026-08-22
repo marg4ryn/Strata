@@ -1,6 +1,6 @@
 import { Service, signal, inject } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { AnalysisStatusKey, PendingAnalysis, ErrorType } from '../../analysis-run.model';
 
 @Service()

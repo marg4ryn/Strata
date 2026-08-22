@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { NotificationsStoreService } from './notifications-store.service';
 import { Notification } from '../../notifications.model';
 

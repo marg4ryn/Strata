@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 
 @Service()
 export class AnalysisRunLockService {

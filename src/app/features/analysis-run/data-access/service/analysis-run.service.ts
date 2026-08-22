@@ -1,7 +1,7 @@
 import { Service, inject, effect, untracked } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisHistoryEntry } from '@app/features/analysis-history/analysis-history.model';

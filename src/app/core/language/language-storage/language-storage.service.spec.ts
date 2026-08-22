@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { StorageService } from '@app/core/storage/storage.service';
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { LanguageStorageService } from './language-storage.service';
 
 describe('LanguageStorageService', () => {

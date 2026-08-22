@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { AnalysisRunStoreService } from './analysis-run-store.service';
 import { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 

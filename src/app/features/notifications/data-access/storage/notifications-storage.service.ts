@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { StorageService } from '@app/core/storage/storage.service';
 import { Notification } from '../../notifications.model';
 

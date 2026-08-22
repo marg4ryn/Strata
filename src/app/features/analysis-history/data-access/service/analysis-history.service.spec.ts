@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
 import { AnalysisHistoryService } from './analysis-history.service';
 import { AnalysisHistoryStoreService } from '../store/analysis-history-store.service';

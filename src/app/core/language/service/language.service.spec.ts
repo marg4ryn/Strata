@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import type { LangPreference } from '../language.model';
 import { LanguageService } from './language.service';
 import { LanguageStoreService } from '../language-store/language-store.service';

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { StorageService } from '@app/core/storage/storage.service';
 import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
 import { AnalysisHistoryStorageService } from './analysis-history-storage.service';

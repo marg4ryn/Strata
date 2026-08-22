@@ -1,7 +1,7 @@
 import { Service, inject } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { LanguageStoreService } from '../language-store/language-store.service';

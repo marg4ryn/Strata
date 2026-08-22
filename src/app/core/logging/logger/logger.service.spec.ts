@@ -3,7 +3,7 @@ import { MockInstance } from 'vitest';
 
 import { environment } from '@env/environment';
 import { LoggerService } from './logger.service';
-import { LogLevel } from './logger.enum';
+import { LogLevel } from '../logger.enum';
 
 vi.mock('@env/environment', () => ({
   environment: {

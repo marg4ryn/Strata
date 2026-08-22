@@ -1,7 +1,7 @@
 import { Service, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
 import { AnalysisHistoryStoreService } from '../store/analysis-history-store.service';
 import { AnalysisHistoryStorageService } from '../storage/analysis-history-storage.service';
 import { AnalysisHistoryEntry } from '../../analysis-history.model';
