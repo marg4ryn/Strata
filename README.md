@@ -40,7 +40,7 @@ The settings panel allows users to change the application language between Engli
 
 | Notifications | Analysis History | Settings |
 |:---:|:---:|:---:|
-| <img src="./docs/common/notifications.png" width="300"/> | <img src="./docs/common/analysis_history.png" width="300"/> | <img src="./docs/common/settings.png" width="300"/> |
+| <img src="./docs/screens/notifications.png" width="300"/> | <img src="./docs/screens/analysis_history.png" width="300"/> | <img src="./docs/screens/settings.png" width="300"/> |
 
 
 ### About Page
@@ -49,4 +49,4 @@ Users interested in the application can visit the About Page, accessible from th
 
 | About Page |
 |:---:|
-| <img src="./docs/common/about.png" width="900"/> |
+| <img src="./docs/screens/about.png" width="900"/> |
