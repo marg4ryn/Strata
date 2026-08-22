@@ -1,35 +1,40 @@
-# Struktura katalogów aplikacji
+# Application Directory Structure
 
-## Katalogi główne
+## Main Directories
 
-* `app/core/` — infrastruktura aplikacji, obejmująca serwisy singleton, interceptory oraz guardy. Są to elementy ładowane raz, na poziomie całej aplikacji.
-* `app/features/` — poszczególne funkcjonalności biznesowe, z których każda znajduje się w osobnym podfolderze.
-* `app/layout/` — komponenty odpowiedzialne za układ strony, takie jak header i footer.
-* `app/shared/` — dyrektywy, komponenty i serwisy wielokrotnego użytku, niezwiązane z jedną konkretną domeną.
+* `app/core/` — application infrastructure, including singleton services, interceptors, and guards. These are elements loaded once at the application level.
 
-## Struktura katalogu feature'u
+* `app/features/` — individual business functionalities, each located in a separate subdirectory.
 
-Każdy feature w `app/features/` ma następującą strukturę:
+* `app/layout/` — components responsible for the page layout, such as the header and footer.
 
-* `data-access/` — logika dostępu do danych, w tym serwisy komunikujące się z API, store'y i resolvery.
-* `feature/` — smart components — komponenty realizujące logikę biznesową feature'u.
-* `ui/` — dumb components — komponenty prezentacyjne, specyficzne dla danego feature'u.
-* `utils/` — funkcje pomocnicze, typy i mapery niezwiązane bezpośrednio z konkretną klasą.
+* `app/shared/` — reusable directives, components, and services that are not related to a specific domain.
 
+## Feature Directory Structure
 
-# Organizacja artefaktów aplikacji
+Each feature in `app/features/` has the following structure:
 
-## Artefakty klasowe
+* `data-access/` — data access logic, including services communicating with the API, stores, and resolvers.
 
-Każda klasa, np. `Service`, `Component`, `Directive`, `Pipe`, `Guard`, `Resolver` czy `Interceptor`, powinna znajdować się we własnym katalogu nazwanym tak jak klasa, bez sufiksu określającego jej typ.
+* `feature/` — smart components — components responsible for the feature's business logic.
 
-W tym samym katalogu należy umieścić:
+* `ui/` — dumb components — presentational components specific to the given feature.
 
-* plik implementacji,
-* plik testów `.spec.ts`,
-* pliki towarzyszące, np. `.html` i `.scss`.
+* `utils/` — utility functions, types, and mappers not directly related to a specific class.
 
-Przykład:
+# Application Artifact Organization
+
+## Class Artifacts
+
+Each class, such as `Service`, `Component`, `Directive`, `Pipe`, `Guard`, `Resolver`, or `Interceptor`, should be placed in its own directory named after the class, without the suffix identifying its type.
+
+The same directory should contain:
+
+* the implementation file,
+* the `.spec.ts` test file,
+* accompanying files, such as `.html` and `.scss`.
+
+Example:
 
 ```text
 user-profile/
@@ -39,11 +44,11 @@ user-profile/
 └── user-profile.component.scss
 ```
 
-### Wyjątek 1 — główny serwis feature'u lub modułu core
+### Exception 1 — Main Feature or Core Module Service
 
-Dla głównego serwisu feature'u lub modułu `core/` należy używać katalogu `service/`. Nazwa ta określa rolę katalogu, a nie domenę. Strukturalnie taki katalog występuje zawsze jako pojedynczy element.
+The main service of a feature or the `core/` module should be placed in a `service/` directory. The name describes the role of the directory rather than the domain. Structurally, there is always exactly one such directory.
 
-Przykład:
+Example:
 
 ```text
 user/
@@ -52,20 +57,20 @@ user/
     └── user.service.spec.ts
 ```
 
-### Wyjątek 2 — pomijanie katalogu klasy
+### Exception 2 — Omitting the Class Directory
 
-Katalog klasy można pominąć, jeśli nadrzędny kontener jednoznacznie wskazuje, do jakiej klasy należą pliki.
+The class directory can be omitted when the parent container clearly indicates which class the files belong to.
 
-Dotyczy to:
+This applies to:
 
-* pojedynczego komponentu w katalogu `ui/` lub `feature/`,
-* fasady umieszczonej w katalogu głównym feature'u lub modułu `core/`.
+* a single component in the `ui/` or `feature/` directory,
+* a facade located in the root directory of a feature or the `core/` module.
 
-## Artefakty nieklasowe
+## Non-Class Artifacts
 
-Pliki, które nie definiują klas, np. `model.ts`, `*.config.ts` czy `routes.ts`, należy umieszczać na poziomie modułu, poza katalogami klas.
+Files that do not define classes, such as `model.ts`, `*.config.ts`, or `routes.ts`, should be placed at the module level, outside class directories.
 
-Przykład:
+Example:
 
 ```text
 user/
