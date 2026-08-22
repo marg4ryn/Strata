@@ -2,7 +2,15 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkListbox } from '@angular/cdk/listbox';
 import { CdkListboxModule } from '@angular/cdk/listbox';
 import { A11yModule } from '@angular/cdk/a11y';
-import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+  viewChild,
+  ElementRef,
+  output,
+} from '@angular/core';
 
 import { LanguageFacade } from '@app/core/language/language.facade';
 import type { LangPreference } from '@app/core/language/language.model';
@@ -21,7 +29,13 @@ interface LangOption {
 })
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);
+
   private readonly listbox = viewChild.required(CdkListbox);
+  private readonly triggerBtn = viewChild.required('triggerBtn', {
+    read: ElementRef<HTMLButtonElement>,
+  });
+
+  readonly openedChange = output<boolean>();
 
   readonly current = this.facade.langPreference;
   readonly isOpen = signal(false);
@@ -42,10 +56,16 @@ export class LanguageSwitcherComponent {
 
   toggle(): void {
     this.isOpen.update((open) => !open);
+    this.openedChange.emit(this.isOpen());
   }
 
   close(): void {
     this.isOpen.set(false);
+    this.openedChange.emit(false);
+    setTimeout(() => {
+      const btn = this.triggerBtn();
+      btn?.nativeElement.focus();
+    }, 0);
   }
 
   select(values: readonly LangPreference[]): void {

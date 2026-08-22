@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 
 import { SettingsFacade } from '../../settings.facade';
@@ -14,4 +14,6 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
 })
 export class SettingsPanel {
   protected readonly facade = inject(SettingsFacade);
+
+  readonly innerOverlayOpen = signal(false);
 }

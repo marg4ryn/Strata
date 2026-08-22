@@ -1,4 +1,9 @@
-<div class="settings-panel" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+<div
+  class="settings-panel"
+  cdkTrapFocus
+  [cdkTrapFocus]="!innerOverlayOpen()"
+  [cdkTrapFocusAutoCapture]="true"
+>
   <div class="settings-panel__header">
     <span class="settings-panel__title">Settings</span>
 
@@ -30,7 +35,7 @@
 
   <div class="settings-panel__list">
     <app-settings-section label="Language">
-      <app-language-switcher />
+      <app-language-switcher (openedChange)="innerOverlayOpen.set($event)" />
     </app-settings-section>
   </div>
 </div>

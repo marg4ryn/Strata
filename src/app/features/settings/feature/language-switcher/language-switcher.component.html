@@ -1,8 +1,9 @@
 <button
   type="button"
+  #triggerBtn
+  #trigger="cdkOverlayOrigin"
   class="lang-switcher__trigger"
   cdkOverlayOrigin
-  #trigger="cdkOverlayOrigin"
   [attr.aria-expanded]="isOpen()"
   aria-haspopup="listbox"
   (click)="toggle()"
@@ -40,6 +41,8 @@
     <ul
       class="lang-switcher__panel"
       cdkListbox
+      (keydown.enter)="close()"
+      (keydown.space)="close()"
       [cdkListboxValue]="[current()]"
       (cdkListboxValueChange)="select($event.value)"
     >
