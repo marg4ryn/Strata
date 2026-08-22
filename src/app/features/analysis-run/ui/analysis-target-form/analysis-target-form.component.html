@@ -11,13 +11,14 @@
       type="url"
       id="analysisTargetURL"
       class="analysis-form__input"
+      aria-describedby="target-url-errors"
       placeholder="https://github.com/JohnDoe/Project.git"
       [formField]="analysisTargetForm.targetURL"
       [class.invalid]="isInvalid(analysisTargetForm.targetURL)"
     />
 
     @if (analysisTargetForm.targetURL().touched() && analysisTargetForm.targetURL().invalid()) {
-      <ul class="analysis-form__error-list">
+      <ul id="target-url-errors" class="analysis-form__error-list" role="alert">
         @for (error of analysisTargetForm.targetURL().errors(); track error.message) {
           <li>{{ error.message }}</li>
         }
@@ -43,6 +44,7 @@
             <input
               type="date"
               class="analysis-form__input"
+              aria-describedby="start-date-errors"
               [formField]="analysisTargetForm.startDate"
               [class.invalid]="isInvalid(analysisTargetForm.startDate)"
             />
@@ -50,6 +52,7 @@
             <input
               type="date"
               class="analysis-form__input"
+              aria-describedby="end-date-errors"
               [formField]="analysisTargetForm.endDate"
               [class.invalid]="isInvalid(analysisTargetForm.endDate)"
             />
@@ -58,7 +61,7 @@
           @if (
             analysisTargetForm.startDate().touched() && analysisTargetForm.startDate().invalid()
           ) {
-            <ul class="analysis-form__error-list">
+            <ul id="start-date-errors" class="analysis-form__error-list" role="alert">
               @for (error of analysisTargetForm.startDate().errors(); track $index) {
                 <li>{{ errorMessage(error) }}</li>
               }
@@ -66,7 +69,7 @@
           }
 
           @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
-            <ul class="analysis-form__error-list">
+            <ul id="end-date-errors" class="analysis-form__error-list" role="alert">
               @for (error of analysisTargetForm.endDate().errors(); track $index) {
                 <li>{{ errorMessage(error) }}</li>
               }

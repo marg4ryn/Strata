@@ -8,7 +8,7 @@
     (click)="removeHistoryEntry($event)"
     (keydown)="handleRemoveHistoryEntryKeydown($event)"
   >
-    <svg width="14" height="14" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+    <svg width="14" height="14" viewBox="0 0 90 90" aria-hidden="true">
       <path
         d="M 73.771 19.39 c -0.378 -0.401 -0.904 -0.628 -1.455 -0.628 H 17.685 c -0.551 0 -1.077 0.227 -1.455 0.628 c -0.378 0.4 -0.574 0.939 -0.542 1.489 l 3.637 62.119 C 19.555 86.924 22.816 90 26.75 90 h 36.499 c 3.934 0 7.195 -3.076 7.427 -7.003 l 3.637 -62.119 C 74.344 20.329 74.148 19.79 73.771 19.39 z"
       />
@@ -39,7 +39,14 @@
 
   @if (hasDateRange()) {
     <span class="history-item__range">
-      <svg class="history-item__range-icon" width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <svg
+        class="history-item__range-icon"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
         <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
         <path
           d="M3 10h18M8 2v4M16 2v4"

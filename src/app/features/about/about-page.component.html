@@ -8,6 +8,7 @@
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
+    aria-hidden="true"
   >
     <line x1="16" y1="4" x2="4" y2="16"></line>
     <line x1="4" y1="4" x2="16" y2="16"></line>
@@ -25,7 +26,7 @@
   <div class="about__content">
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <path d="M2 17l10-4 10 4-10 4z" fill="#744009" />
           <path d="M2 12l10-4 10 4-10 4z" fill="#b8620d" />
           <path d="M2 7l10-4 10 4-10 4z" fill="#f59e0b" />
@@ -48,7 +49,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <rect x="2" y="12" width="4" height="10" fill="#6b3809" />
           <rect x="7" y="6" width="4" height="16" fill="#b8620d" />
           <rect x="12" y="10" width="4" height="12" fill="#6b3809" />
@@ -71,7 +72,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <circle cx="12" cy="12" r="10" stroke="#b8232e" stroke-width="2" fill="none" />
           <line x1="12" y1="0" x2="12" y2="24" stroke="#b8232e" stroke-width="2" />
           <line x1="0" y1="12" x2="24" y2="12" stroke="#b8232e" stroke-width="2" />
@@ -93,7 +94,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <circle cx="8" cy="7" r="3" fill="#9a948a" />
           <path d="M2 21c0-4 3-6 6-6s6 2 6 6" fill="#9a948a" />
           <circle cx="17" cy="8" r="2.5" fill="#5c574e" />
@@ -114,7 +115,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <path
             d="M2 12c2.5-5 7-8 10-8s7.5 3 10 8c-2.5 5-7 8-10 8s-7.5-3-10-8z"
             stroke="#9a948a"
@@ -142,7 +143,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <circle cx="12" cy="12" r="9" stroke="#b8232e" stroke-width="2" fill="none" />
           <line x1="6" y1="6" x2="18" y2="18" stroke="#b8232e" stroke-width="2" />
         </svg>
@@ -171,6 +172,7 @@
           fill="none"
           stroke="#22c55e"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -340,13 +342,7 @@
 
     <article class="about__section">
       <h3 class="about__section-title">
-        <svg
-          viewBox="0 0 24 24"
-          width="32"
-          height="32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
           <circle cx="8" cy="9" r="3" stroke="#f59e0b" stroke-width="1.5" />
           <circle cx="16" cy="9" r="3" stroke="#f59e0b" stroke-width="1.5" />
           <path d="M2.5 21c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#f59e0b" stroke-width="1.5" />
@@ -364,13 +360,7 @@
         @for (member of teamMembers; track member.name) {
           <li class="about__list-item--member">
             <a [href]="member.link" target="_blank" class="about__member-link">
-              <svg
-                viewBox="0 0 24 24"
-                width="32"
-                height="32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" aria-hidden="true">
                 <circle cx="12" cy="12" r="11" stroke="#f59e0b" stroke-width="1.5" />
                 <circle cx="12" cy="9" r="3" stroke="#f59e0b" stroke-width="1.5" />
                 <path

@@ -4,8 +4,8 @@
   #trigger="cdkOverlayOrigin"
   class="lang-switcher__trigger"
   cdkOverlayOrigin
-  [attr.aria-expanded]="isOpen()"
   aria-haspopup="listbox"
+  [attr.aria-expanded]="isOpen()"
   (click)="toggle()"
 >
   <span>{{ currentLabel }}</span>
@@ -29,22 +29,22 @@
 
 <ng-template
   cdkConnectedOverlay
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen()"
   [cdkConnectedOverlayHasBackdrop]="true"
-  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
   (backdropClick)="close()"
   (detach)="close()"
   (attach)="onOverlayAttached()"
 >
   <div class="lang-switcher__panel-wrapper" cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
     <ul
-      class="lang-switcher__panel"
       cdkListbox
+      class="lang-switcher__panel"
+      (cdkListboxValueChange)="select($event.value)"
+      [cdkListboxValue]="[current()]"
       (keydown.enter)="close()"
       (keydown.space)="close()"
-      [cdkListboxValue]="[current()]"
-      (cdkListboxValueChange)="select($event.value)"
     >
       @for (option of options; track option.value) {
         <li class="lang-switcher__option" [cdkOption]="option.value">
