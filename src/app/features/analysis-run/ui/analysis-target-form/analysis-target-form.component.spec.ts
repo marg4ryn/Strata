@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AnalysisTargetForm } from './analysis-target-form.component';
+import { AnalysisTargetFormComponent } from './analysis-target-form.component';
 
-describe('AnalysisTargetForm', () => {
-  let fixture: ComponentFixture<AnalysisTargetForm>;
-  let component: AnalysisTargetForm;
+describe('AnalysisTargetFormComponent', () => {
+  let fixture: ComponentFixture<AnalysisTargetFormComponent>;
+  let component: AnalysisTargetFormComponent;
 
   beforeEach(async () => {
     vi.useFakeTimers();
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisTargetForm],
+      imports: [AnalysisTargetFormComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisTargetForm);
+    fixture = TestBed.createComponent(AnalysisTargetFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

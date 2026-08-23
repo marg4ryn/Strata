@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './repository-details.component.html',
   styleUrl: './repository-details.component.scss',
 })
-export class RepositoryDetails {}
+export class RepositoryDetailsComponent {}

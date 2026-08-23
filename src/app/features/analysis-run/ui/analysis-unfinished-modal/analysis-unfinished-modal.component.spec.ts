@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { AnalysisUnfinishedModal } from './analysis-unfinished-modal.component';
+import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
-describe('AnalysisUnfinishedModal', () => {
-  let component: AnalysisUnfinishedModal;
-  let fixture: ComponentFixture<AnalysisUnfinishedModal>;
+describe('AnalysisUnfinishedModalComponent', () => {
+  let component: AnalysisUnfinishedModalComponent;
+  let fixture: ComponentFixture<AnalysisUnfinishedModalComponent>;
   let confirmModal: { confirm: ReturnType<typeof vi.fn> };
 
   const range: DateRange = {
@@ -30,11 +30,11 @@ describe('AnalysisUnfinishedModal', () => {
     confirmModal = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisUnfinishedModal],
+      imports: [AnalysisUnfinishedModalComponent],
       providers: [{ provide: ConfirmOperationModalService, useValue: confirmModal }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisUnfinishedModal);
+    fixture = TestBed.createComponent(AnalysisUnfinishedModalComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

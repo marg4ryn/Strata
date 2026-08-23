@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
-import { AnalysisRunPage } from './analysis-run-page.component';
+import { AnalysisRunPageComponent } from './analysis-run-page.component';
 import { AnalysisRunFacade } from '../analysis-run.facade';
 import {
   AnalysisStatus,
@@ -11,9 +11,9 @@ import {
   PendingAnalysis,
 } from '../analysis-run.model';
 
-describe('AnalysisRunPage', () => {
-  let component: AnalysisRunPage;
-  let fixture: ComponentFixture<AnalysisRunPage>;
+describe('AnalysisRunPageComponent', () => {
+  let component: AnalysisRunPageComponent;
+  let fixture: ComponentFixture<AnalysisRunPageComponent>;
   let overlayContainer: OverlayContainer;
   let overlayContainerElement: HTMLElement;
 
@@ -51,11 +51,11 @@ describe('AnalysisRunPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisRunPage],
+      imports: [AnalysisRunPageComponent],
       providers: [{ provide: AnalysisRunFacade, useValue: facade }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisRunPage);
+    fixture = TestBed.createComponent(AnalysisRunPageComponent);
     overlayContainer = TestBed.inject(OverlayContainer);
     overlayContainerElement = overlayContainer.getContainerElement();
     component = fixture.componentInstance;

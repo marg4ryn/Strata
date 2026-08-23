@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { AnalysisProgressSpinner } from './analysis-progress-spinner.component';
+import { AnalysisProgressSpinnerComponent } from './analysis-progress-spinner.component';
 
-describe('AnalysisProgressSpinner', () => {
-  let component: AnalysisProgressSpinner;
-  let fixture: ComponentFixture<AnalysisProgressSpinner>;
+describe('AnalysisProgressSpinnerComponent', () => {
+  let component: AnalysisProgressSpinnerComponent;
+  let fixture: ComponentFixture<AnalysisProgressSpinnerComponent>;
   let confirmModal: { confirm: ReturnType<typeof vi.fn> };
   let focusMonitor: {
     focusVia: ReturnType<typeof vi.fn>;
@@ -18,14 +18,14 @@ describe('AnalysisProgressSpinner', () => {
     focusMonitor = { focusVia: vi.fn(), stopMonitoring: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisProgressSpinner],
+      imports: [AnalysisProgressSpinnerComponent],
       providers: [
         { provide: ConfirmOperationModalService, useValue: confirmModal },
         { provide: FocusMonitor, useValue: focusMonitor },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisProgressSpinner);
+    fixture = TestBed.createComponent(AnalysisProgressSpinnerComponent);
     component = fixture.componentInstance;
   });
 

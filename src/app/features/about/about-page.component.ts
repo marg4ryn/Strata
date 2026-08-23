@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 
 interface TeamMember {
@@ -12,7 +12,7 @@ interface TeamMember {
   templateUrl: './about-page.component.html',
   styleUrl: './about-page.component.scss',
 })
-export default class AboutPage {
+export default class AboutPageComponent implements AfterViewInit {
   @ViewChild('backBtn', { read: ElementRef }) backBtn!: ElementRef<HTMLButtonElement>;
 
   private readonly location = inject(Location);

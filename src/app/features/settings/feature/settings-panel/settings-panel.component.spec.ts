@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal, input } from '@angular/core';
 
-import { SettingsPanel } from './settings-panel.component';
+import { SettingsPanelComponent } from './settings-panel.component';
 import { SettingsFacade } from '../../settings.facade';
 import { SettingsSectionComponent } from '../../ui/settings-section.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
@@ -20,9 +20,9 @@ class SettingsSectionStub {
 })
 class LanguageSwitcherStub {}
 
-describe('SettingsPanel', () => {
-  let component: SettingsPanel;
-  let fixture: ComponentFixture<SettingsPanel>;
+describe('SettingsPanelComponent', () => {
+  let component: SettingsPanelComponent;
+  let fixture: ComponentFixture<SettingsPanelComponent>;
 
   let facade: {
     showPanel: ReturnType<typeof signal<boolean>>;
@@ -36,7 +36,7 @@ describe('SettingsPanel', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SettingsPanel],
+      imports: [SettingsPanelComponent],
       providers: [
         {
           provide: SettingsFacade,
@@ -44,7 +44,7 @@ describe('SettingsPanel', () => {
         },
       ],
     })
-      .overrideComponent(SettingsPanel, {
+      .overrideComponent(SettingsPanelComponent, {
         remove: {
           imports: [SettingsSectionComponent, LanguageSwitcherComponent],
         },
@@ -54,7 +54,7 @@ describe('SettingsPanel', () => {
       })
       .compileComponents();
 
-    fixture = TestBed.createComponent(SettingsPanel);
+    fixture = TestBed.createComponent(SettingsPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

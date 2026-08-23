@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { NotificationsFacade } from './notifications.facade';
-import { NotificationsStoreService } from './data-access/store/notifications-store.service';
-import { NotificationsService } from './data-access/service/notifications.service';
+import { NotificationsStoreService } from './data-access/notifications-store/notifications-store.service';
+import { NotificationsService } from './data-access/notifications/notifications.service';
 import { Notification } from './notifications.model';
 
 describe('NotificationsFacade', () => {

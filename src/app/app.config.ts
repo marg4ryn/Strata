@@ -10,7 +10,7 @@ import { provideTransloco } from '@ngneat/transloco';
 
 import { routes } from './app.routes';
 import { translocoConfig } from './core/transloco/transloco.config';
-import { TranslocoHttpLoaderService } from './core/transloco/transloco-http-loader/transloco-http-loader.service';
+import { TranslocoLoaderService } from './core/transloco/transloco-loader.service';
 import { LanguageFacade } from './core/language/language.facade';
 import { NotificationsFacade } from './features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from './features/analysis-history/analysis-history.facade';
@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideTransloco({
       config: translocoConfig,
-      loader: TranslocoHttpLoaderService,
+      loader: TranslocoLoaderService,
     }),
     provideAppInitializer(() => {
       const language = inject(LanguageFacade);

@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { AnalysisRunFacade } from './analysis-run.facade';
-import { AnalysisRunStoreService } from './data-access/store/analysis-run-store.service';
-import { AnalysisRunService } from './data-access/service/analysis-run.service';
+import { AnalysisRunStoreService } from './data-access/analysis-run-store/analysis-run-store.service';
+import { AnalysisRunService } from './data-access/analysis-run/analysis-run.service';
 import {
   AnalysisTargetFormModel,
   AnalysisStatusKey,

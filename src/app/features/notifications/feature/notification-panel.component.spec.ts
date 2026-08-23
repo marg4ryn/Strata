@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { NotificationsFacade } from '../notifications.facade';
-import { NotificationPanel } from './notification-panel.component';
+import { NotificationPanelComponent } from './notification-panel.component';
 import { Notification } from '../notifications.model';
 
-describe('NotificationPanel', () => {
-  let component: NotificationPanel;
-  let fixture: ComponentFixture<NotificationPanel>;
+describe('NotificationPanelComponent', () => {
+  let component: NotificationPanelComponent;
+  let fixture: ComponentFixture<NotificationPanelComponent>;
 
   let facade: {
     showPanel: ReturnType<typeof signal<boolean>>;
@@ -34,11 +34,11 @@ describe('NotificationPanel', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [NotificationPanel],
+      imports: [NotificationPanelComponent],
       providers: [{ provide: NotificationsFacade, useValue: facade }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NotificationPanel);
+    fixture = TestBed.createComponent(NotificationPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

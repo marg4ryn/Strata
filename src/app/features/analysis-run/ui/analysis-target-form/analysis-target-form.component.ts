@@ -23,7 +23,7 @@ import { AnalysisTargetFormModel } from '../../analysis-run.model';
   templateUrl: './analysis-target-form.component.html',
   styleUrl: './analysis-target-form.component.scss',
 })
-export class AnalysisTargetForm {
+export class AnalysisTargetFormComponent {
   private readonly datePipe = new DatePipe('en-US');
   private readonly minDate = new Date('1970-01-01');
 

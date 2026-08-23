@@ -1,23 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Location } from '@angular/common';
-import { vi } from 'vitest';
 
-import AboutPage from './about-page.component';
+import AboutPageComponent from './about-page.component';
 
-describe('AboutPage', () => {
-  let component: AboutPage;
-  let fixture: ComponentFixture<AboutPage>;
+describe('AboutPageComponent', () => {
+  let component: AboutPageComponent;
+  let fixture: ComponentFixture<AboutPageComponent>;
   let locationSpy: { back: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
     locationSpy = { back: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AboutPage],
+      imports: [AboutPageComponent],
       providers: [{ provide: Location, useValue: locationSpy }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AboutPage);
+    fixture = TestBed.createComponent(AboutPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

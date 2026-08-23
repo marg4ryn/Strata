@@ -1,7 +1,7 @@
 import { Service, inject, computed } from '@angular/core';
 
 import { SettingsStoreService } from './data-access/settings-store/settings-store.service';
-import { SettingsService } from './data-access/service/settings.service';
+import { SettingsService } from './data-access/settings/settings.service';
 
 @Service()
 export class SettingsFacade {

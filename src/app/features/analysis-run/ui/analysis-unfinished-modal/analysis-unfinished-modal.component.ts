@@ -20,7 +20,7 @@ import { PendingAnalysis } from '../../analysis-run.model';
   templateUrl: './analysis-unfinished-modal.component.html',
   styleUrl: './analysis-unfinished-modal.component.scss',
 })
-export class AnalysisUnfinishedModal {
+export class AnalysisUnfinishedModalComponent {
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
 

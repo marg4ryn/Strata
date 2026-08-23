@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotificationItem } from './notification-item.component';
+import { NotificationItemComponent } from './notification-item.component';
 import { Notification } from '../notifications.model';
 
-describe('NotificationItem', () => {
-  let component: NotificationItem;
-  let fixture: ComponentFixture<NotificationItem>;
+describe('NotificationItemComponent', () => {
+  let component: NotificationItemComponent;
+  let fixture: ComponentFixture<NotificationItemComponent>;
 
   const baseNotification: Notification = {
     sentAt: 1706438400000, // 2024-01-28T08:00:00.000Z
@@ -20,10 +20,10 @@ describe('NotificationItem', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotificationItem],
+      imports: [NotificationItemComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NotificationItem);
+    fixture = TestBed.createComponent(NotificationItemComponent);
     component = fixture.componentInstance;
   });
 

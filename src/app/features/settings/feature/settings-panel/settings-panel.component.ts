@@ -12,7 +12,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
   templateUrl: './settings-panel.component.html',
   styleUrl: './settings-panel.component.scss',
 })
-export class SettingsPanel {
+export class SettingsPanelComponent {
   protected readonly facade = inject(SettingsFacade);
 
   readonly innerOverlayOpen = signal(false);

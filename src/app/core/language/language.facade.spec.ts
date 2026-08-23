@@ -3,7 +3,7 @@ import { signal } from '@angular/core';
 
 import { LanguageFacade } from './language.facade';
 import type { LangPreference } from './language.model';
-import { LanguageService } from './service/language.service';
+import { LanguageService } from './language/language.service';
 import { LanguageStoreService } from './language-store/language-store.service';
 
 describe('LanguageFacade', () => {

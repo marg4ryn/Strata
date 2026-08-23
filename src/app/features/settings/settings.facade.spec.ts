@@ -3,7 +3,7 @@ import { signal } from '@angular/core';
 
 import { SettingsFacade } from './settings.facade';
 import { SettingsStoreService } from './data-access/settings-store/settings-store.service';
-import { SettingsService } from './data-access/service/settings.service';
+import { SettingsService } from './data-access/settings/settings.service';
 
 describe('SettingsFacade', () => {
   let service: SettingsFacade;

@@ -1,7 +1,7 @@
 import { Service, inject, computed } from '@angular/core';
 
-import { NotificationsService } from './data-access/service/notifications.service';
-import { NotificationsStoreService } from './data-access/store/notifications-store.service';
+import { NotificationsService } from './data-access/notifications/notifications.service';
+import { NotificationsStoreService } from './data-access/notifications-store/notifications-store.service';
 
 @Service()
 export class NotificationsFacade {

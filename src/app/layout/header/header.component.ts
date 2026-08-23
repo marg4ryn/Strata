@@ -8,17 +8,18 @@ import {
   EnvironmentInjector,
   runInInjectionContext,
   DestroyRef,
+  AfterViewInit,
 } from '@angular/core';
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Router } from '@angular/router';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { NotificationPanel } from '@app/features/notifications/feature/notification-panel.component';
+import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
-import { AnalysisHistoryPanel } from '@app/features/analysis-history/feature/analysis-history-panel.component';
+import { AnalysisHistoryPanelComponent } from '@app/features/analysis-history/feature/analysis-history-panel.component';
 import { SettingsFacade } from '@app/features/settings/settings.facade';
-import { SettingsPanel } from '@app/features/settings/feature/settings-panel/settings-panel.component';
+import { SettingsPanelComponent } from '@app/features/settings/feature/settings-panel/settings-panel.component';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 
 interface PanelFacade {
@@ -36,12 +37,17 @@ interface PanelEntry {
 
 @Component({
   selector: 'app-header',
-  imports: [CdkPortal, NotificationPanel, AnalysisHistoryPanel, SettingsPanel],
+  imports: [
+    CdkPortal,
+    NotificationPanelComponent,
+    AnalysisHistoryPanelComponent,
+    SettingsPanelComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class Header {
+export class HeaderComponent implements AfterViewInit {
   @ViewChild('notifBtn', { read: ElementRef }) notifBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('historyBtn', { read: ElementRef }) historyBtn!: ElementRef<HTMLButtonElement>;
   @ViewChild('settingsBtn', { read: ElementRef }) settingsBtn!: ElementRef<HTMLButtonElement>;

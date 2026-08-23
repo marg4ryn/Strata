@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
-import { AnalysisErrorModal } from './analysis-error-modal.component';
+import { AnalysisErrorModalComponent } from './analysis-error-modal.component';
 
-describe('AnalysisErrorModal', () => {
-  let component: AnalysisErrorModal;
-  let fixture: ComponentFixture<AnalysisErrorModal>;
+describe('AnalysisErrorModalComponent', () => {
+  let component: AnalysisErrorModalComponent;
+  let fixture: ComponentFixture<AnalysisErrorModalComponent>;
   let focusMonitor: FocusMonitor;
   let focusViaSpy: ReturnType<typeof vi.spyOn>;
   let stopMonitoringSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AnalysisErrorModal],
+      imports: [AnalysisErrorModalComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisErrorModal);
+    fixture = TestBed.createComponent(AnalysisErrorModalComponent);
     component = fixture.componentInstance;
 
     focusMonitor = TestBed.inject(FocusMonitor);

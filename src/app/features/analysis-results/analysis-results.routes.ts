@@ -5,7 +5,7 @@ export const ANALYSIS_RESULTS_ROUTES: Routes = [
     path: 'summary',
     loadComponent: () =>
       import('./feature/repository-details/repository-details.component').then(
-        (m) => m.RepositoryDetails,
+        (m) => m.RepositoryDetailsComponent,
       ),
   },
 ];

@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { AnalysisHistoryPanel } from './analysis-history-panel.component';
+import { AnalysisHistoryPanelComponent } from './analysis-history-panel.component';
 import { AnalysisHistoryFacade } from '../analysis-history.facade';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 
-describe('AnalysisHistoryPanel', () => {
-  let component: AnalysisHistoryPanel;
-  let fixture: ComponentFixture<AnalysisHistoryPanel>;
+describe('AnalysisHistoryPanelComponent', () => {
+  let component: AnalysisHistoryPanelComponent;
+  let fixture: ComponentFixture<AnalysisHistoryPanelComponent>;
   let facade: {
     analysisHistory: ReturnType<typeof signal<AnalysisHistoryEntry[]>>;
     closePanel: ReturnType<typeof vi.fn>;
@@ -34,14 +34,14 @@ describe('AnalysisHistoryPanel', () => {
     confirmModal = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisHistoryPanel],
+      imports: [AnalysisHistoryPanelComponent],
       providers: [
         { provide: AnalysisHistoryFacade, useValue: facade },
         { provide: ConfirmOperationModalService, useValue: confirmModal },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisHistoryPanel);
+    fixture = TestBed.createComponent(AnalysisHistoryPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

@@ -10,7 +10,7 @@ import { PendingAnalysis } from '../../analysis-run.model';
   templateUrl: './info-panel.component.html',
   styleUrl: './info-panel.component.scss',
 })
-export class InfoPanel {
+export class InfoPanelComponent {
   readonly pendingAnalysis = input<PendingAnalysis | null>();
 
   readonly analysisStartDate = computed(() => {

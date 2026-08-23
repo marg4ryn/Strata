@@ -14,16 +14,16 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
-import { InfoPanel } from '../info-panel/info-panel.component';
+import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
   selector: 'app-analysis-error-modal',
-  imports: [ButtonDirective, InfoPanel],
+  imports: [ButtonDirective, InfoPanelComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-error-modal.component.html',
   styleUrl: './analysis-error-modal.component.scss',
 })
-export class AnalysisErrorModal implements AfterViewInit, OnDestroy {
+export class AnalysisErrorModalComponent implements AfterViewInit, OnDestroy {
   private readonly focusMonitor = inject(FocusMonitor);
 
   readonly cancelButton = viewChild<ElementRef<HTMLButtonElement>>('cancelButton');

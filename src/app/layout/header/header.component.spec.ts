@@ -5,10 +5,10 @@ import { Overlay } from '@angular/cdk/overlay';
 import { Subject } from 'rxjs';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { NotificationPanel } from '@app/features/notifications/feature/notification-panel.component';
+import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
-import { AnalysisHistoryPanel } from '@app/features/analysis-history/feature/analysis-history-panel.component';
-import { Header } from './header.component';
+import { AnalysisHistoryPanelComponent } from '@app/features/analysis-history/feature/analysis-history-panel.component';
+import { HeaderComponent } from './header.component';
 
 @Component({ selector: 'app-notification-panel', template: '', standalone: true })
 class StubNotificationPanel {}
@@ -29,9 +29,9 @@ function fakeOverlayRef() {
   } as any;
 }
 
-describe.skip('Header', () => {
-  let component: Header;
-  let fixture: ComponentFixture<Header>;
+describe.skip('HeaderComponent', () => {
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
   let overlayCreate: any;
   let notifications: any;
   let history: any;
@@ -53,7 +53,7 @@ describe.skip('Header', () => {
     overlayCreate = vi.fn(() => fakeOverlayRef());
 
     await TestBed.configureTestingModule({
-      imports: [Header],
+      imports: [HeaderComponent],
       providers: [
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },
@@ -66,13 +66,13 @@ describe.skip('Header', () => {
         },
       ],
     })
-      .overrideComponent(Header, {
-        remove: { imports: [NotificationPanel, AnalysisHistoryPanel] },
+      .overrideComponent(HeaderComponent, {
+        remove: { imports: [NotificationPanelComponent, AnalysisHistoryPanelComponent] },
         add: { imports: [StubNotificationPanel, StubAnalysisHistoryPanel] },
       })
       .compileComponents();
 
-    fixture = TestBed.createComponent(Header);
+    fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

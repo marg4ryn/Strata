@@ -46,12 +46,12 @@ export class LanguageSwitcherComponent {
     { value: 'pl', label: 'Polski' },
   ];
 
-  onOverlayAttached(): void {
-    this.listbox().focus();
-  }
-
   get currentLabel(): string {
     return this.options.find((option) => option.value === this.current())?.label ?? '';
+  }
+
+  onOverlayAttached(): void {
+    this.listbox().focus();
   }
 
   toggle(): void {

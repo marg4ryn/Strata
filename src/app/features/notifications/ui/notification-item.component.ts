@@ -16,7 +16,7 @@ import { Notification } from '../notifications.model';
   templateUrl: './notification-item.component.html',
   styleUrl: './notification-item.component.scss',
 })
-export class NotificationItem {
+export class NotificationItemComponent {
   readonly notification = input.required<Notification>();
   readonly remove = output<number>();
   readonly timestamp = computed(() => new Date(this.notification().sentAt).toLocaleString());

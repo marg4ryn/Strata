@@ -25,7 +25,7 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
   templateUrl: './analysis-history-item.component.html',
   styleUrl: './analysis-history-item.component.scss',
 })
-export class AnalysisHistoryItem {
+export class AnalysisHistoryItemComponent {
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
 

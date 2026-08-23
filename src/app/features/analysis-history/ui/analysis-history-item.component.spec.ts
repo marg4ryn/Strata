@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { AnalysisHistoryItem } from './analysis-history-item.component';
+import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 
-describe('AnalysisHistoryItem', () => {
-  let component: AnalysisHistoryItem;
-  let fixture: ComponentFixture<AnalysisHistoryItem>;
+describe('AnalysisHistoryItemComponent', () => {
+  let component: AnalysisHistoryItemComponent;
+  let fixture: ComponentFixture<AnalysisHistoryItemComponent>;
   let confirmModalMock: { confirm: ReturnType<typeof vi.fn> };
 
   const baseEntry: AnalysisHistoryEntry = {
@@ -23,11 +23,11 @@ describe('AnalysisHistoryItem', () => {
     confirmModalMock = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisHistoryItem],
+      imports: [AnalysisHistoryItemComponent],
       providers: [{ provide: ConfirmOperationModalService, useValue: confirmModalMock }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnalysisHistoryItem);
+    fixture = TestBed.createComponent(AnalysisHistoryItemComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('historyEntry', baseEntry);
     fixture.detectChanges();

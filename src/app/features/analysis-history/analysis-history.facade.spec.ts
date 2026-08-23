@@ -3,8 +3,8 @@ import { signal } from '@angular/core';
 
 import { AnalysisTarget } from '../analysis-run/analysis-run.model';
 import { AnalysisHistoryFacade } from './analysis-history.facade';
-import { AnalysisHistoryStoreService } from './data-access/store/analysis-history-store.service';
-import { AnalysisHistoryService } from './data-access/service/analysis-history.service';
+import { AnalysisHistoryStoreService } from './data-access/analysis-history-store/analysis-history-store.service';
+import { AnalysisHistoryService } from './data-access/analysis-history/analysis-history.service';
 import { AnalysisHistoryEntry } from './analysis-history.model';
 
 describe('AnalysisHistoryFacade', () => {

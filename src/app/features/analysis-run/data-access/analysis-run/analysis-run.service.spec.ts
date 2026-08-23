@@ -1,0 +1,674 @@
+import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { LoggerService } from '@app/core/logging/logger.service';
+import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
+import { AnalysisRunService } from './analysis-run.service';
+import {
+  AnalysisStatusKey,
+  PendingAnalysis,
+  AnalysisTargetFormModel,
+  AnalysisTarget,
+  DateRange,
+} from '../../analysis-run.model';
+import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
+import { AnalysisRunStorageService } from '../analysis-run-storage/analysis-run-storage.service';
+import { AnalysisRunWebSocketService } from '../analysis-run-web-socket/analysis-run-web-socket.service';
+import { AnalysisRunLockService } from '../analysis-run-lock/analysis-run-lock.service';
+
+describe('AnalysisRunService', () => {
+  let service: AnalysisRunService;
+  let logger: Partial<LoggerService>;
+
+  let store: {
+    pendingAnalysis: ReturnType<typeof signal<PendingAnalysis | null>>;
+    progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
+    result: ReturnType<typeof signal<string | null>>;
+    error: ReturnType<typeof signal<string | null>>;
+    isBusy: ReturnType<typeof signal<boolean>>;
+    showModal: ReturnType<typeof signal<boolean>>;
+    resetAnalysisState: ReturnType<typeof vi.fn>;
+    resetState: ReturnType<typeof vi.fn>;
+  };
+
+  let storage: {
+    saveSessionId: ReturnType<typeof vi.fn>;
+    savePendingAnalysis: ReturnType<typeof vi.fn>;
+    getSessionId: ReturnType<typeof vi.fn>;
+    getPendingAnalyses: ReturnType<typeof vi.fn>;
+    deleteSessionId: ReturnType<typeof vi.fn>;
+    deletePendingAnalysis: ReturnType<typeof vi.fn>;
+  };
+
+  let websocket: {
+    connect: ReturnType<typeof vi.fn>;
+    abort: ReturnType<typeof vi.fn>;
+    disconnect: ReturnType<typeof vi.fn>;
+  };
+
+  let locker: {
+    lock: ReturnType<typeof vi.fn>;
+    unlock: ReturnType<typeof vi.fn>;
+  };
+
+  let notifications: {
+    sendNotificationSuccess: ReturnType<typeof vi.fn>;
+    sendNotificationInfo: ReturnType<typeof vi.fn>;
+    sendNotificationWarning: ReturnType<typeof vi.fn>;
+    sendNotificationError: ReturnType<typeof vi.fn>;
+  };
+
+  let history: {
+    addAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
+  };
+
+  let router: {
+    navigate: ReturnType<typeof vi.fn>;
+  };
+
+  beforeEach(() => {
+    store = {
+      pendingAnalysis: signal(null),
+      progress: signal(null),
+      result: signal(null),
+      error: signal(null),
+      isBusy: signal(false),
+      showModal: signal(false),
+      resetAnalysisState: vi.fn(),
+      resetState: vi.fn(),
+    };
+
+    storage = {
+      saveSessionId: vi.fn(),
+      savePendingAnalysis: vi.fn(),
+      getSessionId: vi.fn(),
+      getPendingAnalyses: vi.fn(),
+      deleteSessionId: vi.fn(),
+      deletePendingAnalysis: vi.fn(),
+    };
+
+    websocket = {
+      connect: vi.fn(),
+      abort: vi.fn(),
+      disconnect: vi.fn(),
+    };
+
+    locker = {
+      lock: vi.fn(),
+      unlock: vi.fn(),
+    };
+
+    notifications = {
+      sendNotificationSuccess: vi.fn(),
+      sendNotificationInfo: vi.fn(),
+      sendNotificationWarning: vi.fn(),
+      sendNotificationError: vi.fn(),
+    };
+
+    history = {
+      addAnalysisHistoryEntry: vi.fn(),
+    };
+
+    router = {
+      navigate: vi.fn(),
+    };
+
+    logger = {
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: AnalysisRunStoreService, useValue: store },
+        { provide: AnalysisRunStorageService, useValue: storage },
+        { provide: AnalysisRunWebSocketService, useValue: websocket },
+        { provide: AnalysisRunLockService, useValue: locker },
+        { provide: LoggerService, useValue: logger },
+        { provide: NotificationsFacade, useValue: notifications },
+        { provide: AnalysisHistoryFacade, useValue: history },
+        { provide: Router, useValue: router },
+      ],
+    });
+
+    service = TestBed.inject(AnalysisRunService);
+    store.pendingAnalysis.set({ sessionId: sessionId } as unknown as PendingAnalysis);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const sessionId = '123';
+
+  describe('effect', () => {
+    it('handles result change', () => {
+      const clearDataSpy = vi.spyOn(service, 'clearData');
+
+      store.result.set('123');
+      TestBed.tick();
+
+      expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(router.navigate).toHaveBeenCalledWith(['analysis', '123', 'summary']);
+      expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
+      expect(history.addAnalysisHistoryEntry).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalled();
+    });
+
+    it('handles error change', () => {
+      store.error.set('Error');
+      TestBed.tick();
+      expect(notifications.sendNotificationError).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalled();
+    });
+  });
+
+  describe('tryToReconnect', () => {
+    it('returns when there is an ongoing analysis', async () => {
+      store.isBusy.set(true);
+
+      await service.tryToReconnect();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(store.resetState).not.toHaveBeenCalled();
+    });
+
+    it('calls tryToResumeAnalysis when no analysis was processed in this tab', async () => {
+      const resumeAnalysisSpy = vi
+        .spyOn(service, 'tryToResumeAnalysis')
+        .mockImplementation(async () => {});
+      storage.getSessionId.mockReturnValue(null);
+      store.isBusy.set(false);
+
+      await service.tryToReconnect();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(storage.getSessionId).toHaveBeenCalledOnce();
+      expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+    });
+
+    it('calls tryToResumeAnalysis when other tab took over analysis', async () => {
+      const resumeAnalysisSpy = vi
+        .spyOn(service, 'tryToResumeAnalysis')
+        .mockImplementation(async () => {});
+      storage.getSessionId.mockReturnValue(sessionId);
+      store.isBusy.set(false);
+      locker.lock.mockReturnValue(false);
+
+      await service.tryToReconnect();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(locker.lock).toHaveBeenCalledWith(sessionId);
+      expect(storage.deleteSessionId).toHaveBeenCalledOnce();
+      expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+    });
+
+    it('calls tryToResumeAnalysis when other tab finished analysis', async () => {
+      const resumeAnalysisSpy = vi
+        .spyOn(service, 'tryToResumeAnalysis')
+        .mockImplementation(async () => {});
+      storage.getSessionId.mockReturnValue(sessionId);
+      store.isBusy.set(false);
+      locker.lock.mockReturnValue(true);
+      storage.getPendingAnalyses.mockReturnValue(null);
+
+      await service.tryToReconnect();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(storage.getPendingAnalyses).toHaveBeenCalledOnce();
+      expect(storage.deleteSessionId).toHaveBeenCalledOnce();
+      expect(locker.unlock).toHaveBeenCalledWith(sessionId);
+      expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+    });
+
+    it('reconnects to unfinished analysis', async () => {
+      storage.getSessionId.mockReturnValue(sessionId);
+      store.isBusy.set(false);
+      locker.lock.mockReturnValue(true);
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValue([pendingAnalysis]);
+
+      await service.tryToReconnect();
+
+      expect(logger.info).toHaveBeenCalled();
+      expect(store.pendingAnalysis()).toBe(pendingAnalysis);
+      expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
+    });
+  });
+
+  describe('tryToResumeAnalysis', () => {
+    it('hides modal when there is no pending analysis', async () => {
+      storage.getPendingAnalyses.mockReturnValue(null);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(storage.getPendingAnalyses).toHaveBeenCalledOnce();
+      expect(store.showModal()).toBeFalsy();
+    });
+
+    it('returns when the only pending analysis is taken', async () => {
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValue([pendingAnalysis]);
+      locker.lock.mockReturnValue(false);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(locker.lock).toHaveBeenCalledWith(sessionId);
+    });
+
+    it('returns when the only pending analysis was finished in this moment', async () => {
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValueOnce([pendingAnalysis]);
+      locker.lock.mockReturnValue(true);
+      storage.getPendingAnalyses.mockReturnValueOnce(null);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.debug).toHaveBeenCalled();
+      expect(locker.unlock).toHaveBeenCalledWith(sessionId);
+    });
+
+    it('shows modal when successfully locked an unfinished analysis', async () => {
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValue([pendingAnalysis]);
+      locker.lock.mockReturnValue(true);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.info).toHaveBeenCalled();
+      expect(store.pendingAnalysis()).toBe(pendingAnalysis);
+      expect(store.showModal()).toBeTruthy();
+    });
+
+    it('shows modal when successfully locked an unfinished analysis despite there are more analyses', async () => {
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      const secondAnalysis = { sessionId: '124' } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValue([pendingAnalysis, secondAnalysis]);
+      locker.lock.mockReturnValueOnce(false);
+      locker.lock.mockReturnValueOnce(true);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.info).toHaveBeenCalled();
+      expect(store.pendingAnalysis()).toBe(secondAnalysis);
+      expect(store.showModal()).toBeTruthy();
+    });
+
+    it('locks first available analysis', async () => {
+      const pendingAnalysis = { sessionId: sessionId } as PendingAnalysis;
+      const secondAnalysis = { sessionId: '124' } as PendingAnalysis;
+      storage.getPendingAnalyses.mockReturnValue([pendingAnalysis, secondAnalysis]);
+      locker.lock.mockReturnValueOnce(true);
+      locker.lock.mockReturnValueOnce(false);
+
+      await service.tryToResumeAnalysis();
+
+      expect(logger.info).toHaveBeenCalled();
+      expect(store.pendingAnalysis()).toBe(pendingAnalysis);
+      expect(store.showModal()).toBeTruthy();
+    });
+  });
+
+  it('starts new analysis', async () => {
+    const constructAnalysisSpy = vi.spyOn(service, 'constructPendingAnalysis');
+    const constructParamsSpy = vi.spyOn(service, 'constructConnectionParams');
+
+    const formData: AnalysisTargetFormModel = {
+      targetURL: 'https://example.com/Project.git',
+      limitRange: true,
+      startDate: new Date('2000-01-01'),
+      endDate: new Date('2000-06-01'),
+    };
+
+    await service.startNewAnalysis(formData);
+
+    expect(logger.info).toHaveBeenCalled();
+    expect(constructAnalysisSpy).toHaveBeenCalledOnce();
+    expect(constructParamsSpy).toHaveBeenCalledOnce();
+    expect(locker.lock).toHaveBeenCalledOnce();
+    expect(storage.savePendingAnalysis).toHaveBeenCalledOnce();
+    expect(storage.saveSessionId).toHaveBeenCalledOnce();
+    expect(websocket.connect).toHaveBeenCalledOnce();
+  });
+
+  it('resumes analysis', () => {
+    service.resumeAnalysis();
+
+    expect(store.showModal()).toBeFalsy();
+    expect(storage.saveSessionId).toHaveBeenCalledWith(sessionId);
+    expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
+    expect(logger.info).toHaveBeenCalled();
+  });
+
+  it('abandons analysis', async () => {
+    const clearDataSpy = vi.spyOn(service, 'clearData');
+    const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+
+    await service.abandonAnalysis();
+
+    expect(logger.info).toHaveBeenCalled();
+    expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
+    expect(clearDataSpy).toHaveBeenCalledOnce();
+    expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+  });
+
+  describe('abortAnalysis', () => {
+    it('aborts analysis', async () => {
+      const clearDataSpy = vi.spyOn(service, 'clearData');
+      const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+      websocket.abort.mockReturnValue(true);
+
+      await service.abortAnalysis();
+
+      expect(websocket.abort).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalled();
+      expect(logger.warn).not.toHaveBeenCalled();
+      expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
+      expect(clearDataSpy).toHaveBeenCalledOnce();
+      expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+    });
+
+    it('aborts analysis on timeout without deleting analysis data', async () => {
+      const clearDataSpy = vi.spyOn(service, 'clearData');
+      const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+      websocket.abort.mockReturnValue(false);
+
+      await service.abortAnalysis();
+
+      expect(websocket.abort).toHaveBeenCalledOnce();
+      expect(logger.info).toHaveBeenCalled();
+      expect(logger.warn).toHaveBeenCalled();
+      expect(notifications.sendNotificationWarning).toHaveBeenCalledOnce();
+      expect(storage.deleteSessionId).toHaveBeenCalledOnce();
+      expect(locker.unlock).toHaveBeenCalledWith(sessionId);
+      expect(clearDataSpy).not.toHaveBeenCalled();
+      expect(resumeAnalysisSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it('retries analysis', () => {
+    store.error.set('Error');
+
+    service.retryAnalysis();
+
+    expect(store.error()).toBeNull();
+    expect(websocket.connect).toHaveBeenCalledWith({ sessionId: sessionId });
+    expect(logger.info).toHaveBeenCalled();
+  });
+
+  it('cancels analysis', async () => {
+    const clearDataSpy = vi.spyOn(service, 'clearData');
+    const resumeAnalysisSpy = vi.spyOn(service, 'tryToResumeAnalysis');
+    store.error.set('Error');
+
+    await service.cancelAnalysis();
+
+    expect(store.error()).toBeNull();
+    expect(logger.info).toHaveBeenCalled();
+    expect(notifications.sendNotificationInfo).toHaveBeenCalledOnce();
+    expect(clearDataSpy).toHaveBeenCalledOnce();
+    expect(resumeAnalysisSpy).toHaveBeenCalledOnce();
+  });
+
+  it('clears data', async () => {
+    await service.clearData();
+
+    expect(storage.deleteSessionId).toHaveBeenCalledOnce();
+    expect(storage.deletePendingAnalysis).toHaveBeenCalledWith(sessionId);
+    expect(locker.unlock).toHaveBeenCalledWith(sessionId);
+    expect(store.resetAnalysisState).toHaveBeenCalledOnce();
+    expect(logger.info).toHaveBeenCalled();
+  });
+
+  describe('constructPendingAnalysis', () => {
+    it('constructs pending analysis with date range', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const formData: AnalysisTargetFormModel = {
+        targetURL: 'https://example.com/Project.git',
+        limitRange: true,
+        startDate: new Date('2000-01-01'),
+        endDate: new Date('2000-06-01'),
+      };
+
+      const result = service.constructPendingAnalysis(formData);
+
+      expect(result).toMatchObject({
+        sessionId: expect.stringMatching(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+        ),
+        startedAt: Date.now(),
+        target: {
+          targetURL: formData.targetURL,
+          limitRange: formData.limitRange,
+          range: {
+            startDate: formData.startDate!.toISOString().split('T')[0],
+            endDate: formData.endDate!.toISOString().split('T')[0],
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          } as DateRange,
+        } as AnalysisTarget,
+      } as PendingAnalysis);
+
+      vi.useRealTimers();
+    });
+
+    it('constructs pending analysis without date range', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const formData: AnalysisTargetFormModel = {
+        targetURL: 'https://example.com/Project.git',
+        limitRange: false,
+        startDate: null,
+        endDate: null,
+      };
+
+      const result = service.constructPendingAnalysis(formData);
+
+      expect(result).toMatchObject({
+        sessionId: expect.stringMatching(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+        ),
+        startedAt: Date.now(),
+        target: {
+          targetURL: formData.targetURL,
+          limitRange: formData.limitRange,
+          range: null,
+        } as AnalysisTarget,
+      } as PendingAnalysis);
+
+      vi.useRealTimers();
+    });
+  });
+
+  describe('constructConnectionParams', () => {
+    it('constructs connection params with date range', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const analysis: PendingAnalysis = {
+        sessionId: '123',
+        startedAt: Date.now(),
+        target: {
+          targetURL: 'https://example.com/Project.git',
+          limitRange: true,
+          range: {
+            startDate: '2000-01-01',
+            endDate: '2000-06-01',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          },
+        },
+      };
+
+      const result = service.constructConnectionParams(analysis);
+
+      expect(result).toMatchObject({
+        sessionId: analysis.sessionId,
+        repositoryUrl: analysis.target.targetURL,
+        startDate: analysis.target.range?.startDate,
+        endDate: analysis.target.range?.endDate,
+        timezone: analysis.target.range?.timezone,
+      });
+
+      vi.useRealTimers();
+    });
+
+    it('constructs connection params without date range', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const analysis: PendingAnalysis = {
+        sessionId: '123',
+        startedAt: Date.now(),
+        target: {
+          targetURL: 'https://example.com/Project.git',
+          limitRange: false,
+          range: null,
+        },
+      };
+
+      const result = service.constructConnectionParams(analysis);
+
+      expect(result).toMatchObject({
+        sessionId: analysis.sessionId,
+        repositoryUrl: analysis.target.targetURL,
+      });
+
+      vi.useRealTimers();
+    });
+  });
+
+  describe('getRepoName', () => {
+    it('extracts repo name from git url', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project.git',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
+    });
+
+    it('extracts repo name from url without .git suffix', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
+    });
+
+    it('returns empty string when url is empty', () => {
+      const target: AnalysisTarget = {
+        targetURL: '',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('returns empty string when pending analysis is missing', () => {
+      store.pendingAnalysis.set(null);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('returns empty string when url ends with slash', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/Project/',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('');
+    });
+
+    it('extracts nested repository name', () => {
+      const target: AnalysisTarget = {
+        targetURL: 'https://example.com/group/subgroup/Project.git',
+        limitRange: false,
+        range: null,
+      };
+      const pendingAnalysis: PendingAnalysis = {
+        sessionId: '1',
+        startedAt: 42,
+        target: target,
+      };
+
+      store.pendingAnalysis.set(pendingAnalysis);
+
+      expect(service.getRepoName()).toBe('Project');
+    });
+  });
+
+  describe('constructAnalysisHistoryEntry', () => {
+    it('constructs analysis history entry', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-01-01'));
+
+      const analysis: PendingAnalysis = {
+        sessionId: '123',
+        startedAt: Date.now(),
+        target: {
+          targetURL: 'https://example.com/Project.git',
+          limitRange: true,
+          range: {
+            startDate: '2000-01-01',
+            endDate: '2000-06-01',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          },
+        },
+      };
+
+      const analysisId = '123';
+      store.result.set(analysisId);
+
+      const result = service.constructAnalysisHistoryEntry(analysis);
+
+      expect(result).toMatchObject({
+        analysisId: analysisId,
+        completedAt: Date.now(),
+        target: analysis.target,
+      });
+
+      vi.useRealTimers();
+    });
+  });
+});

@@ -14,18 +14,18 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { LoadingSpinner } from '@app/shared/loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from '@app/shared/loading-spinner/loading-spinner.component';
 import { PendingAnalysis } from '../../analysis-run.model';
-import { InfoPanel } from '../info-panel/info-panel.component';
+import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
   selector: 'app-analysis-progress-spinner',
-  imports: [ButtonDirective, LoadingSpinner, InfoPanel],
+  imports: [ButtonDirective, LoadingSpinnerComponent, InfoPanelComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-progress-spinner.component.html',
   styleUrl: './analysis-progress-spinner.component.scss',
 })
-export class AnalysisProgressSpinner implements AfterViewInit, OnDestroy {
+export class AnalysisProgressSpinnerComponent implements AfterViewInit, OnDestroy {
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly focusMonitor = inject(FocusMonitor);
