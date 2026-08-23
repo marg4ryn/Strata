@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 
 import { LanguageFacade } from '@app/core/language/language.facade';
-import type { LangPreference } from '@app/core/language/language.model';
+import { LangPreference, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
 
 interface LangOption {
   value: LangPreference;
@@ -41,9 +41,8 @@ export class LanguageSwitcherComponent {
   readonly isOpen = signal(false);
 
   readonly options: LangOption[] = [
-    { value: 'system', label: 'System default' },
-    { value: 'en', label: 'English' },
-    { value: 'pl', label: 'Polski' },
+    { value: SYSTEM_PREFERENCE, label: 'System default' },
+    ...LANGUAGES,
   ];
 
   get currentLabel(): string {

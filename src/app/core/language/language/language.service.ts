@@ -5,7 +5,7 @@ import { LoggerService } from '@app/core/logging/logger.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
-import type { LangPreference } from '../language.model';
+import { Lang, LangPreference, AVAILABLE_LANGS, SYSTEM_PREFERENCE } from '../language.model';
 
 @Service()
 export class LanguageService {
@@ -15,12 +15,11 @@ export class LanguageService {
   private readonly browser = inject(BrowserLanguageService);
   private readonly logger = inject(LoggerService);
 
-  private readonly fallbackLang = 'en';
-  private readonly availableLangs = ['en', 'pl'];
-  private readonly availablePreferences = [...this.availableLangs, 'system'];
+  private readonly fallbackLang: Lang = 'en';
+  private readonly availablePreferences: LangPreference[] = [...AVAILABLE_LANGS, SYSTEM_PREFERENCE];
 
   loadLangPreference(): void {
-    const stored = this.storage.getLangPreference() ?? 'system';
+    const stored = this.storage.getLangPreference() ?? SYSTEM_PREFERENCE;
     const preference = this.validate(stored);
     this.logger.debug(`Language Service loaded preference: ${preference}`);
     this.store.langPreference.set(preference);
@@ -40,15 +39,15 @@ export class LanguageService {
       return preference;
     }
     this.logger.warn(
-      `Language Service received invalid preference "${preference}", falling back to "system"`,
+      `Language Service received invalid preference "${preference}", falling back to ${SYSTEM_PREFERENCE}`,
     );
-    return 'system';
+    return SYSTEM_PREFERENCE;
   }
 
   private apply(preference: LangPreference): void {
     const lang =
-      preference === 'system'
-        ? this.browser.getLang(this.availableLangs, this.fallbackLang)
+      preference === SYSTEM_PREFERENCE
+        ? this.browser.getLang(AVAILABLE_LANGS, this.fallbackLang)
         : preference;
 
     this.logger.info(`Language Service set application language to ${lang}`);
