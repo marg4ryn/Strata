@@ -30,7 +30,7 @@ interface LangOption {
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);
 
-  private readonly listbox = viewChild.required(CdkListbox);
+  private readonly listbox = viewChild.required(CdkListbox /* v8 ignore next */);
   private readonly triggerBtn = viewChild.required('triggerBtn', {
     read: ElementRef<HTMLButtonElement>,
   });
@@ -59,6 +59,9 @@ export class LanguageSwitcherComponent {
   }
 
   close(): void {
+    if (!this.isOpen()) {
+      return;
+    }
     this.isOpen.set(false);
     this.openedChange.emit(false);
     setTimeout(() => {
