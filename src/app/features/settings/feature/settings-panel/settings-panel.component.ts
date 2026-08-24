@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 import { SettingsFacade } from '../../settings.facade';
 import { SettingsSectionComponent } from '../../ui/settings-section.component';
@@ -7,7 +8,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
 
 @Component({
   selector: 'app-settings-panel',
-  imports: [A11yModule, SettingsSectionComponent, LanguageSwitcherComponent],
+  imports: [A11yModule, SettingsSectionComponent, LanguageSwitcherComponent, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './settings-panel.component.html',
   styleUrl: './settings-panel.component.scss',
