@@ -1,58 +1,44 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal, input } from '@angular/core';
+import { signal } from '@angular/core';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 
+import { LanguageFacade } from '@app/core/language/language.facade';
+import { LangPreference } from '@app/core/language/language.model';
 import { SettingsPanelComponent } from './settings-panel.component';
 import { SettingsFacade } from '../../settings.facade';
-import { SettingsSectionComponent } from '../../ui/settings-section.component';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
-
-@Component({
-  selector: 'app-settings-section',
-  template: '<ng-content />',
-})
-class SettingsSectionStub {
-  label = input<string>('');
-}
-
-@Component({
-  selector: 'app-language-switcher',
-  template: '',
-})
-class LanguageSwitcherStub {}
 
 describe('SettingsPanelComponent', () => {
   let component: SettingsPanelComponent;
   let fixture: ComponentFixture<SettingsPanelComponent>;
 
-  let facade: {
+  let settingsFacade: {
     showPanel: ReturnType<typeof signal<boolean>>;
     closePanel: ReturnType<typeof vi.fn>;
   };
 
+  let languageFacade: {
+    langPreference: ReturnType<typeof signal<LangPreference>>;
+    setPreference: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(async () => {
-    facade = {
+    settingsFacade = {
       showPanel: signal(false),
       closePanel: vi.fn(),
+    };
+
+    languageFacade = {
+      langPreference: signal('en'),
+      setPreference: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
       imports: [SettingsPanelComponent],
       providers: [
-        {
-          provide: SettingsFacade,
-          useValue: facade,
-        },
+        { provide: SettingsFacade, useValue: settingsFacade },
+        { provide: LanguageFacade, useValue: languageFacade },
       ],
-    })
-      .overrideComponent(SettingsPanelComponent, {
-        remove: {
-          imports: [SettingsSectionComponent, LanguageSwitcherComponent],
-        },
-        add: {
-          imports: [SettingsSectionStub, LanguageSwitcherStub],
-        },
-      })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsPanelComponent);
     component = fixture.componentInstance;
@@ -69,6 +55,40 @@ describe('SettingsPanelComponent', () => {
       fixture.nativeElement.querySelector('.settings-panel__close');
     closeBtn.click();
 
-    expect(facade.closePanel).toHaveBeenCalledOnce();
+    expect(settingsFacade.closePanel).toHaveBeenCalledOnce();
+  });
+
+  it('renders the panel title', () => {
+    const title = fixture.nativeElement.querySelector('.settings-panel__title');
+    expect(title.textContent).toContain('Settings');
+  });
+
+  it('renders language switcher inside a section labeled "Language"', () => {
+    const sectionEl = fixture.nativeElement.querySelector('app-settings-section');
+    expect(sectionEl.getAttribute('label')).toBe('Language');
+    expect(sectionEl.querySelector('app-language-switcher')).toBeTruthy();
+  });
+
+  it('sets innerOverlayOpen to true when real language switcher opens', () => {
+    const trigger: HTMLButtonElement =
+      fixture.nativeElement.querySelector('.lang-switcher__trigger');
+    trigger.click();
+    fixture.detectChanges();
+
+    expect(component.innerOverlayOpen()).toBe(true);
+  });
+
+  it('disables cdkTrapFocus while inner overlay is open', () => {
+    const trapFocusDebugEl = fixture.debugElement.query((el) =>
+      el.nativeElement.classList.contains('settings-panel'),
+    );
+    const trapFocusDirective = trapFocusDebugEl.injector.get(CdkTrapFocus);
+
+    const trigger: HTMLButtonElement =
+      fixture.nativeElement.querySelector('.lang-switcher__trigger');
+    trigger.click();
+    fixture.detectChanges();
+
+    expect(trapFocusDirective.enabled).toBe(false);
   });
 });
