@@ -33,6 +33,11 @@ describe('isoDateToLocaleString', () => {
     const expected = new Date(2024, 1, 29).toLocaleDateString();
     expect(result).toBe(expected);
   });
+
+  it('formats date according to explicit locale', () => {
+    expect(isoDateToLocaleString('2026-07-18', 'pl-PL')).toBe('18.07.2026');
+    expect(isoDateToLocaleString('2026-07-18', 'en-US')).toBe('7/18/2026');
+  });
 });
 
 describe('dateToCalendarKey', () => {

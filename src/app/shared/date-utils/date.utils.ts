@@ -1,9 +1,9 @@
 export type ISODateString = string; // Alias ​​for readability - "YYYY-MM-DD"
 
-export function isoDateToLocaleString(iso: ISODateString | undefined): string {
+export function isoDateToLocaleString(iso: ISODateString | undefined, locale?: string): string {
   if (!iso) return '';
   const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString();
+  return new Date(y, m - 1, d).toLocaleDateString(locale);
 }
 
 export function dateToCalendarKey(date: Date): number {
