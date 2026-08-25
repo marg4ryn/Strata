@@ -1,7 +1,7 @@
 <button
   class="header__logo"
-  title="Start a new analysis"
-  aria-label="Start a new analysis"
+  [title]="'header.startNewAnalysis' | transloco"
+  [attr.aria-label]="'header.startNewAnalysis' | transloco"
   (click)="startNewAnalysis()"
 >
   <img src="/logo.svg" class="header__logo-icon" alt="" aria-hidden="true" />
@@ -12,8 +12,8 @@
   <button
     #notifBtn
     class="header__action"
-    title="Notifications"
-    aria-label="Notifications"
+    [title]="'header.notifications' | transloco"
+    [attr.aria-label]="'header.notifications' | transloco"
     [class.header__action--active]="notifications.showPanel()"
     [attr.aria-expanded]="notifications.showPanel()"
     (click)="toggleNotificationsPanel()"
@@ -44,8 +44,8 @@
   <button
     #historyBtn
     class="header__action"
-    title="Analysis history"
-    aria-label="Analysis history"
+    [title]="'header.analysisHistory' | transloco"
+    [attr.aria-label]="'header.analysisHistory' | transloco"
     [class.header__action--active]="history.showPanel()"
     [attr.aria-expanded]="history.showPanel()"
     (click)="toggleHistoryPanel()"
@@ -71,8 +71,8 @@
   <button
     #settingsBtn
     class="header__action"
-    title="Settings"
-    aria-label="Settings"
+    [title]="'header.settings' | transloco"
+    [attr.aria-label]="'header.settings' | transloco"
     [class.header__action--active]="settings.showPanel()"
     [attr.aria-expanded]="settings.showPanel()"
     (click)="toggleSettingsPanel()"

@@ -2,11 +2,11 @@
   <span class="footer__copyright" aria-hidden="true">2026 Strata</span>
   <a
     class="footer__about-link"
-    title="About Strata"
-    aria-label="About Strata"
+    [title]="'footer.about.title' | transloco"
+    [attr.aria-label]="'footer.about.title' | transloco"
     routerLink="/about"
     routerLinkActive="footer__about-link--active"
   >
-    About
+    {{ 'footer.about.button' | transloco }}
   </a>
 </footer>

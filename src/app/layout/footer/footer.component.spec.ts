@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { FooterComponent } from './footer.component';
 
 describe('FooterComponent', () => {
@@ -9,7 +10,7 @@ describe('FooterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent],
+      imports: [FooterComponent, getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
 
@@ -32,8 +33,8 @@ describe('FooterComponent', () => {
 
   it('has correct accessibility attributes on link', () => {
     const link: HTMLAnchorElement = fixture.nativeElement.querySelector('.footer__about-link');
-    expect(link.getAttribute('title')).toBe('About Strata');
-    expect(link.getAttribute('aria-label')).toBe('About Strata');
+    expect(link.getAttribute('title')).toBe('About the tool');
+    expect(link.getAttribute('aria-label')).toBe('About the tool');
   });
 
   it('renders link text "About"', () => {

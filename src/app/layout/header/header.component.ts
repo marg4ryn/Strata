@@ -13,6 +13,8 @@ import {
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
@@ -42,6 +44,7 @@ interface PanelEntry {
     NotificationPanelComponent,
     AnalysisHistoryPanelComponent,
     SettingsPanelComponent,
+    TranslocoPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
@@ -63,6 +66,7 @@ export class HeaderComponent implements AfterViewInit {
   protected readonly history = inject(AnalysisHistoryFacade);
   protected readonly settings = inject(SettingsFacade);
   private readonly injector = inject(EnvironmentInjector);
+  private readonly transloco = inject(TranslocoService);
 
   private panels: PanelEntry[] = [];
 
@@ -97,12 +101,12 @@ export class HeaderComponent implements AfterViewInit {
     });
   }
 
+  private readonly label = toSignal(
+    this.transloco.selectTranslate('confirmations.startNewAnalysis.label', { initialValue: '' }),
+  );
+
   async startNewAnalysis(): Promise<void> {
-    const confirmed = await this.confirmModal.confirm(
-      this.destroyRef,
-      `Start a new analysis?`,
-      'confirm',
-    );
+    const confirmed = await this.confirmModal.confirm(this.destroyRef, this.label(), 'confirm');
     if (!confirmed) return;
     this.router.navigate(['']);
   }

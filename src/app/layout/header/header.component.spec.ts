@@ -4,6 +4,7 @@ import { DomPortalOutlet } from '@angular/cdk/portal';
 import { Overlay } from '@angular/cdk/overlay';
 import { Subject } from 'rxjs';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
@@ -53,7 +54,7 @@ describe.skip('HeaderComponent', () => {
     overlayCreate = vi.fn(() => fakeOverlayRef());
 
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
+      imports: [HeaderComponent, getTranslocoModule()],
       providers: [
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },

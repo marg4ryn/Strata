@@ -8,5 +8,22 @@
       "header": "Language",
       "system": "System"
     }
+  },
+  "footer": {
+    "about": {
+      "title": "About the tool",
+      "button": "About"
+    }
+  },
+  "header": {
+    "startNewAnalysis": "Start a new analysis",
+    "notifications": "Notifications",
+    "analysisHistory": "Analysis history",
+    "settings": "Settings"
+  },
+  "confirmations": {
+    "startNewAnalysis": {
+      "label": "Start a new analysis?"
+    }
   }
 }
