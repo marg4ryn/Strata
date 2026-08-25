@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { NotificationsFacade } from '../notifications.facade';
 import { NotificationPanelComponent } from './notification-panel.component';
 import { Notification } from '../notifications.model';
@@ -34,7 +35,7 @@ describe('NotificationPanelComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [NotificationPanelComponent],
+      imports: [NotificationPanelComponent, getTranslocoModule()],
       providers: [{ provide: NotificationsFacade, useValue: facade }],
     }).compileComponents();
 

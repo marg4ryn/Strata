@@ -13,8 +13,7 @@ import {
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
@@ -66,7 +65,6 @@ export class HeaderComponent implements AfterViewInit {
   protected readonly history = inject(AnalysisHistoryFacade);
   protected readonly settings = inject(SettingsFacade);
   private readonly injector = inject(EnvironmentInjector);
-  private readonly transloco = inject(TranslocoService);
 
   private panels: PanelEntry[] = [];
 
@@ -101,12 +99,12 @@ export class HeaderComponent implements AfterViewInit {
     });
   }
 
-  private readonly label = toSignal(
-    this.transloco.selectTranslate('confirmations.startNewAnalysis.label', { initialValue: '' }),
-  );
-
   async startNewAnalysis(): Promise<void> {
-    const confirmed = await this.confirmModal.confirm(this.destroyRef, this.label(), 'confirm');
+    const confirmed = await this.confirmModal.confirm(
+      this.destroyRef,
+      'confirmations.startNewAnalysis',
+      'confirm',
+    );
     if (!confirmed) return;
     this.router.navigate(['']);
   }

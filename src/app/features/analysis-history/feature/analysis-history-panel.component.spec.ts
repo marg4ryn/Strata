@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisHistoryPanelComponent } from './analysis-history-panel.component';
 import { AnalysisHistoryFacade } from '../analysis-history.facade';
@@ -34,7 +35,7 @@ describe('AnalysisHistoryPanelComponent', () => {
     confirmModal = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisHistoryPanelComponent],
+      imports: [AnalysisHistoryPanelComponent, getTranslocoModule()],
       providers: [
         { provide: AnalysisHistoryFacade, useValue: facade },
         { provide: ConfirmOperationModalService, useValue: confirmModal },

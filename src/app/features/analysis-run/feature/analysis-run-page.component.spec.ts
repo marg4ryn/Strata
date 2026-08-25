@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { AnalysisRunPageComponent } from './analysis-run-page.component';
 import { AnalysisRunFacade } from '../analysis-run.facade';
 import {
@@ -51,7 +52,7 @@ describe('AnalysisRunPageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisRunPageComponent],
+      imports: [AnalysisRunPageComponent, getTranslocoModule()],
       providers: [{ provide: AnalysisRunFacade, useValue: facade }],
     }).compileComponents();
 

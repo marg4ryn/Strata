@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Location } from '@angular/common';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import AboutPageComponent from './about-page.component';
 
 describe('AboutPageComponent', () => {
@@ -12,7 +13,7 @@ describe('AboutPageComponent', () => {
     locationSpy = { back: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AboutPageComponent],
+      imports: [AboutPageComponent, getTranslocoModule()],
       providers: [{ provide: Location, useValue: locationSpy }],
     }).compileComponents();
 

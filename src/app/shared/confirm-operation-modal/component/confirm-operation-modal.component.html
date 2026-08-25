@@ -1,6 +1,6 @@
 <div class="modal" role="dialog" aria-modal="true" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <header class="modal__header">
-    <h2 class="modal__title">{{ label() }}</h2>
+    <h2 class="modal__title">{{ labelKey() | transloco }}</h2>
   </header>
 
   <footer class="modal__footer">
@@ -9,14 +9,14 @@
       btn="secondary"
       (click)="onCancel()"
     >
-      Cancel
+      {{ 'common.cancel' | transloco }}
     </button>
     <button
       [attr.cdkFocusInitial]="type() === 'confirm' ? '' : null"
       [btn]="type() === 'confirm' ? 'primary' : 'danger'"
       (click)="onConfirm()"
     >
-      Confirm
+      {{ 'common.confirm' | transloco }}
     </button>
   </footer>
 </div>

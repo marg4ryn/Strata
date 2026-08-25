@@ -93,13 +93,13 @@ describe('ConfirmOperationModalService', () => {
     await expect(promise).resolves.toBe(false);
   });
 
-  it('sets label and type inputs when provided', () => {
-    service.confirm(fakeDestroyRef(), 'My label', 'danger');
-    expect(componentRefMock.setInput).toHaveBeenCalledWith('label', 'My label');
+  it('sets labelKey and type inputs when provided', () => {
+    service.confirm(fakeDestroyRef(), 'myLabelKey', 'danger');
+    expect(componentRefMock.setInput).toHaveBeenCalledWith('labelKey', 'myLabelKey');
     expect(componentRefMock.setInput).toHaveBeenCalledWith('type', 'danger');
   });
 
-  it('does not set inputs when label/type are absent', () => {
+  it('does not set inputs when labelKey/type are absent', () => {
     service.confirm(fakeDestroyRef());
     expect(componentRefMock.setInput).not.toHaveBeenCalled();
   });

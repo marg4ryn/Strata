@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
@@ -23,7 +24,7 @@ describe('AnalysisHistoryItemComponent', () => {
     confirmModalMock = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisHistoryItemComponent],
+      imports: [AnalysisHistoryItemComponent, getTranslocoModule()],
       providers: [{ provide: ConfirmOperationModalService, useValue: confirmModalMock }],
     }).compileComponents();
 

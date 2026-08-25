@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisProgressSpinnerComponent } from './analysis-progress-spinner.component';
 
@@ -18,7 +19,7 @@ describe('AnalysisProgressSpinnerComponent', () => {
     focusMonitor = { focusVia: vi.fn(), stopMonitoring: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisProgressSpinnerComponent],
+      imports: [AnalysisProgressSpinnerComponent, getTranslocoModule()],
       providers: [
         { provide: ConfirmOperationModalService, useValue: confirmModal },
         { provide: FocusMonitor, useValue: focusMonitor },

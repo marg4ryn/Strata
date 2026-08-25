@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { InfoPanelComponent } from './info-panel.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
@@ -28,7 +29,7 @@ describe('InfoPanelComponent', () => {
     vi.useFakeTimers();
 
     await TestBed.configureTestingModule({
-      imports: [InfoPanelComponent],
+      imports: [InfoPanelComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InfoPanelComponent);

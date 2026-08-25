@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationModalComponent } from './confirm-operation-modal.component';
 
 describe('ConfirmOperationModalComponent', () => {
@@ -8,7 +9,7 @@ describe('ConfirmOperationModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmOperationModalComponent],
+      imports: [ConfirmOperationModalComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ConfirmOperationModalComponent);
@@ -29,12 +30,12 @@ describe('ConfirmOperationModalComponent', () => {
     });
 
     it('displays custom label via input', async () => {
-      fixture.componentRef.setInput('label', 'Delete this item?');
+      fixture.componentRef.setInput('labelKey', 'customKey');
       fixture.detectChanges();
       await fixture.whenStable();
 
       const title = fixture.nativeElement.querySelector('.modal__title');
-      expect(title.textContent).toContain('Delete this item?');
+      expect(title.textContent).toContain('customKey');
     });
   });
 

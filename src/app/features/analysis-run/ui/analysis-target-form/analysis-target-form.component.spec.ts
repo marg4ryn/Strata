@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { AnalysisTargetFormComponent } from './analysis-target-form.component';
 
 describe('AnalysisTargetFormComponent', () => {
@@ -11,7 +12,7 @@ describe('AnalysisTargetFormComponent', () => {
     vi.useFakeTimers();
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisTargetFormComponent],
+      imports: [AnalysisTargetFormComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisTargetFormComponent);

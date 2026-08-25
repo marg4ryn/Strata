@@ -10,7 +10,7 @@ export type ModalType = 'confirm' | 'danger';
 export class ConfirmOperationModalService {
   private overlay = inject(Overlay);
 
-  confirm(destroyRef: DestroyRef, label?: string, type?: ModalType): Promise<boolean> {
+  confirm(destroyRef: DestroyRef, labelKey?: string, type?: ModalType): Promise<boolean> {
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
     return new Promise((resolve) => {
@@ -23,8 +23,8 @@ export class ConfirmOperationModalService {
       const portal = new ComponentPortal(ConfirmOperationModalComponent);
       const componentRef = overlayRef.attach(portal);
 
-      if (label) {
-        componentRef.setInput('label', label);
+      if (labelKey) {
+        componentRef.setInput('labelKey', labelKey);
       }
       if (type) {
         componentRef.setInput('type', type);

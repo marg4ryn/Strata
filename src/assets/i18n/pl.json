@@ -1,4 +1,8 @@
 {
+  "common": {
+    "confirm": "Potwierdź",
+    "cancel": "Anuluj"
+  },
   "settings": {
     "panel": {
       "header": "Ustawienia",
@@ -22,8 +26,7 @@
     "settings": "Ustawienia"
   },
   "confirmations": {
-    "startNewAnalysis": {
-      "label": "Rozpocząć nową analizę?"
-    }
+    "default": "Tej operacji nie można cofnąć. Jesteś pewny?",
+    "startNewAnalysis": "Rozpocząć nową analizę?"
   }
 }

@@ -1,4 +1,8 @@
 {
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
   "settings": {
     "panel": {
       "header": "Settings",
@@ -22,8 +26,7 @@
     "settings": "Settings"
   },
   "confirmations": {
-    "startNewAnalysis": {
-      "label": "Start a new analysis?"
-    }
+    "default": "This operation cannot be undone. Are you sure?",
+    "startNewAnalysis": "Start a new analysis?"
   }
 }

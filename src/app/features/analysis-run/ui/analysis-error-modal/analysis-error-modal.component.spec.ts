@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { AnalysisErrorModalComponent } from './analysis-error-modal.component';
 
 describe('AnalysisErrorModalComponent', () => {
@@ -12,7 +13,7 @@ describe('AnalysisErrorModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AnalysisErrorModalComponent],
+      imports: [AnalysisErrorModalComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisErrorModalComponent);

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
@@ -30,7 +31,7 @@ describe('AnalysisUnfinishedModalComponent', () => {
     confirmModal = { confirm: vi.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [AnalysisUnfinishedModalComponent],
+      imports: [AnalysisUnfinishedModalComponent, getTranslocoModule()],
       providers: [{ provide: ConfirmOperationModalService, useValue: confirmModal }],
     }).compileComponents();
 
