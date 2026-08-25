@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { CdkListbox } from '@angular/cdk/listbox';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LangPreference } from '@app/core/language/language.model';
 import { LanguageSwitcherComponent } from './language-switcher.component';
@@ -23,7 +24,7 @@ describe('LanguageSwitcherComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [LanguageSwitcherComponent],
+      imports: [LanguageSwitcherComponent, getTranslocoModule()],
       providers: [{ provide: LanguageFacade, useValue: facade }],
     }).compileComponents();
 
@@ -37,21 +38,29 @@ describe('LanguageSwitcherComponent', () => {
     vi.restoreAllMocks();
   });
 
+  const getButton = () => fixture.nativeElement.querySelector('button');
+
   it('displays current language label', () => {
-    const btn = fixture.nativeElement.querySelector('button');
-    expect(btn.textContent).toContain('English');
+    expect(getButton().textContent).toContain('English');
   });
 
-  it('falls back to empty label for unknown preference', () => {
+  it('falls back to undefined for unknown preference', () => {
     facade.langPreference.set('xx' as LangPreference);
     fixture.detectChanges();
 
-    expect(component.currentLabel).toBe('');
+    expect(component.currentOption).toBeUndefined();
+    expect(getButton().textContent.trim()).toEqual('');
+  });
+
+  it('translates labelKey for "system"', () => {
+    facade.langPreference.set('system');
+    fixture.detectChanges();
+
+    expect(getButton().textContent).toContain('System');
   });
 
   it('toggles visibility on click', () => {
-    const btn = fixture.nativeElement.querySelector('button');
-    btn.click();
+    getButton().click();
     fixture.detectChanges();
 
     expect(component.isOpen()).toBe(true);
@@ -59,13 +68,12 @@ describe('LanguageSwitcherComponent', () => {
   });
 
   it('sets aria-expanded according to open state', () => {
-    const btn = fixture.nativeElement.querySelector('button');
-    expect(btn.getAttribute('aria-expanded')).toBe('false');
+    expect(getButton().getAttribute('aria-expanded')).toBe('false');
 
     component.toggle();
     fixture.detectChanges();
 
-    expect(btn.getAttribute('aria-expanded')).toBe('true');
+    expect(getButton().getAttribute('aria-expanded')).toBe('true');
   });
 
   it('emits openedChange on toggle', () => {
@@ -167,7 +175,6 @@ describe('LanguageSwitcherComponent', () => {
   });
 
   it('restores focus to trigger button after closing', () => {
-    const btn = fixture.nativeElement.querySelector('button');
     component.toggle();
     fixture.detectChanges();
 
@@ -175,6 +182,6 @@ describe('LanguageSwitcherComponent', () => {
     fixture.detectChanges();
     vi.advanceTimersByTime(0);
 
-    expect(document.activeElement).toBe(btn);
+    expect(document.activeElement).toBe(getButton());
   });
 });

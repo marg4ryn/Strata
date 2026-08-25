@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { SettingsSectionComponent } from './settings-section.component';
 
 describe('SettingsSectionComponent', () => {
@@ -8,7 +9,7 @@ describe('SettingsSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettingsSectionComponent],
+      imports: [SettingsSectionComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsSectionComponent);
@@ -18,10 +19,11 @@ describe('SettingsSectionComponent', () => {
     await fixture.whenStable();
   });
 
-  it('sets headerKey via input', () => {
-    const headerKey = 'testKey';
-    fixture.componentRef.setInput('headerKey', headerKey);
+  it('renders translated header text for given key', () => {
+    fixture.componentRef.setInput('headerKey', 'settings.panel.header');
     fixture.detectChanges();
-    expect(component.headerKey()).toBe(headerKey);
+
+    const title = fixture.nativeElement.querySelector('.settings-section__title');
+    expect(title.textContent.trim()).toBe('Settings');
   });
 });

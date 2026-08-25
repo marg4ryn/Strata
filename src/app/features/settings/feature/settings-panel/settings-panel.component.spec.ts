@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LangPreference } from '@app/core/language/language.model';
 import { SettingsPanelComponent } from './settings-panel.component';
@@ -33,7 +34,7 @@ describe('SettingsPanelComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SettingsPanelComponent],
+      imports: [SettingsPanelComponent, getTranslocoModule()],
       providers: [
         { provide: SettingsFacade, useValue: settingsFacade },
         { provide: LanguageFacade, useValue: languageFacade },
@@ -65,7 +66,7 @@ describe('SettingsPanelComponent', () => {
 
   it('renders language switcher inside a section labeled "Language"', () => {
     const sectionEl = fixture.nativeElement.querySelector('app-settings-section');
-    expect(sectionEl.getAttribute('label')).toBe('Language');
+    expect(sectionEl.getAttribute('headerKey')).toBe('settings.language.header');
     expect(sectionEl.querySelector('app-language-switcher')).toBeTruthy();
   });
 
