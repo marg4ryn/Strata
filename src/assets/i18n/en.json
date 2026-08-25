@@ -3,6 +3,34 @@
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
+  "header": {
+    "startNewAnalysis": "Start a new analysis",
+    "notifications": "Notifications",
+    "analysisHistory": "Analysis history",
+    "settings": "Settings"
+  },
+  "footer": {
+    "about": {
+      "title": "About the tool",
+      "button": "About"
+    }
+  },
+  "confirmations": {
+    "default": "This operation cannot be undone. Are you sure?",
+    "startNewAnalysis": "Start a new analysis?",
+    "loadAnalysis": "Load the {{ repoName }} analysis?",
+    "deleteAnalysis": "Are you sure you want to delete the {{ repoName }} analysis? This operation cannot be undone."
+  },
+  "analysisHistory": {
+    "panel": {
+      "header": "Analysis history",
+      "close": "Close analysis history",
+      "empty": "Analysis history is empty"
+    },
+    "item": {
+      "delete": "Delete analysis"
+    }
+  },
   "settings": {
     "panel": {
       "header": "Settings",
@@ -12,21 +40,5 @@
       "header": "Language",
       "system": "System"
     }
-  },
-  "footer": {
-    "about": {
-      "title": "About the tool",
-      "button": "About"
-    }
-  },
-  "header": {
-    "startNewAnalysis": "Start a new analysis",
-    "notifications": "Notifications",
-    "analysisHistory": "Analysis history",
-    "settings": "Settings"
-  },
-  "confirmations": {
-    "default": "This operation cannot be undone. Are you sure?",
-    "startNewAnalysis": "Start a new analysis?"
   }
 }

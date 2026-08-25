@@ -14,6 +14,7 @@ import { ModalType } from '../service/confirm-operation-modal.service';
 })
 export class ConfirmOperationModalComponent {
   readonly labelKey = input<string>('confirmations.default');
+  readonly params = input<Record<string, unknown>>({});
   readonly type = input<ModalType>('danger');
 
   readonly cancel = output<void>();

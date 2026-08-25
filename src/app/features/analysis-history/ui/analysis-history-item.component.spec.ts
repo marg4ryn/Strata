@@ -119,8 +119,9 @@ describe('AnalysisHistoryItemComponent', () => {
 
       expect(confirmModalMock.confirm).toHaveBeenCalledWith(
         expect.anything(),
-        `Load the ${component.repoName()} analysis?`,
+        'confirmations.loadAnalysis',
         'confirm',
+        expect.objectContaining({ repoName: component.repoName() }),
       );
       expect(spy).toHaveBeenCalledWith(baseEntry.analysisId);
     });
@@ -148,7 +149,9 @@ describe('AnalysisHistoryItemComponent', () => {
       expect(event.stopPropagation).toHaveBeenCalled();
       expect(confirmModalMock.confirm).toHaveBeenCalledWith(
         expect.anything(),
-        `Are you sure you want to delete the ${component.repoName()} analysis? This operation cannot be undone.`,
+        'confirmations.deleteAnalysis',
+        'danger',
+        expect.objectContaining({ repoName: component.repoName() }),
       );
       expect(spy).toHaveBeenCalledWith(baseEntry.analysisId);
     });
@@ -200,8 +203,11 @@ describe('AnalysisHistoryItemComponent', () => {
 
       expect(confirmModalMock.confirm).toHaveBeenCalledWith(
         expect.anything(),
-        expect.stringContaining('Load the'),
+        'confirmations.loadAnalysis',
         'confirm',
+        expect.objectContaining({
+          repoName: component.repoName(),
+        }),
       );
     });
 
@@ -228,7 +234,11 @@ describe('AnalysisHistoryItemComponent', () => {
       expect(confirmModalMock.confirm).toHaveBeenCalledOnce();
       expect(confirmModalMock.confirm).toHaveBeenCalledWith(
         expect.anything(),
-        expect.stringContaining('delete'),
+        'confirmations.deleteAnalysis',
+        'danger',
+        expect.objectContaining({
+          repoName: component.repoName(),
+        }),
       );
     });
 
@@ -267,8 +277,11 @@ describe('AnalysisHistoryItemComponent', () => {
 
       expect(confirmModalMock.confirm).not.toHaveBeenCalledWith(
         expect.anything(),
-        expect.stringContaining('Load the'),
+        'confirmations.loadAnalysis',
         'confirm',
+        expect.objectContaining({
+          repoName: component.repoName(),
+        }),
       );
     });
   });

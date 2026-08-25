@@ -1,6 +1,6 @@
 <div class="modal" role="dialog" aria-modal="true" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <header class="modal__header">
-    <h2 class="modal__title">{{ labelKey() | transloco }}</h2>
+    <h2 class="modal__title">{{ labelKey() | transloco: params() }}</h2>
   </header>
 
   <footer class="modal__footer">

@@ -3,6 +3,34 @@
     "confirm": "Potwierdź",
     "cancel": "Anuluj"
   },
+  "header": {
+    "startNewAnalysis": "Rozpocznij nową analizę",
+    "notifications": "Powiadomienia",
+    "analysisHistory": "Historia analiz",
+    "settings": "Ustawienia"
+  },
+  "footer": {
+    "about": {
+      "title": "O narzędziu",
+      "button": "O narzędziu"
+    }
+  },
+  "confirmations": {
+    "default": "Tej operacji nie można cofnąć. Jesteś pewny?",
+    "startNewAnalysis": "Rozpocząć nową analizę?",
+    "loadAnalysis": "Wczytać analizę {{ repoName }}?",
+    "deleteAnalysis": "Czy jesteś pewny, że chcesz usunąć analizę {{ repoName }}? Tej operacji nie można cofnąć."
+  },
+  "analysisHistory": {
+    "panel": {
+      "header": "Historia analiz",
+      "close": "Zamknij historię analiz",
+      "empty": "Historia analiz jest pusta"
+    },
+    "item": {
+      "delete": "Usuń analizę"
+    }
+  },
   "settings": {
     "panel": {
       "header": "Ustawienia",
@@ -12,21 +40,5 @@
       "header": "Język",
       "system": "Systemowy"
     }
-  },
-  "footer": {
-    "about": {
-      "title": "O narzędziu",
-      "button": "O narzędziu"
-    }
-  },
-  "header": {
-    "startNewAnalysis": "Rozpocznij nową analizę",
-    "notifications": "Powiadomienia",
-    "analysisHistory": "Historia analiz",
-    "settings": "Ustawienia"
-  },
-  "confirmations": {
-    "default": "Tej operacji nie można cofnąć. Jesteś pewny?",
-    "startNewAnalysis": "Rozpocząć nową analizę?"
   }
 }

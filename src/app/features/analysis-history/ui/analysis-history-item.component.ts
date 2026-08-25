@@ -7,7 +7,7 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
@@ -15,7 +15,7 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
 
 @Component({
   selector: 'app-analysis-history-item',
-  imports: [],
+  imports: [TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'history-item history-item--success',
@@ -60,8 +60,9 @@ export class AnalysisHistoryItemComponent {
   async loadAnalysis(): Promise<void> {
     const confirmed = await this.confirmModal.confirm(
       this.destroyRef,
-      `Load the ${this.repoName()} analysis?`,
+      'confirmations.loadAnalysis',
       'confirm',
+      { repoName: this.repoName() },
     );
     if (!confirmed) return;
     this.load.emit(this.historyEntry().analysisId);
@@ -71,7 +72,9 @@ export class AnalysisHistoryItemComponent {
     event.stopPropagation();
     const confirmed = await this.confirmModal.confirm(
       this.destroyRef,
-      `Are you sure you want to delete the ${this.repoName()} analysis? This operation cannot be undone.`,
+      'confirmations.deleteAnalysis',
+      'danger',
+      { repoName: this.repoName() },
     );
     if (!confirmed) return;
     this.remove.emit(this.historyEntry().analysisId);

@@ -1,13 +1,13 @@
 <div class="history-panel" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <div class="history-panel__header">
-    <span class="history-panel__title">Analysis History</span>
+    <span class="history-panel__title">{{ 'analysisHistory.panel.header' | transloco }}</span>
 
     <div class="history-panel__actions">
       <button
         type="button"
         class="history-panel__close"
-        title="Close analysis history"
-        aria-label="Close analysis history"
+        [title]="'analysisHistory.panel.close' | transloco"
+        [attr.aria-label]="'analysisHistory.panel.close' | transloco"
         (click)="facade.closePanel()"
       >
         <svg
@@ -39,7 +39,7 @@
       }
     } @else {
       <div class="history-panel__empty">
-        <p>Analysis history is empty</p>
+        <p>{{ 'analysisHistory.panel.empty' | transloco }}</p>
       </div>
     }
   </div>

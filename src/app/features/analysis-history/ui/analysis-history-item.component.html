@@ -3,8 +3,8 @@
   <button
     type="button"
     class="history-item__delete"
-    title="Delete analysis"
-    aria-label="Delete analysis"
+    [title]="'analysisHistory.item.delete' | transloco"
+    [attr.aria-label]="'analysisHistory.item.delete' | transloco"
     (click)="removeHistoryEntry($event)"
     (keydown)="handleRemoveHistoryEntryKeydown($event)"
   >

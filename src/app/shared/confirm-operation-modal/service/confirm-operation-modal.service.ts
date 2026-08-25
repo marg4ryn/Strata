@@ -10,7 +10,12 @@ export type ModalType = 'confirm' | 'danger';
 export class ConfirmOperationModalService {
   private overlay = inject(Overlay);
 
-  confirm(destroyRef: DestroyRef, labelKey?: string, type?: ModalType): Promise<boolean> {
+  confirm(
+    destroyRef: DestroyRef,
+    labelKey?: string,
+    type?: ModalType,
+    params?: Record<string, unknown>,
+  ): Promise<boolean> {
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
     return new Promise((resolve) => {
@@ -28,6 +33,9 @@ export class ConfirmOperationModalService {
       }
       if (type) {
         componentRef.setInput('type', type);
+      }
+      if (params) {
+        componentRef.setInput('params', params);
       }
 
       componentRef.changeDetectorRef.detectChanges();
