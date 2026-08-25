@@ -1,5 +1,12 @@
 {
   "settings": {
-    "header": "Ustawienia"
+    "panel": {
+      "header": "Ustawienia",
+      "close": "Zamknij ustawienia"
+    },
+    "language": {
+      "header": "Język",
+      "system": "Systemowy"
+    }
   }
 }

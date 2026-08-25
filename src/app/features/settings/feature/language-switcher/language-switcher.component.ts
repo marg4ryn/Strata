@@ -2,6 +2,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkListbox } from '@angular/cdk/listbox';
 import { CdkListboxModule } from '@angular/cdk/listbox';
 import { A11yModule } from '@angular/cdk/a11y';
+import { TranslocoPipe } from '@ngneat/transloco';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,11 +19,12 @@ import { LangPreference, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language
 interface LangOption {
   value: LangPreference;
   label: string;
+  labelKey?: string;
 }
 
 @Component({
   selector: 'app-language-switcher',
-  imports: [OverlayModule, A11yModule, CdkListbox, CdkListboxModule],
+  imports: [OverlayModule, A11yModule, CdkListbox, CdkListboxModule, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './language-switcher.component.html',
   styleUrl: './language-switcher.component.scss',
@@ -30,7 +32,7 @@ interface LangOption {
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);
 
-  private readonly listbox = viewChild.required(CdkListbox /* v8 ignore next */);
+  private readonly listbox = viewChild.required(CdkListbox);
   private readonly triggerBtn = viewChild.required('triggerBtn', {
     read: ElementRef<HTMLButtonElement>,
   });
@@ -41,12 +43,12 @@ export class LanguageSwitcherComponent {
   readonly isOpen = signal(false);
 
   readonly options: LangOption[] = [
-    { value: SYSTEM_PREFERENCE, label: 'System default' },
+    { value: SYSTEM_PREFERENCE, label: '', labelKey: 'settings.language.system' },
     ...LANGUAGES,
   ];
 
-  get currentLabel(): string {
-    return this.options.find((option) => option.value === this.current())?.label ?? '';
+  get currentOption(): LangOption | undefined {
+    return this.options.find((option) => option.value === this.current());
   }
 
   onOverlayAttached(): void {

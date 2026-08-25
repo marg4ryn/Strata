@@ -8,7 +8,9 @@
   [attr.aria-expanded]="isOpen()"
   (click)="toggle()"
 >
-  <span>{{ currentLabel }}</span>
+  <span>
+    {{ currentOption?.labelKey ? (currentOption!.labelKey | transloco) : currentOption?.label }}
+  </span>
   <svg
     class="lang-switcher__chevron"
     width="12"
@@ -48,7 +50,7 @@
     >
       @for (option of options; track option.value) {
         <li class="lang-switcher__option" [cdkOption]="option.value">
-          {{ option.label }}
+          {{ option.labelKey ? (option.labelKey | transloco) : option.label }}
         </li>
       }
     </ul>

@@ -13,15 +13,15 @@ describe('SettingsSectionComponent', () => {
 
     fixture = TestBed.createComponent(SettingsSectionComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('label', 'test');
+    fixture.componentRef.setInput('headerKey', 'test');
     fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  it('sets label via input', () => {
-    const label = 'test label';
-    fixture.componentRef.setInput('label', label);
+  it('sets headerKey via input', () => {
+    const headerKey = 'testKey';
+    fixture.componentRef.setInput('headerKey', headerKey);
     fixture.detectChanges();
-    expect(component.label()).toBe(label);
+    expect(component.headerKey()).toBe(headerKey);
   });
 });

@@ -1,11 +1,12 @@
 import { Component, input } from '@angular/core';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-settings-section',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './settings-section.component.html',
   styleUrl: './settings-section.component.scss',
 })
 export class SettingsSectionComponent {
-  label = input.required<string>();
+  headerKey = input.required<string>();
 }

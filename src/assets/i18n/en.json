@@ -1,5 +1,12 @@
 {
   "settings": {
-    "header": "Settings"
+    "panel": {
+      "header": "Settings",
+      "close": "Close settings"
+    },
+    "language": {
+      "header": "Language",
+      "system": "System"
+    }
   }
 }
