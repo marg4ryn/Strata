@@ -7,8 +7,10 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
+import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 
 @Component({
@@ -28,6 +30,7 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
 export class AnalysisHistoryItemComponent {
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly transloco = inject(TranslocoService);
 
   readonly historyEntry = input.required<AnalysisHistoryEntry>();
   readonly remove = output<string>();
@@ -48,7 +51,10 @@ export class AnalysisHistoryItemComponent {
   readonly rangeLabel = computed(() => {
     const range = this.historyEntry().target.range;
     if (!range) return '';
-    return `${range.startDate} – ${range.endDate}`;
+    return (
+      `${isoDateToLocaleString(range.startDate, this.transloco.getActiveLang())}` +
+      ` – ${isoDateToLocaleString(range.endDate, this.transloco.getActiveLang())}`
+    );
   });
 
   async loadAnalysis(): Promise<void> {

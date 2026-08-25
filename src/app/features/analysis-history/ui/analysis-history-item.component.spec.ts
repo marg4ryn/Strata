@@ -105,7 +105,7 @@ describe('AnalysisHistoryItemComponent', () => {
         },
       });
       fixture.detectChanges();
-      expect(component.rangeLabel()).toBe('2024-01-01 – 2024-01-31');
+      expect(component.rangeLabel()).toBe('1/1/2024 – 1/31/2024');
     });
   });
 
