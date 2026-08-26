@@ -1,4 +1,5 @@
 import { Service, inject } from '@angular/core';
+import { Meta } from '@angular/platform-browser';
 import { TranslocoService } from '@ngneat/transloco';
 
 import { LoggerService } from '@app/core/logging/logger.service';
@@ -9,6 +10,7 @@ import { Lang, LangPreference, AVAILABLE_LANGS, SYSTEM_PREFERENCE } from '../lan
 
 @Service()
 export class LanguageService {
+  private readonly meta = inject(Meta);
   private readonly transloco = inject(TranslocoService);
   private readonly storage = inject(LanguageStorageService);
   private readonly store = inject(LanguageStoreService);
@@ -51,6 +53,11 @@ export class LanguageService {
         : preference;
 
     this.logger.info(`Language Service set application language to ${lang}`);
+    document.documentElement.lang = lang;
     this.transloco.setActiveLang(lang);
+    this.meta.updateTag({
+      name: 'description',
+      content: this.transloco.translate('meta.description') ?? '',
+    });
   }
 }

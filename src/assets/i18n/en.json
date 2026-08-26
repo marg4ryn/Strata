@@ -5,6 +5,9 @@
     "close": "Close",
     "loading": "Loading"
   },
+  "meta": {
+    "description": "Strata is a tool for behavioral analysis of software repositories, combining change history and code structure to identify hotspots and highlight areas that require the most attention."
+  },
   "header": {
     "startNewAnalysis": "Start a new analysis",
     "notifications": "Notifications",
