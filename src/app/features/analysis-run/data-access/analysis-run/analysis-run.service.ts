@@ -1,7 +1,7 @@
 import { Service, inject, effect, untracked } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
+import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisHistoryEntry } from '@app/features/analysis-history/analysis-history.model';
@@ -18,7 +18,7 @@ import {
 
 @Service()
 export class AnalysisRunService {
-  private readonly router = inject(Router);
+  private readonly results = inject(AnalysisResultsFacade);
   private readonly store = inject(AnalysisRunStoreService);
   private readonly storage = inject(AnalysisRunStorageService);
   private readonly webSocket = inject(AnalysisRunWebSocketService);
@@ -42,7 +42,7 @@ export class AnalysisRunService {
             this.store.pendingAnalysis()!,
           );
           this.history.addAnalysisHistoryEntry(analysisHistoryEntry);
-          this.router.navigate(['analysis', result, 'summary']);
+          this.results.navigateToAnalysis(result);
           void this.clearData();
         });
       }

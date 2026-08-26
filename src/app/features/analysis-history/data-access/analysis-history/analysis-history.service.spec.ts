@@ -3,6 +3,7 @@ import { signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
+import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
 import { AnalysisHistoryService } from './analysis-history.service';
 import { AnalysisHistoryStoreService } from '../analysis-history-store/analysis-history-store.service';
@@ -38,8 +39,8 @@ describe('AnalysisHistoryService', () => {
     clearAnalysisHistory: ReturnType<typeof vi.fn>;
   };
 
-  let router: {
-    navigate: ReturnType<typeof vi.fn>;
+  let results: {
+    navigateToAnalysis: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -64,8 +65,8 @@ describe('AnalysisHistoryService', () => {
       error: vi.fn(),
     };
 
-    router = {
-      navigate: vi.fn(),
+    results = {
+      navigateToAnalysis: vi.fn(),
     };
 
     mockChannel = new MockBroadcastChannel();
@@ -82,7 +83,7 @@ describe('AnalysisHistoryService', () => {
         { provide: AnalysisHistoryStoreService, useValue: store },
         { provide: AnalysisHistoryStorageService, useValue: storage },
         { provide: LoggerService, useValue: logger },
-        { provide: Router, useValue: router },
+        { provide: AnalysisResultsFacade, useValue: results },
       ],
     });
     service = TestBed.inject(AnalysisHistoryService);
@@ -116,7 +117,7 @@ describe('AnalysisHistoryService', () => {
   describe('loadAnalysis', () => {
     it('loads analysis', () => {
       service.loadAnalysis('123');
-      expect(router.navigate).toHaveBeenCalledWith(['analysis', '123', 'summary']);
+      expect(results.navigateToAnalysis).toHaveBeenCalledWith('123');
     });
   });
 

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
+import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { AnalysisRunService } from './analysis-run.service';
@@ -64,8 +64,8 @@ describe('AnalysisRunService', () => {
     addAnalysisHistoryEntry: ReturnType<typeof vi.fn>;
   };
 
-  let router: {
-    navigate: ReturnType<typeof vi.fn>;
+  let results: {
+    navigateToAnalysis: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -111,8 +111,8 @@ describe('AnalysisRunService', () => {
       addAnalysisHistoryEntry: vi.fn(),
     };
 
-    router = {
-      navigate: vi.fn(),
+    results = {
+      navigateToAnalysis: vi.fn(),
     };
 
     logger = {
@@ -131,7 +131,7 @@ describe('AnalysisRunService', () => {
         { provide: LoggerService, useValue: logger },
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },
-        { provide: Router, useValue: router },
+        { provide: AnalysisResultsFacade, useValue: results },
       ],
     });
 
@@ -153,7 +153,7 @@ describe('AnalysisRunService', () => {
       TestBed.tick();
 
       expect(clearDataSpy).toHaveBeenCalledOnce();
-      expect(router.navigate).toHaveBeenCalledWith(['analysis', '123', 'summary']);
+      expect(results.navigateToAnalysis).toHaveBeenCalledWith('123');
       expect(notifications.sendNotificationSuccess).toHaveBeenCalledOnce();
       expect(history.addAnalysisHistoryEntry).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalled();

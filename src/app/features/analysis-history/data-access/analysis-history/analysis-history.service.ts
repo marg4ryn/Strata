@@ -2,6 +2,7 @@ import { Service, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
+import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { AnalysisHistoryStoreService } from '../analysis-history-store/analysis-history-store.service';
 import { AnalysisHistoryStorageService } from '../analysis-history-storage/analysis-history-storage.service';
 import { AnalysisHistoryEntry } from '../../analysis-history.model';
@@ -11,7 +12,7 @@ export class AnalysisHistoryService {
   private readonly store = inject(AnalysisHistoryStoreService);
   private readonly storage = inject(AnalysisHistoryStorageService);
   private readonly logger = inject(LoggerService);
-  private readonly router = inject(Router);
+  private readonly results = inject(AnalysisResultsFacade);
 
   private readonly channel = new BroadcastChannel('analysis-history-sync');
 
@@ -51,7 +52,7 @@ export class AnalysisHistoryService {
     this.logger.debug(
       `Analysis History Service received a request to load analysis with analysisId: ${analysisId}`,
     );
-    this.router.navigate(['analysis', analysisId, 'summary']);
+    this.results.navigateToAnalysis(analysisId);
   }
 
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry) {
