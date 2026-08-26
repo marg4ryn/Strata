@@ -28,6 +28,7 @@
       "empty": "Analysis history is empty"
     },
     "item": {
+      "load": "Load analysis",
       "delete": "Delete analysis"
     }
   },

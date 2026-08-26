@@ -17,13 +17,6 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
   selector: 'app-analysis-history-item',
   imports: [TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'history-item history-item--success',
-    '(click)': 'loadAnalysis()',
-    tabindex: '0',
-    role: 'button',
-    '(keydown.enter)': 'loadAnalysis()',
-  },
   templateUrl: './analysis-history-item.component.html',
   styleUrl: './analysis-history-item.component.scss',
 })
@@ -36,7 +29,9 @@ export class AnalysisHistoryItemComponent {
   readonly remove = output<string>();
   readonly load = output<string>();
 
-  readonly timestamp = computed(() => new Date(this.historyEntry().completedAt).toLocaleString());
+  readonly timestamp = computed(() =>
+    new Date(this.historyEntry().completedAt).toLocaleString(this.transloco.getActiveLang()),
+  );
 
   readonly repoName = computed(() => {
     const repoName = this.historyEntry().target.targetURL.split('/').slice(-2).join('/') || '';

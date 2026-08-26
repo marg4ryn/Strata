@@ -28,6 +28,7 @@
       "empty": "Historia analiz jest pusta"
     },
     "item": {
+      "load": "Wczytaj analizę",
       "delete": "Usuń analizę"
     }
   },

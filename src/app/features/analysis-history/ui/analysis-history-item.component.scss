@@ -1,11 +1,10 @@
-:host.history-item {
+.history-item {
   display: flex;
   flex-direction: column;
   cursor: pointer;
   gap: 0.5rem;
   padding: 0.75rem;
   min-height: 73px;
-  margin-bottom: 0.25rem;
   border-radius: 8px;
   background-color: var(--bg-primary);
   border-left: 3px solid transparent;
@@ -15,10 +14,6 @@
     border-top: 1px solid var(--border-subtle);
     border-right: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
-  }
-
-  &:last-child {
-    margin-bottom: 0;
   }
 
   &:hover,
