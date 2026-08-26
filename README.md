@@ -13,9 +13,9 @@
 
 ## 🧭 About
 
-**Strata** is a tool for analyzing the evolution of software repositories. It uses version control history to reveal how code changes over time, helping teams identify areas with high activity and complexity. Instead of focusing only on the current state of a codebase, Strata examines development patterns to provide insight into how the system evolves and where maintenance effort may be most valuable.
+**Strata** is a tool for behavioral analysis of software repositories. It uses version control history to study how a codebase evolves over time, going beyond its current state to reveal patterns of development and maintenance. By combining historical activity with structural information about the code, Strata helps identify areas that are particularly important to the evolution of a system and provides context for deciding where maintenance effort may have the greatest impact.
 
-The application's name refers to rock strata – layers that accumulate over time, recording the history of everything that shaped them. In the context of software development, these layers correspond to the evolving history of a codebase, where high complexity coinciding with frequent changes forms so-called **_hotspots_**. Strata highlights these highly active regions that often remain hidden in traditional analyses. This allows teams to focus their attention and resources on the areas where intervention is most needed, reducing the risk of failures and supporting long-term, sustainable system maintenance.
+The application's name refers to rock strata – layers that accumulate over time and record the processes that shaped them. In software, these layers are the successive changes recorded in version control, preserving a history of how the system was developed. By examining this history, Strata can reveal **hotspots** – areas of code that are both complex and frequently modified, and therefore often deserve additional attention. Rather than replacing static analysis, Strata adds a historical perspective that helps teams understand which parts of a system matter most in practice and make better-informed decisions about its development and maintenance.
 
 ## ✨ Features
 
@@ -36,7 +36,7 @@ Users can access several application panels directly from the header. All panels
 
 Important actions trigger notifications that inform users about the result of an operation. Notifications indicate the message type (`success`, `info`, `warn`, or `error`) and the number of unread notifications is displayed in the application header (see the **Notifications** below).
 
-Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below). The analysis history state is synchronized between browser tabs using the BroadcastChannel API, ensuring that additions and removals made in one tab are reflected in the others.
+Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below). The analysis history state is synchronized between browser tabs using the Broadcast Channel API, ensuring that additions and removals made in one tab are reflected in the others.
 
 The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below).
 
@@ -47,7 +47,7 @@ The settings panel allows users to change the application language between Engli
 
 ### About Page
 
-Users interested in the application can visit the About Page, accessible from the footer of the interface. It presents the development team behind the project and the technology stack used to build the system, and it also documents the tool’s limitations to help users better understand Strata’s purpose and scope (see the **About Page** below).
+Users interested in the application can visit the About Page, accessible from the application's footer. It presents the development team behind the project and the technology stack used to build the system, and it also documents the tool’s limitations to help users better understand Strata’s purpose and scope (see the **About Page** below).
 
 | About Page |
 |:---:|

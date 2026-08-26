@@ -42,7 +42,7 @@ SSR and SSG were rejected. Even with either approach, a browser crawler would no
 The application's SEO remains limited. This is an intentional trade-off, as SEO is not a priority for this product. The priority is the performance of interactive visualizations.
 
 
-## [Architecture] Application Directory Structure Standard
+## [Architecture] Why this Application Directory Structure Convention?
 
 ### Context
 
@@ -99,7 +99,26 @@ Angular's built-in localization (compile-time translations) was rejected. Despit
 Translations are resolved at runtime, which introduces additional runtime overhead compared to a compile-time solution. This cost is accepted in exchange for the flexibility to change the language without reloading the application.
 
 
-## [Shared: Button Directive] Why Are the Main Application Buttons a Directive?
+## [Architecture] Why only one translation file per locale?
+
+### Context
+
+The application supports multiple languages, so translation strings must be stored in dedicated locale files. The structure should remain simple and easy to integrate with the application's i18n tooling. Translations can be stored in one file per locale or split by application module. Since the project is relatively small and has few developers, the chosen approach should avoid unnecessary complexity.
+
+### Decision
+
+I store all translations for a given locale in a single file. This reduces the number of HTTP requests, keeps the i18n configuration simple, supports i18n plugins, and makes translation management easier.
+
+### Alternatives Considered
+
+Translations could be split into separate files for individual modules. This would provide clearer module boundaries and could be useful in a larger project with more developers. For the current project, this would add unnecessary files and configuration without providing enough benefit to justify the additional complexity.
+
+### Consequences
+
+The translation structure remains simple and predictable, with minimal configuration overhead. The main drawback is that locale files may become harder to navigate as the application grows. If the project or team becomes significantly larger, this decision can be revisited and translations split by module.
+
+
+## [Shared: Button Directive] Why are the main application buttons a directive?
 
 ### Context
 
