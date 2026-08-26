@@ -1,8 +1,10 @@
 <div class="loading">
   <app-loading-spinner />
-  <p class="loading__label">{{ label() }}</p>
+  <p class="loading__label">{{ labelKey() | transloco }}...</p>
   <button #firstButton btn="secondary" [disabled]="isAborting()" (click)="abortAnalysis()">
-    {{ isAborting() ? 'Aborting...' : 'Abort' }}
+    {{
+      (isAborting() ? 'analysisRun.progress.aborting' : 'analysisRun.progress.abort') | transloco
+    }}
   </button>
 </div>
 

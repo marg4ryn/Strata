@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, output, inject } from '@angular/core';
 import {
   form,
   FormField,
@@ -9,23 +9,31 @@ import {
   debounce,
   ValidationError,
 } from '@angular/forms/signals';
-import { DatePipe } from '@angular/common';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { url, afterDate, beforeDate } from '../../utils/validators';
+import { url, afterDate, beforeDate, ParamValidationError } from '../../utils/validators';
 import { AnalysisTargetFormModel } from '../../analysis-run.model';
 
 @Component({
   selector: 'app-analysis-target-form',
-  imports: [FormField, FormRoot, ButtonDirective],
+  imports: [FormField, FormRoot, ButtonDirective, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-target-form.component.html',
   styleUrl: './analysis-target-form.component.scss',
 })
 export class AnalysisTargetFormComponent {
-  private readonly datePipe = new DatePipe('en-US');
+  private readonly transloco = inject(TranslocoService);
+
+  readonly analysisTargetData = output<AnalysisTargetFormModel>();
+
   private readonly minDate = new Date('1970-01-01');
+
+  private readonly activeLang = toSignal(this.transloco.langChanges$, {
+    initialValue: this.transloco.getActiveLang(),
+  });
 
   private readonly initialModel = (): AnalysisTargetFormModel => ({
     targetURL: '',
@@ -33,8 +41,6 @@ export class AnalysisTargetFormComponent {
     startDate: null,
     endDate: null,
   });
-
-  readonly analysisTargetData = output<AnalysisTargetFormModel>();
 
   readonly analysisTargetModel = signal<AnalysisTargetFormModel>(this.initialModel());
 
@@ -44,14 +50,14 @@ export class AnalysisTargetFormComponent {
       debounce(schemaPath.targetURL, 300);
 
       required(schemaPath.targetURL, {
-        message: 'URL is required',
+        message: 'analysisRun.form.urlRequired',
       });
       required(schemaPath.startDate, {
-        message: 'Start date is required',
+        message: 'analysisRun.form.startDateRequired',
         when: ({ valueOf }) => valueOf(schemaPath.limitRange),
       });
       required(schemaPath.endDate, {
-        message: 'End date is required',
+        message: 'analysisRun.form.endDateRequired',
         when: ({ valueOf }) => valueOf(schemaPath.limitRange),
       });
 
@@ -62,22 +68,18 @@ export class AnalysisTargetFormComponent {
         when: ({ valueOf }) => !valueOf(schemaPath.limitRange),
       });
 
-      url(schemaPath.targetURL, 'Enter a valid URL');
+      url(schemaPath.targetURL, 'analysisRun.form.urlInvalid');
       maxLength(schemaPath.targetURL, 500);
 
-      afterDate(
-        schemaPath.startDate,
-        this.minDate,
-        `Start date cannot be earlier than ${this.datePipe.transform(this.minDate, 'longDate')}`,
-      );
-      afterDate(
-        schemaPath.endDate,
-        this.minDate,
-        `End date cannot be earlier than ${this.datePipe.transform(this.minDate, 'longDate')}`,
-      );
-      afterDate(schemaPath.endDate, schemaPath.startDate, 'End date must be after start date');
-      beforeDate(schemaPath.startDate, localNowAsUtcMidnight, 'Start date cannot be in the future');
-      beforeDate(schemaPath.endDate, localNowAsUtcMidnight, 'End date cannot be in the future');
+      afterDate(schemaPath.startDate, this.minDate, 'analysisRun.form.dateTooEarly', {
+        date: this.minDate.toISOString(),
+      });
+      afterDate(schemaPath.endDate, this.minDate, 'analysisRun.form.dateTooEarly', {
+        date: this.minDate.toISOString(),
+      });
+      afterDate(schemaPath.endDate, schemaPath.startDate, 'analysisRun.form.endBeforeStart');
+      beforeDate(schemaPath.startDate, localNowAsUtcMidnight, 'analysisRun.form.dateInFuture');
+      beforeDate(schemaPath.endDate, localNowAsUtcMidnight, 'analysisRun.form.dateInFuture');
     },
     {
       submission: {
@@ -98,7 +100,17 @@ export class AnalysisTargetFormComponent {
     return field().touched() && field().invalid();
   }
 
+  errorParams(error: ValidationError): Record<string, string> | undefined {
+    const params = (error as ParamValidationError).params;
+    if (!params?.['date']) return params;
+
+    return {
+      ...params,
+      date: new Date(params['date']).toLocaleDateString(this.activeLang()),
+    };
+  }
+
   errorMessage(error: ValidationError): string | null {
-    return error.message ?? 'Enter a valid date';
+    return error.message ?? 'analysisRun.form.dateInvalid';
   }
 }

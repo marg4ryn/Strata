@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
@@ -18,7 +19,7 @@ import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
   selector: 'app-analysis-error-modal',
-  imports: [ButtonDirective, InfoPanelComponent],
+  imports: [ButtonDirective, InfoPanelComponent, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-error-modal.component.html',
   styleUrl: './analysis-error-modal.component.scss',

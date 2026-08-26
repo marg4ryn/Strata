@@ -2,7 +2,8 @@
   "common": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "loading": "Loading"
   },
   "header": {
     "startNewAnalysis": "Start a new analysis",
@@ -98,6 +99,46 @@
       "title": "Project team",
       "supervisorLabel": "Supervisor",
       "supervisorDegree": "Dr."
+    }
+  },
+  "analysisRun": {
+    "progress": {
+      "connecting": "Connecting",
+      "queued": "Queued",
+      "cloning": "Cloning",
+      "updating": "Updating",
+      "processing": "Processing data",
+      "analyzing": "Analyzing",
+      "finalizing": "Finalizing",
+      "aborting": "Aborting...",
+      "abort": "Abort"
+    },
+    "infoPanel": {
+      "startDate": "Started at",
+      "targetURL": "Target URL",
+      "dateRange": "Date Range"
+    },
+    "unfinished": {
+      "header": "Unfinished analysis found",
+      "abandon": "Abandon",
+      "resume": "Resume"
+    },
+    "error": {
+      "header": "Analysis error",
+      "retry": "Retry"
+    },
+    "form": {
+      "targetLabel": "Enter link to analysis target",
+      "limitRange": "Limit date range",
+      "submit": "Start Analysis",
+      "urlRequired": "URL is required",
+      "urlInvalid": "Enter a valid URL",
+      "dateInvalid": "Enter a valid date",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "dateTooEarly": "Date cannot be earlier than {{ date }}",
+      "endBeforeStart": "End date must be after start date",
+      "dateInFuture": "Date cannot be in the future"
     }
   }
 }

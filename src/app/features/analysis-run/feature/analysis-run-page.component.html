@@ -8,7 +8,7 @@
   />
 } @else if (facade.isBusy()) {
   <app-analysis-progress-spinner
-    [label]="debouncedLabel.value()"
+    [labelKey]="debouncedLabelKey.value()"
     [isAborting]="facade.isAborting()"
     [pendingAnalysis]="facade.pendingAnalysis()"
     (abort)="facade.abortAnalysis()"

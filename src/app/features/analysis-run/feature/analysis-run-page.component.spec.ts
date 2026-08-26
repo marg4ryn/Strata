@@ -236,7 +236,7 @@ describe('AnalysisRunPageComponent', () => {
   describe('label computed', () => {
     it('shows "Connecting..." when progress is null', () => {
       fixture.detectChanges();
-      expect(component.debouncedLabel.value()).toBe('Connecting...');
+      expect(component.debouncedLabelKey.value()).toBe('analysisRun.progress.connecting');
     });
 
     it('does not update debounced label before 800ms', async () => {
@@ -247,7 +247,7 @@ describe('AnalysisRunPageComponent', () => {
       await vi.advanceTimersByTimeAsync(799);
       fixture.detectChanges();
 
-      expect(component.debouncedLabel.value()).toBe(`Connecting...`);
+      expect(component.debouncedLabelKey.value()).toBe(`analysisRun.progress.connecting`);
       vi.useRealTimers();
     });
 
@@ -259,7 +259,7 @@ describe('AnalysisRunPageComponent', () => {
       await vi.advanceTimersByTimeAsync(800);
       fixture.detectChanges();
 
-      expect(component.debouncedLabel.value()).toBe(`${AnalysisStatus.ANALYZING}...`);
+      expect(component.debouncedLabelKey.value()).toBe(AnalysisStatus.ANALYZING);
       vi.useRealTimers();
     });
   });

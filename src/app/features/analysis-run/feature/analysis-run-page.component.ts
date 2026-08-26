@@ -22,10 +22,10 @@ import { AnalysisRunFacade } from '../analysis-run.facade';
 export class AnalysisRunPageComponent {
   protected readonly facade = inject(AnalysisRunFacade);
 
-  readonly label = computed(() => {
+  readonly labelKey = computed(() => {
     const progress = this.facade.progress();
-    return progress ? `${AnalysisStatus[progress]}...` : 'Connecting...';
+    return progress ? `${AnalysisStatus[progress]}` : 'analysisRun.progress.connecting';
   });
 
-  readonly debouncedLabel = debounced(this.label, 800);
+  readonly debouncedLabelKey = debounced(this.labelKey, 800);
 }

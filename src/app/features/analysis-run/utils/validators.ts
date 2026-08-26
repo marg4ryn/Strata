@@ -1,6 +1,11 @@
 import { validate, SchemaPath } from '@angular/forms/signals';
+import type { ValidationError } from '@angular/forms/signals';
 
 import { dateToCalendarKey } from '@app/shared/date-utils/date.utils';
+
+export interface ParamValidationError extends ValidationError {
+  params?: Record<string, string>;
+}
 
 export function url(path: SchemaPath<string>, message: string) {
   validate(path, ({ value }) => {
@@ -21,6 +26,7 @@ export function afterDate(
   path: SchemaPath<Date | null>,
   min: Date | SchemaPath<Date | null>,
   message: string,
+  params?: Record<string, string>,
 ) {
   validate(path, ({ value, valueOf }) => {
     const date = value();
@@ -28,7 +34,7 @@ export function afterDate(
     if (!date || !minDate) return null;
 
     if (dateToCalendarKey(date) < dateToCalendarKey(minDate)) {
-      return { kind: 'date', message };
+      return { kind: 'date', message, params: params };
     }
     return null;
   });

@@ -1,12 +1,12 @@
 import type { ISODateString } from '@app/shared/date-utils/date.utils';
 
 export enum AnalysisStatus {
-  QUEUED = 'Queued',
-  CLONING = 'Cloning',
-  UPDATING = 'Updating',
-  PROCESSING_DATA = 'Processing data',
-  ANALYZING = 'Analyzing',
-  FINALIZING = 'Finalizing',
+  QUEUED = 'analysisRun.progress.queued',
+  CLONING = 'analysisRun.progress.cloning',
+  UPDATING = 'analysisRun.progress.updating',
+  PROCESSING_DATA = 'analysisRun.progress.processing',
+  ANALYZING = 'analysisRun.progress.analyzing',
+  FINALIZING = 'analysisRun.progress.finalizing',
 }
 
 export type AnalysisStatusKey = keyof typeof AnalysisStatus;

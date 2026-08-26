@@ -4,9 +4,9 @@
 
 <div class="analysis-form">
   <form [formRoot]="analysisTargetForm">
-    <label for="analysisTargetURL" class="analysis-form__label"
-      >Enter link to analysis target</label
-    >
+    <label for="analysisTargetURL" class="analysis-form__label">{{
+      'analysisRun.form.targetLabel' | transloco
+    }}</label>
     <input
       type="url"
       id="analysisTargetURL"
@@ -20,7 +20,7 @@
     @if (analysisTargetForm.targetURL().touched() && analysisTargetForm.targetURL().invalid()) {
       <ul id="target-url-errors" class="analysis-form__error-list" role="alert">
         @for (error of analysisTargetForm.targetURL().errors(); track error.message) {
-          <li>{{ error.message }}</li>
+          <li>{{ error.message | transloco }}</li>
         }
       </ul>
     }
@@ -31,7 +31,7 @@
         type="checkbox"
         [formField]="analysisTargetForm.limitRange"
       />
-      Limit date range
+      {{ 'analysisRun.form.limitRange' | transloco }}
     </label>
 
     <div
@@ -63,7 +63,7 @@
           ) {
             <ul id="start-date-errors" class="analysis-form__error-list" role="alert">
               @for (error of analysisTargetForm.startDate().errors(); track $index) {
-                <li>{{ errorMessage(error) }}</li>
+                <li>{{ errorMessage(error) | transloco: errorParams(error) }}</li>
               }
             </ul>
           }
@@ -71,7 +71,7 @@
           @if (analysisTargetForm.endDate().touched() && analysisTargetForm.endDate().invalid()) {
             <ul id="end-date-errors" class="analysis-form__error-list" role="alert">
               @for (error of analysisTargetForm.endDate().errors(); track $index) {
-                <li>{{ errorMessage(error) }}</li>
+                <li>{{ errorMessage(error) | transloco: errorParams(error) }}</li>
               }
             </ul>
           }
@@ -86,9 +86,9 @@
       [disabled]="analysisTargetForm().submitting()"
     >
       @if (analysisTargetForm().submitting()) {
-        Loading ...
+        {{ 'common.loading' | transloco }}...
       } @else {
-        Start Analysis
+        {{ 'analysisRun.form.submit' | transloco }}
       }
     </button>
   </form>

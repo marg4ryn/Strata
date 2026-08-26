@@ -1,6 +1,6 @@
 <div class="modal">
   <header class="modal__header">
-    <h2 class="modal__title">Analysis error</h2>
+    <h2 class="modal__title">{{ 'analysisRun.error.header' | transloco }}</h2>
   </header>
 
   <div class="modal__body">
@@ -8,10 +8,14 @@
   </div>
 
   <footer class="modal__footer">
-    <button #cancelButton btn="secondary" (click)="cancelAnalysis()">Cancel</button>
+    <button #cancelButton btn="secondary" (click)="cancelAnalysis()">
+      {{ 'common.cancel' | transloco }}
+    </button>
 
     @if (showRetry()) {
-      <button #retryButton btn="primary" (click)="retryAnalysis()">Retry</button>
+      <button #retryButton btn="primary" (click)="retryAnalysis()">
+        {{ 'analysisRun.error.retry' | transloco }}
+      </button>
     }
   </footer>
 </div>

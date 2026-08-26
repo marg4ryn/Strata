@@ -68,7 +68,7 @@ describe('AnalysisTargetFormComponent', () => {
         .targetURL()
         .errors()
         .map((e: any) => e.message);
-      expect(messages).toContain('URL is required');
+      expect(messages).toContain('analysisRun.form.urlRequired');
     });
 
     it('is invalid for a malformed URL', async () => {
@@ -81,7 +81,7 @@ describe('AnalysisTargetFormComponent', () => {
         .targetURL()
         .errors()
         .map((e: any) => e.message);
-      expect(messages).toContain('Enter a valid URL');
+      expect(messages).toContain('analysisRun.form.urlInvalid');
     });
 
     it('is valid for a well-formed URL', async () => {
@@ -173,7 +173,7 @@ describe('AnalysisTargetFormComponent', () => {
         .startDate()
         .errors()
         .map((e: any) => e.message);
-      expect(messages.some((m: string) => m.includes('cannot be earlier than'))).toBe(true);
+      expect(messages.some((m: string) => m.includes('analysisRun.form.dateTooEarly'))).toBe(true);
     });
 
     it('rejects end date before 1970-01-01', () => {
@@ -194,7 +194,7 @@ describe('AnalysisTargetFormComponent', () => {
         .startDate()
         .errors()
         .map((e: any) => e.message);
-      expect(messages).toContain('Start date cannot be in the future');
+      expect(messages).toContain('analysisRun.form.dateInFuture');
     });
 
     it('rejects an end date in the future', () => {
@@ -208,7 +208,7 @@ describe('AnalysisTargetFormComponent', () => {
         .endDate()
         .errors()
         .map((e: any) => e.message);
-      expect(messages).toContain('End date cannot be in the future');
+      expect(messages).toContain('analysisRun.form.dateInFuture');
     });
 
     it('rejects end date earlier than start date', () => {
@@ -221,7 +221,7 @@ describe('AnalysisTargetFormComponent', () => {
         .endDate()
         .errors()
         .map((e: any) => e.message);
-      expect(messages).toContain('End date must be after start date');
+      expect(messages).toContain('analysisRun.form.endBeforeStart');
     });
 
     it('accepts a valid date range', () => {
@@ -303,7 +303,7 @@ describe('AnalysisTargetFormComponent', () => {
 
     it('returns fallback message when error has no message', () => {
       const error = { kind: 'parse' } as any;
-      expect(component.errorMessage(error)).toBe('Enter a valid date');
+      expect(component.errorMessage(error)).toBe('analysisRun.form.dateInvalid');
     });
 
     it('prefers the original message over the fallback', () => {

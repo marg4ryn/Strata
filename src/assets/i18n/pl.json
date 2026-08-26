@@ -99,5 +99,45 @@
       "supervisorLabel": "Promotor",
       "supervisorDegree": "dr inż."
     }
+  },
+  "analysisRun": {
+    "progress": {
+      "connecting": "Łączenie",
+      "queued": "W kolejce",
+      "cloning": "Klonowanie",
+      "updating": "Aktualizowanie",
+      "processing": "Przetwarzanie danych",
+      "analyzing": "Analizowanie",
+      "finalizing": "Finalizowanie",
+      "aborting": "Przerywanie...",
+      "abort": "Przerwij"
+    },
+    "infoPanel": {
+      "startDate": "Rozpoczęto",
+      "targetURL": "Cel analizy",
+      "dateRange": "Zakres analizy"
+    },
+    "unfinished": {
+      "header": "Znaleziono niedokończoną analizę",
+      "abandon": "Porzuć",
+      "resume": "Wznów"
+    },
+    "error": {
+      "header": "Błąd analizy",
+      "retry": "Spróbuj ponownie"
+    },
+    "form": {
+      "targetLabel": "Wprowadź link do celu analizy",
+      "limitRange": "Ogranicz zakres dat",
+      "submit": "Rozpocznij analizę",
+      "urlRequired": "Adres URL jest wymagany",
+      "urlInvalid": "Wprowadź prawidłowy adres URL",
+      "dateInvalid": "Wprowadź prawidłową datę",
+      "startDateRequired": "Data początkowa jest wymagana",
+      "endDateRequired": "Data końcowa jest wymagana",
+      "dateTooEarly": "Data nie może być wcześniejsza niż {{ date }}",
+      "endBeforeStart": "Data końcowa musi być późniejsza niż data początkowa",
+      "dateInFuture": "Data nie może być z przyszłości"
+    }
   }
 }

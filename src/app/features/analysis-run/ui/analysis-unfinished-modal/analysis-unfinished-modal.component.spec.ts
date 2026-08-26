@@ -66,10 +66,10 @@ describe('AnalysisUnfinishedModalComponent', () => {
     setInput(analysis);
 
     expect(component.targetURL()).toBe(target.targetURL);
-    expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString());
+    expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString('en'));
     expect(component.limitRange()).toBeTruthy();
-    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate));
-    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate));
+    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate, 'en'));
+    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate, 'en'));
   });
 
   it('displays analysis data via inputs', () => {
@@ -78,7 +78,7 @@ describe('AnalysisUnfinishedModalComponent', () => {
     fixture.detectChanges();
 
     const started = fixture.nativeElement.querySelector('.details__group');
-    expect(started.textContent).toContain(new Date(analysis.startedAt).toLocaleString());
+    expect(started.textContent).toContain(new Date(analysis.startedAt).toLocaleString('en'));
 
     const url = fixture.nativeElement.querySelector('.details__url');
     expect(url.textContent).toContain(target.targetURL);
@@ -91,7 +91,7 @@ describe('AnalysisUnfinishedModalComponent', () => {
 
     const rangeEl = fixture.nativeElement.querySelector('.details__range');
     expect(rangeEl).toBeTruthy();
-    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate));
+    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate, 'en'));
   });
 
   it('does not show date range section when limitRange is false', async () => {

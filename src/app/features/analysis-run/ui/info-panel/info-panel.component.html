@@ -1,18 +1,18 @@
 <aside class="info-panel">
   <dl class="details">
     <div class="details__group">
-      <dt>Started at</dt>
+      <dt>{{ 'analysisRun.infoPanel.startDate' | transloco }}</dt>
       <dd>{{ debouncedAnalysisStartDate.value() }}</dd>
     </div>
 
     <div class="details__group">
-      <dt>Target URL</dt>
+      <dt>{{ 'analysisRun.infoPanel.targetURL' | transloco }}</dt>
       <dd class="details__url">{{ debouncedTargetURL.value() }}</dd>
     </div>
 
     @if (debouncedLimitRange.value()) {
       <div class="details__group">
-        <dt>Date Range</dt>
+        <dt>{{ 'analysisRun.infoPanel.dateRange' | transloco }}</dt>
         <dd class="details__range">
           <span>{{ debouncedStartDate.value() }}</span>
           <span class="details__range-sep">–</span>

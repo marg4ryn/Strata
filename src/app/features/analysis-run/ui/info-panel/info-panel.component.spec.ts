@@ -49,10 +49,10 @@ describe('InfoPanelComponent', () => {
     setInput(analysis);
 
     expect(component.targetURL()).toBe(target.targetURL);
-    expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString());
+    expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString('en'));
     expect(component.limitRange()).toBeTruthy();
-    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate));
-    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate));
+    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate, 'en'));
+    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate, 'en'));
   });
 
   it('does not update debounced signals before 800ms', async () => {
@@ -64,11 +64,13 @@ describe('InfoPanelComponent', () => {
 
     expect(component.debouncedTargetURL.value()).not.toBe(target.targetURL);
     expect(component.debouncedAnalysisStartDate.value()).not.toBe(
-      new Date(analysis.startedAt).toLocaleString(),
+      new Date(analysis.startedAt).toLocaleString('en'),
     );
     expect(component.debouncedLimitRange.value()).not.toBeTruthy();
-    expect(component.debouncedStartDate.value()).not.toBe(isoDateToLocaleString('2000-01-01'));
-    expect(component.debouncedEndDate.value()).not.toBe(isoDateToLocaleString('2000-01-01'));
+    expect(component.debouncedStartDate.value()).not.toBe(
+      isoDateToLocaleString('2000-01-01', 'en'),
+    );
+    expect(component.debouncedEndDate.value()).not.toBe(isoDateToLocaleString('2000-01-01', 'en'));
   });
 
   it('updates debounced signals after 800ms', async () => {
@@ -80,11 +82,11 @@ describe('InfoPanelComponent', () => {
 
     expect(component.debouncedTargetURL.value()).toBe(target.targetURL);
     expect(component.debouncedAnalysisStartDate.value()).toBe(
-      new Date(analysis.startedAt).toLocaleString(),
+      new Date(analysis.startedAt).toLocaleString('en'),
     );
     expect(component.debouncedLimitRange.value()).toBeTruthy();
-    expect(component.debouncedStartDate.value()).toBe(isoDateToLocaleString(range.startDate));
-    expect(component.debouncedEndDate.value()).toBe(isoDateToLocaleString(range.endDate));
+    expect(component.debouncedStartDate.value()).toBe(isoDateToLocaleString(range.startDate, 'en'));
+    expect(component.debouncedEndDate.value()).toBe(isoDateToLocaleString(range.endDate, 'en'));
   });
 
   it('renders target URL after debounce', async () => {
@@ -107,7 +109,7 @@ describe('InfoPanelComponent', () => {
 
     const rangeEl = fixture.nativeElement.querySelector('.details__range');
     expect(rangeEl).toBeTruthy();
-    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate));
+    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate, 'en'));
   });
 
   it('does not show date range section when limitRange is false', async () => {

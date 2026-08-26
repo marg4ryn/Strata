@@ -11,6 +11,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
@@ -20,7 +21,7 @@ import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
   selector: 'app-analysis-progress-spinner',
-  imports: [ButtonDirective, LoadingSpinnerComponent, InfoPanelComponent],
+  imports: [ButtonDirective, LoadingSpinnerComponent, InfoPanelComponent, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-progress-spinner.component.html',
   styleUrl: './analysis-progress-spinner.component.scss',
@@ -33,7 +34,7 @@ export class AnalysisProgressSpinnerComponent implements AfterViewInit, OnDestro
   readonly firstButton = viewChild.required<ElementRef<HTMLButtonElement>>('firstButton');
 
   readonly pendingAnalysis = input<PendingAnalysis | null>();
-  readonly label = input<string>('');
+  readonly labelKey = input<string>('');
   readonly isAborting = input<boolean>(false);
 
   readonly abort = output<void>();

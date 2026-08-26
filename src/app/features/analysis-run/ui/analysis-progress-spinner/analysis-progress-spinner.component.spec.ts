@@ -53,7 +53,7 @@ describe('AnalysisProgressSpinnerComponent', () => {
   });
 
   it('displays label via inputs', () => {
-    fixture.componentRef.setInput('label', 'Loading...');
+    fixture.componentRef.setInput('labelKey', 'Loading...');
     fixture.detectChanges();
 
     const label = fixture.nativeElement.querySelector('.loading__label');

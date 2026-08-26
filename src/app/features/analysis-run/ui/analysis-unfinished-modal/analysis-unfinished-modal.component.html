@@ -1,23 +1,23 @@
 <div class="modal">
   <header class="modal__header">
-    <h2 class="modal__title">Unfinished analysis found</h2>
+    <h2 class="modal__title">{{ 'analysisRun.unfinished.header' | transloco }}</h2>
   </header>
 
   <div class="modal__body">
     <dl class="details">
       <div class="details__group">
-        <dt>Started at</dt>
+        <dt>{{ 'analysisRun.infoPanel.startDate' | transloco }}</dt>
         <dd>{{ analysisStartDate() }}</dd>
       </div>
 
       <div class="details__group">
-        <dt>Target URL</dt>
+        <dt>{{ 'analysisRun.infoPanel.targetURL' | transloco }}</dt>
         <dd class="details__url">{{ targetURL() }}</dd>
       </div>
 
       @if (limitRange()) {
         <div class="details__group">
-          <dt>Date Range</dt>
+          <dt>{{ 'analysisRun.infoPanel.dateRange' | transloco }}</dt>
           <dd class="details__range">
             <span>{{ startDate() }}</span>
             <span class="details__range-sep">–</span>
@@ -29,7 +29,11 @@
   </div>
 
   <footer class="modal__footer">
-    <button btn="secondary" (click)="abandonAnalysis()">Abandon</button>
-    <button btn="primary" (click)="resumeAnalysis()">Resume</button>
+    <button btn="secondary" (click)="abandonAnalysis()">
+      {{ 'analysisRun.unfinished.abandon' | transloco }}
+    </button>
+    <button btn="primary" (click)="resumeAnalysis()">
+      {{ 'analysisRun.unfinished.resume' | transloco }}
+    </button>
   </footer>
 </div>
