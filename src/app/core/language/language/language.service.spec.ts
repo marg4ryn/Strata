@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { Meta } from '@angular/platform-browser';
 import { signal } from '@angular/core';
+import { of, throwError } from 'rxjs';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import type { LangPreference } from '../language.model';
@@ -28,7 +30,11 @@ describe('LanguageService', () => {
 
   let transloco: {
     setActiveLang: ReturnType<typeof vi.fn>;
+    load: ReturnType<typeof vi.fn>;
+    translate: ReturnType<typeof vi.fn>;
   };
+
+  let meta: { updateTag: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
     store = {
@@ -46,6 +52,12 @@ describe('LanguageService', () => {
 
     transloco = {
       setActiveLang: vi.fn(),
+      load: vi.fn().mockReturnValue(of(undefined)),
+      translate: vi.fn().mockReturnValue('translated description'),
+    };
+
+    meta = {
+      updateTag: vi.fn(),
     };
 
     logger = {
@@ -62,6 +74,7 @@ describe('LanguageService', () => {
         { provide: BrowserLanguageService, useValue: browser },
         { provide: TranslocoService, useValue: transloco },
         { provide: LoggerService, useValue: logger },
+        { provide: Meta, useValue: meta },
       ],
     });
     service = TestBed.inject(LanguageService);
@@ -77,6 +90,7 @@ describe('LanguageService', () => {
       storage.getLangPreference.mockReturnValue(langPreference);
       service.loadLangPreference();
       expect(store.langPreference()).toBe(langPreference);
+      expect(transloco.load).toHaveBeenCalledWith(langPreference);
       expect(transloco.setActiveLang).toHaveBeenCalledWith(langPreference);
     });
 
@@ -85,6 +99,7 @@ describe('LanguageService', () => {
       browser.getLang.mockReturnValue('pl');
       service.loadLangPreference();
       expect(store.langPreference()).toBe('system');
+      expect(transloco.load).toHaveBeenCalledWith('pl');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
     });
 
@@ -93,6 +108,7 @@ describe('LanguageService', () => {
       browser.getLang.mockReturnValue('pl');
       service.loadLangPreference();
       expect(store.langPreference()).toBe('system');
+      expect(transloco.load).toHaveBeenCalledWith('pl');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
     });
 
@@ -100,6 +116,32 @@ describe('LanguageService', () => {
       storage.getLangPreference.mockReturnValue('en');
       service.loadLangPreference();
       expect(storage.saveLangPreference).not.toHaveBeenCalled();
+    });
+
+    it('sets active lang only after translations are loaded', () => {
+      storage.getLangPreference.mockReturnValue('en');
+      const callOrder: string[] = [];
+      transloco.load.mockImplementation(() => {
+        callOrder.push('load');
+        return of(undefined);
+      });
+      transloco.setActiveLang.mockImplementation(() => callOrder.push('setActiveLang'));
+
+      service.loadLangPreference();
+
+      expect(callOrder).toEqual(['load', 'setActiveLang']);
+    });
+
+    it('falls back to empty string when translation is missing', () => {
+      storage.getLangPreference.mockReturnValue('en');
+      transloco.translate.mockReturnValue(undefined);
+
+      service.loadLangPreference();
+
+      expect(meta.updateTag).toHaveBeenCalledWith({
+        name: 'description',
+        content: '',
+      });
     });
   });
 
@@ -109,12 +151,14 @@ describe('LanguageService', () => {
       service.setPreference(langPreference);
       expect(storage.saveLangPreference).toHaveBeenCalledWith(langPreference);
       expect(store.langPreference()).toBe(langPreference);
+      expect(transloco.load).toHaveBeenCalledWith(langPreference);
       expect(transloco.setActiveLang).toHaveBeenCalledWith(langPreference);
     });
 
     it('resolves browser language when preference is "system"', () => {
       browser.getLang.mockReturnValue('en');
       service.setPreference('system');
+      expect(transloco.load).toHaveBeenCalledWith('en');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('en');
     });
 
@@ -123,6 +167,7 @@ describe('LanguageService', () => {
       service.setPreference('fr' as unknown as LangPreference);
       expect(storage.saveLangPreference).toHaveBeenCalledWith('system');
       expect(store.langPreference()).toBe('system');
+      expect(transloco.load).toHaveBeenCalledWith('pl');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
     });
   });
