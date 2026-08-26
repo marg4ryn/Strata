@@ -11,7 +11,7 @@ describe('NotificationItemComponent', () => {
   const baseNotification: Notification = {
     sentAt: 1706438400000, // 2024-01-28T08:00:00.000Z
     type: 'info',
-    message: 'Test message',
+    messageKey: 'Test message',
   };
 
   function setNotification(overrides: Partial<Notification> = {}): void {
@@ -29,7 +29,7 @@ describe('NotificationItemComponent', () => {
   });
 
   it('renders notification message', () => {
-    setNotification({ message: 'Hello world' });
+    setNotification({ messageKey: 'Hello world' });
 
     const messageEl = fixture.nativeElement.querySelector('.notification-item__message');
     expect(messageEl.textContent.trim()).toBe('Hello world');
@@ -38,7 +38,7 @@ describe('NotificationItemComponent', () => {
   it('renders formatted timestamp based on sentAt', () => {
     setNotification({ sentAt: baseNotification.sentAt });
 
-    const expected = new Date(baseNotification.sentAt).toLocaleString();
+    const expected = new Date(baseNotification.sentAt).toLocaleString('en');
     const timeEl = fixture.nativeElement.querySelector('.notification-item__time');
     expect(timeEl.textContent.trim()).toBe(expected);
   });

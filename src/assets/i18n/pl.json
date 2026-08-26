@@ -21,6 +21,25 @@
     "loadAnalysis": "Wczytać analizę {{ repoName }}?",
     "deleteAnalysis": "Czy jesteś pewny, że chcesz usunąć analizę {{ repoName }}? Tej operacji nie można cofnąć."
   },
+  "notifications": {
+    "panel": {
+      "header": "Powiadomienia",
+      "clear": "Wyczyść",
+      "close": "Zamknij powiadomienia",
+      "empty": "Brak powiadomień"
+    },
+    "item": {
+      "remove": "Usuń powiadomienie"
+    },
+    "analysisRun": {
+      "success": "Analiza {{ repoName }} zakończyła się pomyślnie",
+      "error": "Analiza {{ repoName }} zakończyła się błędem",
+      "cancel": "Analiza {{ repoName }} została anulowana",
+      "abandon": "Analiza {{ repoName }} została porzucona",
+      "abort": "Analiza {{ repoName }} została przerwana",
+      "abortError": "Nie udało się przerwać analizy {{ repoName }} — serwer nie odpowiada"
+    }
+  },
   "analysisHistory": {
     "panel": {
       "header": "Historia analiz",

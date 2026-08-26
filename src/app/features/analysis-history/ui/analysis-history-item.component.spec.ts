@@ -62,7 +62,7 @@ describe('AnalysisHistoryItemComponent', () => {
     });
 
     it('timestamp formats completedAt as locale string', () => {
-      const expected = new Date(baseEntry.completedAt).toLocaleString();
+      const expected = new Date(baseEntry.completedAt).toLocaleString('en');
       expect(component.timestamp()).toBe(expected);
     });
 
@@ -183,22 +183,25 @@ describe('AnalysisHistoryItemComponent', () => {
   });
 
   describe('DOM interaction', () => {
-    it('clicking delete button calls removeHistoryEntry and stops propagation to host', async () => {
+    it('clicking delete button calls removeHistoryEntry and stops propagation to item', async () => {
       confirmModalMock.confirm.mockResolvedValue(false);
-      const hostClickSpy = vi.fn();
-      fixture.nativeElement.addEventListener('click', hostClickSpy);
+      const itemClickSpy = vi.fn();
+      const item = fixture.nativeElement.querySelector('.history-item');
+      item.addEventListener('click', itemClickSpy);
 
       const deleteButton = fixture.nativeElement.querySelector('.history-item__delete');
       deleteButton.click();
       await fixture.whenStable();
 
       expect(confirmModalMock.confirm).toHaveBeenCalled();
+      expect(itemClickSpy).not.toHaveBeenCalled();
     });
 
-    it('clicking host element triggers loadAnalysis', async () => {
+    it('clicking history item triggers loadAnalysis', async () => {
       confirmModalMock.confirm.mockResolvedValue(false);
 
-      fixture.nativeElement.click();
+      const item = fixture.nativeElement.querySelector('.history-item');
+      item.click();
       await fixture.whenStable();
 
       expect(confirmModalMock.confirm).toHaveBeenCalledWith(
@@ -211,11 +214,14 @@ describe('AnalysisHistoryItemComponent', () => {
       );
     });
 
-    it('triggers loadAnalysis on host enter keydown', async () => {
+    it('triggers loadAnalysis on item enter keydown', async () => {
       confirmModalMock.confirm.mockResolvedValue(false);
+
+      const item = fixture.nativeElement.querySelector('.history-item');
       const event = new KeyboardEvent('keydown', { key: 'Enter' });
-      fixture.nativeElement.dispatchEvent(event);
+      item.dispatchEvent(event);
       await fixture.whenStable();
+
       expect(confirmModalMock.confirm).toHaveBeenCalled();
     });
   });

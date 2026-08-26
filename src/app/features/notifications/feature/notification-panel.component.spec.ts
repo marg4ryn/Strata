@@ -21,7 +21,7 @@ describe('NotificationPanelComponent', () => {
   const notification = (overrides: Partial<Notification> = {}): Notification => ({
     sentAt: 1706438400000, // 2024-01-28T08:00:00.000Z
     type: 'info',
-    message: 'Test message',
+    messageKey: 'Test message',
     ...overrides,
   });
 

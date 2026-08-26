@@ -49,24 +49,28 @@ export class NotificationsService {
     this.store.notifications.set(null);
   }
 
-  addNotificationSuccess(message: string): void {
-    this.addNotification('success', message);
+  addNotificationSuccess(messageKey: string, params?: Record<string, unknown>): void {
+    this.addNotification('success', messageKey, params);
   }
 
-  addNotificationInfo(message: string): void {
-    this.addNotification('info', message);
+  addNotificationInfo(messageKey: string, params?: Record<string, unknown>): void {
+    this.addNotification('info', messageKey, params);
   }
 
-  addNotificationWarning(message: string): void {
-    this.addNotification('warning', message);
+  addNotificationWarning(messageKey: string, params?: Record<string, unknown>): void {
+    this.addNotification('warning', messageKey, params);
   }
 
-  addNotificationError(message: string): void {
-    this.addNotification('error', message);
+  addNotificationError(messageKey: string, params?: Record<string, unknown>): void {
+    this.addNotification('error', messageKey, params);
   }
 
-  private addNotification(type: NotificationType, message: string): void {
-    const notification = this.constructNotification(type, message);
+  private addNotification(
+    type: NotificationType,
+    messageKey: string,
+    params?: Record<string, unknown>,
+  ): void {
+    const notification = this.constructNotification(type, messageKey, params);
     this.storage.saveNotification(notification);
     this.store.addNotification(notification);
 
@@ -80,9 +84,13 @@ export class NotificationsService {
     }
   }
 
-  private constructNotification(type: NotificationType, message: string): Notification {
+  private constructNotification(
+    type: NotificationType,
+    messageKey: string,
+    params?: Record<string, unknown>,
+  ): Notification {
     const sentAt = Date.now();
-    const notification = { type, message, sentAt } as Notification;
+    const notification = { type, messageKey, sentAt, params } as Notification;
     this.logger.info('Notifications Service created notification: ', notification);
     return notification;
   }

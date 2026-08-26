@@ -71,7 +71,7 @@ describe('NotificationsService', () => {
 
   const notification: Notification = {
     type: 'success',
-    message: 'foo',
+    messageKey: 'foo',
     sentAt: 42,
   };
 
@@ -150,25 +150,25 @@ describe('NotificationsService', () => {
 
     it('increases unread notifications count', () => {
       store.unreadNotificationsCount.set(0);
-      service.addNotificationSuccess(notification.message);
+      service.addNotificationSuccess(notification.messageKey);
       expect(store.unreadNotificationsCount()).toBe(1);
     });
 
     it('does not increase unread notifications count when panel is opened', () => {
       store.showPanel.set(true);
       store.unreadNotificationsCount.set(0);
-      service.addNotificationSuccess(notification.message);
+      service.addNotificationSuccess(notification.messageKey);
       expect(store.unreadNotificationsCount()).toBe(0);
     });
 
     it('adds success notification', () => {
       const successNotification: Notification = {
         type: 'success',
-        message: 'foo',
+        messageKey: 'foo',
         sentAt: 42,
       };
       vi.setSystemTime(successNotification.sentAt);
-      service.addNotificationSuccess(successNotification.message);
+      service.addNotificationSuccess(successNotification.messageKey);
       expect(store.addNotification).toHaveBeenCalledWith(successNotification);
       expect(storage.saveNotification).toHaveBeenCalledWith(successNotification);
     });
@@ -176,11 +176,11 @@ describe('NotificationsService', () => {
     it('adds info notification', () => {
       const infoNotification: Notification = {
         type: 'info',
-        message: 'foo',
+        messageKey: 'foo',
         sentAt: 42,
       };
       vi.setSystemTime(infoNotification.sentAt);
-      service.addNotificationInfo(infoNotification.message);
+      service.addNotificationInfo(infoNotification.messageKey);
       expect(store.addNotification).toHaveBeenCalledWith(infoNotification);
       expect(storage.saveNotification).toHaveBeenCalledWith(infoNotification);
     });
@@ -188,11 +188,11 @@ describe('NotificationsService', () => {
     it('adds warning notification', () => {
       const warningNotification: Notification = {
         type: 'warning',
-        message: 'foo',
+        messageKey: 'foo',
         sentAt: 42,
       };
       vi.setSystemTime(warningNotification.sentAt);
-      service.addNotificationWarning(warningNotification.message);
+      service.addNotificationWarning(warningNotification.messageKey);
       expect(store.addNotification).toHaveBeenCalledWith(warningNotification);
       expect(storage.saveNotification).toHaveBeenCalledWith(warningNotification);
     });
@@ -200,11 +200,11 @@ describe('NotificationsService', () => {
     it('adds error notification', () => {
       const errorNotification: Notification = {
         type: 'error',
-        message: 'foo',
+        messageKey: 'foo',
         sentAt: 42,
       };
       vi.setSystemTime(errorNotification.sentAt);
-      service.addNotificationError(errorNotification.message);
+      service.addNotificationError(errorNotification.messageKey);
       expect(store.addNotification).toHaveBeenCalledWith(errorNotification);
       expect(storage.saveNotification).toHaveBeenCalledWith(errorNotification);
     });

@@ -35,9 +35,9 @@ export class AnalysisRunService {
       if (result !== null) {
         untracked(() => {
           this.logger.info('Analysis Run Service handled the analysis results');
-          this.notifications.sendNotificationSuccess(
-            `${this.getRepoName()} analysis was successful`,
-          );
+          this.notifications.sendNotificationSuccess('notifications.analysisRun.success', {
+            repoName: this.getRepoName(),
+          });
           const analysisHistoryEntry = this.constructAnalysisHistoryEntry(
             this.store.pendingAnalysis()!,
           );
@@ -50,9 +50,9 @@ export class AnalysisRunService {
       if (error !== null) {
         untracked(() => {
           this.logger.info('Analysis Run Service handled an analysis error');
-          this.notifications.sendNotificationError(
-            `${this.getRepoName()} analysis ended with an error`,
-          );
+          this.notifications.sendNotificationError('notifications.analysisRun.error', {
+            repoName: this.getRepoName(),
+          });
         });
       }
     });
@@ -179,7 +179,9 @@ export class AnalysisRunService {
     this.logger.info(
       `Analysis Run Service received a request to abandon analysis with sessionId: ${sessionId}`,
     );
-    this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis abandoned`);
+    this.notifications.sendNotificationInfo('notifications.analysisRun.abandon', {
+      repoName: this.getRepoName(),
+    });
     await this.clearData();
     await this.tryToResumeAnalysis();
   }
@@ -194,16 +196,18 @@ export class AnalysisRunService {
 
     if (confirmed) {
       this.logger.debug(`Abort for sessionId ${sessionId} confirmed by server`);
-      this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis aborted`);
+      this.notifications.sendNotificationInfo('notifications.analysisRun.abort', {
+        repoName: this.getRepoName(),
+      });
       await this.clearData();
       await this.tryToResumeAnalysis();
     } else {
       this.logger.warn(
         `Abort for sessionId ${sessionId} not confirmed by server - analysis result already arrived or timed out`,
       );
-      this.notifications.sendNotificationWarning(
-        `${this.getRepoName()} analysis abort failed - server not responding`,
-      );
+      this.notifications.sendNotificationWarning('notifications.analysisRun.abortError', {
+        repoName: this.getRepoName(),
+      });
       this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
     }
@@ -224,7 +228,9 @@ export class AnalysisRunService {
       `Analysis Run Service received a request to cancel analysis with sessionId: ${sessionId}`,
     );
     this.store.error.set(null);
-    this.notifications.sendNotificationInfo(`${this.getRepoName()} analysis cancelled`);
+    this.notifications.sendNotificationInfo('notifications.analysisRun.cancel', {
+      repoName: this.getRepoName(),
+    });
     await this.clearData();
     await this.tryToResumeAnalysis();
   }

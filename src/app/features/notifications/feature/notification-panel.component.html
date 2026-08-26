@@ -1,24 +1,22 @@
 <div class="notification-panel" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <div class="notification-panel__header">
-    <span class="notification-panel__title">Notifications</span>
+    <span class="notification-panel__title">{{ 'notifications.panel.header' | transloco }}</span>
 
     <div class="notification-panel__actions">
       @if (facade.notifications()?.length) {
         <button
           type="button"
           class="notification-panel__clear-all"
-          title="Remove all notifications"
-          aria-label="Remove all notifications"
           (click)="facade.clearNotifications()"
         >
-          Clear all
+          {{ 'notifications.panel.clear' | transloco }}
         </button>
       }
       <button
         type="button"
         class="notification-panel__close"
-        title="Close notifications"
-        aria-label="Close notifications"
+        [title]="'notifications.panel.close' | transloco"
+        [attr.aria-label]="'notifications.panel.close' | transloco"
         (click)="facade.closePanel()"
       >
         <svg
@@ -46,7 +44,7 @@
       }
     } @else {
       <div class="notification-panel__empty">
-        <p>No notifications</p>
+        <p>{{ 'notifications.panel.empty' | transloco }}</p>
       </div>
     }
   </div>

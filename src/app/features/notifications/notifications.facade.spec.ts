@@ -56,11 +56,14 @@ describe('NotificationsFacade', () => {
     service = TestBed.inject(NotificationsFacade);
   });
 
+  const params = { param: 'param' };
+
   it('updates computed signals', () => {
     const notification: Notification = {
       type: 'info',
-      message: 'foo',
+      messageKey: 'foo',
       sentAt: 42,
+      params,
     };
     store.unreadNotificationsCount.set(1);
     store.notifications.set([notification]);
@@ -97,22 +100,27 @@ describe('NotificationsFacade', () => {
   });
 
   it('handles sendNotificationSuccess', () => {
-    service.sendNotificationSuccess('foo');
-    expect(notificationsService.addNotificationSuccess).toHaveBeenCalledWith('foo');
+    service.sendNotificationSuccess('foo', params);
+    expect(notificationsService.addNotificationSuccess).toHaveBeenCalledWith('foo', params);
   });
 
   it('handles sendNotificationInfo', () => {
-    service.sendNotificationInfo('foo');
-    expect(notificationsService.addNotificationInfo).toHaveBeenCalledWith('foo');
+    service.sendNotificationInfo('foo', params);
+    expect(notificationsService.addNotificationInfo).toHaveBeenCalledWith('foo', params);
   });
 
   it('handles sendNotificationWarning', () => {
-    service.sendNotificationWarning('foo');
-    expect(notificationsService.addNotificationWarning).toHaveBeenCalledWith('foo');
+    service.sendNotificationWarning('foo', params);
+    expect(notificationsService.addNotificationWarning).toHaveBeenCalledWith('foo', params);
   });
 
   it('handles sendNotificationError', () => {
-    service.sendNotificationError('foo');
-    expect(notificationsService.addNotificationError).toHaveBeenCalledWith('foo');
+    service.sendNotificationError('foo', params);
+    expect(notificationsService.addNotificationError).toHaveBeenCalledWith('foo', params);
+  });
+
+  it('handles send notification without params', () => {
+    service.sendNotificationSuccess('foo');
+    expect(notificationsService.addNotificationSuccess).toHaveBeenCalledWith('foo', undefined);
   });
 });

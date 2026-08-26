@@ -21,6 +21,25 @@
     "loadAnalysis": "Load the {{ repoName }} analysis?",
     "deleteAnalysis": "Are you sure you want to delete the {{ repoName }} analysis? This operation cannot be undone."
   },
+  "notifications": {
+    "panel": {
+      "header": "Notifications",
+      "clear": "Clear all",
+      "close": "Close notifications",
+      "empty": "No notifications"
+    },
+    "item": {
+      "remove": "Remove notification"
+    },
+    "analysisRun": {
+      "success": "{{ repoName }} analysis was successful",
+      "error": "{{ repoName }} analysis ended with an error",
+      "cancel": "{{ repoName }} analysis cancelled",
+      "abandon": "{{ repoName }} analysis abandoned",
+      "abort": "{{ repoName }} analysis aborted",
+      "abortError": "{{ repoName }} analysis abort failed - server not responding"
+    }
+  },
   "analysisHistory": {
     "panel": {
       "header": "Analysis history",

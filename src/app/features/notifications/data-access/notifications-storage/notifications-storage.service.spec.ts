@@ -44,12 +44,12 @@ describe('NotificationsStorageService', () => {
 
   const firstNotification: Notification = {
     type: 'info',
-    message: 'foo',
+    messageKey: 'foo',
     sentAt: 42,
   };
   const secondNotification: Notification = {
     type: 'success',
-    message: 'bar',
+    messageKey: 'bar',
     sentAt: 43,
   };
 

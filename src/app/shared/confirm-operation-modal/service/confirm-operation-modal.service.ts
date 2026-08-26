@@ -14,7 +14,7 @@ export class ConfirmOperationModalService {
     destroyRef: DestroyRef,
     labelKey?: string,
     type?: ModalType,
-    params?: Record<string, unknown>,
+    params?: Record<string, string>,
   ): Promise<boolean> {
     const previouslyFocused = document.activeElement as HTMLElement | null;
 

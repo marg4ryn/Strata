@@ -121,7 +121,7 @@ describe('AnalysisHistoryPanelComponent', () => {
     it('calls loadAnalysis when item emits load', async () => {
       confirmModal.confirm.mockResolvedValue(true);
 
-      const itemHost = fixture.nativeElement.querySelector('app-analysis-history-item');
+      const itemHost = fixture.nativeElement.querySelector('.history-item');
       itemHost.click();
       await fixture.whenStable();
 
@@ -133,7 +133,7 @@ describe('AnalysisHistoryPanelComponent', () => {
     it('does not call closePanel/loadAnalysis when load is cancelled', async () => {
       confirmModal.confirm.mockResolvedValue(false);
 
-      const itemHost = fixture.nativeElement.querySelector('app-analysis-history-item');
+      const itemHost = fixture.nativeElement.querySelector('.history-item');
       itemHost.click();
       await fixture.whenStable();
 

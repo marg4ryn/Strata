@@ -20,20 +20,20 @@ export class NotificationsFacade {
     this.service.closePanel();
   }
 
-  sendNotificationSuccess(message: string): void {
-    this.service.addNotificationSuccess(message);
+  sendNotificationSuccess(messageKey: string, params?: Record<string, unknown>): void {
+    this.service.addNotificationSuccess(messageKey, params);
   }
 
-  sendNotificationInfo(message: string): void {
-    this.service.addNotificationInfo(message);
+  sendNotificationInfo(messageKey: string, params?: Record<string, unknown>): void {
+    this.service.addNotificationInfo(messageKey, params);
   }
 
-  sendNotificationWarning(message: string): void {
-    this.service.addNotificationWarning(message);
+  sendNotificationWarning(messageKey: string, params?: Record<string, unknown>): void {
+    this.service.addNotificationWarning(messageKey, params);
   }
 
-  sendNotificationError(message: string): void {
-    this.service.addNotificationError(message);
+  sendNotificationError(messageKey: string, params?: Record<string, unknown>): void {
+    this.service.addNotificationError(messageKey, params);
   }
 
   loadNotifications(): void {

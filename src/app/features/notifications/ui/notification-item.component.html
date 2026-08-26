@@ -3,8 +3,8 @@
   <button
     type="button"
     class="notification-item__close"
-    title="Remove notification"
-    aria-label="Remove notification"
+    [title]="'notifications.item.remove' | transloco"
+    [attr.aria-label]="'notifications.item.remove' | transloco"
     (click)="remove.emit(notification().sentAt)"
   >
     <svg
@@ -25,5 +25,5 @@
 </div>
 
 <div class="notification-item__content">
-  <p class="notification-item__message">{{ notification().message }}</p>
+  <p class="notification-item__message">{{ notification().messageKey | transloco: params() }}</p>
 </div>

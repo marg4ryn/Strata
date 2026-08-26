@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed, inject } from '@angular/core';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 
 import { Notification } from '../notifications.model';
 
 @Component({
   selector: 'app-notification-item',
-  imports: [],
+  imports: [TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'notification-item',
@@ -17,7 +18,13 @@ import { Notification } from '../notifications.model';
   styleUrl: './notification-item.component.scss',
 })
 export class NotificationItemComponent {
+  private readonly transloco = inject(TranslocoService);
+
   readonly notification = input.required<Notification>();
   readonly remove = output<number>();
-  readonly timestamp = computed(() => new Date(this.notification().sentAt).toLocaleString());
+
+  readonly params = computed(() => this.notification().params ?? {});
+  readonly timestamp = computed(() =>
+    new Date(this.notification().sentAt).toLocaleString(this.transloco.getActiveLang()),
+  );
 }
