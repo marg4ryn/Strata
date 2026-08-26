@@ -1,7 +1,8 @@
 {
   "common": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close"
   },
   "header": {
     "startNewAnalysis": "Start a new analysis",
@@ -59,6 +60,44 @@
     "language": {
       "header": "Language",
       "system": "System"
+    }
+  },
+  "about": {
+    "section1": {
+      "title": "Code Has a History",
+      "content": "Strata is a tool for behavioral analysis, that is, for studying the evolution of repositories over time. It considers not only the current state of a project, but also how the code has changed and how developers work on it. Its fundamental premise is that code alone does not provide a complete picture of a system. Two pieces of code may look similar in terms of structure and quality, yet have completely different significance for the project if one is rarely modified while the other is constantly changed by multiple developers. The application's name refers to rock strata – layers that accumulate over time, recording the history of everything that shaped them. In software, these layers are the successive changes recorded in version control systems. They are what make it possible to study the processes that shaped the system."
+    },
+    "section2": {
+      "title": "A City Built from Code",
+      "content": "One way to represent dependencies within a repository is through a Code City visualization. In it, each file becomes a building: its height corresponds to the number of changes made to it, while its width represents the length of the file measured in lines of code. The buildings are arranged on platforms representing the project's folders. This form of visualization is not meant to replace numerical data. Instead, it takes advantage of something humans are particularly good at – recognizing visual patterns. Rather than examining hundreds of values, you can see the structure of the project as a whole and identify areas that stand out from the rest, which might otherwise go unnoticed in a traditional data presentation."
+    },
+    "section3": {
+      "title": "Applications",
+      "content": "In large systems, it is not possible to address all quality issues at once, which makes proper prioritization essential. Looking at code through the lens of its history makes it possible to identify areas that are particularly important to the system's development. One example is hotspots, which are pieces of code that are both complex and frequently modified. They usually require refactoring, additional testing, or at least special attention during code reviews. Strata provides data and helps determine where to invest available time and resources to achieve the greatest benefits. It does not replace static analysis, but rather provides it with context – showing which issues are significant from the perspective of the system's actual use and evolution."
+    },
+    "section4": {
+      "title": "Behind the Code Are People",
+      "content": "The history of a repository describes more than just its files. It is also a record of the team's work. People make decisions, introduce changes, and accumulate knowledge about different parts of the system. Strata makes it possible to view a repository from this perspective as well-revealing how activity is distributed across team members, modules, and areas of the system, and where expertise is concentrated. This is not an attempt to evaluate developers. Rather, it aims to highlight relationships that may influence how the system is developed, how the team communicates, and how knowledge is shared."
+    },
+    "section5": {
+      "title": "Who Is It For?",
+      "content": "This approach to analysis can be particularly useful for developers onboarding to new projects, as well as architects and technical leaders responsible for the development and maintenance of systems. It can also support communication with managers by providing an accessible way to present an overview of the system through visualizations and support proposed development directions with data. It does not replace the expertise of those involved in developing the system, but provides real-world data that can be used to make better-informed decisions."
+    },
+    "section6": {
+      "title": "Limitations",
+      "content": "The tool supports Git and public repositories hosted on GitHub and GitLab only. It analyzes individual repositories, so architectures based on microservices are not supported. The scope of the analyzed history is also important. Results depend on the selected time period, and an inappropriate timeframe may lead, among other things, to incorrect identification of hotspots. Results are also influenced by the team's workflow. One developer may make many small commits, while another may combine a larger set of changes into a single commit. Therefore, Strata's results should be interpreted in the context of the history of the specific project. Consistent coding, formatting, and commit practices increase the reliability of the analysis, but do not eliminate the need to consider the data from a broader perspective."
+    },
+    "section7": {
+      "title": "Technologies",
+      "subTitle1": "Frontend",
+      "subTitle2": "Visualizations",
+      "subTitle3": "Backend",
+      "subTitle4": "Analysis"
+    },
+    "section8": {
+      "title": "Project team",
+      "supervisorLabel": "Supervisor",
+      "supervisorDegree": "Dr."
     }
   }
 }

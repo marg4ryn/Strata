@@ -1,7 +1,8 @@
 {
   "common": {
     "confirm": "Potwierdź",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "close": "Zamknij"
   },
   "header": {
     "startNewAnalysis": "Rozpocznij nową analizę",
@@ -59,6 +60,44 @@
     "language": {
       "header": "Język",
       "system": "Systemowy"
+    }
+  },
+  "about": {
+    "section1": {
+      "title": "Kod ma swoją historię",
+      "content": "Strata jest narzędziem do analizy behawioralnej, czyli badania ewolucji repozytoriów w czasie. Uwzględnia nie tylko aktualny stan projektu, ale również sposób, w jaki zmieniał się kod oraz jak pracują nad nim programiści. Jej podstawowym założeniem jest to, że sam kod nie przedstawia pełnego obrazu systemu. Dwa fragmenty kodu mogą wyglądać podobnie pod względem struktury i jakości, ale mieć zupełnie inne znaczenie dla projektu, jeśli jeden z nich jest rzadko modyfikowany, a drugi jest stale zmieniany przez wielu programistów. Sama nazwa narzędzia nawiązuje do warstw skalnych, które gromadzą się w czasie i zapisują historię procesów, które je ukształtowały (z ang. strata – warstwa skalna). W przypadku oprogramowania takimi warstwami są kolejne zmiany zapisywane w systemach kontroli wersji. To właśnie one pozwalają zbadać procesy, które ukształtowały system."
+    },
+    "section2": {
+      "title": "Miasto zbudowane z kodu",
+      "content": "Jednym ze sposobów przedstawienia zależności w repozytorium jest wizualizacja Code City. Każdy plik staje się w nim budynkiem: jego wysokość odpowiada liczbie jego zmian, a szerokość długości pliku mierzonej w liniach kodu. Budynki są rozmieszczone na platformach reprezentujących foldery projektu. Taka forma nie ma zastępować danych liczbowych. Ma wykorzystać coś, w czym człowiek jest szczególnie dobry – rozpoznawanie wzorców wizualnych. Zamiast przeglądać setki wartości, można zobaczyć strukturę projektu jako całość i dostrzec miejsca wyróżniające się na tle reszty, które w tradycyjnym zestawieniu danych mogłyby pozostać niezauważone."
+    },
+    "section3": {
+      "title": "Zastosowania",
+      "content": "W dużych systemach nie jest możliwe jednoczesne rozwiązanie wszystkich problemów jakościowych, dlatego kluczowa staje się ich właściwa priorytetyzacja. Spojrzenie na kod przez pryzmat jego historii pozwala wskazać obszary, które mają szczególne znaczenie dla rozwoju systemu. Przykładem są hotspoty, czyli fragmenty kodu, które są jednocześnie złożone i często modyfikowane. Zwykle wymagają one refaktoryzacji, dodatkowego testowania lub przynajmniej szczególnej uwagi podczas przeglądów kodu. Strata dostarcza danych i pomaga określić, gdzie warto zainwestować dostępny czas i zasoby, aby osiągnąć największe korzyści. Nie zastępuje ona analizy statycznej, lecz nadaje jej kontekst – pokazuje, które problemy są istotne z perspektywy rzeczywistego użytkowania oraz ewolucji systemu."
+    },
+    "section4": {
+      "title": "Za kodem stoją ludzie",
+      "content": "Historia repozytorium opisuje jednak nie tylko pliki. Jest również zapisem pracy zespołu. To ludzie podejmują decyzje, wprowadzają zmiany i gromadzą wiedzę o poszczególnych częściach systemu. Strata pozwala spojrzeć na repozytorium także z tej perspektywy – zobaczyć, jak rozkłada się aktywność pomiędzy członków zespołu, moduły i obszary systemu oraz gdzie koncentruje się wiedza. Nie jest to próba oceniania programistów. Chodzi raczej o pokazanie zależności, które mogą mieć znaczenie dla sposobu rozwijania systemu, komunikacji w zespole i przepływu wiedzy."
+    },
+    "section5": {
+      "title": "Dla kogo",
+      "content": "Taki sposób analizy może być szczególnie przydatny dla programistów wdrażających się do nowych projektów oraz architektów i liderów technicznych odpowiedzialnych za rozwój i utrzymanie systemów. Może być również pomocny w komunikacji z menedżerami, ponieważ dzięki wizualizacjom pozwala w przystępny sposób przedstawić obraz systemu oraz poprzeć proponowane kierunki jego rozwoju. Nie zastępuje ekspertyzy osób zaangażowanych w rozwój systemu, lecz dostarcza rzeczywistych danych, na podstawie których można podejmować trafniejsze decyzje."
+    },
+    "section6": {
+      "title": "Ograniczenia",
+      "content": "Narzędzie obsługuje wyłącznie Git oraz publiczne repozytoria znajdujące się w GitHub i GitLab. Analizowane są pojedyncze repozytoria, dlatego nie wspieramy architektur opartych na mikroserwisach. Istotny jest również zakres analizowanej historii. Wyniki zależą od tego, jaki okres zostanie wybrany, a niewłaściwy zakres czasowy może prowadzić między innymi do błędnej identyfikacji hotspotów. Na wyniki wpływa także sposób pracy zespołu. Jeden programista może wykonywać wiele małych commitów, podczas gdy inny może łączyć większy zestaw zmian w pojedynczym commicie. Dlatego wyniki Straty należy interpretować w kontekście historii konkretnego projektu. Spójny styl kodowania, formatowania i tworzenia commitów zwiększa wiarygodność analizy, ale nie eliminuje potrzeby spojrzenia na dane z szerszej perspektywy."
+    },
+    "section7": {
+      "title": "Technologie",
+      "subTitle1": "Frontend",
+      "subTitle2": "Wizualizacje",
+      "subTitle3": "Backend",
+      "subTitle4": "Analiza"
+    },
+    "section8": {
+      "title": "Zespół projektowy",
+      "supervisorLabel": "Promotor",
+      "supervisorDegree": "dr inż."
     }
   }
 }

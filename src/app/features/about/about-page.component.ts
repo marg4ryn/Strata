@@ -1,5 +1,6 @@
 import { Component, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 interface TeamMember {
   name: string;
@@ -8,7 +9,7 @@ interface TeamMember {
 
 @Component({
   selector: 'app-about-page',
-  imports: [],
+  imports: [TranslocoPipe],
   templateUrl: './about-page.component.html',
   styleUrl: './about-page.component.scss',
 })
