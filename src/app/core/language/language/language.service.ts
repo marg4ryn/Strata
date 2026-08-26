@@ -54,10 +54,13 @@ export class LanguageService {
 
     this.logger.info(`Language Service set application language to ${lang}`);
     document.documentElement.lang = lang;
-    this.transloco.setActiveLang(lang);
-    this.meta.updateTag({
-      name: 'description',
-      content: this.transloco.translate('meta.description') ?? '',
+
+    this.transloco.load(lang).subscribe(() => {
+      this.transloco.setActiveLang(lang);
+      this.meta.updateTag({
+        name: 'description',
+        content: this.transloco.translate('meta.description') ?? '',
+      });
     });
   }
 }
