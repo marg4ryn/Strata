@@ -143,5 +143,11 @@
       "endBeforeStart": "End date must be after start date",
       "dateInFuture": "Date cannot be in the future"
     }
+  },
+  "analysisResults": {
+    "resource": {
+      "error": "Error",
+      "notFound": "The analysis you are looking for does not exist."
+    }
   }
 }

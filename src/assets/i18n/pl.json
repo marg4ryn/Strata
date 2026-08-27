@@ -143,5 +143,11 @@
       "endBeforeStart": "Data końcowa musi być późniejsza niż data początkowa",
       "dateInFuture": "Data nie może być z przyszłości"
     }
+  },
+  "analysisResults": {
+    "resource": {
+      "error": "Błąd",
+      "notFound": "Analiza, której szukasz, nie istnieje."
+    }
   }
 }
