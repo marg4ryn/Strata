@@ -1,0 +1,12 @@
+@if (data().hasValue()) {
+  <ng-container
+    [ngTemplateOutlet]="content()"
+    [ngTemplateOutletContext]="{ $implicit: data().value() }"
+  />
+} @else if (isNotFound()) {
+  <app-analysis-not-found />
+} @else if (data().error()) {
+  <app-analysis-error [error]="data().error()" />
+} @else if (data().isLoading()) {
+  <app-analysis-loading />
+}

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 
+import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { AnalysisErrorComponent } from './analysis-error.component';
 
 describe('AnalysisErrorComponent', () => {

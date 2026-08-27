@@ -1,1 +1,5 @@
-<p>repository-details works!</p>
+<app-resource-page [data]="resource">
+  <ng-template #content let-data>
+    <p>Data: {{ data }}</p>
+  </ng-template>
+</app-resource-page>
