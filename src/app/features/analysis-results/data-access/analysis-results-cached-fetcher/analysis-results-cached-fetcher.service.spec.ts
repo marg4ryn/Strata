@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
+import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsCachedFetcherService } from './analysis-results-cached-fetcher.service';
 import { CACHE_CONFIG, CacheConfig } from './cache.config';
-import { LoggerService } from '@app/core/logging/logger.service';
 
 class MockCache {
   private store = new Map<string, Response>();

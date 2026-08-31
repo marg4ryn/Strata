@@ -3,12 +3,24 @@ import { provideRouter } from '@angular/router';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { App } from './app';
+import {
+  CACHE_CONFIG,
+  CacheConfig,
+} from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
 
 describe('App', () => {
+  let config: CacheConfig;
+
   beforeEach(async () => {
+    config = {
+      maxCaches: 2,
+      registryCacheName: 'test-reg',
+      registryKey: '/test',
+    };
+
     await TestBed.configureTestingModule({
       imports: [App, getTranslocoModule()],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: CACHE_CONFIG, useValue: config }],
     }).compileComponents();
   });
 

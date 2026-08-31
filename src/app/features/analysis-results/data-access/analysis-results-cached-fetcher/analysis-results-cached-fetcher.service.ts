@@ -18,11 +18,17 @@ export class AnalysisResultsCachedFetcherService {
     await this.touchRegistry(cacheName);
 
     if (cached) {
+      this.logger.info(
+        `Analysis Results Cached Fetcher Service returned from cache: ${cacheName}/${cacheKey}`,
+      );
       return cached;
     }
 
     const data = await fetchFn();
     await this.tryWriteToCache<T>(cacheName, cacheKey, data);
+    this.logger.info(
+      `Analysis Results Cached Fetcher Service fetched data for: ${cacheName}/${cacheKey}`,
+    );
     return data;
   }
 
