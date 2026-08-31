@@ -1,10 +1,7 @@
 import { Service, inject } from '@angular/core';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-
-const MAX_CACHES = 5;
-const REGISTRY_CACHE_NAME = '__cache-registry__';
-const REGISTRY_KEY = '/registry';
+import { CACHE_CONFIG } from './cache.config';
 
 interface CacheRegistryEntry {
   cacheName: string;
@@ -14,6 +11,7 @@ interface CacheRegistryEntry {
 @Service()
 export class AnalysisResultsCachedFetcherService {
   private readonly logger = inject(LoggerService);
+  private readonly config = inject(CACHE_CONFIG);
 
   async getOrFetch<T>(cacheName: string, cacheKey: string, fetchFn: () => Promise<T>): Promise<T> {
     const cached = await this.tryReadFromCache<T>(cacheName, cacheKey);
@@ -28,7 +26,7 @@ export class AnalysisResultsCachedFetcherService {
     return data;
   }
 
-  async tryReadFromCache<T>(cacheName: string, cacheKey: string): Promise<T | null> {
+  private async tryReadFromCache<T>(cacheName: string, cacheKey: string): Promise<T | null> {
     let cache: Cache;
 
     try {
@@ -69,7 +67,7 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async tryWriteToCache<T>(cacheName: string, cacheKey: string, data: T): Promise<void> {
+  private async tryWriteToCache<T>(cacheName: string, cacheKey: string, data: T): Promise<void> {
     try {
       const cache = await caches.open(cacheName);
       const response = new Response(JSON.stringify(data));
@@ -82,7 +80,7 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async touchRegistry(cacheName: string): Promise<void> {
+  private async touchRegistry(cacheName: string): Promise<void> {
     const registry = await this.readRegistry();
     const existing = registry.find((entry) => entry.cacheName === cacheName);
 
@@ -96,10 +94,10 @@ export class AnalysisResultsCachedFetcherService {
     await this.enforceMaxCaches();
   }
 
-  async readRegistry(): Promise<CacheRegistryEntry[]> {
+  private async readRegistry(): Promise<CacheRegistryEntry[]> {
     try {
-      const cache = await caches.open(REGISTRY_CACHE_NAME);
-      const response = await cache.match(REGISTRY_KEY);
+      const cache = await caches.open(this.config.registryCacheName);
+      const response = await cache.match(this.config.registryKey);
       if (!response) return [];
       return (await response.json()) as CacheRegistryEntry[];
     } catch (error) {
@@ -111,10 +109,10 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async writeRegistry(registry: CacheRegistryEntry[]): Promise<void> {
+  private async writeRegistry(registry: CacheRegistryEntry[]): Promise<void> {
     try {
-      const cache = await caches.open(REGISTRY_CACHE_NAME);
-      await cache.put(REGISTRY_KEY, new Response(JSON.stringify(registry)));
+      const cache = await caches.open(this.config.registryCacheName);
+      await cache.put(this.config.registryKey, new Response(JSON.stringify(registry)));
     } catch (error) {
       this.logger.warn(
         `Analysis Results Cached Fetcher Service failed to save cache registry`,
@@ -123,12 +121,12 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async enforceMaxCaches(): Promise<void> {
+  private async enforceMaxCaches(): Promise<void> {
     const registry = await this.readRegistry();
 
-    if (registry.length > MAX_CACHES) {
+    if (registry.length > this.config.maxCaches) {
       const sorted = [...registry].sort((a, b) => a.lastUsed - b.lastUsed);
-      const toEvict = sorted.slice(0, registry.length - MAX_CACHES);
+      const toEvict = sorted.slice(0, registry.length - this.config.maxCaches);
 
       for (const entry of toEvict) {
         await this.deleteCacheName(entry.cacheName);
@@ -139,7 +137,7 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async deleteCacheKey(cache: Cache, cacheKey: string): Promise<void> {
+  private async deleteCacheKey(cache: Cache, cacheKey: string): Promise<void> {
     try {
       await cache.delete(cacheKey);
     } catch (error) {
@@ -150,7 +148,7 @@ export class AnalysisResultsCachedFetcherService {
     }
   }
 
-  async deleteCacheName(cacheName: string): Promise<void> {
+  private async deleteCacheName(cacheName: string): Promise<void> {
     try {
       await caches.delete(cacheName);
     } catch (error) {

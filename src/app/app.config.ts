@@ -15,6 +15,10 @@ import { LanguageFacade } from './core/language/language.facade';
 import { NotificationsFacade } from './features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from './features/analysis-history/analysis-history.facade';
 import { AnalysisRunFacade } from './features/analysis-run/analysis-run.facade';
+import {
+  CACHE_CONFIG,
+  CacheConfig,
+} from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,5 +45,13 @@ export const appConfig: ApplicationConfig = {
       const analysisRun = inject(AnalysisRunFacade);
       return analysisRun.tryToReconnect();
     }),
+    {
+      provide: CACHE_CONFIG,
+      useValue: {
+        maxCaches: 5,
+        registryCacheName: '__cache-registry__',
+        registryKey: '/registry',
+      } as CacheConfig,
+    },
   ],
 };
