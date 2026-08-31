@@ -86,21 +86,19 @@ describe.skip('HeaderComponent', () => {
   };
 
   it('displays unread notifications badge correctly', () => {
+    const badge = fixture.nativeElement.querySelector('.header__action-badge');
+
     notifications.unreadNotificationsCount.set(0);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.header__action-badge')).toBeNull();
+    expect(badge).toBeNull();
 
-    notifications.unreadNotificationsCount.set(50);
+    notifications.unreadNotificationsCount.set(9);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.header__action-badge').textContent).toContain(
-      '50',
-    );
+    expect(badge.textContent).toContain('9');
 
-    notifications.unreadNotificationsCount.set(150);
+    notifications.unreadNotificationsCount.set(10);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.header__action-badge').textContent).toContain(
-      '99+',
-    );
+    expect(badge.textContent).toContain('9+');
   });
 
   it('toggles panels and manages active states', async () => {

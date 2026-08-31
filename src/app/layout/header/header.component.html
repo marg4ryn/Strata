@@ -33,8 +33,8 @@
     @if (notifications.unreadNotificationsCount() > 0) {
       <span class="header__action-badge">
         {{
-          notifications.unreadNotificationsCount() > 99
-            ? '99+'
+          notifications.unreadNotificationsCount() > 9
+            ? '9+'
             : notifications.unreadNotificationsCount()
         }}
       </span>
