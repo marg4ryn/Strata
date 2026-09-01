@@ -29,10 +29,10 @@ export class AnalysisResultsService {
       this.cachedFetcher.getOrFetch<RepositoryDetails>(cacheName, '/repository-details', () =>
         this.api.fetchRepositoryDetails(analysisId),
       ),
-      this.cachedFetcher.getOrFetch<RepositoryTrends>(cacheName, '/repository-trends', () =>
+      this.cachedFetcher.getOrFetch<RepositoryTrends[]>(cacheName, '/repository-trends', () =>
         this.api.fetchRepositoryTrends(analysisId),
       ),
-      this.cachedFetcher.getOrFetch<AuthorStatistics>(cacheName, '/author-statistics', () =>
+      this.cachedFetcher.getOrFetch<AuthorStatistics[]>(cacheName, '/author-statistics', () =>
         this.api.fetchAuthorStatistics(analysisId),
       ),
     ]);

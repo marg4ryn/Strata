@@ -72,6 +72,6 @@ export interface AuthorStatistics {
 
 export interface RepositorySummary {
   details: RepositoryDetails;
-  trends: RepositoryTrends;
-  authors: AuthorStatistics;
+  trends: RepositoryTrends[];
+  authors: AuthorStatistics[];
 }

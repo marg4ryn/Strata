@@ -106,8 +106,8 @@ describe('AnalysisResultsService', () => {
 
     it('combines results from 3 sources into a single objec', async () => {
       const details = { name: 'test-repo' };
-      const trends = { commitsPerMonth: [1, 2, 3] };
-      const authors = { total: 5 };
+      const trends = [{ commits: 2 }];
+      const authors = [{ name: 'John Doe' }];
 
       api.fetchRepositoryDetails.mockResolvedValue(details);
       api.fetchRepositoryTrends.mockResolvedValue(trends);

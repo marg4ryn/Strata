@@ -15,11 +15,11 @@ export class AnalysisResultsApiService {
     return this.http.get<RepositoryDetails>(`/analysis/${analysisId}/summary`);
   }
 
-  fetchRepositoryTrends(analysisId: string): Promise<RepositoryTrends> {
-    return this.http.get<RepositoryTrends>(`/analysis/${analysisId}/trends`);
+  fetchRepositoryTrends(analysisId: string): Promise<RepositoryTrends[]> {
+    return this.http.get<RepositoryTrends[]>(`/analysis/${analysisId}/trends`);
   }
 
-  fetchAuthorStatistics(analysisId: string): Promise<AuthorStatistics> {
-    return this.http.get<AuthorStatistics>(`/analysis/${analysisId}/authors/statistics`);
+  fetchAuthorStatistics(analysisId: string): Promise<AuthorStatistics[]> {
+    return this.http.get<AuthorStatistics[]>(`/analysis/${analysisId}/authors/statistics`);
   }
 }
