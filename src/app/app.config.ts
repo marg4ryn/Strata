@@ -7,6 +7,7 @@ import {
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideTransloco } from '@ngneat/transloco';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { routes } from './app.routes';
 import { translocoConfig } from './core/transloco/transloco.config';
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
       config: translocoConfig,
       loader: TranslocoLoaderService,
     }),
+    provideCharts(withDefaultRegisterables()),
     provideAppInitializer(() => {
       const language = inject(LanguageFacade);
       return language.loadLangPreference();
