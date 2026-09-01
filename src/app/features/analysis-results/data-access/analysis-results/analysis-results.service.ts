@@ -3,7 +3,12 @@ import { inject, Service } from '@angular/core';
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
-import type { RepositoryDetails } from '../../analysis-results.model';
+import type {
+  RepositorySummary,
+  RepositoryDetails,
+  RepositoryTrends,
+  AuthorStatistics,
+} from '../../analysis-results.model';
 
 @Service()
 export class AnalysisResultsService {
@@ -13,14 +18,25 @@ export class AnalysisResultsService {
 
   private readonly apiVersion = 'v1';
 
-  getRepositoryDetails(analysisId: string): Promise<RepositoryDetails> {
+  async getRepositorySummary(analysisId: string): Promise<RepositorySummary> {
     this.logger.info(
-      `Analysis Results Service received a request to fetch repository details data for analysisId: ${analysisId}`,
+      `Analysis Results Service received a request to fetch repository summary data for analysisId: ${analysisId}`,
     );
-    return this.cachedFetcher.getOrFetch<RepositoryDetails>(
-      `analysis:${analysisId}:${this.apiVersion}`,
-      '/repository-details',
-      () => this.api.fetchRepositoryDetails(analysisId),
-    );
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const [details, trends, authors] = await Promise.all([
+      this.cachedFetcher.getOrFetch<RepositoryDetails>(cacheName, '/repository-details', () =>
+        this.api.fetchRepositoryDetails(analysisId),
+      ),
+      this.cachedFetcher.getOrFetch<RepositoryTrends>(cacheName, '/repository-trends', () =>
+        this.api.fetchRepositoryTrends(analysisId),
+      ),
+      this.cachedFetcher.getOrFetch<AuthorStatistics>(cacheName, '/author-statistics', () =>
+        this.api.fetchAuthorStatistics(analysisId),
+      ),
+    ]);
+
+    return { details, trends, authors };
   }
 }

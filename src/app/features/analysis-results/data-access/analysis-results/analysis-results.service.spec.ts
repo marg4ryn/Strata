@@ -13,6 +13,8 @@ describe('AnalysisResultsService', () => {
 
   let api: {
     fetchRepositoryDetails: ReturnType<typeof vi.fn>;
+    fetchRepositoryTrends: ReturnType<typeof vi.fn>;
+    fetchAuthorStatistics: ReturnType<typeof vi.fn>;
   };
 
   let cachedFetcher: {
@@ -22,6 +24,8 @@ describe('AnalysisResultsService', () => {
   beforeEach(() => {
     api = {
       fetchRepositoryDetails: vi.fn(),
+      fetchRepositoryTrends: vi.fn(),
+      fetchAuthorStatistics: vi.fn(),
     };
 
     cachedFetcher = {
@@ -54,28 +58,72 @@ describe('AnalysisResultsService', () => {
 
   const analysisId = '123';
 
-  describe('getRepositoryDetails', () => {
-    it('passes correct arguments to cached fetcher', () => {
-      service.getRepositoryDetails(analysisId);
-      expect(logger.info).toHaveBeenCalled();
-      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
-        expect.stringContaining(`analysis:${analysisId}`),
-        '/repository-details',
-        expect.any(Function),
+  describe('getRepositorySummary', () => {
+    beforeEach(() => {
+      cachedFetcher.getOrFetch.mockImplementation(
+        (_cacheName: string, _key: string, fetcher: () => Promise<unknown>) => fetcher(),
       );
     });
 
-    it('fetches repository details from api', async () => {
-      const repositoryDetails = { name: 'test-repo' };
-      api.fetchRepositoryDetails.mockResolvedValue(repositoryDetails);
+    it('calls getOrFetch with correct cache keys for all 3 endpoints', async () => {
+      api.fetchRepositoryDetails.mockResolvedValue({});
+      api.fetchRepositoryTrends.mockResolvedValue({});
+      api.fetchAuthorStatistics.mockResolvedValue({});
 
-      service.getRepositoryDetails(analysisId);
+      await service.getRepositorySummary(analysisId);
 
-      const [, , fetcher] = cachedFetcher.getOrFetch.mock.calls[0];
-      const result = await fetcher();
+      const expectedCacheName = expect.stringContaining(`analysis:${analysisId}`);
+
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+        expectedCacheName,
+        '/repository-details',
+        expect.any(Function),
+      );
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+        expectedCacheName,
+        '/repository-trends',
+        expect.any(Function),
+      );
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+        expectedCacheName,
+        '/author-statistics',
+        expect.any(Function),
+      );
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('calls the api with analysisId for each endpoint', async () => {
+      api.fetchRepositoryDetails.mockResolvedValue({});
+      api.fetchRepositoryTrends.mockResolvedValue({});
+      api.fetchAuthorStatistics.mockResolvedValue({});
+
+      await service.getRepositorySummary(analysisId);
 
       expect(api.fetchRepositoryDetails).toHaveBeenCalledWith(analysisId);
-      expect(result).toBe(repositoryDetails);
+      expect(api.fetchRepositoryTrends).toHaveBeenCalledWith(analysisId);
+      expect(api.fetchAuthorStatistics).toHaveBeenCalledWith(analysisId);
+    });
+
+    it('combines results from 3 sources into a single objec', async () => {
+      const details = { name: 'test-repo' };
+      const trends = { commitsPerMonth: [1, 2, 3] };
+      const authors = { total: 5 };
+
+      api.fetchRepositoryDetails.mockResolvedValue(details);
+      api.fetchRepositoryTrends.mockResolvedValue(trends);
+      api.fetchAuthorStatistics.mockResolvedValue(authors);
+
+      const result = await service.getRepositorySummary(analysisId);
+
+      expect(result).toEqual({ details, trends, authors });
+    });
+
+    it('propagates an error when one of the fetches fails', async () => {
+      api.fetchRepositoryDetails.mockResolvedValue({});
+      api.fetchRepositoryTrends.mockRejectedValue(new Error('Network error'));
+      api.fetchAuthorStatistics.mockResolvedValue({});
+
+      await expect(service.getRepositorySummary(analysisId)).rejects.toThrow('Network error');
     });
   });
 });
