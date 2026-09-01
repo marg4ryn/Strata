@@ -1,3 +1,5 @@
+import type { ISODateString } from '@app/shared/date-utils/date.utils';
+
 export interface RepositoryDetails {
   info: RepositoryInfo;
   statistics: RepositoryStatistics;
@@ -10,8 +12,8 @@ export interface RepositoryInfo {
   repositoryName: string;
   repositoryOwner: string;
   repositoryPlatform: string;
-  analysisRangeStartDate: string;
-  analysisRangeEndDate: string;
+  analysisRangeStartDate: ISODateString;
+  analysisRangeEndDate: ISODateString;
   lastCommitHash: string;
   analysisStartedAt: string;
   analysisFinishedAt: string;
@@ -43,4 +45,33 @@ export interface RepositoryStaticAnalysis {
   codeSmells: number;
   complexity: number;
   duplicatedLinesDensity: number;
+}
+
+export interface RepositoryTrends {
+  date: ISODateString;
+  commits: number;
+  uniqueAuthors: number;
+  activeAuthors: number;
+  linesAdded: number;
+  linesDeleted: number;
+}
+
+export interface AuthorStatistics {
+  name: string;
+  emails: string[];
+  firstCommitDate: ISODateString;
+  lastCommitDate: ISODateString;
+  isActive: boolean;
+  daysSinceLastCommit: number;
+  commits: number;
+  linesAdded: number;
+  linesDeleted: number;
+  existingFilesModified: number;
+  filesAsLeadAuthor: number;
+}
+
+export interface RepositorySummary {
+  details: RepositoryDetails;
+  trends: RepositoryTrends;
+  authors: AuthorStatistics;
 }
