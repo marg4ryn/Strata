@@ -147,7 +147,7 @@ export class AnalysisRunWebSocketService {
   }
 
   private constructUrl(params?: Record<string, string>): string {
-    let url = environment.apiUrl.replace(/^http/, 'ws') + 'analysis';
+    let url = environment.apiUrl.replace(/^http/, 'ws') + '/analysis';
 
     if (params) {
       const queryParams = new URLSearchParams();
