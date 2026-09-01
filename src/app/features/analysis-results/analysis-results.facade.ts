@@ -2,7 +2,7 @@ import { Service, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
-import type { RepositoryDetails } from './analysis-results.model';
+import type { RepositorySummary } from './analysis-results.model';
 
 @Service()
 export class AnalysisResultsFacade {
@@ -13,7 +13,7 @@ export class AnalysisResultsFacade {
     this.router.navigate(['analysis', analysisId, 'summary']);
   }
 
-  getRepositoryDetails(analysisId: string): Promise<RepositoryDetails> {
-    return this.service.getRepositoryDetails(analysisId);
+  getRepositorySummary(analysisId: string): Promise<RepositorySummary> {
+    return this.service.getRepositorySummary(analysisId);
   }
 }

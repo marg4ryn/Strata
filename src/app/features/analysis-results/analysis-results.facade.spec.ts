@@ -15,7 +15,7 @@ describe('AnalysisResultsFacade', () => {
   let config: CacheConfig;
 
   let analysisResults: {
-    getRepositoryDetails: ReturnType<typeof vi.fn>;
+    getRepositorySummary: ReturnType<typeof vi.fn>;
   };
 
   let router: {
@@ -24,7 +24,7 @@ describe('AnalysisResultsFacade', () => {
 
   beforeEach(() => {
     analysisResults = {
-      getRepositoryDetails: vi.fn(),
+      getRepositorySummary: vi.fn(),
     };
 
     router = {
@@ -62,8 +62,8 @@ describe('AnalysisResultsFacade', () => {
     expect(router.navigate).toHaveBeenCalledWith(['analysis', analysisId, 'summary']);
   });
 
-  it('handles getRepositoryDetails', () => {
-    service.getRepositoryDetails(analysisId);
-    expect(analysisResults.getRepositoryDetails).toHaveBeenCalledWith(analysisId);
+  it('handles getRepositorySummary', () => {
+    service.getRepositorySummary(analysisId);
+    expect(analysisResults.getRepositorySummary).toHaveBeenCalledWith(analysisId);
   });
 });

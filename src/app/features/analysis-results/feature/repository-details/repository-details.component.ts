@@ -15,7 +15,7 @@ export class RepositoryDetailsComponent {
   private readonly facade = inject(AnalysisResultsFacade);
 
   resource = pageResource(
-    () => this.facade.getRepositoryDetails(this.id()),
+    () => this.facade.getRepositorySummary(this.id()),
     () => this.id(),
   );
 }
