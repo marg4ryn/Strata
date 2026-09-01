@@ -34,8 +34,18 @@ describe('AnalysisResultsApiService', () => {
 
   const analysisId = '123';
 
-  it('fetches repository details', () => {
+  it('handles fetchRepositoryDetails', () => {
     service.fetchRepositoryDetails(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/summary`);
+  });
+
+  it('handles fetchRepositoryTrends', () => {
+    service.fetchRepositoryTrends(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/trends`);
+  });
+
+  it('handles fetchAuthorStatistics', () => {
+    service.fetchAuthorStatistics(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/authors/statistics`);
   });
 });
