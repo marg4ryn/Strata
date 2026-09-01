@@ -1,8 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 
-import { AnalysisResultsService } from '../../data-access/analysis-results/analysis-results.service';
 import { ResourcePageComponent } from '../resource-page/resource-page.component';
 import { pageResource } from '../../utils/page-resource';
+import { AnalysisResultsFacade } from '../../analysis-results.facade';
 
 @Component({
   selector: 'app-repository-details',
@@ -12,10 +12,10 @@ import { pageResource } from '../../utils/page-resource';
 })
 export class RepositoryDetailsComponent {
   id = input.required<string>();
-  private readonly analysisResults = inject(AnalysisResultsService);
+  private readonly facade = inject(AnalysisResultsFacade);
 
   resource = pageResource(
-    () => this.analysisResults.getRepositoryDetails(this.id()),
+    () => this.facade.getRepositoryDetails(this.id()),
     () => this.id(),
   );
 }
