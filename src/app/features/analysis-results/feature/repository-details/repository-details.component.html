@@ -1,5 +1,138 @@
 <app-resource-page [data]="resource">
   <ng-template #content let-data>
-    <p>Data: {{ data }}</p>
+    <div class="repository-details">
+      @let info = data.details.info;
+      <section class="data-section">
+        <h2 class="data-section__header">
+          <a
+            [href]="info.repositoryUrl"
+            target="_blank"
+            class="repository-link"
+            [title]="
+              'analysisResults.repositoryDetails.repositoryLinkTitle'
+                | transloco
+                  : {
+                      owner: info.repositoryOwner,
+                      name: info.repositoryName,
+                    }
+            "
+            [attr.aria-label]="
+              'analysisResults.repositoryDetails.repositoryLinkTitle'
+                | transloco
+                  : {
+                      owner: info.repositoryOwner,
+                      name: info.repositoryName,
+                    }
+            "
+          >
+            {{ info.repositoryOwner }}/{{ info.repositoryName }}
+          </a>
+          <span class="badge">{{ info.repositoryPlatform }}</span>
+        </h2>
+        <dl class="data-section__content">
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.analysisId' | transloco }}</dt>
+            <dd>{{ info.id }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.analysisDateRange' | transloco }}</dt>
+            <dd>
+              {{ info.analysisRangeStartDate | localizedDate }} –
+              {{ info.analysisRangeEndDate | localizedDate }}
+            </dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.analysisCompleted' | transloco }}</dt>
+            <dd>
+              {{ info.analysisFinishedAt | localizedDate: { timeStyle: 'short' } }} ({{
+                info.analysisTimeInSeconds | localizedDuration
+              }})
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      @let statistics = data.details.statistics;
+      <section class="data-section">
+        <h2 class="data-section__header">
+          {{ 'analysisResults.repositoryDetails.repositoryStatistics' | transloco }}
+        </h2>
+        <dl class="data-section__content">
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.authors' | transloco }}</dt>
+            <dd>{{ statistics.authors | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.activeAuthors' | transloco }}</dt>
+            <dd>{{ statistics.activeAuthors | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.commits' | transloco }}</dt>
+            <dd>{{ statistics.commits | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.files' | transloco }}</dt>
+            <dd>{{ statistics.files | localizedNumber }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      @let staticAnalysis = data.details.staticAnalysis;
+      <section class="data-section">
+        <h2 class="data-section__header">
+          {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
+        </h2>
+        <dl class="data-section__content">
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.bugs' | transloco }}</dt>
+            <dd>{{ staticAnalysis.bugs | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.vulnerabilities' | transloco }}</dt>
+            <dd>{{ staticAnalysis.vulnerabilities | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.codeSmells' | transloco }}</dt>
+            <dd>{{ staticAnalysis.codeSmells | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.complexity' | transloco }}</dt>
+            <dd>{{ staticAnalysis.complexity | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.duplicatedLinesDensity' | transloco }}</dt>
+            <dd>{{ staticAnalysis.duplicatedLinesDensity | localizedNumber }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="data-section">
+        <h2 class="data-section__header">
+          {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
+        </h2>
+        <app-doughnut-chart
+          [items]="[
+            {
+              legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
+              tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
+              value: statistics.codeLines,
+              color: '#2563eb',
+            },
+            {
+              legendLabelKey: 'analysisResults.repositoryDetails.commentsLegendLabel',
+              tooltipLabelKey: 'analysisResults.repositoryDetails.commentsTooltipLabel',
+              value: statistics.commentLines,
+              color: '#22c55e',
+            },
+            {
+              legendLabelKey: 'analysisResults.repositoryDetails.blankLegendLabel',
+              tooltipLabelKey: 'analysisResults.repositoryDetails.blankTooltipLabel',
+              value: statistics.blankLines,
+              color: '#e2e8f0',
+            },
+          ]"
+        />
+      </section>
+    </div>
   </ng-template>
 </app-resource-page>
