@@ -7,15 +7,15 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
+import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 
 @Component({
   selector: 'app-analysis-history-item',
-  imports: [TranslocoPipe],
+  imports: [TranslocoPipe, LocalizedDatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-history-item.component.html',
   styleUrl: './analysis-history-item.component.scss',
@@ -23,33 +23,14 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
 export class AnalysisHistoryItemComponent {
   private readonly confirmModal = inject(ConfirmOperationModalService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly transloco = inject(TranslocoService);
 
   readonly historyEntry = input.required<AnalysisHistoryEntry>();
   readonly remove = output<string>();
   readonly load = output<string>();
 
-  readonly timestamp = computed(() =>
-    new Date(this.historyEntry().completedAt).toLocaleString(this.transloco.getActiveLang()),
-  );
-
   readonly repoName = computed(() => {
     const repoName = this.historyEntry().target.targetURL.split('/').slice(-2).join('/') || '';
     return repoName?.replace(/\.git$/, '');
-  });
-
-  readonly hasDateRange = computed(() => {
-    const target = this.historyEntry().target;
-    return target.limitRange && target.range !== null;
-  });
-
-  readonly rangeLabel = computed(() => {
-    const range = this.historyEntry().target.range;
-    if (!range) return '';
-    return (
-      `${isoDateToLocaleString(range.startDate, this.transloco.getActiveLang())}` +
-      ` – ${isoDateToLocaleString(range.endDate, this.transloco.getActiveLang())}`
-    );
   });
 
   async loadAnalysis(): Promise<void> {

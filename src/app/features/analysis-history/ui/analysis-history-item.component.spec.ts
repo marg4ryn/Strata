@@ -4,6 +4,7 @@ import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
+import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 
 describe('AnalysisHistoryItemComponent', () => {
   let component: AnalysisHistoryItemComponent;
@@ -35,7 +36,7 @@ describe('AnalysisHistoryItemComponent', () => {
     await fixture.whenStable();
   });
 
-  describe('computed properties', () => {
+  describe('repoName', () => {
     const withUrl = (targetURL: string) =>
       ({ ...baseEntry, target: { ...baseEntry.target, targetURL } }) as AnalysisHistoryEntry;
 
@@ -60,26 +61,10 @@ describe('AnalysisHistoryItemComponent', () => {
       fixture.detectChanges();
       expect(component.repoName()).toBe('owner/repo');
     });
+  });
 
-    it('timestamp formats completedAt as locale string', () => {
-      const expected = new Date(baseEntry.completedAt).toLocaleString('en');
-      expect(component.timestamp()).toBe(expected);
-    });
-
-    it('hasDateRange is false when limitRange is false', () => {
-      expect(component.hasDateRange()).toBe(false);
-    });
-
-    it('hasDateRange is false when limitRange is true but range is null', async () => {
-      fixture.componentRef.setInput('historyEntry', {
-        ...baseEntry,
-        target: { ...baseEntry.target, limitRange: true, range: null },
-      });
-      fixture.detectChanges();
-      expect(component.hasDateRange()).toBe(false);
-    });
-
-    it('hasDateRange is true when limitRange is true and range is set', async () => {
+  describe('dateRange', () => {
+    it('renders dateRange when limitRange is true', async () => {
       fixture.componentRef.setInput('historyEntry', {
         ...baseEntry,
         target: {
@@ -89,23 +74,40 @@ describe('AnalysisHistoryItemComponent', () => {
         },
       });
       fixture.detectChanges();
-      expect(component.hasDateRange()).toBe(true);
+      const range = fixture.nativeElement.querySelector('.history-item__range');
+      expect(range).not.toBeNull();
     });
 
-    it('rangeLabel returns empty string when range is null', () => {
-      expect(component.rangeLabel()).toBe('');
-    });
-
-    it('rangeLabel formats start and end date when range is set', async () => {
+    it('does not render dateRange when limitRange is false', async () => {
       fixture.componentRef.setInput('historyEntry', {
         ...baseEntry,
         target: {
           ...baseEntry.target,
+          range: false,
+        },
+      });
+      fixture.detectChanges();
+      const range = fixture.nativeElement.querySelector('.history-item__range');
+      expect(range).toBeNull();
+    });
+  });
+
+  describe('localizedDatePipe', () => {
+    it('uses localizedDate pipe with the range dates', () => {
+      const transformSpy = vi.spyOn(LocalizedDatePipe.prototype, 'transform');
+
+      fixture.componentRef.setInput('historyEntry', {
+        ...baseEntry,
+        target: {
+          ...baseEntry.target,
+          limitRange: true,
           range: { startDate: '2024-01-01', endDate: '2024-01-31' },
         },
       });
       fixture.detectChanges();
-      expect(component.rangeLabel()).toBe('1/1/2024 – 1/31/2024');
+
+      expect(transformSpy).toHaveBeenCalledWith('2024-01-01');
+      expect(transformSpy).toHaveBeenCalledWith('2024-01-31');
     });
   });
 

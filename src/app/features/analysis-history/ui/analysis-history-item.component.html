@@ -8,7 +8,9 @@
   (keydown.enter)="loadAnalysis()"
 >
   <div class="history-item__header">
-    <span class="history-item__time">{{ timestamp() }}</span>
+    <span class="history-item__time">{{
+      historyEntry().completedAt | localizedDate: { dateStyle: 'medium', timeStyle: 'short' }
+    }}</span>
     <button
       type="button"
       class="history-item__delete"
@@ -46,7 +48,7 @@
   <div class="history-item__content">
     <p class="history-item__url">{{ repoName() }}</p>
 
-    @if (hasDateRange()) {
+    @if (historyEntry().target?.limitRange) {
       <span class="history-item__range">
         <svg
           class="history-item__range-icon"
@@ -64,7 +66,8 @@
             stroke-linecap="round"
           />
         </svg>
-        {{ rangeLabel() }}
+        {{ historyEntry().target?.range?.startDate | localizedDate }} –
+        {{ historyEntry().target?.range?.endDate | localizedDate }}
       </span>
     }
   </div>

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 import { NotificationItemComponent } from './notification-item.component';
 import { Notification } from '../notifications.model';
 
@@ -35,12 +36,16 @@ describe('NotificationItemComponent', () => {
     expect(messageEl.textContent.trim()).toBe('Hello world');
   });
 
-  it('renders formatted timestamp based on sentAt', () => {
-    setNotification({ sentAt: baseNotification.sentAt });
+  it('formats timestamp using localizedDate pipe', () => {
+    const transformSpy = vi.spyOn(LocalizedDatePipe.prototype, 'transform');
 
-    const expected = new Date(baseNotification.sentAt).toLocaleString('en');
-    const timeEl = fixture.nativeElement.querySelector('.notification-item__time');
-    expect(timeEl.textContent.trim()).toBe(expected);
+    setNotification({ sentAt: baseNotification.sentAt });
+    fixture.detectChanges();
+
+    expect(transformSpy).toHaveBeenCalledWith(baseNotification.sentAt, {
+      dateStyle: 'medium',
+      timeStyle: 'medium',
+    });
   });
 
   it('emits sentAt when close button is clicked', () => {

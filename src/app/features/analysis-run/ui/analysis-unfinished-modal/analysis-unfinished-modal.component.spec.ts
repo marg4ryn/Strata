@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { isoDateToLocaleString } from '@app/shared/date-utils/date.utils';
+import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
@@ -49,61 +49,53 @@ describe('AnalysisUnfinishedModalComponent', () => {
     fixture.componentRef.setInput('pendingAnalysis', value);
   }
 
-  it('computes default date values when pendingAnalysis range is not set', () => {
-    fixture.detectChanges();
-    setInput({
-      ...analysis,
-      target: { ...analysis.target, limitRange: false, range: null },
-    });
-    fixture.detectChanges();
-
-    expect(component.startDate()).toBe('');
-    expect(component.endDate()).toBe('');
-  });
-
-  it('immediately updates computed signals', () => {
-    fixture.detectChanges();
-    setInput(analysis);
-
-    expect(component.targetURL()).toBe(target.targetURL);
-    expect(component.analysisStartDate()).toBe(new Date(analysis.startedAt).toLocaleString('en'));
-    expect(component.limitRange()).toBeTruthy();
-    expect(component.startDate()).toBe(isoDateToLocaleString(range.startDate, 'en'));
-    expect(component.endDate()).toBe(isoDateToLocaleString(range.endDate, 'en'));
-  });
-
-  it('displays analysis data via inputs', () => {
-    fixture.detectChanges();
+  it('renders target URL', () => {
     setInput(analysis);
     fixture.detectChanges();
-
-    const started = fixture.nativeElement.querySelector('.details__group');
-    expect(started.textContent).toContain(new Date(analysis.startedAt).toLocaleString('en'));
 
     const url = fixture.nativeElement.querySelector('.details__url');
     expect(url.textContent).toContain(target.targetURL);
   });
 
   it('shows date range section when limitRange is true', () => {
-    fixture.detectChanges();
     setInput(analysis);
     fixture.detectChanges();
 
     const rangeEl = fixture.nativeElement.querySelector('.details__range');
     expect(rangeEl).toBeTruthy();
-    expect(rangeEl.textContent).toContain(isoDateToLocaleString(range.startDate, 'en'));
   });
 
-  it('does not show date range section when limitRange is false', async () => {
-    fixture.detectChanges();
+  it('does not show date range section when limitRange is false', () => {
     setInput({
       ...analysis,
       target: { ...analysis.target, limitRange: false },
     });
     fixture.detectChanges();
 
-    const range = fixture.nativeElement.querySelector('.details__range');
-    expect(range).toBeNull();
+    const rangeEl = fixture.nativeElement.querySelector('.details__range');
+    expect(rangeEl).toBeNull();
+  });
+
+  it('formats startedAt using localizedDate pipe with dateStyle and timeStyle', () => {
+    const transformSpy = vi.spyOn(LocalizedDatePipe.prototype, 'transform');
+
+    setInput(analysis);
+    fixture.detectChanges();
+
+    expect(transformSpy).toHaveBeenCalledWith(analysis.startedAt, {
+      dateStyle: 'medium',
+      timeStyle: 'medium',
+    });
+  });
+
+  it('formats range start and end dates using localizedDate pipe', () => {
+    const transformSpy = vi.spyOn(LocalizedDatePipe.prototype, 'transform');
+
+    setInput(analysis);
+    fixture.detectChanges();
+
+    expect(transformSpy).toHaveBeenCalledWith(range.startDate);
+    expect(transformSpy).toHaveBeenCalledWith(range.endDate);
   });
 
   it('emits resume when resume button is clicked', () => {

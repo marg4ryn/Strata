@@ -1,5 +1,7 @@
 <div class="notification-item__header">
-  <span class="notification-item__time">{{ timestamp() }}</span>
+  <span class="notification-item__time">{{
+    notification().sentAt | localizedDate: { dateStyle: 'medium', timeStyle: 'medium' }
+  }}</span>
   <button
     type="button"
     class="notification-item__close"

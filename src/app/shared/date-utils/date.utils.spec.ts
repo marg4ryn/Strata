@@ -1,44 +1,4 @@
-import { isoDateToLocaleString, dateToCalendarKey, localNowAsUtcMidnight } from './date.utils';
-
-describe('isoDateToLocaleString', () => {
-  it('returns empty string for undefined', () => {
-    expect(isoDateToLocaleString(undefined)).toBe('');
-  });
-
-  it('returns empty string for an empty string', () => {
-    expect(isoDateToLocaleString('')).toBe('');
-  });
-
-  it('formats a valid ISO date using local time', () => {
-    const result = isoDateToLocaleString('2026-07-18');
-    const expected = new Date(2026, 6, 18).toLocaleDateString();
-    expect(result).toBe(expected);
-  });
-
-  it('never converts through UTC internally', () => {
-    const toISOSpy = vi.spyOn(Date.prototype, 'toISOString');
-    isoDateToLocaleString('2026-01-01');
-    expect(toISOSpy).not.toHaveBeenCalled();
-    toISOSpy.mockRestore();
-  });
-
-  it('handles single-digit month and day correctly', () => {
-    const result = isoDateToLocaleString('2026-03-05');
-    const expected = new Date(2026, 2, 5).toLocaleDateString();
-    expect(result).toBe(expected);
-  });
-
-  it('handles leap year date correctly', () => {
-    const result = isoDateToLocaleString('2024-02-29');
-    const expected = new Date(2024, 1, 29).toLocaleDateString();
-    expect(result).toBe(expected);
-  });
-
-  it('formats date according to explicit locale', () => {
-    expect(isoDateToLocaleString('2026-07-18', 'pl-PL')).toBe('18.07.2026');
-    expect(isoDateToLocaleString('2026-07-18', 'en-US')).toBe('7/18/2026');
-  });
-});
+import { dateToCalendarKey, localNowAsUtcMidnight } from './date.utils';
 
 describe('dateToCalendarKey', () => {
   it('encodes year, month, and day as a comparable number', () => {

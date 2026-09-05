@@ -2,21 +2,25 @@
   <dl class="details">
     <div class="details__group">
       <dt>{{ 'analysisRun.infoPanel.startDate' | transloco }}</dt>
-      <dd>{{ debouncedAnalysisStartDate.value() }}</dd>
+      <dd>
+        {{
+          pendingAnalysis()?.startedAt | localizedDate: { dateStyle: 'medium', timeStyle: 'medium' }
+        }}
+      </dd>
     </div>
 
     <div class="details__group">
       <dt>{{ 'analysisRun.infoPanel.targetURL' | transloco }}</dt>
-      <dd class="details__url">{{ debouncedTargetURL.value() }}</dd>
+      <dd class="details__url">{{ pendingAnalysis()?.target?.targetURL }}</dd>
     </div>
 
-    @if (debouncedLimitRange.value()) {
+    @if (pendingAnalysis()?.target?.limitRange) {
       <div class="details__group">
         <dt>{{ 'analysisRun.infoPanel.dateRange' | transloco }}</dt>
         <dd class="details__range">
-          <span>{{ debouncedStartDate.value() }}</span>
+          <span>{{ pendingAnalysis()?.target?.range?.startDate | localizedDate }}</span>
           <span class="details__range-sep">–</span>
-          <span>{{ debouncedEndDate.value() }}</span>
+          <span>{{ pendingAnalysis()?.target?.range?.endDate | localizedDate }}</span>
         </dd>
       </div>
     }
