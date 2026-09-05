@@ -42,12 +42,16 @@
             </dd>
           </div>
           <div>
+            <dt>{{ 'analysisResults.repositoryDetails.analysisStarted' | transloco }}</dt>
+            <dd>{{ info.analysisStartedAt | localizedDate: { timeStyle: 'medium' } }}</dd>
+          </div>
+          <div>
             <dt>{{ 'analysisResults.repositoryDetails.analysisCompleted' | transloco }}</dt>
-            <dd>
-              {{ info.analysisFinishedAt | localizedDate: { timeStyle: 'short' } }} ({{
-                info.analysisTimeInSeconds | localizedDuration
-              }})
-            </dd>
+            <dd>{{ info.analysisFinishedAt | localizedDate: { timeStyle: 'medium' } }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.analysisDuration' | transloco }}</dt>
+            <dd>{{ info.analysisTimeInSeconds | localizedDuration }}</dd>
           </div>
         </dl>
       </section>
@@ -63,7 +67,13 @@
             <dd>{{ statistics.authors | localizedNumber }}</dd>
           </div>
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.activeAuthors' | transloco }}</dt>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.activeAuthors' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.activeAuthorsTooltip"
+                [iconSize]="15"
+              />
+            </dt>
             <dd>{{ statistics.activeAuthors | localizedNumber }}</dd>
           </div>
           <div>
@@ -73,6 +83,10 @@
           <div>
             <dt>{{ 'analysisResults.repositoryDetails.files' | transloco }}</dt>
             <dd>{{ statistics.files | localizedNumber }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'analysisResults.repositoryDetails.fileTypes' | transloco }}</dt>
+            <dd>{{ statistics.fileTypeStatistics.length | localizedNumber }}</dd>
           </div>
         </dl>
       </section>
@@ -84,24 +98,56 @@
         </h2>
         <dl class="data-section__content">
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.bugs' | transloco }}</dt>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.bugs' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.bugsTooltip"
+                [iconSize]="15"
+              />
+            </dt>
             <dd>{{ staticAnalysis.bugs | localizedNumber }}</dd>
           </div>
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.vulnerabilities' | transloco }}</dt>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.vulnerabilities' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.vulnerabilitiesTooltip"
+                [iconSize]="15"
+              />
+            </dt>
             <dd>{{ staticAnalysis.vulnerabilities | localizedNumber }}</dd>
           </div>
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.codeSmells' | transloco }}</dt>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.codeSmells' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.codeSmellsTooltip"
+                [iconSize]="15"
+              />
+            </dt>
             <dd>{{ staticAnalysis.codeSmells | localizedNumber }}</dd>
           </div>
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.complexity' | transloco }}</dt>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.complexity' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.complexityTooltip"
+                [iconSize]="15"
+              />
+            </dt>
             <dd>{{ staticAnalysis.complexity | localizedNumber }}</dd>
           </div>
           <div>
-            <dt>{{ 'analysisResults.repositoryDetails.duplicatedLinesDensity' | transloco }}</dt>
-            <dd>{{ staticAnalysis.duplicatedLinesDensity | localizedNumber }}</dd>
+            <dt>
+              {{ 'analysisResults.repositoryDetails.duplicatedLinesDensity' | transloco }}
+              <app-info-tooltip
+                textKey="analysisResults.repositoryDetails.duplicatedLinesDensityTooltip"
+                [iconSize]="15"
+              />
+            </dt>
+            <dd>
+              {{ staticAnalysis.duplicatedLinesDensity | localizedNumber: '1.0-2' : 'percent' }}
+            </dd>
           </div>
         </dl>
       </section>

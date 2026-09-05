@@ -1,0 +1,45 @@
+<span class="info-tooltip-wrapper">
+  <button
+    class="info-button"
+    type="button"
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    (mouseenter)="onButtonEnter()"
+    (mouseleave)="onButtonLeave()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keydown.escape)="onEscape()"
+    [attr.aria-label]="'tooltip.ariaLabel' | transloco"
+    [attr.aria-describedby]="tooltipId"
+  >
+    <svg
+      [attr.width]="iconSize()"
+      [attr.height]="iconSize()"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+      <path d="M8 7V11M8 5V5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="visible"
+    [cdkConnectedOverlayPositions]="positions"
+    [cdkConnectedOverlayHasBackdrop]="false"
+  >
+    <div
+      class="tooltip"
+      [id]="tooltipId"
+      role="tooltip"
+      [style.width.px]="width()"
+      (mouseenter)="onTooltipEnter()"
+      (mouseleave)="onTooltipLeave()"
+    >
+      {{ textKey() | transloco }}
+    </div>
+  </ng-template>
+</span>

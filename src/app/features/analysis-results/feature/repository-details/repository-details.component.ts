@@ -4,6 +4,7 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
 import { LocalizedNumberPipe } from '@app/shared/localized-number-pipe/localized-number.pipe';
 import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
+import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
 import { ResourcePageComponent } from '../resource-page/resource-page.component';
 import { pageResource } from '../../utils/page-resource';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
@@ -18,6 +19,7 @@ import { DoughnutChartComponent } from '../../ui/doughnut-chart/doughnut-chart.c
     LocalizedNumberPipe,
     LocalizedDurationPipe,
     DoughnutChartComponent,
+    InfoTooltipComponent,
   ],
   templateUrl: './repository-details.component.html',
   styleUrl: './repository-details.component.scss',

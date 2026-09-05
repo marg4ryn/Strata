@@ -64,10 +64,20 @@
     }
 
     dt {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      gap: 0.25em;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       color: var(--text-secondary);
+
+      app-info-tooltip {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+      }
     }
 
     dd {

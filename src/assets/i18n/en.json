@@ -32,6 +32,9 @@
     "minutesSeconds": "{{ minutes }}m {{ seconds }}s",
     "secondsOnly": "{{ seconds }}s"
   },
+  "tooltip": {
+    "ariaLabel": "More information"
+  },
   "notifications": {
     "panel": {
       "header": "Notifications",
@@ -158,19 +161,28 @@
     "repositoryDetails": {
       "analysisDateRange": "Analysis date range",
       "analysisId": "Analysis ID",
+      "analysisStarted": "Analysis started",
       "analysisCompleted": "Analysis completed",
+      "analysisDuration": "Analysis duration",
       "repositoryStatistics": "Repository statistics",
       "codeQuality": "Code quality",
       "numberOfLines": "Number of lines",
       "authors": "Authors",
       "activeAuthors": "Active authors",
+      "activeAuthorsTooltip": "Number of authors who have made at least one commit to the analyzed repository within the last 6 months.",
       "commits": "Commits",
       "files": "Files",
+      "fileTypes": "File types",
       "bugs": "Bugs",
+      "bugsTooltip": "Number of bugs that may cause incorrect runtime behavior. The higher the number, the greater the risk of failures.",
       "vulnerabilities": "Vulnerabilities",
+      "vulnerabilitiesTooltip": "Number of security vulnerabilities, such as SQL injection, hardcoded passwords, or weak cryptography.",
       "codeSmells": "Code Smells",
+      "codeSmellsTooltip": "Number of issues affecting code readability and maintainability, such as overly long methods, duplication, or poor naming. A higher value indicates greater technical debt.",
       "complexity": "Complexity",
+      "complexityTooltip": "Cyclomatic complexity, i.e. the number of independent execution paths in the code. A higher value indicates code that is harder to understand and test, with a greater risk of errors. The metric is aggregated for the entire project.",
       "duplicatedLinesDensity": "Duplicated lines density",
+      "duplicatedLinesDensityTooltip": "Percentage of duplicated lines relative to all lines of code. A low value is desirable; a high value may indicate excessive code duplication and make maintenance more difficult.",
       "codeLegendLabel": "Code",
       "codeTooltipLabel": "Lines of code",
       "commentsLegendLabel": "Comments",

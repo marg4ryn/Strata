@@ -32,6 +32,9 @@
     "minutesSeconds": "{{ minutes }} min {{ seconds }} s",
     "secondsOnly": "{{ seconds }} s"
   },
+  "tooltip": {
+    "ariaLabel": "Więcej informacji"
+  },
   "notifications": {
     "panel": {
       "header": "Powiadomienia",
@@ -158,19 +161,28 @@
     "repositoryDetails": {
       "analysisDateRange": "Zakres analizy",
       "analysisId": "ID analizy",
-      "analysisCompleted": "Analizę zakończono",
+      "analysisStarted": "Rozpoczęcie analizy",
+      "analysisCompleted": "Zakończenie analizy",
+      "analysisDuration": "Czas trwania",
       "repositoryStatistics": "Statystyki repozytorium",
       "codeQuality": "Jakość kodu",
       "numberOfLines": "Liczba linii",
       "authors": "Autorzy",
       "activeAuthors": "Aktywni autorzy",
+      "activeAuthorsTooltip": "Liczba autorów, którzy dodali co najmniej jeden commit do analizowanego repozytorium w ciągu ostatnich 6 miesięcy.",
       "commits": "Commity",
       "files": "Pliki",
+      "fileTypes": "Typy plików",
       "bugs": "Błędy",
+      "bugsTooltip": "Liczba błędów mogących powodować nieprawidłowe działanie kodu w runtime. Im więcej, tym większe ryzyko awarii.",
       "vulnerabilities": "Podatności",
+      "vulnerabilitiesTooltip": "Liczba podatności bezpieczeństwa, np. SQL Injection, hardcoded hasła czy słaba kryptografia.",
       "codeSmells": "Zapachy kodu",
+      "codeSmellsTooltip": "Tzw. Code Smells – liczba problemów wpływających na czytelność i utrzymywalność kodu, np. zbyt długie metody, duplikacja lub złe nazewnictwo. Wysoka wartość oznacza większy dług techniczny.",
       "complexity": "Złożoność",
+      "complexityTooltip": "Złożoność cyklomatyczna, czyli liczba niezależnych ścieżek wykonania w kodzie. Wyższa wartość oznacza trudniejszy do zrozumienia i testowania kod oraz większe ryzyko błędów. Metryka jest agregowana dla całego projektu.",
       "duplicatedLinesDensity": "Gęstość zduplikowanych linii",
+      "duplicatedLinesDensityTooltip": "Procent zduplikowanych linii kodu względem wszystkich linii. Niska wartość jest pożądana; wysoka może oznaczać nadmierne kopiowanie kodu i utrudniać jego utrzymanie.",
       "codeLegendLabel": "Kod",
       "codeTooltipLabel": "Linie kodu",
       "commentsLegendLabel": "Komentarze",
