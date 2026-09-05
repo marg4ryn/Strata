@@ -26,6 +26,12 @@
     "loadAnalysis": "Load the {{ repoName }} analysis?",
     "deleteAnalysis": "Are you sure you want to delete the {{ repoName }} analysis? This operation cannot be undone."
   },
+  "duration": {
+    "hoursMinutes": "{{ hours }}h {{ minutes }}m",
+    "hoursOnly": "{{ hours }}h",
+    "minutesSeconds": "{{ minutes }}m {{ seconds }}s",
+    "secondsOnly": "{{ seconds }}s"
+  },
   "notifications": {
     "panel": {
       "header": "Notifications",
@@ -148,6 +154,30 @@
     "resource": {
       "error": "Error",
       "notFound": "The analysis you are looking for does not exist."
+    },
+    "repositoryDetails": {
+      "analysisDateRange": "Analysis date range",
+      "analysisId": "Analysis ID",
+      "analysisCompleted": "Analysis completed",
+      "repositoryStatistics": "Repository statistics",
+      "codeQuality": "Code quality",
+      "numberOfLines": "Number of lines",
+      "authors": "Authors",
+      "activeAuthors": "Active authors",
+      "commits": "Commits",
+      "files": "Files",
+      "bugs": "Bugs",
+      "vulnerabilities": "Vulnerabilities",
+      "codeSmells": "Code Smells",
+      "complexity": "Complexity",
+      "duplicatedLinesDensity": "Duplicated lines density",
+      "codeLegendLabel": "Code",
+      "codeTooltipLabel": "Lines of code",
+      "commentsLegendLabel": "Comments",
+      "commentsTooltipLabel": "Comment lines",
+      "blankLegendLabel": "Blank",
+      "blankTooltipLabel": "Blank lines",
+      "repositoryLinkTitle": "Open repository {{owner}}/{{name}}"
     }
   }
 }

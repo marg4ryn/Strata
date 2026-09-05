@@ -26,6 +26,12 @@
     "loadAnalysis": "Wczytać analizę {{ repoName }}?",
     "deleteAnalysis": "Czy jesteś pewny, że chcesz usunąć analizę {{ repoName }}? Tej operacji nie można cofnąć."
   },
+  "duration": {
+    "hoursMinutes": "{{ hours }} godz. {{ minutes }} min",
+    "hoursOnly": "{{ hours }} godz.",
+    "minutesSeconds": "{{ minutes }} min {{ seconds }} s",
+    "secondsOnly": "{{ seconds }} s"
+  },
   "notifications": {
     "panel": {
       "header": "Powiadomienia",
@@ -148,6 +154,30 @@
     "resource": {
       "error": "Błąd",
       "notFound": "Analiza, której szukasz, nie istnieje."
+    },
+    "repositoryDetails": {
+      "analysisDateRange": "Zakres analizy",
+      "analysisId": "ID analizy",
+      "analysisCompleted": "Analizę zakończono",
+      "repositoryStatistics": "Statystyki repozytorium",
+      "codeQuality": "Jakość kodu",
+      "numberOfLines": "Liczba linii",
+      "authors": "Autorzy",
+      "activeAuthors": "Aktywni autorzy",
+      "commits": "Commity",
+      "files": "Pliki",
+      "bugs": "Błędy",
+      "vulnerabilities": "Podatności",
+      "codeSmells": "Zapachy kodu",
+      "complexity": "Złożoność",
+      "duplicatedLinesDensity": "Gęstość zduplikowanych linii",
+      "codeLegendLabel": "Kod",
+      "codeTooltipLabel": "Linie kodu",
+      "commentsLegendLabel": "Komentarze",
+      "commentsTooltipLabel": "Linie komentarzy",
+      "blankLegendLabel": "Puste",
+      "blankTooltipLabel": "Linie puste",
+      "repositoryLinkTitle": "Otwórz repozytorium {{owner}}/{{name}}"
     }
   }
 }

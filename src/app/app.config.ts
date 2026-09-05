@@ -6,6 +6,9 @@ import {
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localePl from '@angular/common/locales/pl';
 import { provideTransloco } from '@ngneat/transloco';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
@@ -20,6 +23,9 @@ import {
   CACHE_CONFIG,
   CacheConfig,
 } from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
+
+registerLocaleData(localePl);
+registerLocaleData(localeEn);
 
 export const appConfig: ApplicationConfig = {
   providers: [
