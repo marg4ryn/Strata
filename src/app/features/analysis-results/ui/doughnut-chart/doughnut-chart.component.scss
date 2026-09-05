@@ -1,9 +1,12 @@
-.doughnut-chart {
+:host {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.doughnut-chart {
   position: relative;
   width: 100%;
+  max-width: 300px;
   aspect-ratio: 1;
-  max-height: 300px;
 }
