@@ -1,4 +1,4 @@
-import type { ISODateString } from '@app/shared/date-utils/date.utils';
+import type { ISODateString, ISOLocalDateTime } from '@app/shared/date-utils/date.utils';
 
 export interface RepositoryDetails {
   info: RepositoryInfo;
@@ -14,9 +14,8 @@ export interface RepositoryInfo {
   repositoryPlatform: string;
   analysisRangeStartDate: ISODateString;
   analysisRangeEndDate: ISODateString;
-  lastCommitHash: string;
-  analysisStartedAt: string;
-  analysisFinishedAt: string;
+  analysisStartedAt: ISOLocalDateTime;
+  analysisFinishedAt: ISOLocalDateTime;
   analysisTimeInSeconds: number;
 }
 
