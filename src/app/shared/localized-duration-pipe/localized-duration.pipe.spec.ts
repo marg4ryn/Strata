@@ -15,10 +15,6 @@ describe('LocalizedDurationPipe', () => {
     pipe = TestBed.inject(LocalizedDurationPipe);
   });
 
-  it('creates an instance', () => {
-    expect(pipe).toBeTruthy();
-  });
-
   it('returns empty string for null/undefined/0', () => {
     expect(pipe.transform(null)).toBe('');
     expect(pipe.transform(undefined)).toBe('');

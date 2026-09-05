@@ -1,7 +1,9 @@
 import { Pipe, PipeTransform, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { formatNumber } from '@angular/common';
+import { formatNumber, formatPercent } from '@angular/common';
 import { TranslocoService } from '@ngneat/transloco';
+
+type NumberStyle = 'decimal' | 'percent';
 
 @Pipe({
   name: 'localizedNumber',
@@ -14,11 +16,17 @@ export class LocalizedNumberPipe implements PipeTransform {
     initialValue: this.transloco.getActiveLang(),
   });
 
-  transform(value: number | null | undefined, digitsInfo = '1.0-2'): string {
+  transform(
+    value: number | null | undefined,
+    digitsInfo = '1.0-2',
+    style: NumberStyle = 'decimal',
+  ): string {
     const lang = this.activeLang();
 
     if (value === null || value === undefined) return '';
 
-    return formatNumber(value, lang, digitsInfo);
+    return style === 'percent'
+      ? formatPercent(value / 100, lang, digitsInfo)
+      : formatNumber(value, lang, digitsInfo);
   }
 }

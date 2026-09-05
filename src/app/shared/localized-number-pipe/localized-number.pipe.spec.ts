@@ -15,10 +15,6 @@ describe('LocalizedNumberPipe', () => {
     pipe = TestBed.inject(LocalizedNumberPipe);
   });
 
-  it('creates an instance', () => {
-    expect(pipe).toBeTruthy();
-  });
-
   it('returns empty string for null/undefined', () => {
     expect(pipe.transform(null)).toBe('');
     expect(pipe.transform(undefined)).toBe('');
@@ -50,5 +46,9 @@ describe('LocalizedNumberPipe', () => {
 
   it('applies digitsInfo with no decimal places', () => {
     expect(pipe.transform(1234.9, '1.0-0')).toBe('1,235');
+  });
+
+  it('formats percents when specified', () => {
+    expect(pipe.transform(42.5, '1.0-1', 'percent')).toBe('42.5%');
   });
 });
