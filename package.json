@@ -34,7 +34,9 @@
     "@vitest/coverage-v8": "^4.1.9",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
+    "resize-observer-polyfill": "^1.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "vitest-canvas-mock": "^1.2.0"
   }
 }
