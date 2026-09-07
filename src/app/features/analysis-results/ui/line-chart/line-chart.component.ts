@@ -7,9 +7,9 @@ import { ChartConfiguration } from 'chart.js';
 import type { ISODateString } from '@app/shared/date-utils/date.utils';
 import { aggregatePoints } from '../../utils/aggregation/aggregation';
 
-export type LineChartMode = 'sum' | 'max';
+export type LineChartAggregationMode = 'sum' | 'max';
 
-export type LineChartAggregation = 'day' | 'week' | 'biweek' | 'month';
+export type LineChartAggregationPeriod = 'day' | 'week' | 'biweek' | 'month';
 
 export interface LineChartDataPoint {
   date: ISODateString;
@@ -33,8 +33,8 @@ export class LineChartComponent {
   private readonly transloco = inject(TranslocoService);
 
   series = input.required<LineChartSeries[]>();
-  aggregation = input.required<LineChartAggregation>();
-  mode = input<LineChartMode>('sum');
+  period = input.required<LineChartAggregationPeriod>();
+  mode = input<LineChartAggregationMode>('sum');
 
   private readonly activeLang = toSignal(this.transloco.langChanges$, {
     initialValue: this.transloco.getActiveLang(),
@@ -43,7 +43,7 @@ export class LineChartComponent {
   private readonly aggregatedSeries = computed(() =>
     this.series().map((s) => ({
       ...s,
-      buckets: aggregatePoints(s.points, this.aggregation(), this.mode()),
+      buckets: aggregatePoints(s.points, this.period(), this.mode()),
     })),
   );
 
@@ -62,11 +62,11 @@ export class LineChartComponent {
 
   chartData = computed<ChartConfiguration<'line'>['data']>(() => {
     const keys = this.bucketKeys();
-    const mode = this.aggregation();
+    const period = this.period();
     const lang = this.activeLang();
 
     return {
-      labels: keys.map((k) => this.formatBucketLabel(k, mode, lang)),
+      labels: keys.map((k) => this.formatBucketLabel(k, period, lang)),
       datasets: this.aggregatedSeries().map((s) => ({
         label: this.transloco.translate(s.tooltipLabelKey),
         data: keys.map((k) => s.buckets.get(k) ?? 0),
@@ -101,8 +101,8 @@ export class LineChartComponent {
     };
   });
 
-  formatBucketLabel(key: string, mode: LineChartAggregation, lang: string): string {
-    if (mode === 'month') {
+  formatBucketLabel(key: string, period: LineChartAggregationPeriod, lang: string): string {
+    if (period === 'month') {
       const [year, month] = key.split('-');
       return new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(lang, {
         month: 'long',

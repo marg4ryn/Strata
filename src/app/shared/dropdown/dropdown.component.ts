@@ -21,7 +21,7 @@ export class DropdownComponent<T> {
   readonly value = input.required<T>();
   readonly ariaLabelKey = input('dropdown.ariaLabel');
 
-  readonly selectionChange = output<readonly T[]>();
+  readonly selectionChange = output<T>();
   readonly openedChange = output<boolean>();
 
   private readonly listbox = viewChild.required(CdkListbox);
@@ -39,7 +39,8 @@ export class DropdownComponent<T> {
   }
 
   select(values: readonly T[]): void {
-    this.selectionChange.emit(values);
+    const [selected] = values;
+    this.selectionChange.emit(selected);
     this.close();
   }
 

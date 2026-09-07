@@ -6,7 +6,7 @@ import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module
 import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
 import { LineChartSectionComponent } from './line-chart-section.component';
 import {
-  LineChartAggregation,
+  LineChartAggregationPeriod,
   LineChartComponent,
   LineChartSeries,
 } from '../../ui/line-chart/line-chart.component';
@@ -35,7 +35,7 @@ describe('LineChartSectionComponent', () => {
   });
 
   it('defaults current aggregation to week', () => {
-    expect(component.current()).toBe('week');
+    expect(component.selectedPeriod()).toBe('week');
   });
 
   it('starts closed', () => {
@@ -47,7 +47,7 @@ describe('LineChartSectionComponent', () => {
   });
 
   it('returns first option when no other matches', () => {
-    component.current.set('invalid' as unknown as LineChartAggregation);
+    component.selectedPeriod.set('invalid' as LineChartAggregationPeriod);
     fixture.detectChanges();
     expect(component.currentOption).toEqual(component.options[0]);
   });
@@ -73,44 +73,37 @@ describe('LineChartSectionComponent', () => {
   });
 
   it('updates current aggregation on select with new value', () => {
-    component.select(['day']);
-    expect(component.current()).toBe('day');
+    component.select('day');
+    expect(component.selectedPeriod()).toBe('day');
   });
 
   it('closes dropdown after selecting new value', () => {
     const spy = vi.spyOn(dropdown, 'close');
-    component.select(['day']);
+    component.select('day');
     expect(spy).toHaveBeenCalled();
   });
 
   it('keeps current aggregation when selecting the same value', () => {
-    component.select(['week']);
-    expect(component.current()).toBe('week');
+    component.select('week');
+    expect(component.selectedPeriod()).toBe('week');
   });
 
   it('closes dropdown when selecting the same value', () => {
     const spy = vi.spyOn(dropdown, 'close');
-    component.select(['week']);
+    component.select('week');
     expect(spy).toHaveBeenCalled();
-  });
-
-  it('closes dropdown without changing current when values are empty', () => {
-    const spy = vi.spyOn(dropdown, 'close');
-    component.select([]);
-    expect(spy).toHaveBeenCalled();
-    expect(component.current()).toBe('week');
   });
 
   it('reacts to dropdown selectionChange event', () => {
-    dropdown.selectionChange.emit(['month']);
-    expect(component.current()).toBe('month');
+    dropdown.selectionChange.emit('month');
+    expect(component.selectedPeriod()).toBe('month');
   });
 
-  it('passes updated aggregation to the line chart', () => {
-    component.select(['biweek']);
+  it('passes updated aggregation period to the line chart', () => {
+    component.select('biweek');
     fixture.detectChanges();
     const chart = fixture.debugElement.query(By.directive(LineChartComponent))
       .componentInstance as LineChartComponent;
-    expect(chart.aggregation()).toBe('biweek');
+    expect(chart.period()).toBe('biweek');
   });
 });

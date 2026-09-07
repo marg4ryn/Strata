@@ -207,9 +207,9 @@
       "lineChartUniqueAuthorsTooltip": "Number of unique authors",
       "lineChartActiveAuthorsLegend": "Active",
       "lineChartActiveAuthorsTooltip": "Number of active authors",
-      "lineChartLinesTitle": "Lines changed",
-      "lineChartChangedLegend": "Changed",
-      "lineChartChangedTooltip": "Number of changed lines",
+      "lineChartLinesTitle": "Dynamics",
+      "lineChartChangedLegend": "Modified",
+      "lineChartChangedTooltip": "Number of modified lines",
       "lineChartTotalLegend": "Total",
       "lineChartTotalTooltip": "Total number of lines"
     }

@@ -1,24 +1,24 @@
 import type { ISODateString } from '@app/shared/date-utils/date.utils';
 import type {
-  LineChartAggregation,
   LineChartDataPoint,
-  LineChartMode,
+  LineChartAggregationMode,
+  LineChartAggregationPeriod,
 } from '../../ui/line-chart/line-chart.component';
 
 const MS_PER_DAY = 86_400_000;
 
 export function aggregatePoints(
   points: LineChartDataPoint[],
-  aggregation: LineChartAggregation,
-  mode: LineChartMode,
+  period: LineChartAggregationPeriod,
+  mode: LineChartAggregationMode = 'sum',
 ): Map<string, number> {
   const buckets = new Map<string, number>();
-  const biweekAnchor = aggregation === 'biweek' ? getBiweekAnchor(points) : undefined;
+  const biweekAnchor = period === 'biweek' ? getBiweekAnchor(points) : undefined;
 
   for (const point of points) {
-    const key = getBucketKey(point.date, aggregation, biweekAnchor);
+    const key = getBucketKey(point.date, period, biweekAnchor);
     const prev = buckets.get(key) ?? 0;
-    const value = mode === 'sum' ? prev + point.value : Math.max(prev, point.value);
+    const value = mode === 'max' ? Math.max(prev, point.value) : prev + point.value;
     buckets.set(key, value);
   }
 
@@ -41,10 +41,10 @@ function getWeekStart(date: ISODateString): Date {
 
 function getBucketKey(
   date: ISODateString,
-  mode: LineChartAggregation,
+  period: LineChartAggregationPeriod,
   biweekAnchor?: number,
 ): string {
-  switch (mode) {
+  switch (period) {
     case 'day':
       return date;
 
@@ -64,7 +64,7 @@ function getBucketKey(
       return date.slice(0, 7);
 
     default:
-      mode satisfies never;
+      period satisfies never;
       return '';
   }
 }

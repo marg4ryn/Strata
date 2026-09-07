@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { InteractivityChecker } from '@angular/cdk/a11y';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { AnalysisRunPageComponent } from './analysis-run-page.component';
@@ -53,7 +54,13 @@ describe('AnalysisRunPageComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AnalysisRunPageComponent, getTranslocoModule()],
-      providers: [{ provide: AnalysisRunFacade, useValue: facade }],
+      providers: [
+        { provide: AnalysisRunFacade, useValue: facade },
+        {
+          provide: InteractivityChecker,
+          useValue: { isFocusable: () => true, isTabbable: () => true },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisRunPageComponent);

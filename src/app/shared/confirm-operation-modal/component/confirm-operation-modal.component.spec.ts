@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { InteractivityChecker } from '@angular/cdk/a11y';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationModalComponent } from './confirm-operation-modal.component';
@@ -10,6 +11,12 @@ describe('ConfirmOperationModalComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ConfirmOperationModalComponent, getTranslocoModule()],
+      providers: [
+        {
+          provide: InteractivityChecker,
+          useValue: { isFocusable: () => true, isTabbable: () => true },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ConfirmOperationModalComponent);

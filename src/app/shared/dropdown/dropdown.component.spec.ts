@@ -92,7 +92,7 @@ describe('DropdownComponent', () => {
     const spy = vi.fn();
     component.selectionChange.subscribe(spy);
     component.select(['b']);
-    expect(spy).toHaveBeenCalledWith(['b']);
+    expect(spy).toHaveBeenCalledWith('b');
   });
 
   it('closes the panel after select', () => {

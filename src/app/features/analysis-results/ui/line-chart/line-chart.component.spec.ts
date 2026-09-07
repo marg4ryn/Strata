@@ -39,7 +39,7 @@ describe('LineChartComponent', () => {
     transloco = TestBed.inject(TranslocoService);
 
     fixture.componentRef.setInput('series', []);
-    fixture.componentRef.setInput('aggregation', 'day');
+    fixture.componentRef.setInput('period', 'day');
     fixture.detectChanges();
     await fixture.whenStable();
   });
@@ -115,12 +115,12 @@ describe('LineChartComponent', () => {
     expect(component.chartData()!.datasets[0].label).toBe('Translated Label');
   });
 
-  it('recomputes buckets when aggregation input changes', () => {
+  it('recomputes buckets when aggregation period input changes', () => {
     fixture.componentRef.setInput('series', [seriesA]);
     fixture.detectChanges();
     const dayLabelsCount = component.chartData()!.labels!.length;
 
-    fixture.componentRef.setInput('aggregation', 'month');
+    fixture.componentRef.setInput('period', 'month');
     fixture.detectChanges();
     const monthLabelsCount = component.chartData()!.labels!.length;
 
@@ -182,7 +182,7 @@ describe('LineChartComponent', () => {
 
   it('recomputes chart data when active language changes', () => {
     fixture.componentRef.setInput('series', [seriesA]);
-    fixture.componentRef.setInput('aggregation', 'month');
+    fixture.componentRef.setInput('period', 'month');
     fixture.detectChanges();
 
     const enLabel = component.chartData()!.labels![0];

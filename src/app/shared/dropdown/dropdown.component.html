@@ -45,6 +45,7 @@
       cdkListbox
       class="dropdown__panel"
       [cdkListboxValue]="[value()]"
+      [cdkListboxMultiple]="false"
       (cdkListboxValueChange)="select($event.value)"
       (keydown.enter)="close()"
       (keydown.space)="close()"

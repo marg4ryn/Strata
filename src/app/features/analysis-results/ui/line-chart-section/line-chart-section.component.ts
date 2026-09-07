@@ -4,9 +4,9 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { DropdownComponent, DropdownOption } from '@app/shared/dropdown/dropdown.component';
 import {
   LineChartComponent,
-  LineChartAggregation,
   LineChartSeries,
-  LineChartMode,
+  LineChartAggregationPeriod,
+  LineChartAggregationMode,
 } from '../../ui/line-chart/line-chart.component';
 
 @Component({
@@ -19,36 +19,34 @@ import {
 export class LineChartSectionComponent {
   series = input.required<LineChartSeries[]>();
   titleKey = input.required<string>();
-  mode = input<LineChartMode>('sum');
+  mode = input<LineChartAggregationMode>('sum');
 
   private readonly dropdown = viewChild.required(DropdownComponent);
-  readonly current = signal<LineChartAggregation>('week');
+  readonly selectedPeriod = signal<LineChartAggregationPeriod>('week');
   readonly isOpen = signal(false);
 
-  readonly options: DropdownOption<LineChartAggregation>[] = [
+  readonly options: DropdownOption<LineChartAggregationPeriod>[] = [
     { value: 'day', labelKey: 'analysisResults.repositoryDetails.aggregationDay' },
     { value: 'week', labelKey: 'analysisResults.repositoryDetails.aggregationWeek' },
     { value: 'biweek', labelKey: 'analysisResults.repositoryDetails.aggregationBiweek' },
     { value: 'month', labelKey: 'analysisResults.repositoryDetails.aggregationMonth' },
   ];
 
-  get currentOption(): DropdownOption<LineChartAggregation> {
-    return this.options.find((o) => o.value === this.current()) ?? this.options[0];
+  get currentOption(): DropdownOption<LineChartAggregationPeriod> {
+    return this.options.find((o) => o.value === this.selectedPeriod()) ?? this.options[0];
   }
 
   close(): void {
     this.dropdown().close();
   }
 
-  select(values: readonly LineChartAggregation[]): void {
-    const value = values[0];
-
-    if (value === undefined || value === this.current()) {
+  select(value: LineChartAggregationPeriod): void {
+    if (value === this.selectedPeriod()) {
       this.close();
       return;
     }
 
-    this.current.set(value);
+    this.selectedPeriod.set(value);
     this.close();
   }
 }

@@ -39,13 +39,13 @@ export class LanguageSwitcherComponent {
     this.dropdown().close();
   }
 
-  select(values: readonly LangPreference[]): void {
-    const [pref] = values;
-    if (pref === undefined || pref === this.current()) {
+  select(value: LangPreference): void {
+    if (value === this.current()) {
       this.close();
       return;
     }
-    this.facade.setPreference(pref);
+
+    this.facade.setPreference(value);
     this.close();
   }
 
