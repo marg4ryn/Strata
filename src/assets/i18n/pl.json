@@ -35,6 +35,9 @@
   "tooltip": {
     "ariaLabel": "Więcej informacji"
   },
+  "dropdown": {
+    "ariaLabel": "Wybierz opcję"
+  },
   "notifications": {
     "panel": {
       "header": "Powiadomienia",
@@ -72,7 +75,8 @@
     },
     "language": {
       "header": "Język",
-      "system": "Systemowy"
+      "system": "Systemowy",
+      "dropdownAriaLabel": "Wybierz język"
     }
   },
   "about": {
@@ -194,9 +198,20 @@
       "aggregationWeek": "Tydzień",
       "aggregationBiweek": "Dwa tygodnie",
       "aggregationMonth": "Miesiąc",
+      "lineChartSectionDropdown": "Wybierz przedział",
       "lineChartCommitTitle": "Commity",
       "lineChartCommitLegend": "Commity",
-      "lineChartCommitTooltip": "Liczba commitów"
+      "lineChartCommitTooltip": "Liczba commitów",
+      "lineChartAuthorsTitle": "Autorzy",
+      "lineChartUniqueAuthorsLegend": "Unikalni",
+      "lineChartUniqueAuthorsTooltip": "Liczba unikalnych autorów",
+      "lineChartActiveAuthorsLegend": "Aktywni",
+      "lineChartActiveAuthorsTooltip": "Liczba aktywnych autorów",
+      "lineChartLinesTitle": "Zmienione linie",
+      "lineChartChangedLegend": "Zmienione",
+      "lineChartChangedTooltip": "Liczba zmienionych linii",
+      "lineChartTotalLegend": "Łącznie",
+      "lineChartTotalTooltip": "Łączna liczba linii"
     }
   }
 }

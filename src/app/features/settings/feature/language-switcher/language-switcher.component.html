@@ -1,8 +1,7 @@
 <app-dropdown
   [options]="options"
   [value]="current()"
-  classPrefix="lang-switcher"
-  ariaLabel="Select language"
+  ariaLabelKey="settings.language.dropdownAriaLabel"
   (selectionChange)="select($event)"
   (openedChange)="onOpenedChange($event)"
 />

@@ -1,4 +1,4 @@
-import { Component, inject, input, computed, signal } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
@@ -44,4 +44,43 @@ export class RepositoryDetailsComponent {
         value: entry.commits,
       })) ?? [],
   );
+
+  uniqueAuthorsSeries = computed<LineChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: entry.uniqueAuthors,
+      })) ?? [],
+  );
+
+  activeAuthorsSeries = computed<LineChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: entry.activeAuthors,
+      })) ?? [],
+  );
+
+  linesChangedSeries = computed<LineChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: entry.linesAdded + entry.linesDeleted,
+      })) ?? [],
+  );
+
+  totalLinesSeries = computed(() => {
+    let totalLines = 0;
+
+    return (
+      this.resource.value()?.trends.map((entry) => {
+        totalLines += entry.linesAdded - entry.linesDeleted;
+
+        return {
+          date: entry.date,
+          value: totalLines,
+        };
+      }) ?? []
+    );
+  });
 }

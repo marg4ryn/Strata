@@ -27,16 +27,12 @@ export class LanguageSwitcherComponent {
   readonly isOpen = signal(false);
 
   readonly options: DropdownOption<LangPreference>[] = [
-    { value: SYSTEM_PREFERENCE, label: '', labelKey: 'settings.language.system' },
+    { value: SYSTEM_PREFERENCE, labelKey: 'settings.language.system' },
     ...LANGUAGES,
   ];
 
   get currentOption(): DropdownOption<LangPreference> {
     return this.options.find((option) => option.value === this.current()) ?? this.options[0];
-  }
-
-  toggle(): void {
-    this.dropdown().toggle();
   }
 
   close(): void {

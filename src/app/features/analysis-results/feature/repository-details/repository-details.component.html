@@ -182,12 +182,51 @@
 
       <app-line-chart-section
         titleKey="analysisResults.repositoryDetails.lineChartCommitTitle"
+        [mode]="'sum'"
         [series]="[
           {
             legendLabelKey: 'analysisResults.repositoryDetails.lineChartCommitLegend',
             tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartCommitTooltip',
             color: '#2563eb',
             points: commitSeries(),
+          },
+        ]"
+      />
+
+      <app-line-chart-section
+        titleKey="analysisResults.repositoryDetails.lineChartAuthorsTitle"
+        [mode]="'max'"
+        [series]="[
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.lineChartUniqueAuthorsLegend',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartUniqueAuthorsTooltip',
+            color: '#9B5CFF',
+            points: uniqueAuthorsSeries(),
+          },
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.lineChartActiveAuthorsLegend',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartActiveAuthorsTooltip',
+            color: '#FF4FD8',
+            points: activeAuthorsSeries(),
+          },
+        ]"
+      />
+
+      <app-line-chart-section
+        titleKey="analysisResults.repositoryDetails.lineChartLinesTitle"
+        [mode]="'sum'"
+        [series]="[
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.lineChartTotalLegend',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartTotalTooltip',
+            color: '#9B5CFF',
+            points: totalLinesSeries(),
+          },
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.lineChartChangedLegend',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartChangedTooltip',
+            color: '#FF4FD8',
+            points: linesChangedSeries(),
           },
         ]"
       />

@@ -35,6 +35,9 @@
   "tooltip": {
     "ariaLabel": "More information"
   },
+  "dropdown": {
+    "ariaLabel": "Select an option"
+  },
   "notifications": {
     "panel": {
       "header": "Notifications",
@@ -72,7 +75,8 @@
     },
     "language": {
       "header": "Language",
-      "system": "System"
+      "system": "System",
+      "dropdownAriaLabel": "Select language"
     }
   },
   "about": {
@@ -194,9 +198,20 @@
       "aggregationWeek": "Week",
       "aggregationBiweek": "Two weeks",
       "aggregationMonth": "Month",
+      "lineChartSectionDropdown": "Select interval",
       "lineChartCommitTitle": "Commits",
       "lineChartCommitLegend": "Commits",
-      "lineChartCommitTooltip": "Number of commits"
+      "lineChartCommitTooltip": "Number of commits",
+      "lineChartAuthorsTitle": "Authors",
+      "lineChartUniqueAuthorsLegend": "Unique",
+      "lineChartUniqueAuthorsTooltip": "Number of unique authors",
+      "lineChartActiveAuthorsLegend": "Active",
+      "lineChartActiveAuthorsTooltip": "Number of active authors",
+      "lineChartLinesTitle": "Lines changed",
+      "lineChartChangedLegend": "Changed",
+      "lineChartChangedTooltip": "Number of changed lines",
+      "lineChartTotalLegend": "Total",
+      "lineChartTotalTooltip": "Total number of lines"
     }
   }
 }

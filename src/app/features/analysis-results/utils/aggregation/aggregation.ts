@@ -2,20 +2,24 @@ import type { ISODateString } from '@app/shared/date-utils/date.utils';
 import type {
   LineChartAggregation,
   LineChartDataPoint,
+  LineChartMode,
 } from '../../ui/line-chart/line-chart.component';
 
 const MS_PER_DAY = 86_400_000;
 
 export function aggregatePoints(
   points: LineChartDataPoint[],
-  mode: LineChartAggregation,
+  aggregation: LineChartAggregation,
+  mode: LineChartMode,
 ): Map<string, number> {
   const buckets = new Map<string, number>();
-  const biweekAnchor = mode === 'biweek' ? getBiweekAnchor(points) : undefined;
+  const biweekAnchor = aggregation === 'biweek' ? getBiweekAnchor(points) : undefined;
 
   for (const point of points) {
-    const key = getBucketKey(point.date, mode, biweekAnchor);
-    buckets.set(key, (buckets.get(key) ?? 0) + point.value);
+    const key = getBucketKey(point.date, aggregation, biweekAnchor);
+    const prev = buckets.get(key) ?? 0;
+    const value = mode === 'sum' ? prev + point.value : Math.max(prev, point.value);
+    buckets.set(key, value);
   }
 
   return buckets;

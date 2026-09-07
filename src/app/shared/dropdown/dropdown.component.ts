@@ -6,7 +6,7 @@ import { TranslocoPipe } from '@ngneat/transloco';
 
 export interface DropdownOption<T> {
   value: T;
-  label: string;
+  label?: string;
   labelKey?: string;
 }
 
@@ -19,8 +19,7 @@ export interface DropdownOption<T> {
 export class DropdownComponent<T> {
   readonly options = input.required<readonly DropdownOption<T>[]>();
   readonly value = input.required<T>();
-  readonly classPrefix = input('dropdown');
-  readonly ariaLabel = input('Select an option');
+  readonly ariaLabelKey = input('dropdown.ariaLabel');
 
   readonly selectionChange = output<readonly T[]>();
   readonly openedChange = output<boolean>();
@@ -35,8 +34,13 @@ export class DropdownComponent<T> {
     return this.options().find((option) => option.value === this.value()) ?? this.options()[0];
   }
 
-  toggle(): void {
-    this.setOpen(!this.isOpen());
+  onOverlayAttached(): void {
+    this.listbox().focus();
+  }
+
+  select(values: readonly T[]): void {
+    this.selectionChange.emit(values);
+    this.close();
   }
 
   close(): void {
@@ -48,13 +52,8 @@ export class DropdownComponent<T> {
     setTimeout(() => this.triggerButton().nativeElement.focus(), 0);
   }
 
-  onOverlayAttached(): void {
-    this.listbox().focus();
-  }
-
-  select(values: readonly T[]): void {
-    this.selectionChange.emit(values);
-    this.close();
+  toggle(): void {
+    this.setOpen(!this.isOpen());
   }
 
   private setOpen(open: boolean): void {

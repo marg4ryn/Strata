@@ -7,11 +7,10 @@
     <app-dropdown
       [options]="options"
       [value]="current()"
-      classPrefix=""
-      ariaLabel="Select language"
+      ariaLabelKey="analysisResults.repositoryDetails.lineChartSectionDropdown"
       (selectionChange)="select($event)"
     />
   </div>
 
-  <app-line-chart [series]="series()" [aggregation]="current()" />
+  <app-line-chart [series]="series()" [aggregation]="current()" [mode]="mode()" />
 </section>

@@ -7,6 +7,8 @@ import { ChartConfiguration } from 'chart.js';
 import type { ISODateString } from '@app/shared/date-utils/date.utils';
 import { aggregatePoints } from '../../utils/aggregation/aggregation';
 
+export type LineChartMode = 'sum' | 'max';
+
 export type LineChartAggregation = 'day' | 'week' | 'biweek' | 'month';
 
 export interface LineChartDataPoint {
@@ -32,6 +34,7 @@ export class LineChartComponent {
 
   series = input.required<LineChartSeries[]>();
   aggregation = input.required<LineChartAggregation>();
+  mode = input<LineChartMode>('sum');
 
   private readonly activeLang = toSignal(this.transloco.langChanges$, {
     initialValue: this.transloco.getActiveLang(),
@@ -40,7 +43,7 @@ export class LineChartComponent {
   private readonly aggregatedSeries = computed(() =>
     this.series().map((s) => ({
       ...s,
-      buckets: aggregatePoints(s.points, this.aggregation()),
+      buckets: aggregatePoints(s.points, this.aggregation(), this.mode()),
     })),
   );
 

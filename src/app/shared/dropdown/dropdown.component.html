@@ -3,8 +3,8 @@
   #triggerButton
   #trigger="cdkOverlayOrigin"
   cdkOverlayOrigin
-  [class]="'dropdown__trigger ' + classPrefix() + '__trigger'"
-  [attr.aria-label]="ariaLabel()"
+  class="dropdown__trigger"
+  [attr.aria-label]="ariaLabelKey() | transloco"
   aria-haspopup="listbox"
   [attr.aria-expanded]="isOpen()"
   (click)="toggle()"
@@ -43,15 +43,15 @@
   <div class="dropdown__panel-wrapper" cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
     <ul
       cdkListbox
-      [class]="'dropdown__panel ' + classPrefix() + '__panel'"
+      class="dropdown__panel"
       [cdkListboxValue]="[value()]"
       (cdkListboxValueChange)="select($event.value)"
       (keydown.enter)="close()"
       (keydown.space)="close()"
     >
       @for (option of options(); track option.value) {
-        <li [class]="'dropdown__option ' + classPrefix() + '__option'" [cdkOption]="option.value">
-          {{ option.labelKey ? (option.labelKey | transloco) : option.label }}
+        <li class="dropdown__option" [cdkOption]="option.value">
+          {{ option.labelKey ? (option.labelKey | transloco) : option?.label }}
         </li>
       }
     </ul>
