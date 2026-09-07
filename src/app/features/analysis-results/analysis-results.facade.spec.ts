@@ -1,68 +1,41 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import type { Mock } from 'vitest';
 
-import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsFacade } from './analysis-results.facade';
-import {
-  CACHE_CONFIG,
-  CacheConfig,
-} from './data-access/analysis-results-cached-fetcher/cache.config';
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
 
 describe('AnalysisResultsFacade', () => {
+  const analysisId = '123';
+
   let service: AnalysisResultsFacade;
-  let logger: Partial<LoggerService>;
-  let config: CacheConfig;
-
-  let analysisResults: {
-    getRepositorySummary: ReturnType<typeof vi.fn>;
-  };
-
-  let router: {
-    navigate: ReturnType<typeof vi.fn>;
-  };
+  let analysisResults: { getRepositorySummary: Mock };
+  let router: { navigate: Mock };
 
   beforeEach(() => {
-    analysisResults = {
-      getRepositorySummary: vi.fn(),
-    };
-
-    router = {
-      navigate: vi.fn(),
-    };
-
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
-
-    config = {
-      maxCaches: 2,
-      registryCacheName: 'test-reg',
-      registryKey: '/test',
-    };
+    analysisResults = { getRepositorySummary: vi.fn() };
+    router = { navigate: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
         { provide: AnalysisResultsService, useValue: analysisResults },
         { provide: Router, useValue: router },
-        { provide: LoggerService, useValue: logger },
-        { provide: CACHE_CONFIG, useValue: config },
       ],
     });
+
     service = TestBed.inject(AnalysisResultsFacade);
   });
 
-  const analysisId = '123';
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-  it('navigates do analysis', () => {
+  it('navigates to analysis', () => {
     service.navigateToAnalysis(analysisId);
     expect(router.navigate).toHaveBeenCalledWith(['analysis', analysisId, 'summary']);
   });
 
-  it('handles getRepositorySummary', () => {
+  it('delegates getRepositorySummary to AnalysisResultsService', () => {
     service.getRepositorySummary(analysisId);
     expect(analysisResults.getRepositorySummary).toHaveBeenCalledWith(analysisId);
   });
