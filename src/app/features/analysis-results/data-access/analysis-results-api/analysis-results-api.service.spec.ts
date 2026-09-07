@@ -1,50 +1,40 @@
 import { TestBed } from '@angular/core/testing';
+import type { Mock } from 'vitest';
 
 import { HttpService } from '@app/core/http/http.service';
 import { AnalysisResultsApiService } from './analysis-results-api.service';
-import { CACHE_CONFIG, CacheConfig } from '../analysis-results-cached-fetcher/cache.config';
 
 describe('AnalysisResultsApiService', () => {
-  let service: AnalysisResultsApiService;
-  let config: CacheConfig;
+  const analysisId = '123';
 
-  let http: {
-    get: ReturnType<typeof vi.fn>;
-  };
+  let service: AnalysisResultsApiService;
+  let http: { get: Mock };
 
   beforeEach(() => {
-    http = {
-      get: vi.fn(),
-    };
-
-    config = {
-      maxCaches: 2,
-      registryCacheName: 'test-reg',
-      registryKey: '/test',
-    };
+    http = { get: vi.fn() };
 
     TestBed.configureTestingModule({
-      providers: [
-        { provide: HttpService, useValue: http },
-        { provide: CACHE_CONFIG, useValue: config },
-      ],
+      providers: [{ provide: HttpService, useValue: http }],
     });
+
     service = TestBed.inject(AnalysisResultsApiService);
   });
 
-  const analysisId = '123';
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-  it('handles fetchRepositoryDetails', () => {
+  it('delegates fetchRepositoryDetails to HttpService', () => {
     service.fetchRepositoryDetails(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/summary`);
   });
 
-  it('handles fetchRepositoryTrends', () => {
+  it('delegates fetchRepositoryTrends to HttpService', () => {
     service.fetchRepositoryTrends(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/trends`);
   });
 
-  it('handles fetchAuthorStatistics', () => {
+  it('delegates fetchAuthorStatistics to HttpService', () => {
     service.fetchAuthorStatistics(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/authors/statistics`);
   });

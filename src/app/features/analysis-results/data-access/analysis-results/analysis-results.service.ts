@@ -12,9 +12,9 @@ import type {
 
 @Service()
 export class AnalysisResultsService {
-  private readonly cachedFetcher = inject(AnalysisResultsCachedFetcherService);
   private readonly api = inject(AnalysisResultsApiService);
   private readonly logger = inject(LoggerService);
+  private readonly cachedFetcher = inject(AnalysisResultsCachedFetcherService);
 
   private readonly apiVersion = 'v1';
 

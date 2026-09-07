@@ -1,48 +1,34 @@
 import { TestBed } from '@angular/core/testing';
+import type { Mock } from 'vitest';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsService } from './analysis-results.service';
-import { CACHE_CONFIG, CacheConfig } from '../analysis-results-cached-fetcher/cache.config';
+import { CACHE_CONFIG } from '../analysis-results-cached-fetcher/cache.config';
+import type { CacheConfig } from '../analysis-results-cached-fetcher/cache.config';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 
 describe('AnalysisResultsService', () => {
+  const analysisId = '123';
+
   let service: AnalysisResultsService;
   let logger: Partial<LoggerService>;
   let config: CacheConfig;
-
+  let cachedFetcher: { getOrFetch: Mock };
   let api: {
-    fetchRepositoryDetails: ReturnType<typeof vi.fn>;
-    fetchRepositoryTrends: ReturnType<typeof vi.fn>;
-    fetchAuthorStatistics: ReturnType<typeof vi.fn>;
-  };
-
-  let cachedFetcher: {
-    getOrFetch: ReturnType<typeof vi.fn>;
+    fetchRepositoryDetails: Mock;
+    fetchRepositoryTrends: Mock;
+    fetchAuthorStatistics: Mock;
   };
 
   beforeEach(() => {
+    cachedFetcher = { getOrFetch: vi.fn() };
+    logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
     api = {
       fetchRepositoryDetails: vi.fn(),
       fetchRepositoryTrends: vi.fn(),
       fetchAuthorStatistics: vi.fn(),
-    };
-
-    cachedFetcher = {
-      getOrFetch: vi.fn(),
-    };
-
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
-
-    config = {
-      maxCaches: 2,
-      registryCacheName: 'test-reg',
-      registryKey: '/test',
     };
 
     TestBed.configureTestingModule({
@@ -53,15 +39,18 @@ describe('AnalysisResultsService', () => {
         { provide: CACHE_CONFIG, useValue: config },
       ],
     });
+
     service = TestBed.inject(AnalysisResultsService);
   });
 
-  const analysisId = '123';
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   describe('getRepositorySummary', () => {
     beforeEach(() => {
       cachedFetcher.getOrFetch.mockImplementation(
-        (_cacheName: string, _key: string, fetcher: () => Promise<unknown>) => fetcher(),
+        (_cacheName: string, _cacheKey: string, fetcher: () => Promise<unknown>) => fetcher(),
       );
     });
 
@@ -104,7 +93,7 @@ describe('AnalysisResultsService', () => {
       expect(api.fetchAuthorStatistics).toHaveBeenCalledWith(analysisId);
     });
 
-    it('combines results from 3 sources into a single objec', async () => {
+    it('combines results from 3 sources into a single object', async () => {
       const details = { name: 'test-repo' };
       const trends = [{ commits: 2 }];
       const authors = [{ name: 'John Doe' }];

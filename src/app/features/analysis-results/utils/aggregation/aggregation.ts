@@ -6,6 +6,7 @@ import type {
 } from '../../ui/line-chart/line-chart.component';
 
 const MS_PER_DAY = 86_400_000;
+const MIDNIGHT_UTC = 'T00:00:00Z';
 
 export function aggregatePoints(
   points: LineChartDataPoint[],
@@ -32,7 +33,7 @@ function getBiweekAnchor(points: LineChartDataPoint[]): number | undefined {
 }
 
 function getWeekStart(date: ISODateString): Date {
-  const d = new Date(date + 'T00:00:00Z');
+  const d = new Date(date + MIDNIGHT_UTC);
   const day = d.getUTCDay();
   const diffToMonday = day === 0 ? 6 : day - 1;
   d.setUTCDate(d.getUTCDate() - diffToMonday);
@@ -53,7 +54,7 @@ function getBucketKey(
 
     case 'biweek': {
       const anchor = biweekAnchor!;
-      const d = new Date(date + 'T00:00:00Z');
+      const d = new Date(date + MIDNIGHT_UTC);
       const daysSinceAnchor = Math.floor((d.getTime() - anchor) / MS_PER_DAY);
       const biweekIndex = Math.floor(daysSinceAnchor / 14);
       const bucketStart = new Date(anchor + biweekIndex * 14 * MS_PER_DAY);

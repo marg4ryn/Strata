@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsCachedFetcherService } from './analysis-results-cached-fetcher.service';
-import { CACHE_CONFIG, CacheConfig } from './cache.config';
+import { CACHE_CONFIG } from './cache.config';
+import type { CacheConfig } from './cache.config';
 
 class MockCache {
   private store = new Map<string, Response>();
@@ -24,7 +25,7 @@ class MockCache {
 class MockCacheStorage {
   private caches = new Map<string, MockCache>();
 
-  async open(name: string): Promise<MockCache | undefined> {
+  async open(name: string): Promise<MockCache> {
     if (!this.caches.has(name)) {
       this.caches.set(name, new MockCache());
     }
@@ -37,23 +38,19 @@ class MockCacheStorage {
 }
 
 describe('AnalysisResultsCachedFetcherService', () => {
+  const cacheName = 'test-cache';
+  const cacheKey = '/test-key';
+  const data = { data: 'data' };
+  const response = new Response(JSON.stringify(data));
+
   let service: AnalysisResultsCachedFetcherService;
   let logger: Partial<LoggerService>;
   let config: CacheConfig;
+  let mockCaches: MockCacheStorage;
 
   beforeEach(() => {
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
-
-    config = {
-      maxCaches: 2,
-      registryCacheName: 'test-reg',
-      registryKey: '/test',
-    };
+    logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
 
     TestBed.configureTestingModule({
       providers: [
@@ -61,18 +58,17 @@ describe('AnalysisResultsCachedFetcherService', () => {
         { provide: CACHE_CONFIG, useValue: config },
       ],
     });
+
     service = TestBed.inject(AnalysisResultsCachedFetcherService);
-    vi.stubGlobal('caches', new MockCacheStorage());
+    mockCaches = new MockCacheStorage();
+    vi.stubGlobal('caches', mockCaches);
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
-
-  const cacheName = 'test-cache';
-  const cacheKey = '/test-key';
-  const data = { data: 'data' };
-  const response = new Response(JSON.stringify(data));
 
   describe('cache', () => {
     it('calls fetchFn when cache is empty', async () => {
@@ -86,7 +82,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('does not call fetchFn when cache exists', async () => {
       const fetchFn = vi.fn();
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       await cache.put(cacheKey, response);
 
       const res = await service.getOrFetch(cacheName, cacheKey, fetchFn);
@@ -100,7 +96,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
       await service.getOrFetch(cacheName, cacheKey, fetchFn);
 
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       const res = await cache.match(cacheKey);
       expect(res).toEqual(response);
     });
@@ -120,7 +116,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('handles cache match error', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       vi.spyOn(cache, 'match').mockImplementation(() => {
         throw new Error('Cache error');
       });
@@ -134,7 +130,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('handles JSON parse error', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       const deleteSpy = vi.spyOn(cache, 'delete');
       vi.spyOn(cache, 'match').mockResolvedValue(new Response('invalid json'));
 
@@ -148,7 +144,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('handles cache delete error during JSON parse error', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       const deleteSpy = vi.spyOn(cache, 'delete').mockImplementation(() => {
         throw new Error('Cache error');
       });
@@ -164,14 +160,14 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('handles cache put error', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
-      const cache = await caches.open(cacheName);
+      const cache = await mockCaches.open(cacheName);
       const putSpy = vi.spyOn(cache, 'put').mockImplementation(() => {
         throw new Error('Cache error');
       });
 
       const res = await service.getOrFetch(cacheName, cacheKey, fetchFn);
 
-      expect(putSpy).toHaveBeenCalledWith(cacheKey, expect.objectContaining(response));
+      expect(putSpy).toHaveBeenCalledWith(cacheKey, expect.any(Response));
       expect(fetchFn).toHaveBeenCalledOnce();
       expect(res).toEqual(data);
       expect(logger.warn).toHaveBeenCalled();
@@ -180,7 +176,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
   describe('registry', () => {
     const readRegistry = async (): Promise<{ cacheName: string; lastUsed: number }[]> => {
-      const registryCache = await caches.open(config.registryCacheName);
+      const registryCache = await mockCaches.open(config.registryCacheName);
       const res = await registryCache.match(config.registryKey);
       return res ? await res.json() : [];
     };
@@ -208,8 +204,6 @@ describe('AnalysisResultsCachedFetcherService', () => {
       await service.getOrFetch(cacheName, cacheKey, fetchFn);
       const secondRegistry = await readRegistry();
 
-      vi.useRealTimers();
-
       expect(secondRegistry).toHaveLength(1);
       expect(secondRegistry[0].lastUsed).toBeGreaterThan(firstRegistry[0].lastUsed);
     });
@@ -224,7 +218,6 @@ describe('AnalysisResultsCachedFetcherService', () => {
       await service.getOrFetch('cache-b', cacheKey, fetchFn);
       vi.advanceTimersByTime(1000);
       await service.getOrFetch('cache-c', cacheKey, fetchFn);
-      vi.useRealTimers();
 
       expect(deleteSpy).toHaveBeenCalledWith('cache-a');
 
@@ -259,7 +252,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     it('handles registry write error', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
-      const registryCache = await caches.open(config.registryCacheName);
+      const registryCache = await mockCaches.open(config.registryCacheName);
       vi.spyOn(registryCache, 'put').mockImplementation(() => {
         throw new Error('Registry error');
       });
