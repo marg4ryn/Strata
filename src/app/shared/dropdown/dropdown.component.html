@@ -1,0 +1,59 @@
+<button
+  type="button"
+  #triggerButton
+  #trigger="cdkOverlayOrigin"
+  cdkOverlayOrigin
+  [class]="'dropdown__trigger ' + classPrefix() + '__trigger'"
+  [attr.aria-label]="ariaLabel()"
+  aria-haspopup="listbox"
+  [attr.aria-expanded]="isOpen()"
+  (click)="toggle()"
+>
+  <span>
+    {{ currentOption?.labelKey ? (currentOption!.labelKey! | transloco) : currentOption?.label }}
+  </span>
+  <svg
+    class="dropdown__chevron"
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M2.5 4.5L6 8L9.5 4.5"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  (backdropClick)="close()"
+  (detach)="close()"
+  (attach)="onOverlayAttached()"
+>
+  <div class="dropdown__panel-wrapper" cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
+    <ul
+      cdkListbox
+      [class]="'dropdown__panel ' + classPrefix() + '__panel'"
+      [cdkListboxValue]="[value()]"
+      (cdkListboxValueChange)="select($event.value)"
+      (keydown.enter)="close()"
+      (keydown.space)="close()"
+    >
+      @for (option of options(); track option.value) {
+        <li [class]="'dropdown__option ' + classPrefix() + '__option'" [cdkOption]="option.value">
+          {{ option.labelKey ? (option.labelKey | transloco) : option.label }}
+        </li>
+      }
+    </ul>
+  </div>
+</ng-template>

@@ -1,75 +1,46 @@
-import { OverlayModule } from '@angular/cdk/overlay';
-import { CdkListbox } from '@angular/cdk/listbox';
-import { CdkListboxModule } from '@angular/cdk/listbox';
-import { A11yModule } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
   signal,
-  viewChild,
-  ElementRef,
   output,
+  viewChild,
 } from '@angular/core';
 
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LangPreference, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
-
-interface LangOption {
-  value: LangPreference;
-  label: string;
-  labelKey?: string;
-}
+import { DropdownComponent, DropdownOption } from '@app/shared/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-language-switcher',
-  imports: [OverlayModule, A11yModule, CdkListbox, CdkListboxModule, TranslocoPipe],
+  imports: [DropdownComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './language-switcher.component.html',
-  styleUrl: './language-switcher.component.scss',
 })
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);
 
-  private readonly listbox = viewChild.required(CdkListbox);
-  private readonly triggerBtn = viewChild.required('triggerBtn', {
-    read: ElementRef<HTMLButtonElement>,
-  });
-
   readonly openedChange = output<boolean>();
 
+  private readonly dropdown = viewChild.required(DropdownComponent);
   readonly current = this.facade.langPreference;
   readonly isOpen = signal(false);
 
-  readonly options: LangOption[] = [
+  readonly options: DropdownOption<LangPreference>[] = [
     { value: SYSTEM_PREFERENCE, label: '', labelKey: 'settings.language.system' },
     ...LANGUAGES,
   ];
 
-  get currentOption(): LangOption | undefined {
-    return this.options.find((option) => option.value === this.current());
-  }
-
-  onOverlayAttached(): void {
-    this.listbox().focus();
+  get currentOption(): DropdownOption<LangPreference> {
+    return this.options.find((option) => option.value === this.current()) ?? this.options[0];
   }
 
   toggle(): void {
-    this.isOpen.update((open) => !open);
-    this.openedChange.emit(this.isOpen());
+    this.dropdown().toggle();
   }
 
   close(): void {
-    if (!this.isOpen()) {
-      return;
-    }
-    this.isOpen.set(false);
-    this.openedChange.emit(false);
-    setTimeout(() => {
-      const btn = this.triggerBtn();
-      btn?.nativeElement.focus();
-    }, 0);
+    this.dropdown().close();
   }
 
   select(values: readonly LangPreference[]): void {
@@ -80,5 +51,10 @@ export class LanguageSwitcherComponent {
     }
     this.facade.setPreference(pref);
     this.close();
+  }
+
+  onOpenedChange(open: boolean): void {
+    this.isOpen.set(open);
+    this.openedChange.emit(open);
   }
 }

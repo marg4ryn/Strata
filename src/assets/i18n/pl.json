@@ -189,7 +189,14 @@
       "commentsTooltipLabel": "Linie komentarzy",
       "blankLegendLabel": "Puste",
       "blankTooltipLabel": "Linie puste",
-      "repositoryLinkTitle": "Otwórz repozytorium {{owner}}/{{name}}"
+      "repositoryLinkTitle": "Otwórz repozytorium {{owner}}/{{name}}",
+      "aggregationDay": "Dzień",
+      "aggregationWeek": "Tydzień",
+      "aggregationBiweek": "Dwa tygodnie",
+      "aggregationMonth": "Miesiąc",
+      "lineChartCommitTitle": "Commity",
+      "lineChartCommitLegend": "Commity",
+      "lineChartCommitTooltip": "Liczba commitów"
     }
   }
 }

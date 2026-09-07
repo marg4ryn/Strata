@@ -1,58 +1,8 @@
-<button
-  type="button"
-  #triggerBtn
-  #trigger="cdkOverlayOrigin"
-  class="lang-switcher__trigger"
-  cdkOverlayOrigin
-  aria-haspopup="listbox"
-  [attr.aria-expanded]="isOpen()"
-  (click)="toggle()"
->
-  <span>
-    {{ currentOption?.labelKey ? (currentOption!.labelKey | transloco) : currentOption?.label }}
-  </span>
-  <svg
-    class="lang-switcher__chevron"
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="none"
-    aria-hidden="true"
-  >
-    <path
-      d="M2.5 4.5L6 8L9.5 4.5"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-</button>
-
-<ng-template
-  cdkConnectedOverlay
-  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isOpen()"
-  [cdkConnectedOverlayHasBackdrop]="true"
-  (backdropClick)="close()"
-  (detach)="close()"
-  (attach)="onOverlayAttached()"
->
-  <div class="lang-switcher__panel-wrapper" cdkTrapFocus [cdkTrapFocusAutoCapture]="false">
-    <ul
-      cdkListbox
-      class="lang-switcher__panel"
-      (cdkListboxValueChange)="select($event.value)"
-      [cdkListboxValue]="[current()]"
-      (keydown.enter)="close()"
-      (keydown.space)="close()"
-    >
-      @for (option of options; track option.value) {
-        <li class="lang-switcher__option" [cdkOption]="option.value">
-          {{ option.labelKey ? (option.labelKey | transloco) : option.label }}
-        </li>
-      }
-    </ul>
-  </div>
-</ng-template>
+<app-dropdown
+  [options]="options"
+  [value]="current()"
+  classPrefix="lang-switcher"
+  ariaLabel="Select language"
+  (selectionChange)="select($event)"
+  (openedChange)="onOpenedChange($event)"
+/>

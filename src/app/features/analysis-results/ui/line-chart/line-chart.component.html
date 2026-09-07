@@ -1,0 +1,25 @@
+<div class="line-chart">
+  <div class="line-chart__scroll">
+    <div
+      class="line-chart__canvas-container"
+      [style.width.px]="chartWidth()"
+      [style.height.px]="chartHeight()"
+    >
+      <canvas
+        baseChart
+        [type]="chartType"
+        [data]="chartData()"
+        [options]="chartOptions()"
+      ></canvas>
+    </div>
+  </div>
+
+  <ul class="line-chart__legend">
+    @for (s of series(); track s.legendLabelKey) {
+      <li class="line-chart__legend-item">
+        <span class="line-chart__legend-rectangle" [style.background]="s.color"></span>
+        {{ s.legendLabelKey | transloco }}
+      </li>
+    }
+  </ul>
+</div>

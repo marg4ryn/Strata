@@ -179,6 +179,18 @@
           ]"
         />
       </section>
+
+      <app-line-chart-section
+        titleKey="analysisResults.repositoryDetails.lineChartCommitTitle"
+        [series]="[
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.lineChartCommitLegend',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartCommitTooltip',
+            color: '#2563eb',
+            points: commitSeries(),
+          },
+        ]"
+      />
     </div>
   </ng-template>
 </app-resource-page>

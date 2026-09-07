@@ -1,14 +1,16 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, computed, signal } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
 import { LocalizedNumberPipe } from '@app/shared/localized-number-pipe/localized-number.pipe';
 import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
+import { pageResource } from '../../utils/page-resource/page-resource';
 import { ResourcePageComponent } from '../resource-page/resource-page.component';
-import { pageResource } from '../../utils/page-resource';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { DoughnutChartComponent } from '../../ui/doughnut-chart/doughnut-chart.component';
+import { LineChartSectionComponent } from '../../ui/line-chart-section/line-chart-section.component';
+import type { LineChartDataPoint } from '../../ui/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-repository-details',
@@ -19,6 +21,7 @@ import { DoughnutChartComponent } from '../../ui/doughnut-chart/doughnut-chart.c
     LocalizedNumberPipe,
     LocalizedDurationPipe,
     DoughnutChartComponent,
+    LineChartSectionComponent,
     InfoTooltipComponent,
   ],
   templateUrl: './repository-details.component.html',
@@ -32,5 +35,13 @@ export class RepositoryDetailsComponent {
   resource = pageResource(
     () => this.facade.getRepositorySummary(this.id()),
     () => this.id(),
+  );
+
+  commitSeries = computed<LineChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: entry.commits,
+      })) ?? [],
   );
 }
