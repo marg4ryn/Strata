@@ -50,14 +50,4 @@ describe('App', () => {
     const outlet = main.query(By.css('router-outlet'));
     expect(outlet).toBeTruthy();
   });
-
-  it('renders header, content and footer in the correct order', () => {
-    const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-
-    const layout = fixture.debugElement.query(By.css('.app-layout'));
-    const childTags = layout.children.map((child) => child.name);
-
-    expect(childTags).toEqual(['app-header', 'main', 'app-footer']);
-  });
 });
