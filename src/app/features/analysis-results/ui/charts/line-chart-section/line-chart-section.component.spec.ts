@@ -6,11 +6,11 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
 import { LineChartSectionComponent } from './line-chart-section.component';
-import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
+import { LineChartComponent } from '../line-chart/line-chart.component';
 import type {
   LineChartAggregationPeriod,
   LineChartSeries,
-} from '../../ui/line-chart/line-chart.component';
+} from '../line-chart/line-chart.component';
 
 describe('LineChartSectionComponent', () => {
   let component: LineChartSectionComponent;

@@ -8,9 +8,9 @@ import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.comp
 import { pageResource } from '../../utils/page-resource/page-resource';
 import { ResourcePageComponent } from '../resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
-import { DoughnutChartComponent } from '../../ui/doughnut-chart/doughnut-chart.component';
-import { LineChartSectionComponent } from '../../ui/line-chart-section/line-chart-section.component';
-import type { LineChartDataPoint } from '../../ui/line-chart/line-chart.component';
+import { DoughnutChartComponent } from '../../ui/charts/doughnut-chart/doughnut-chart.component';
+import { LineChartSectionComponent } from '../../ui/charts/line-chart-section/line-chart-section.component';
+import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-repository-details',

@@ -3,7 +3,7 @@ import type {
   LineChartDataPoint,
   LineChartAggregationMode,
   LineChartAggregationPeriod,
-} from '../../ui/line-chart/line-chart.component';
+} from '../../ui/charts/line-chart/line-chart.component';
 
 const MS_PER_DAY = 86_400_000;
 const MIDNIGHT_UTC = 'T00:00:00Z';

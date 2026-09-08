@@ -7,9 +7,9 @@ import { By } from '@angular/platform-browser';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ResourcePageComponent } from './resource-page.component';
-import { AnalysisErrorComponent } from '../../ui/analysis-error/analysis-error.component';
-import { AnalysisLoadingComponent } from '../../ui/analysis-loading/analysis-loading.component';
-import { AnalysisNotFoundComponent } from '../../ui/analysis-not-found/analysis-not-found.component';
+import { AnalysisErrorComponent } from '../../ui/resource-states/analysis-error/analysis-error.component';
+import { AnalysisLoadingComponent } from '../../ui/resource-states/analysis-loading/analysis-loading.component';
+import { AnalysisNotFoundComponent } from '../../ui/resource-states/analysis-not-found/analysis-not-found.component';
 
 function createResourceRefMock<T>(overrides: Partial<ResourceRef<T>> = {}) {
   return {

@@ -2,7 +2,7 @@ import type {
   LineChartDataPoint,
   LineChartAggregationMode,
   LineChartAggregationPeriod,
-} from '../../ui/line-chart/line-chart.component';
+} from '../../ui/charts/line-chart/line-chart.component';
 import { aggregatePoints } from './aggregation';
 
 function point(date: string, value: number): LineChartDataPoint {

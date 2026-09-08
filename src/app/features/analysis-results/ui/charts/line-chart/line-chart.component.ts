@@ -5,7 +5,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 
 import type { ISODateString } from '@app/shared/date-utils/date.utils';
-import { aggregatePoints } from '../../utils/aggregation/aggregation';
+import { aggregatePoints } from '../../../utils/aggregation/aggregation';
 
 export type LineChartAggregationMode = 'sum' | 'max';
 

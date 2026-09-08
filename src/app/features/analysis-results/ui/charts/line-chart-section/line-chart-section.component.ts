@@ -3,12 +3,12 @@ import { TranslocoPipe } from '@ngneat/transloco';
 
 import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
 import type { DropdownOption } from '@app/shared/dropdown/dropdown.component';
-import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
+import { LineChartComponent } from '../line-chart/line-chart.component';
 import type {
   LineChartSeries,
   LineChartAggregationPeriod,
   LineChartAggregationMode,
-} from '../../ui/line-chart/line-chart.component';
+} from '../line-chart/line-chart.component';
 
 @Component({
   selector: 'app-line-chart-section',

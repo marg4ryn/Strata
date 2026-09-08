@@ -22,6 +22,10 @@ Each feature in `app/features/` has the following structure:
 
 * `utils/` — utility functions, types, and mappers not directly related to a specific class.
 
+The distinction between `feature/` and `ui/` is not based on the amount of logic, but on the type of dependencies injected into the component. A component belongs in `ui/` if it uses only `input()`/`output()` or generic, domain-agnostic services. A component belongs in `feature/` if it injects data-access or a facade, knows about routing, or makes business decisions based on domain data.
+
+There is a possibility of creating a subfeature when the extracted part has its own, independent data-access logic and exposes that logic externally through its own facade. The parent communicates with the subfeature only through it. Mere growth in the number of components, dedicated routing, or a separate shell are not sufficient reasons to extract a subfeature.
+
 ## Common Module Structure
 
 Each module in `app/core/`, `app/layout/`, `app/shared/` follows the same layout: artifacts are grouped into a directory named after their kind.
@@ -267,4 +271,21 @@ some-module/
 └── user/
     ├── user.service.ts
     └── user.service.spec.ts
+```
+
+### Exception 3 — Thematic Grouping
+
+Additional semantic grouping of components into subfolders is allowed when the number of components in a given role grows and they form natural thematic subsets.
+
+```text
+repository-details/
+└── ui/
+    ├── resource-states/
+    │   ├── analysis-error/
+    │   ├── analysis-loading/
+    │   └── analysis-not-found/
+    └── charts/
+        ├── doughnut-chart/
+        ├── commits-chart/
+        └── contributors-chart/
 ```
