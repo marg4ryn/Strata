@@ -1,10 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TranslocoService } from '@ngneat/transloco';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LineChartComponent, LineChartSeries } from './line-chart.component';
+import { LineChartComponent } from './line-chart.component';
+import type { LineChartSeries } from './line-chart.component';
 
 describe('LineChartComponent', () => {
   let component: LineChartComponent;

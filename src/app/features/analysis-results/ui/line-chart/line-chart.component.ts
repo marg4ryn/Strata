@@ -1,4 +1,4 @@
-import { Component, input, inject, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { BaseChartDirective } from 'ng2-charts';
@@ -26,6 +26,7 @@ export interface LineChartSeries {
 @Component({
   selector: 'app-line-chart',
   imports: [BaseChartDirective, TranslocoPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',
 })
@@ -102,6 +103,8 @@ export class LineChartComponent {
   });
 
   formatBucketLabel(key: string, period: LineChartAggregationPeriod, lang: string): string {
+    const MIDNIGHT_UTC = 'T00:00:00Z';
+
     if (period === 'month') {
       const [year, month] = key.split('-');
       return new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(lang, {
@@ -110,7 +113,7 @@ export class LineChartComponent {
       });
     }
 
-    return new Date(key + 'T00:00:00Z').toLocaleDateString(lang, {
+    return new Date(key + MIDNIGHT_UTC).toLocaleDateString(lang, {
       day: '2-digit',
       month: 'long',
     });

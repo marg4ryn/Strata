@@ -1,27 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import type { Mock } from 'vitest';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { RepositoryDetailsComponent } from './repository-details.component';
-import {
-  CACHE_CONFIG,
-  CacheConfig,
-} from '../../data-access/analysis-results-cached-fetcher/cache.config';
+import { AnalysisResultsFacade } from '../../analysis-results.facade';
 
 describe('RepositoryDetailsComponent', () => {
   let component: RepositoryDetailsComponent;
   let fixture: ComponentFixture<RepositoryDetailsComponent>;
-  let config: CacheConfig;
+  let facade: { getRepositorySummary: Mock };
 
   beforeEach(async () => {
-    config = {
-      maxCaches: 2,
-      registryCacheName: 'test-reg',
-      registryKey: '/test',
-    };
+    facade = { getRepositorySummary: vi.fn() };
 
     await TestBed.configureTestingModule({
       imports: [RepositoryDetailsComponent, getTranslocoModule()],
-      providers: [{ provide: CACHE_CONFIG, useValue: config }],
+      providers: [{ provide: AnalysisResultsFacade, useValue: facade }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RepositoryDetailsComponent);

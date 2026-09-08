@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { LoadingSpinnerComponent } from '@app/shared/loading-spinner/loading-spinner.component';
@@ -6,6 +6,7 @@ import { LoadingSpinnerComponent } from '@app/shared/loading-spinner/loading-spi
 @Component({
   selector: 'app-analysis-loading',
   imports: [LoadingSpinnerComponent, TranslocoPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-loading.component.html',
   styleUrl: './analysis-loading.component.scss',
 })

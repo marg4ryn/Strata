@@ -1,4 +1,4 @@
-import { Component, inject, input, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
@@ -24,6 +24,7 @@ import type { LineChartDataPoint } from '../../ui/line-chart/line-chart.componen
     LineChartSectionComponent,
     InfoTooltipComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './repository-details.component.html',
   styleUrl: './repository-details.component.scss',
 })

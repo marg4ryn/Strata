@@ -1,8 +1,8 @@
-import { Component, input, inject, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService } from '@ngneat/transloco';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration } from 'chart.js';
+import type { ChartConfiguration } from 'chart.js';
 
 export interface DoughnutChartItem {
   legendLabelKey: string;
@@ -14,6 +14,7 @@ export interface DoughnutChartItem {
 @Component({
   selector: 'app-doughnut-chart',
   imports: [BaseChartDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './doughnut-chart.component.html',
   styleUrl: './doughnut-chart.component.scss',
 })

@@ -1,5 +1,7 @@
-import { Component, ResourceRef, signal } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, signal } from '@angular/core';
+import type { ResourceRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 
@@ -21,7 +23,7 @@ function createResourceRefMock<T>(overrides: Partial<ResourceRef<T>> = {}) {
     reload: vi.fn(),
     destroy: vi.fn(),
     ...overrides,
-  } as unknown as ResourceRef<T>;
+  } as ResourceRef<T>;
 }
 
 @Component({

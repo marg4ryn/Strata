@@ -1,8 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { DoughnutChartComponent, DoughnutChartItem } from './doughnut-chart.component';
+import { DoughnutChartComponent } from './doughnut-chart.component';
+import type { DoughnutChartItem } from './doughnut-chart.component';
 
 describe('DoughnutChartComponent', () => {
   let component: DoughnutChartComponent;

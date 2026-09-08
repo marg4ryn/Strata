@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, signal, viewChild } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
-import { DropdownComponent, DropdownOption } from '@app/shared/dropdown/dropdown.component';
-import {
-  LineChartComponent,
+import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
+import type { DropdownOption } from '@app/shared/dropdown/dropdown.component';
+import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
+import type {
   LineChartSeries,
   LineChartAggregationPeriod,
   LineChartAggregationMode,

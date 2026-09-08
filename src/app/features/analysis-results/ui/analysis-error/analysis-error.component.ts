@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-analysis-error',
   imports: [TranslocoPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './analysis-error.component.html',
   styleUrl: './analysis-error.component.scss',
 })

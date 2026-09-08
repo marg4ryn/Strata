@@ -1,4 +1,5 @@
-import { Component, computed, contentChild, input, ResourceRef, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChild, input } from '@angular/core';
+import type { ResourceRef, TemplateRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -14,6 +15,7 @@ import { AnalysisNotFoundComponent } from '../../ui/analysis-not-found/analysis-
     AnalysisLoadingComponent,
     AnalysisNotFoundComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './resource-page.component.html',
   styleUrl: './resource-page.component.scss',
 })

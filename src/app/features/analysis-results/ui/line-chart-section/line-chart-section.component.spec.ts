@@ -1,13 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
 import { LineChartSectionComponent } from './line-chart-section.component';
-import {
+import { LineChartComponent } from '../../ui/line-chart/line-chart.component';
+import type {
   LineChartAggregationPeriod,
-  LineChartComponent,
   LineChartSeries,
 } from '../../ui/line-chart/line-chart.component';
 
