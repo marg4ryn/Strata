@@ -74,14 +74,17 @@ export class RepositoryDetailsComponent {
     let totalLines = 0;
 
     return (
-      this.resource.value()?.trends.map((entry) => {
-        totalLines += entry.linesAdded - entry.linesDeleted;
+      this.resource
+        .value()
+        ?.trends.sort((a, b) => a.date.localeCompare(b.date))
+        .map((entry) => {
+          totalLines += entry.linesAdded - entry.linesDeleted;
 
-        return {
-          date: entry.date,
-          value: totalLines,
-        };
-      }) ?? []
+          return {
+            date: entry.date,
+            value: totalLines,
+          };
+        }) ?? []
     );
   });
 }

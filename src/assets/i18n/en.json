@@ -171,7 +171,7 @@
       "repositoryStatistics": "Repository statistics",
       "codeQuality": "Code quality",
       "numberOfLines": "Number of lines",
-      "authors": "Authors",
+      "authors": "Unique authors",
       "activeAuthors": "Active authors",
       "activeAuthorsTooltip": "Number of authors who have made at least one commit to the analyzed repository within the last 6 months.",
       "commits": "Commits",
@@ -204,14 +204,14 @@
       "lineChartCommitTooltip": "Number of commits",
       "lineChartAuthorsTitle": "Authors",
       "lineChartUniqueAuthorsLegend": "Unique",
-      "lineChartUniqueAuthorsTooltip": "Number of unique authors",
+      "lineChartUniqueAuthorsTooltip": "Unique authors",
       "lineChartActiveAuthorsLegend": "Active",
-      "lineChartActiveAuthorsTooltip": "Number of active authors",
-      "lineChartLinesTitle": "Dynamics",
+      "lineChartActiveAuthorsTooltip": "Active authors",
+      "lineChartLinesTitle": "Change dynamics",
       "lineChartChangedLegend": "Modified",
-      "lineChartChangedTooltip": "Number of modified lines",
+      "lineChartChangedTooltip": "Modified lines",
       "lineChartTotalLegend": "Total",
-      "lineChartTotalTooltip": "Total number of lines"
+      "lineChartTotalTooltip": "All lines"
     }
   }
 }

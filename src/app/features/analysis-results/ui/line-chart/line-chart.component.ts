@@ -35,16 +35,16 @@ export class LineChartComponent {
 
   series = input.required<LineChartSeries[]>();
   period = input.required<LineChartAggregationPeriod>();
-  mode = input<LineChartAggregationMode>('sum');
+  modes = input<LineChartAggregationMode[]>(['sum']);
 
   private readonly activeLang = toSignal(this.transloco.langChanges$, {
     initialValue: this.transloco.getActiveLang(),
   });
 
   private readonly aggregatedSeries = computed(() =>
-    this.series().map((s) => ({
+    this.series().map((s, idx) => ({
       ...s,
-      buckets: aggregatePoints(s.points, this.period(), this.mode()),
+      buckets: aggregatePoints(s.points, this.period(), this.modes()[idx]),
     })),
   );
 

@@ -20,7 +20,7 @@ import type {
 export class LineChartSectionComponent {
   series = input.required<LineChartSeries[]>();
   titleKey = input.required<string>();
-  mode = input<LineChartAggregationMode>('sum');
+  modes = input<LineChartAggregationMode[]>(['sum']);
 
   private readonly dropdown = viewChild.required(DropdownComponent);
   readonly selectedPeriod = signal<LineChartAggregationPeriod>('week');
