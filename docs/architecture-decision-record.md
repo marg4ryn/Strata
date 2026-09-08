@@ -140,6 +140,24 @@ Buttons retain the full native semantics and accessibility of the `<button>` ele
 
 Style variants are managed in a single place (`styles.scss`), making visual consistency easier to maintain. However, the button styles are not encapsulated by Angular and therefore must be consciously maintained as part of the global design system rather than as local component logic.
 
+## [Feature: Analysis Run] Why WebSocket?
+
+### Context
+
+During an analysis, the client needs bidirectional communication with the server. The client must be able to receive analysis updates while also sending commands, such as a request to stop the ongoing analysis. Most importantly, the connection may need to be re-established if it is interrupted.
+
+### Decision
+
+WebSocket was chosen as the communication protocol between the client and server. It provides persistent, bidirectional communication, allowing the client to both receive updates and send commands, including a request to cancel the analysis. WebSocket also supports reconnecting after a connection is lost.
+
+### Alternatives Considered
+
+Server-Sent Events (SSE) were considered, but they provide one-way communication from the server to the client. This would prevent the client from notifying the server when the user wants to stop the analysis. SSE also requires additional mechanisms to support reconnecting and sending commands.
+
+### Consequences
+
+This enables reliable control over the analysis lifecycle and allows the client to recover from temporary connection interruptions, at the cost of additional logic for managing the connection and reconnection lifecycle.
+
 
 ## [Feature: Analysis Run] Why Web Locks API?
 

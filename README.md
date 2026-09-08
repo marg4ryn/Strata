@@ -38,7 +38,7 @@ Important actions trigger notifications that inform users about the result of an
 
 Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below). The analysis history state is synchronized between browser tabs using the Broadcast Channel API, ensuring that additions and removals made in one tab are reflected in the others.
 
-The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below).
+The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below). Dates and numbers are localized at display time using custom pipes, which format the values according to the currently selected application language provided by Transloco.
 
 | Notifications | Analysis History | Settings |
 |:---:|:---:|:---:|
