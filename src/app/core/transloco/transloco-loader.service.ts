@@ -1,6 +1,6 @@
-import { inject, Service } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Translation, TranslocoLoader } from '@ngneat/transloco';
+import type { Translation, TranslocoLoader } from '@ngneat/transloco';
 
 @Service()
 export class TranslocoLoaderService implements TranslocoLoader {

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const ANALYSIS_RESULTS_ROUTES: Routes = [
+export const analysisResultsRoutes: Routes = [
   {
     path: 'summary',
     loadComponent: () =>
