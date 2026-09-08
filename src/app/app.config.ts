@@ -1,9 +1,5 @@
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-  provideAppInitializer,
-  inject,
-} from '@angular/core';
+import type { ApplicationConfig } from '@angular/core';
+import { provideBrowserGlobalErrorListeners, provideAppInitializer, inject } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
@@ -19,47 +15,55 @@ import { LanguageFacade } from './core/language/language.facade';
 import { NotificationsFacade } from './features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from './features/analysis-history/analysis-history.facade';
 import { AnalysisRunFacade } from './features/analysis-run/analysis-run.facade';
-import {
-  CACHE_CONFIG,
-  CacheConfig,
-} from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
+import { CACHE_CONFIG } from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
+import type { CacheConfig } from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
 
 registerLocaleData(localePl);
 registerLocaleData(localeEn);
 
+const cacheConfig = {
+  maxCaches: 5,
+  registryCacheName: '__cache-registry__',
+  registryKey: '/registry',
+} satisfies CacheConfig;
+
+function initializeLanguage(): void {
+  return inject(LanguageFacade).loadLangPreference();
+}
+
+function initializeNotifications(): void {
+  return inject(NotificationsFacade).loadNotifications();
+}
+
+function initializeAnalysisHistory(): void {
+  return inject(AnalysisHistoryFacade).loadAnalysisHistory();
+}
+
+function initializeAnalysisRunReconnect(): void {
+  return inject(AnalysisRunFacade).tryToReconnect();
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    // Infrastructure
+    provideRouter(routes, withComponentInputBinding()),
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
-    provideRouter(routes, withComponentInputBinding()),
+
+    // Integrations
+    provideCharts(withDefaultRegisterables()),
     provideTransloco({
       config: translocoConfig,
       loader: TranslocoLoaderService,
     }),
-    provideCharts(withDefaultRegisterables()),
-    provideAppInitializer(() => {
-      const language = inject(LanguageFacade);
-      return language.loadLangPreference();
-    }),
-    provideAppInitializer(() => {
-      const notifications = inject(NotificationsFacade);
-      return notifications.loadNotifications();
-    }),
-    provideAppInitializer(() => {
-      const history = inject(AnalysisHistoryFacade);
-      return history.loadAnalysisHistory();
-    }),
-    provideAppInitializer(() => {
-      const analysisRun = inject(AnalysisRunFacade);
-      return analysisRun.tryToReconnect();
-    }),
-    {
-      provide: CACHE_CONFIG,
-      useValue: {
-        maxCaches: 5,
-        registryCacheName: '__cache-registry__',
-        registryKey: '/registry',
-      } as CacheConfig,
-    },
+
+    // App initializers
+    provideAppInitializer(initializeAnalysisRunReconnect),
+    provideAppInitializer(initializeAnalysisHistory),
+    provideAppInitializer(initializeNotifications),
+    provideAppInitializer(initializeLanguage),
+
+    // Cache configuration
+    { provide: CACHE_CONFIG, useValue: cacheConfig },
   ],
 };
