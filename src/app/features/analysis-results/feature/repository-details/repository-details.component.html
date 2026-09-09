@@ -1,187 +1,142 @@
 <app-resource-page [data]="resource">
   <ng-template #content let-data>
     <div class="repository-details">
-      @let info = data.details.info;
-      <section class="data-section">
-        <h2 class="data-section__header">
-          <a
-            [href]="info.repositoryUrl"
-            target="_blank"
-            class="repository-link"
-            [title]="
-              'analysisResults.repositoryDetails.repositoryLinkTitle'
-                | transloco
-                  : {
-                      owner: info.repositoryOwner,
-                      name: info.repositoryName,
-                    }
-            "
-            [attr.aria-label]="
-              'analysisResults.repositoryDetails.repositoryLinkTitle'
-                | transloco
-                  : {
-                      owner: info.repositoryOwner,
-                      name: info.repositoryName,
-                    }
-            "
-          >
+      @let info = data?.details?.info;
+      <app-data-list-section
+        [items]="[
+          {
+            labelKey: 'analysisResults.repositoryDetails.analysisId',
+            value: info.id,
+            valueType: 'text',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.analysisDateRange',
+            value: { start: info.analysisRangeStartDate, end: info.analysisRangeEndDate },
+            valueType: 'dateRange',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.analysisStarted',
+            value: info.analysisStartedAt,
+            valueType: 'dateTime',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.analysisCompleted',
+            value: info.analysisFinishedAt,
+            valueType: 'dateTime',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.analysisDuration',
+            value: info.analysisTimeInSeconds,
+            valueType: 'duration',
+          },
+        ]"
+      >
+        <div class="header__container">
+          <a [href]="info.repositoryUrl" target="_blank" class="repository-link">
             {{ info.repositoryOwner }}/{{ info.repositoryName }}
           </a>
           <span class="badge">{{ info.repositoryPlatform }}</span>
-        </h2>
-        <dl class="data-section__content">
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.analysisId' | transloco }}</dt>
-            <dd>{{ info.id }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.analysisDateRange' | transloco }}</dt>
-            <dd>
-              {{ info.analysisRangeStartDate | localizedDate }} –
-              {{ info.analysisRangeEndDate | localizedDate }}
-            </dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.analysisStarted' | transloco }}</dt>
-            <dd>{{ info.analysisStartedAt | localizedDate: { timeStyle: 'medium' } }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.analysisCompleted' | transloco }}</dt>
-            <dd>{{ info.analysisFinishedAt | localizedDate: { timeStyle: 'medium' } }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.analysisDuration' | transloco }}</dt>
-            <dd>{{ info.analysisTimeInSeconds | localizedDuration }}</dd>
-          </div>
-        </dl>
-      </section>
+        </div>
+      </app-data-list-section>
 
-      @let statistics = data.details.statistics;
-      <section class="data-section">
-        <h2 class="data-section__header">
-          {{ 'analysisResults.repositoryDetails.repositoryStatistics' | transloco }}
-        </h2>
-        <dl class="data-section__content">
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.authors' | transloco }}</dt>
-            <dd>{{ statistics.authors | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.activeAuthors' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.activeAuthorsTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>{{ statistics.activeAuthors | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.commits' | transloco }}</dt>
-            <dd>{{ statistics.commits | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.files' | transloco }}</dt>
-            <dd>{{ statistics.files | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>{{ 'analysisResults.repositoryDetails.fileTypes' | transloco }}</dt>
-            <dd>{{ statistics.fileTypeStatistics.length | localizedNumber }}</dd>
-          </div>
-        </dl>
-      </section>
+      @let statistics = data?.details?.statistics;
+      <app-data-list-section
+        [items]="[
+          {
+            labelKey: 'analysisResults.repositoryDetails.authors',
+            value: statistics.authors,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.activeAuthors',
+            tooltipKey: 'analysisResults.repositoryDetails.activeAuthorsTooltip',
+            value: statistics.activeAuthors,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.commits',
+            value: statistics.commits,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.files',
+            value: statistics.files,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.fileTypes',
+            value: statistics.fileTypeStatistics.length,
+            valueType: 'number',
+          },
+        ]"
+      >
+        {{ 'analysisResults.repositoryDetails.repositoryStatistics' | transloco }}
+      </app-data-list-section>
 
-      @let staticAnalysis = data.details.staticAnalysis;
-      <section class="data-section">
-        <h2 class="data-section__header">
-          {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
-        </h2>
-        <dl class="data-section__content">
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.bugs' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.bugsTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>{{ staticAnalysis.bugs | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.vulnerabilities' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.vulnerabilitiesTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>{{ staticAnalysis.vulnerabilities | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.codeSmells' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.codeSmellsTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>{{ staticAnalysis.codeSmells | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.complexity' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.complexityTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>{{ staticAnalysis.complexity | localizedNumber }}</dd>
-          </div>
-          <div>
-            <dt>
-              {{ 'analysisResults.repositoryDetails.duplicatedLinesDensity' | transloco }}
-              <app-info-tooltip
-                textKey="analysisResults.repositoryDetails.duplicatedLinesDensityTooltip"
-                [iconSize]="15"
-              />
-            </dt>
-            <dd>
-              {{ staticAnalysis.duplicatedLinesDensity | localizedNumber: '1.0-2' : 'percent' }}
-            </dd>
-          </div>
-        </dl>
-      </section>
+      @let staticAnalysis = data?.details?.staticAnalysis;
+      <app-data-list-section
+        [items]="[
+          {
+            labelKey: 'analysisResults.repositoryDetails.bugs',
+            tooltipKey: 'analysisResults.repositoryDetails.bugsTooltip',
+            value: staticAnalysis?.bugs,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.vulnerabilities',
+            tooltipKey: 'analysisResults.repositoryDetails.vulnerabilitiesTooltip',
+            value: staticAnalysis?.vulnerabilities,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.codeSmells',
+            tooltipKey: 'analysisResults.repositoryDetails.codeSmellsTooltip',
+            value: staticAnalysis?.codeSmells,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.complexity',
+            tooltipKey: 'analysisResults.repositoryDetails.complexityTooltip',
+            value: staticAnalysis?.complexity,
+            valueType: 'number',
+          },
+          {
+            labelKey: 'analysisResults.repositoryDetails.duplicatedLinesDensity',
+            tooltipKey: 'analysisResults.repositoryDetails.duplicatedLinesDensityTooltip',
+            value: staticAnalysis?.duplicatedLinesDensity,
+            valueType: 'percent',
+          },
+        ]"
+      >
+        {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
+      </app-data-list-section>
 
-      <section class="data-section">
-        <h2 class="data-section__header">
-          {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
-        </h2>
-        <app-doughnut-chart
-          [items]="[
-            {
-              legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
-              tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
-              value: statistics.codeLines,
-              color: '#2563eb',
-            },
-            {
-              legendLabelKey: 'analysisResults.repositoryDetails.commentsLegendLabel',
-              tooltipLabelKey: 'analysisResults.repositoryDetails.commentsTooltipLabel',
-              value: statistics.commentLines,
-              color: '#22c55e',
-            },
-            {
-              legendLabelKey: 'analysisResults.repositoryDetails.blankLegendLabel',
-              tooltipLabelKey: 'analysisResults.repositoryDetails.blankTooltipLabel',
-              value: statistics.blankLines,
-              color: '#e2e8f0',
-            },
-          ]"
-        />
-      </section>
+      <app-doughnut-chart-section
+        [items]="[
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
+            value: statistics.codeLines,
+            color: '#2563eb',
+          },
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.commentsLegendLabel',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.commentsTooltipLabel',
+            value: statistics.commentLines,
+            color: '#22c55e',
+          },
+          {
+            legendLabelKey: 'analysisResults.repositoryDetails.blankLegendLabel',
+            tooltipLabelKey: 'analysisResults.repositoryDetails.blankTooltipLabel',
+            value: statistics.blankLines,
+            color: '#e2e8f0',
+          },
+        ]"
+      >
+        {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
+      </app-doughnut-chart-section>
 
       <app-line-chart-section
-        titleKey="analysisResults.repositoryDetails.lineChartAuthorsTitle"
         [modes]="['max', 'max']"
         [series]="[
           {
@@ -197,10 +152,11 @@
             points: activeAuthorsSeries(),
           },
         ]"
-      />
+      >
+        {{ 'analysisResults.repositoryDetails.lineChartAuthorsTitle' | transloco }}
+      </app-line-chart-section>
 
       <app-line-chart-section
-        titleKey="analysisResults.repositoryDetails.lineChartCommitTitle"
         [modes]="['sum']"
         [series]="[
           {
@@ -210,10 +166,11 @@
             points: commitSeries(),
           },
         ]"
-      />
+      >
+        {{ 'analysisResults.repositoryDetails.lineChartCommitTitle' | transloco }}
+      </app-line-chart-section>
 
       <app-line-chart-section
-        titleKey="analysisResults.repositoryDetails.lineChartLinesTitle"
         [modes]="['max', 'sum']"
         [series]="[
           {
@@ -229,7 +186,9 @@
             points: linesChangedSeries(),
           },
         ]"
-      />
+      >
+        {{ 'analysisResults.repositoryDetails.lineChartLinesTitle' | transloco }}
+      </app-line-chart-section>
     </div>
   </ng-template>
 </app-resource-page>

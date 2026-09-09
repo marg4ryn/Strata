@@ -1,15 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
-import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
-import { LocalizedNumberPipe } from '@app/shared/localized-number-pipe/localized-number.pipe';
-import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
-import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
 import { pageResource } from '../../utils/page-resource/page-resource';
 import { ResourcePageComponent } from '../resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
-import { DoughnutChartComponent } from '../../ui/charts/doughnut-chart/doughnut-chart.component';
-import { LineChartSectionComponent } from '../../ui/charts/line-chart-section/line-chart-section.component';
+import { DataListSectionComponent } from '../../ui/data-sections/data-list-section/data-list-section.component';
+import { DoughnutChartSectionComponent } from '../../ui/data-sections/doughnut-chart-section/doughnut-chart-section.component';
+import { LineChartSectionComponent } from '../../ui/data-sections/line-chart-section/line-chart-section.component';
 import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.component';
 
 @Component({
@@ -17,12 +14,9 @@ import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.c
   imports: [
     ResourcePageComponent,
     TranslocoPipe,
-    LocalizedDatePipe,
-    LocalizedNumberPipe,
-    LocalizedDurationPipe,
-    DoughnutChartComponent,
+    DataListSectionComponent,
+    DoughnutChartSectionComponent,
     LineChartSectionComponent,
-    InfoTooltipComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './repository-details.component.html',

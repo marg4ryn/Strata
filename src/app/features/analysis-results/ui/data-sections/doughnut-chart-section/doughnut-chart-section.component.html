@@ -1,0 +1,14 @@
+<app-data-section>
+  <ng-container slot="header">
+    <ng-content />
+  </ng-container>
+  <ng-container slot="content">
+    @if (items().length > 0) {
+      <app-doughnut-chart [items]="items()" />
+    } @else {
+      <span class="content__no-data">
+        {{ 'common.noData' | transloco }}
+      </span>
+    }
+  </ng-container>
+</app-data-section>

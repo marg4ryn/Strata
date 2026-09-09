@@ -1,0 +1,52 @@
+<app-data-section>
+  <ng-container slot="header">
+    <ng-content />
+  </ng-container>
+
+  <ng-container slot="content">
+    <dl class="data-list-section__list">
+      @for (item of items(); track item.labelKey) {
+        <div>
+          <dt>
+            {{ item.labelKey | transloco }}
+            @if (item.tooltipKey) {
+              <app-info-tooltip [textKey]="item.tooltipKey" [iconSize]="15" />
+            }
+          </dt>
+          <dd>
+            @if (item.value) {
+              @switch (item.valueType) {
+                @case ('number') {
+                  {{ asNumericValue(item.value) | localizedNumber }}
+                }
+                @case ('percent') {
+                  {{ asNumericValue(item.value) | localizedNumber: '1.0-2' : 'percent' }}
+                }
+                @case ('date') {
+                  {{ asDateValue(item.value) | localizedDate }}
+                }
+                @case ('dateTime') {
+                  {{ asDateValue(item.value) | localizedDate: { timeStyle: 'medium' } }}
+                }
+                @case ('dateRange') {
+                  {{ asDateValue(asDateRange(item.value).start) | localizedDate }} –
+                  {{ asDateValue(asDateRange(item.value).end) | localizedDate }}
+                }
+                @case ('duration') {
+                  {{ asNumericValue(item.value) | localizedDuration }}
+                }
+                @default {
+                  {{ item.value }}
+                }
+              }
+            } @else {
+              <span class="data-list-section__no-data">
+                {{ 'common.noData' | transloco }}
+              </span>
+            }
+          </dd>
+        </div>
+      }
+    </dl>
+  </ng-container>
+</app-data-section>

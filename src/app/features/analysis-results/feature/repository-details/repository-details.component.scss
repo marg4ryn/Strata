@@ -25,71 +25,23 @@
   gap: 1.5rem;
 }
 
-.data-section {
+.header__container {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   min-width: 0;
-  padding: 1.25rem 1.5rem;
-  border-radius: 0.75rem;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-strong);
-
-  &__header {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  &__content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.75rem 1.5rem;
-    margin: 0;
-
-    div {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
-
-    dt {
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      gap: 0.25em;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--text-secondary);
-
-      app-info-tooltip {
-        display: inline-flex;
-        align-items: center;
-        line-height: 1;
-      }
-    }
-
-    dd {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      font-family: 'SFMono-Regular', Consolas, monospace;
-    }
-  }
+  width: 100%;
+  gap: 10px;
 }
 
 .repository-link {
-  font-size: 1.25rem;
-  font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   &:hover,
   &:focus-visible {
@@ -98,7 +50,8 @@
 }
 
 .badge {
-  padding: 0.15rem 0.6rem;
+  flex-shrink: 0;
+  padding: 0.3rem 0.6rem;
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: 600;

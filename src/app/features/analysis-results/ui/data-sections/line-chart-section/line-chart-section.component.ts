@@ -3,23 +3,23 @@ import { TranslocoPipe } from '@ngneat/transloco';
 
 import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
 import type { DropdownOption } from '@app/shared/dropdown/dropdown.component';
-import { LineChartComponent } from '../line-chart/line-chart.component';
+import { DataSectionComponent } from '../data-section/data-section.component';
+import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
 import type {
   LineChartSeries,
   LineChartAggregationPeriod,
   LineChartAggregationMode,
-} from '../line-chart/line-chart.component';
+} from '../../charts/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-line-chart-section',
-  imports: [TranslocoPipe, LineChartComponent, DropdownComponent],
+  imports: [LineChartComponent, DropdownComponent, DataSectionComponent, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './line-chart-section.component.html',
   styleUrl: './line-chart-section.component.scss',
 })
 export class LineChartSectionComponent {
   series = input.required<LineChartSeries[]>();
-  titleKey = input.required<string>();
   modes = input<LineChartAggregationMode[]>(['sum']);
 
   private readonly dropdown = viewChild.required(DropdownComponent);

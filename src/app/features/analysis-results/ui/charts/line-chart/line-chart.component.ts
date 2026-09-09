@@ -83,6 +83,7 @@ export class LineChartComponent {
     const lang = this.activeLang();
 
     return {
+      locale: lang,
       responsive: true,
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },

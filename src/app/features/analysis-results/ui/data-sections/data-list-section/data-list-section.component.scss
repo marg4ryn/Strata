@@ -1,0 +1,41 @@
+.data-list-section__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  dt {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    gap: 0.25em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary);
+
+    app-info-tooltip {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+  }
+}
+
+.data-list-section__no-data {
+  color: var(--text-disabled);
+  font-size: 0.875rem;
+  font-style: italic;
+}

@@ -3,7 +3,8 @@
     "confirm": "Potwierdź",
     "cancel": "Anuluj",
     "close": "Zamknij",
-    "loading": "Ładowanie"
+    "loading": "Ładowanie",
+    "noData": "Brak danych do wyświetlenia"
   },
   "meta": {
     "description": "Strata to narzędzie do analizy behawioralnej repozytoriów, które łączy historię zmian i strukturę kodu, pomagając wykrywać hotspoty oraz wskazywać obszary wymagające największej uwagi."

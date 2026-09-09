@@ -50,6 +50,7 @@ export class DoughnutChartComponent {
     const lang = this.activeLang();
 
     return {
+      locale: lang,
       responsive: true,
       maintainAspectRatio: true,
       cutout: '65%',

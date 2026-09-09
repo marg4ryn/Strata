@@ -1,0 +1,16 @@
+app-doughnut-chart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content__no-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  color: var(--text-disabled);
+  font-size: 0.875rem;
+  font-style: italic;
+}
