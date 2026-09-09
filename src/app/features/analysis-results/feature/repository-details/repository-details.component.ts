@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, computed } from '@an
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { pageResource } from '../../utils/page-resource/page-resource';
-import { ResourcePageComponent } from '../resource-page/resource-page.component';
+import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { DataListSectionComponent } from '../../ui/data-sections/data-list-section/data-list-section.component';
 import { DoughnutChartSectionComponent } from '../../ui/data-sections/doughnut-chart-section/doughnut-chart-section.component';

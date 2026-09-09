@@ -3,9 +3,9 @@ import type { ResourceRef, TemplateRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgTemplateOutlet } from '@angular/common';
 
-import { AnalysisErrorComponent } from '../../ui/resource-states/analysis-error/analysis-error.component';
-import { AnalysisLoadingComponent } from '../../ui/resource-states/analysis-loading/analysis-loading.component';
-import { AnalysisNotFoundComponent } from '../../ui/resource-states/analysis-not-found/analysis-not-found.component';
+import { AnalysisErrorComponent } from '../analysis-error/analysis-error.component';
+import { AnalysisLoadingComponent } from '../analysis-loading/analysis-loading.component';
+import { AnalysisNotFoundComponent } from '../analysis-not-found/analysis-not-found.component';
 
 @Component({
   selector: 'app-resource-page',
