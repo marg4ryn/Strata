@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { AnalysisHistoryFacade } from '../analysis-history.facade';
 import { AnalysisHistoryItemComponent } from '../ui/analysis-history-item.component';

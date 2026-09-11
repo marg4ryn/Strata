@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ErrorType, PendingAnalysis } from '../../analysis-run.model';

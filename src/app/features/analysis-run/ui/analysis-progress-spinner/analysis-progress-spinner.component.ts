@@ -11,7 +11,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';

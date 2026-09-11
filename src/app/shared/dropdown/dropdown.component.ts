@@ -2,7 +2,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { CdkListbox, CdkListboxModule } from '@angular/cdk/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface DropdownOption<T> {
   value: T;

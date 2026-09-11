@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SettingsFacade } from '../../settings.facade';
 import { SettingsSectionComponent } from '../../ui/settings-section.component';

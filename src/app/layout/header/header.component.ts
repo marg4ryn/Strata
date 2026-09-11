@@ -13,7 +13,7 @@ import {
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay';
 import { CdkPortal } from '@angular/cdk/portal';
 import { Router } from '@angular/router';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';

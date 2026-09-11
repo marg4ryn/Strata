@@ -1,6 +1,6 @@
 import { Component, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ConnectionPositionPair, OverlayModule } from '@angular/cdk/overlay';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 let nextId = 0;
 

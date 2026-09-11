@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { BaseChartDirective } from 'ng2-charts';
 import type { ChartConfiguration } from 'chart.js';
 

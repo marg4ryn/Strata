@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
 import { Notification } from '../notifications.model';

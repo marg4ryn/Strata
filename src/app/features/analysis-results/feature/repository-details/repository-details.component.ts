@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
 import { pageResource } from '../../utils/page-resource/page-resource';

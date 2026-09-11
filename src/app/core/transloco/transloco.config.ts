@@ -1,4 +1,4 @@
-import { TranslocoConfig } from '@ngneat/transloco';
+import { TranslocoConfig } from '@jsverse/transloco';
 import { isDevMode } from '@angular/core';
 
 import { AVAILABLE_LANGS } from '@app/core/language/language.model';

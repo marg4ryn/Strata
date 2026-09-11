@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { DataSectionComponent } from '../data-section/data-section.component';
 import { DoughnutChartComponent } from '../../charts/doughnut-chart/doughnut-chart.component';

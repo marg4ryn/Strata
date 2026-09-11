@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ButtonDirective } from '@app/shared/button-directive/button.directive';
 import { ModalType } from '../service/confirm-operation-modal.service';

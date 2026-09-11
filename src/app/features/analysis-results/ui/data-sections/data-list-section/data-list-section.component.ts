@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { LocalizedDurationPipe } from '@app/shared/localized-duration-pipe/localized-duration.pipe';
 import { LocalizedNumberPipe } from '@app/shared/localized-number-pipe/localized-number.pipe';

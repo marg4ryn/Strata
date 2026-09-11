@@ -7,7 +7,7 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
 import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';

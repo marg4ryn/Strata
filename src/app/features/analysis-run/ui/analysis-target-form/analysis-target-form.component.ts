@@ -9,7 +9,7 @@ import {
   debounce,
   ValidationError,
 } from '@angular/forms/signals';
-import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';

@@ -9,7 +9,7 @@ import { LanguageService } from './language.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 describe('LanguageService', () => {
   let service: LanguageService;

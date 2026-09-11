@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
