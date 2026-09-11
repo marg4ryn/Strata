@@ -17,7 +17,9 @@ describe('LineChartSectionComponent', () => {
   let fixture: ComponentFixture<LineChartSectionComponent>;
   let dropdown: DropdownComponent<string>;
 
-  const mockSeries: LineChartSeries[] = [];
+  const mockSeries: LineChartSeries[] = [
+    { legendLabelKey: 'test', tooltipLabelKey: 'test', color: 'test', points: [] },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,7 +30,6 @@ describe('LineChartSectionComponent', () => {
     fixture = TestBed.createComponent(LineChartSectionComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('series', mockSeries);
-    fixture.componentRef.setInput('titleKey', 'some.title.key');
     await fixture.whenStable();
     fixture.detectChanges();
 
