@@ -1,12 +1,12 @@
-<app-data-section>
+<app-data-section class="line-chart-section">
   <ng-container slot="header">
-    <div class="header__container">
-      <span class="header__title">
+    <div class="line-chart-section__header">
+      <span class="line-chart-section__title">
         <ng-content />
       </span>
       @if (series().length > 0) {
         <app-dropdown
-          class="header__dropdown"
+          class="line-chart-section__dropdown"
           [options]="options"
           [value]="selectedPeriod()"
           ariaLabelKey="analysisResults.repositoryDetails.lineChartSectionDropdown"
@@ -19,7 +19,7 @@
     @if (series().length > 0) {
       <app-line-chart [series]="series()" [period]="selectedPeriod()" [modes]="modes()" />
     } @else {
-      <span class="content__no-data">
+      <span class="line-chart-section__no-data">
         {{ 'common.noData' | transloco }}
       </span>
     }

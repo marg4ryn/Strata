@@ -31,11 +31,11 @@
           },
         ]"
       >
-        <div class="header__container">
-          <a [href]="info.repositoryUrl" target="_blank" class="repository-link">
+        <div class="section-title">
+          <a class="section-title__link" [href]="info.repositoryUrl" target="_blank">
             {{ info.repositoryOwner }}/{{ info.repositoryName }}
           </a>
-          <span class="badge">{{ info.repositoryPlatform }}</span>
+          <span class="section-title__badge">{{ info.repositoryPlatform }}</span>
         </div>
       </app-data-list-section>
 
@@ -44,6 +44,7 @@
         [items]="[
           {
             labelKey: 'analysisResults.repositoryDetails.authors',
+            tooltipKey: 'analysisResults.repositoryDetails.uniqueAuthorsTooltip',
             value: statistics.authors,
             valueType: 'number',
           },
@@ -55,6 +56,7 @@
           },
           {
             labelKey: 'analysisResults.repositoryDetails.commits',
+            tooltipKey: 'analysisResults.repositoryDetails.commitsTooltip',
             value: statistics.commits,
             valueType: 'number',
           },
@@ -69,8 +71,11 @@
             valueType: 'number',
           },
         ]"
-      >
-        {{ 'analysisResults.repositoryDetails.repositoryStatistics' | transloco }}
+        ><div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.repositoryDetails.repositoryStatistics' | transloco
+          }}</span>
+        </div>
       </app-data-list-section>
 
       @let staticAnalysis = data?.details?.staticAnalysis;
@@ -107,8 +112,11 @@
             valueType: 'percent',
           },
         ]"
-      >
-        {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
+        ><div class="section-title">
+          <span class="section-title__label">
+            {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
+          </span>
+        </div>
       </app-data-list-section>
 
       <app-doughnut-chart-section
@@ -132,8 +140,11 @@
             color: '#e2e8f0',
           },
         ]"
-      >
-        {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
+        ><div class="section-title">
+          <span class="section-title__label">
+            {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
+          </span>
+        </div>
       </app-doughnut-chart-section>
 
       <app-line-chart-section
@@ -153,7 +164,16 @@
           },
         ]"
       >
-        {{ 'analysisResults.repositoryDetails.lineChartAuthorsTitle' | transloco }}
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.repositoryDetails.lineChartAuthorsTitle' | transloco
+          }}</span>
+          <app-info-tooltip
+            class="section-title__tooltip"
+            textKey="analysisResults.repositoryDetails.lineChartAuthorsInfoTooltip"
+            [iconSize]="22"
+          />
+        </div>
       </app-line-chart-section>
 
       <app-line-chart-section
@@ -167,7 +187,16 @@
           },
         ]"
       >
-        {{ 'analysisResults.repositoryDetails.lineChartCommitTitle' | transloco }}
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.repositoryDetails.lineChartCommitTitle' | transloco
+          }}</span>
+          <app-info-tooltip
+            class="section-title__tooltip"
+            textKey="analysisResults.repositoryDetails.lineChartCommitInfoTooltip"
+            [iconSize]="22"
+          />
+        </div>
       </app-line-chart-section>
 
       <app-line-chart-section
@@ -187,7 +216,16 @@
           },
         ]"
       >
-        {{ 'analysisResults.repositoryDetails.lineChartLinesTitle' | transloco }}
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.repositoryDetails.lineChartLinesTitle' | transloco
+          }}</span>
+          <app-info-tooltip
+            class="section-title__tooltip"
+            textKey="analysisResults.repositoryDetails.lineChartLinesInfoTooltip"
+            [iconSize]="22"
+          />
+        </div>
       </app-line-chart-section>
     </div>
   </ng-template>

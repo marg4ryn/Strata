@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 
+import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
 import { pageResource } from '../../utils/page-resource/page-resource';
 import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
@@ -17,6 +18,7 @@ import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.c
     DataListSectionComponent,
     DoughnutChartSectionComponent,
     LineChartSectionComponent,
+    InfoTooltipComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './repository-details.component.html',
