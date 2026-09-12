@@ -6,35 +6,30 @@ import { TranslocoLoaderService } from './transloco-loader.service';
 
 describe('TranslocoLoaderService', () => {
   let service: TranslocoLoaderService;
-  let httpTesting: HttpTestingController;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TranslocoLoaderService, provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(TranslocoLoaderService);
-    httpTesting = TestBed.inject(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
-    httpTesting.verify();
+    httpMock.verify();
   });
 
-  it('loads translation for given language', () => {
-    const translation = {
-      hello: 'Hello',
-      goodbye: 'Goodbye',
-    };
+  it('fetches translation file for given lang', () => {
+    const mockTranslation = { hello: 'world' };
 
-    service.getTranslation('en').subscribe((result) => {
-      expect(result).toEqual(translation);
+    service.getTranslation('en').subscribe((res) => {
+      expect(res).toEqual(mockTranslation);
     });
 
-    const request = httpTesting.expectOne('/assets/i18n/en.json');
-
-    expect(request.request.method).toBe('GET');
-
-    request.flush(translation);
+    const req = httpMock.expectOne('/assets/i18n/en.json');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockTranslation);
   });
 });

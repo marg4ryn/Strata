@@ -1,5 +1,5 @@
-import { TranslocoConfig } from '@jsverse/transloco';
 import { isDevMode } from '@angular/core';
+import type { TranslocoConfig } from '@jsverse/transloco';
 
 import { AVAILABLE_LANGS } from '@app/core/language/language.model';
 

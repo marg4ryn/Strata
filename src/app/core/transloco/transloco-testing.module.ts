@@ -1,4 +1,6 @@
-import { TranslocoTestingModule, TranslocoTestingOptions } from '@jsverse/transloco';
+import { TranslocoTestingModule } from '@jsverse/transloco';
+import type { TranslocoTestingOptions } from '@jsverse/transloco';
+
 import en from '../../../assets/i18n/en.json';
 import pl from '../../../assets/i18n/pl.json';
 
