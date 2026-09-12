@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
 import { NotificationItemComponent } from './notification-item.component';
 import { Notification } from '../notifications.model';
 

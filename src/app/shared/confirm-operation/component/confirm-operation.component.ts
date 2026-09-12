@@ -2,17 +2,17 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ButtonDirective } from '@app/shared/button-directive/button.directive';
-import { ModalType } from '../service/confirm-operation-modal.service';
+import { ButtonDirective } from '@app/shared/directives/button.directive';
+import { ModalType } from '../service/confirm-operation.service';
 
 @Component({
   selector: 'app-confirm-operation-modal',
   imports: [ButtonDirective, A11yModule, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './confirm-operation-modal.component.html',
-  styleUrl: './confirm-operation-modal.component.scss',
+  templateUrl: './confirm-operation.component.html',
+  styleUrl: './confirm-operation.component.scss',
 })
-export class ConfirmOperationModalComponent {
+export class ConfirmOperationComponent {
   readonly labelKey = input<string>('confirmations.default');
   readonly params = input<Record<string, unknown>>({});
   readonly type = input<ModalType>('danger');

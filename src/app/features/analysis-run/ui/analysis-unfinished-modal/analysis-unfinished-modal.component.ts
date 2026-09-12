@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
-import { ButtonDirective } from '@app/shared/button-directive/button.directive';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
+import { ButtonDirective } from '@app/shared/directives/button.directive';
 import { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({
@@ -21,7 +21,7 @@ import { PendingAnalysis } from '../../analysis-run.model';
   styleUrl: './analysis-unfinished-modal.component.scss',
 })
 export class AnalysisUnfinishedModalComponent {
-  private readonly confirmModal = inject(ConfirmOperationModalService);
+  private readonly confirmModal = inject(ConfirmOperationService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly pendingAnalysis = input<PendingAnalysis | null>();

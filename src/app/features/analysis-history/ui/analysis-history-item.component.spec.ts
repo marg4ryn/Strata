@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
-import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
 
 describe('AnalysisHistoryItemComponent', () => {
   let component: AnalysisHistoryItemComponent;
@@ -26,7 +26,7 @@ describe('AnalysisHistoryItemComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [AnalysisHistoryItemComponent, getTranslocoModule()],
-      providers: [{ provide: ConfirmOperationModalService, useValue: confirmModalMock }],
+      providers: [{ provide: ConfirmOperationService, useValue: confirmModalMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AnalysisHistoryItemComponent);

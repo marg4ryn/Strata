@@ -21,7 +21,7 @@ import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-h
 import { AnalysisHistoryPanelComponent } from '@app/features/analysis-history/feature/analysis-history-panel.component';
 import { SettingsFacade } from '@app/features/settings/settings.facade';
 import { SettingsPanelComponent } from '@app/features/settings/feature/settings-panel/settings-panel.component';
-import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
 
 interface PanelFacade {
   showPanel: () => boolean;
@@ -59,7 +59,7 @@ export class HeaderComponent implements AfterViewInit {
   @ViewChild('settingsPortal') settingsPortalRef!: CdkPortal;
 
   private readonly router = inject(Router);
-  private readonly confirmModal = inject(ConfirmOperationModalService);
+  private readonly confirmModal = inject(ConfirmOperationService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly notifications = inject(NotificationsFacade);
   protected readonly history = inject(AnalysisHistoryFacade);

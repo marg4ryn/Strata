@@ -1,4 +1,4 @@
-import type { ISODateString } from '@app/shared/date-utils/date.utils';
+import type { ISODateString } from '@app/shared/utils/date.utils';
 import type {
   LineChartDataPoint,
   LineChartAggregationMode,

@@ -13,7 +13,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ButtonDirective } from '@app/shared/button-directive/button.directive';
+import { ButtonDirective } from '@app/shared/directives/button.directive';
 import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
 

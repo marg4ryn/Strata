@@ -3,10 +3,10 @@ import { DestroyRef } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import { Subscription, Subject } from 'rxjs';
 
-import { ConfirmOperationModalService } from './confirm-operation-modal.service';
+import { ConfirmOperationService } from './confirm-operation.service';
 
-describe('ConfirmOperationModalService', () => {
-  let service: ConfirmOperationModalService;
+describe('ConfirmOperationService', () => {
+  let service: ConfirmOperationService;
   let cancel$: Subject<void>;
   let confirm$: Subject<void>;
   let backdropClick$: Subject<void>;
@@ -49,7 +49,7 @@ describe('ConfirmOperationModalService', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: Overlay, useValue: overlayMock }],
     });
-    service = TestBed.inject(ConfirmOperationModalService);
+    service = TestBed.inject(ConfirmOperationService);
   });
 
   const fakeDestroyRef = () => {

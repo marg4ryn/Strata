@@ -2,12 +2,12 @@ import { Service, inject, DestroyRef } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { ConfirmOperationModalComponent } from '../component/confirm-operation-modal.component';
+import { ConfirmOperationComponent } from '../component/confirm-operation.component';
 
 export type ModalType = 'confirm' | 'danger';
 
 @Service()
-export class ConfirmOperationModalService {
+export class ConfirmOperationService {
   private overlay = inject(Overlay);
 
   confirm(
@@ -25,7 +25,7 @@ export class ConfirmOperationModalService {
         backdropClass: 'cdk-overlay-dark-backdrop',
       });
 
-      const portal = new ComponentPortal(ConfirmOperationModalComponent);
+      const portal = new ComponentPortal(ConfirmOperationComponent);
       const componentRef = overlayRef.attach(portal);
 
       if (labelKey) {

@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationModalService } from '@app/shared/confirm-operation-modal/service/confirm-operation-modal.service';
-import { LocalizedDatePipe } from '@app/shared/localized-date-pipe/localized-date.pipe';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 
 @Component({
@@ -21,7 +21,7 @@ import { AnalysisHistoryEntry } from '../analysis-history.model';
   styleUrl: './analysis-history-item.component.scss',
 })
 export class AnalysisHistoryItemComponent {
-  private readonly confirmModal = inject(ConfirmOperationModalService);
+  private readonly confirmModal = inject(ConfirmOperationService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly historyEntry = input.required<AnalysisHistoryEntry>();

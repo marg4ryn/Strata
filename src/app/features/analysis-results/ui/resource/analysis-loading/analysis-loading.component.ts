@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { LoadingSpinnerComponent } from '@app/shared/loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from '@app/shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-analysis-loading',

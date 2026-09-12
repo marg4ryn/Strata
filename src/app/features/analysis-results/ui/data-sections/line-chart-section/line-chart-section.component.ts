@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, signal, viewChild } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { DropdownComponent } from '@app/shared/dropdown/dropdown.component';
-import type { DropdownOption } from '@app/shared/dropdown/dropdown.component';
+import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
+import type { DropdownOption } from '@app/shared/components/dropdown/dropdown.component';
 import { DataSectionComponent } from '../data-section/data-section.component';
 import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
 import type {

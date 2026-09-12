@@ -1,4 +1,4 @@
-import type { ISODateString, ISOLocalDateTime } from '@app/shared/date-utils/date.utils';
+import type { ISODateString, ISOLocalDateTime } from '@app/shared/utils/date.utils';
 
 export interface RepositoryDetails {
   info: RepositoryInfo;

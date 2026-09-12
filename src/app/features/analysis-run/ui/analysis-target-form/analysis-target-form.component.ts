@@ -12,8 +12,8 @@ import {
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { localNowAsUtcMidnight } from '@app/shared/date-utils/date.utils';
-import { ButtonDirective } from '@app/shared/button-directive/button.directive';
+import { localNowAsUtcMidnight } from '@app/shared/utils/date.utils';
+import { ButtonDirective } from '@app/shared/directives/button.directive';
 import { url, afterDate, beforeDate, ParamValidationError } from '../../utils/validators';
 import { AnalysisTargetFormModel } from '../../analysis-run.model';
 

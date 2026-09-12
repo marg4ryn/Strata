@@ -2,15 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationModalComponent } from './confirm-operation-modal.component';
+import { ConfirmOperationComponent } from './confirm-operation.component';
 
-describe('ConfirmOperationModalComponent', () => {
-  let component: ConfirmOperationModalComponent;
-  let fixture: ComponentFixture<ConfirmOperationModalComponent>;
+describe('ConfirmOperationComponent', () => {
+  let component: ConfirmOperationComponent;
+  let fixture: ComponentFixture<ConfirmOperationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmOperationModalComponent, getTranslocoModule()],
+      imports: [ConfirmOperationComponent, getTranslocoModule()],
       providers: [
         {
           provide: InteractivityChecker,
@@ -19,7 +19,7 @@ describe('ConfirmOperationModalComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmOperationModalComponent);
+    fixture = TestBed.createComponent(ConfirmOperationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();

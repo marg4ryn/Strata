@@ -9,7 +9,10 @@ import {
 
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LangPreference, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
-import { DropdownComponent, DropdownOption } from '@app/shared/dropdown/dropdown.component';
+import {
+  DropdownComponent,
+  DropdownOption,
+} from '@app/shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-language-switcher',

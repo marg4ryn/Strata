@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { InfoTooltipComponent } from '@app/shared/info-tooltip/info-tooltip.component';
+import { InfoTooltipComponent } from '@app/shared/components/info-tooltip/info-tooltip.component';
 import { pageResource } from '../../utils/page-resource/page-resource';
 import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';

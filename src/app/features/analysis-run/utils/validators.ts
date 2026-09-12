@@ -1,7 +1,7 @@
 import { validate, SchemaPath } from '@angular/forms/signals';
 import type { ValidationError } from '@angular/forms/signals';
 
-import { dateToCalendarKey } from '@app/shared/date-utils/date.utils';
+import { dateToCalendarKey } from '@app/shared/utils/date.utils';
 
 export interface ParamValidationError extends ValidationError {
   params?: Record<string, string>;
