@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
 import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
 import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
 import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';

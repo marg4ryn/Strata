@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { LocalizedDurationPipe } from '@app/shared/pipes/localized-duration-pipe/localized-duration.pipe';
-import { LocalizedNumberPipe } from '@app/shared/pipes/localized-number-pipe/localized-number.pipe';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
+import { LocalizedDurationPipe } from '@app/shared/pipes/localized-duration/localized-duration.pipe';
+import { LocalizedNumberPipe } from '@app/shared/pipes/localized-number/localized-number.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
 import { InfoTooltipComponent } from '@app/shared/components/info-tooltip/info-tooltip.component';
 import { DataSectionComponent } from '../data-section/data-section.component';
 

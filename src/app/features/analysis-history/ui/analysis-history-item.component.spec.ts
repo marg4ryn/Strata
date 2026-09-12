@@ -4,7 +4,7 @@ import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module
 import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
 
 describe('AnalysisHistoryItemComponent', () => {
   let component: AnalysisHistoryItemComponent;

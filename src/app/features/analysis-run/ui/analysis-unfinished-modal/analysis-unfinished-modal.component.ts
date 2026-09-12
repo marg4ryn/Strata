@@ -9,7 +9,7 @@ import {
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date-pipe/localized-date.pipe';
+import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
 import { ButtonDirective } from '@app/shared/directives/button.directive';
 import { PendingAnalysis } from '../../analysis-run.model';
 
