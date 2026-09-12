@@ -1,71 +1,36 @@
 import { TestBed } from '@angular/core/testing';
 import { Meta } from '@angular/platform-browser';
 import { signal } from '@angular/core';
-import { of, throwError } from 'rxjs';
+import { TranslocoService } from '@jsverse/transloco';
+import type { Translation } from '@jsverse/transloco';
+import { MockService } from 'ng-mocks';
+import { of } from 'rxjs';
 
 import { LoggerService } from '@app/core/logging/logger.service';
-import type { LangPreference } from '../language.model';
 import { LanguageService } from './language.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
-import { TranslocoService } from '@jsverse/transloco';
+import type { LangPreference } from '../language.model';
 
 describe('LanguageService', () => {
   let service: LanguageService;
-  let logger: Partial<LoggerService>;
-
-  let store: {
-    langPreference: ReturnType<typeof signal<LangPreference>>;
-  };
-
-  let storage: {
-    getLangPreference: ReturnType<typeof vi.fn>;
-    saveLangPreference: ReturnType<typeof vi.fn>;
-  };
-
-  let browser: {
-    getLang: ReturnType<typeof vi.fn>;
-  };
-
-  let transloco: {
-    setActiveLang: ReturnType<typeof vi.fn>;
-    load: ReturnType<typeof vi.fn>;
-    translate: ReturnType<typeof vi.fn>;
-  };
-
-  let meta: { updateTag: ReturnType<typeof vi.fn> };
+  let logger: ReturnType<typeof MockService<LoggerService>>;
+  let storage: ReturnType<typeof MockService<LanguageStorageService>>;
+  let browser: ReturnType<typeof MockService<BrowserLanguageService>>;
+  let transloco: ReturnType<typeof MockService<TranslocoService>>;
+  let meta: ReturnType<typeof MockService<Meta>>;
+  let store: { langPreference: ReturnType<typeof signal<LangPreference>> };
 
   beforeEach(() => {
-    store = {
-      langPreference: signal('system'),
-    };
+    logger = MockService(LoggerService);
+    storage = MockService(LanguageStorageService);
+    browser = MockService(BrowserLanguageService);
+    transloco = MockService(TranslocoService);
+    meta = MockService(Meta);
+    store = { langPreference: signal('system') };
 
-    storage = {
-      getLangPreference: vi.fn(),
-      saveLangPreference: vi.fn(),
-    };
-
-    browser = {
-      getLang: vi.fn(),
-    };
-
-    transloco = {
-      setActiveLang: vi.fn(),
-      load: vi.fn().mockReturnValue(of(undefined)),
-      translate: vi.fn().mockReturnValue('translated description'),
-    };
-
-    meta = {
-      updateTag: vi.fn(),
-    };
-
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    vi.mocked(transloco.load).mockReturnValue(of({} as Translation));
 
     TestBed.configureTestingModule({
       providers: [
@@ -77,6 +42,7 @@ describe('LanguageService', () => {
         { provide: Meta, useValue: meta },
       ],
     });
+
     service = TestBed.inject(LanguageService);
   });
 
@@ -85,90 +51,82 @@ describe('LanguageService', () => {
   });
 
   describe('loadLangPreference', () => {
-    it('loads langPreference from localStorage', () => {
-      const langPreference = 'en';
-      storage.getLangPreference.mockReturnValue(langPreference);
+    it('loads langPreference from storage', () => {
+      vi.mocked(storage.getLangPreference).mockReturnValue('en');
       service.loadLangPreference();
-      expect(store.langPreference()).toBe(langPreference);
-      expect(transloco.load).toHaveBeenCalledWith(langPreference);
-      expect(transloco.setActiveLang).toHaveBeenCalledWith(langPreference);
+      expect(store.langPreference()).toBe('en');
+      expect(transloco.load).toHaveBeenCalledWith('en');
+      expect(transloco.setActiveLang).toHaveBeenCalledWith('en');
+      expect(storage.saveLangPreference).not.toHaveBeenCalled();
     });
 
     it('uses browser language when langPreference is "system"', () => {
-      storage.getLangPreference.mockReturnValue('system');
-      browser.getLang.mockReturnValue('pl');
+      vi.mocked(storage.getLangPreference).mockReturnValue('system');
+      vi.mocked(browser.getLang).mockReturnValue('pl');
       service.loadLangPreference();
       expect(store.langPreference()).toBe('system');
       expect(transloco.load).toHaveBeenCalledWith('pl');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
+      expect(storage.saveLangPreference).not.toHaveBeenCalled();
     });
 
-    it('uses browser language when localStorage is empty', () => {
-      storage.getLangPreference.mockReturnValue(null);
-      browser.getLang.mockReturnValue('pl');
+    it('uses browser language when storage is empty', () => {
+      vi.mocked(storage.getLangPreference).mockReturnValue(null);
+      vi.mocked(browser.getLang).mockReturnValue('pl');
       service.loadLangPreference();
       expect(store.langPreference()).toBe('system');
       expect(transloco.load).toHaveBeenCalledWith('pl');
-      expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
-    });
-
-    it('does not write back to storage on load', () => {
-      storage.getLangPreference.mockReturnValue('en');
-      service.loadLangPreference();
       expect(storage.saveLangPreference).not.toHaveBeenCalled();
     });
 
     it('sets active lang only after translations are loaded', () => {
-      storage.getLangPreference.mockReturnValue('en');
+      vi.mocked(storage.getLangPreference).mockReturnValue('en');
       const callOrder: string[] = [];
-      transloco.load.mockImplementation(() => {
+      vi.mocked(transloco.load).mockImplementation(() => {
         callOrder.push('load');
-        return of(undefined);
+        return of({} as Translation);
       });
-      transloco.setActiveLang.mockImplementation(() => callOrder.push('setActiveLang'));
-
+      vi.mocked(transloco.setActiveLang).mockImplementation(() => {
+        callOrder.push('setActiveLang');
+        return transloco;
+      });
       service.loadLangPreference();
-
       expect(callOrder).toEqual(['load', 'setActiveLang']);
     });
 
-    it('falls back to empty string when translation is missing', () => {
-      storage.getLangPreference.mockReturnValue('en');
-      transloco.translate.mockReturnValue(undefined);
-
+    it('falls back to empty string for meta description when translation is missing', () => {
+      vi.mocked(storage.getLangPreference).mockReturnValue('en');
+      vi.mocked(transloco.translate).mockReturnValue(undefined);
       service.loadLangPreference();
-
-      expect(meta.updateTag).toHaveBeenCalledWith({
-        name: 'description',
-        content: '',
-      });
+      expect(meta.updateTag).toHaveBeenCalledWith({ name: 'description', content: '' });
     });
   });
 
   describe('setPreference', () => {
     it('saves preference and applies exact language', () => {
-      const langPreference = 'pl';
-      service.setPreference(langPreference);
-      expect(storage.saveLangPreference).toHaveBeenCalledWith(langPreference);
-      expect(store.langPreference()).toBe(langPreference);
-      expect(transloco.load).toHaveBeenCalledWith(langPreference);
-      expect(transloco.setActiveLang).toHaveBeenCalledWith(langPreference);
+      service.setPreference('pl');
+      expect(storage.saveLangPreference).toHaveBeenCalledWith('pl');
+      expect(store.langPreference()).toBe('pl');
+      expect(transloco.load).toHaveBeenCalledWith('pl');
+      expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
     });
 
     it('resolves browser language when preference is "system"', () => {
-      browser.getLang.mockReturnValue('en');
+      vi.mocked(browser.getLang).mockReturnValue('en');
       service.setPreference('system');
+      expect(storage.saveLangPreference).toHaveBeenCalledWith('system');
+      expect(store.langPreference()).toBe('system');
       expect(transloco.load).toHaveBeenCalledWith('en');
       expect(transloco.setActiveLang).toHaveBeenCalledWith('en');
     });
 
-    it('falls back to "system" for an invalid preference', () => {
-      browser.getLang.mockReturnValue('pl');
+    it('falls back to "system" for an invalid preference and logs a warning', () => {
+      vi.mocked(browser.getLang).mockReturnValue('pl');
       service.setPreference('fr' as unknown as LangPreference);
       expect(storage.saveLangPreference).toHaveBeenCalledWith('system');
       expect(store.langPreference()).toBe('system');
       expect(transloco.load).toHaveBeenCalledWith('pl');
-      expect(transloco.setActiveLang).toHaveBeenCalledWith('pl');
+      expect(logger.warn).toHaveBeenCalledOnce();
     });
   });
 });

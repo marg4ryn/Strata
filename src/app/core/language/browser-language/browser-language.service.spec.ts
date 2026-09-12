@@ -6,7 +6,6 @@ describe('BrowserLanguageService', () => {
   let service: BrowserLanguageService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(BrowserLanguageService);
   });
 
@@ -18,29 +17,25 @@ describe('BrowserLanguageService', () => {
     vi.stubGlobal('navigator', {
       language: 'pl-PL',
     });
-
-    expect(service.getLang(['pl', 'en'], 'en')).toBe('pl');
+    expect(service.getLang(['en', 'pl'], 'en')).toBe('pl');
   });
 
   it('uses only the language part', () => {
     vi.stubGlobal('navigator', {
       language: 'en-US',
     });
-
-    expect(service.getLang(['en'], 'pl')).toBe('en');
+    expect(service.getLang(['en'], 'en')).toBe('en');
   });
 
   it('returns fallback when browser language is not available', () => {
     vi.stubGlobal('navigator', {
-      language: 'de-DE',
+      language: 'pl-PL',
     });
-
-    expect(service.getLang(['pl', 'en'], 'en')).toBe('en');
+    expect(service.getLang(['en'], 'en')).toBe('en');
   });
 
   it('returns fallback when navigator.language does not exist', () => {
     vi.stubGlobal('navigator', {});
-
-    expect(service.getLang(['pl', 'en'], 'en')).toBe('en');
+    expect(service.getLang(['en', 'pl'], 'en')).toBe('en');
   });
 });

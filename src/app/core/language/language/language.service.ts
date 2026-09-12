@@ -6,7 +6,8 @@ import { LoggerService } from '@app/core/logging/logger.service';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
-import { Lang, LangPreference, AVAILABLE_LANGS, SYSTEM_PREFERENCE } from '../language.model';
+import { AVAILABLE_LANGS, SYSTEM_PREFERENCE } from '../language.model';
+import type { Lang, LangPreference } from '../language.model';
 
 @Service()
 export class LanguageService {
@@ -22,10 +23,10 @@ export class LanguageService {
 
   loadLangPreference(): void {
     const stored = this.storage.getLangPreference() ?? SYSTEM_PREFERENCE;
-    const preference = this.validate(stored);
-    this.logger.debug(`Language Service loaded preference: ${preference}`);
-    this.store.langPreference.set(preference);
-    this.apply(preference);
+    const validated = this.validate(stored);
+    this.logger.debug(`Language Service loaded preference: ${validated}`);
+    this.store.langPreference.set(validated);
+    this.apply(validated);
   }
 
   setPreference(preference: LangPreference): void {

@@ -10,7 +10,7 @@ describe('LanguageStoreService', () => {
     service = TestBed.inject(LanguageStoreService);
   });
 
-  it('creates', () => {
-    expect(service).toBeTruthy();
+  it('defaults the langPreference signal to "system"', () => {
+    expect(service.langPreference()).toBe('system');
   });
 });

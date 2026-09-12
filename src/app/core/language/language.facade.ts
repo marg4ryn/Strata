@@ -1,8 +1,8 @@
 import { Service, inject, computed } from '@angular/core';
 
-import type { LangPreference } from './language.model';
 import { LanguageService } from './language/language.service';
 import { LanguageStoreService } from './language-store/language-store.service';
+import type { LangPreference } from './language.model';
 
 @Service()
 export class LanguageFacade {

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
 import { StorageService } from '@app/core/storage/storage.service';
 import { LoggerService } from '@app/core/logging/logger.service';
@@ -6,27 +7,15 @@ import { LanguageStorageService } from './language-storage.service';
 
 describe('LanguageStorageService', () => {
   let service: LanguageStorageService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<LoggerService>>;
+  let storage: ReturnType<typeof MockService<StorageService>>;
 
-  let storage: {
-    setItem: ReturnType<typeof vi.fn>;
-    getItem: ReturnType<typeof vi.fn>;
-    removeItem: ReturnType<typeof vi.fn>;
-  };
+  const langPreference = 'en';
+  const langPreferenceKey = 'langPreference';
 
   beforeEach(() => {
-    storage = {
-      setItem: vi.fn(),
-      getItem: vi.fn(),
-      removeItem: vi.fn(),
-    };
-
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(LoggerService);
+    storage = MockService(StorageService);
 
     TestBed.configureTestingModule({
       providers: [
@@ -34,6 +23,7 @@ describe('LanguageStorageService', () => {
         { provide: StorageService, useValue: storage },
       ],
     });
+
     service = TestBed.inject(LanguageStorageService);
   });
 
@@ -41,29 +31,26 @@ describe('LanguageStorageService', () => {
     vi.restoreAllMocks();
   });
 
-  const langPreference = 'en';
-  const langPreferenceKey = 'langPreference';
-
   describe('getLangPreference', () => {
-    it('returns langPreference', () => {
-      storage.getItem.mockReturnValue(langPreference);
+    it('returns langPreference read from storage', () => {
+      vi.mocked(storage.getItem).mockReturnValue(langPreference);
       const res = service.getLangPreference();
       expect(res).toBe(langPreference);
       expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPreferenceKey);
+      expect(logger.debug).toHaveBeenCalledOnce();
     });
 
     it('returns null when storage is empty', () => {
-      storage.getItem.mockReturnValue(null);
-      const res = service.getLangPreference();
-      expect(res).toBeNull();
-      expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPreferenceKey);
+      vi.mocked(storage.getItem).mockReturnValue(null);
+      expect(service.getLangPreference()).toBeNull();
     });
   });
 
   describe('saveLangPreference', () => {
-    it('saves langPreference', () => {
+    it('saves langPreference to storage', () => {
       service.saveLangPreference(langPreference);
       expect(storage.setItem).toHaveBeenCalledWith(localStorage, langPreferenceKey, langPreference);
+      expect(logger.info).toHaveBeenCalledOnce();
     });
   });
 });

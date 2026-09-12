@@ -1,14 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
   let service: StorageService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<LoggerService>>;
 
   beforeEach(() => {
-    logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    logger = MockService(LoggerService);
 
     TestBed.configureTestingModule({
       providers: [{ provide: LoggerService, useValue: logger }],
@@ -35,7 +36,8 @@ describe('StorageService', () => {
 
     it('recovers from corrupted data by clearing it', () => {
       sessionStorage.setItem('key', 'invalid json');
-      expect(service.getItem<string>(sessionStorage, 'key')).toBeNull();
+      const res = service.getItem<string>(sessionStorage, 'key');
+      expect(res).toBeNull();
       expect(sessionStorage.getItem('key')).toBeNull();
       expect(logger.error).toHaveBeenCalledOnce();
     });
