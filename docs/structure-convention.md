@@ -1,5 +1,7 @@
 # Application Directory Structure
 
+The application architecture is inspired by the feature-oriented approach commonly used in Nx projects. It organizes the code primarily around business functionality while keeping application-wide infrastructure, layout, and shared building blocks separate. This structure aims to improve maintainability and make dependencies between different parts of the application easier to understand as the project grows.
+
 ## Main Directories
 
 * `app/core/` — application infrastructure, including singleton services, interceptors, and guards. These are elements loaded once at the application level.

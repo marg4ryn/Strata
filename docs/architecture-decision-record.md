@@ -118,6 +118,21 @@ Translations could be split into separate files for individual modules. This wou
 The translation structure remains simple and predictable, with minimal configuration overhead. The main drawback is that locale files may become harder to navigate as the application grows. If the project or team becomes significantly larger, this decision can be revisited and translations split by module.
 
 
+## [Testing] Why do component tests use real child components instead of stubs?
+
+### Context
+Child components can normally be replaced with stubs to isolate the component under test. However, calling `TestBed.overrideComponent` / `overrideTemplate` forces Angular to recompile that component's definition (`ɵcmp`) at runtime, outside the module that was originally instrumented for coverage. As a result, code coverage tools (both V8 and Istanbul) lose the link between the recompiled component and its instrumented source, and report 0% coverage for it — even though the component is fully exercised by other tests. `ng-mocks` does not solve this issue because it uses `overrideComponent` internally and triggers the same recompilation.
+
+Observed with: Angular `22.1.8`, Vitest `4.1.11`
+
+### Decision
+Component tests use real child components instead of stubs. They are therefore effectively integration tests. All dependencies required by child components must be provided in the test configuration. This is a workaround for a specific coverage-instrumentation gap, not a preference for integration-style tests. It avoids coverage numbers being distorted by a tooling limitation rather than actual test gaps.
+
+
+### Consequences
+Tests require more dependencies and are slower than isolated unit tests. In exchange, coverage numbers remain accurate and reflect real test gaps instead of tooling artifacts. This decision should be revisited once the Angular/Vitest ecosystem provides a reliable way to preserve code coverage for overridden/recompiled components.
+
+
 ## [Shared: Button Directive] Why are the main application buttons a directive?
 
 ### Context
