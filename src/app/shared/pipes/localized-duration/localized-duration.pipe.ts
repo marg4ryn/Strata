@@ -16,9 +16,9 @@ export class LocalizedDurationPipe implements PipeTransform {
   transform(seconds: number | null | undefined): string {
     this.activeLang();
 
-    if (!seconds) return '';
+    if (seconds === null || seconds === undefined) return '';
 
-    const hours = Math.floor((seconds % 86400) / 3600);
+    const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
 
