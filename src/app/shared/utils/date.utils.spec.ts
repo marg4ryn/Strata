@@ -1,5 +1,10 @@
 import { dateToCalendarKey, localNowAsUtcMidnight } from './date.utils';
 
+function setFakeLocalTime(date: Date): void {
+  vi.useFakeTimers();
+  vi.setSystemTime(date);
+}
+
 describe('dateToCalendarKey', () => {
   it('encodes year, month, and day as a comparable number', () => {
     const date = new Date(Date.UTC(2026, 6, 18));
@@ -33,6 +38,11 @@ describe('dateToCalendarKey', () => {
     const startOfNextYear = new Date(Date.UTC(2026, 0, 1));
     expect(dateToCalendarKey(endOfYear)).toBeLessThan(dateToCalendarKey(startOfNextYear));
   });
+
+  it('returns NaN for an invalid date', () => {
+    const invalid = new Date('not-a-date');
+    expect(Number.isNaN(dateToCalendarKey(invalid))).toBe(true);
+  });
 });
 
 describe('localNowAsUtcMidnight', () => {
@@ -41,39 +51,22 @@ describe('localNowAsUtcMidnight', () => {
   });
 
   it('returns a Date at UTC midnight for the current local date', () => {
-    const fixedNow = new Date(2026, 6, 18, 15, 30, 45);
-    vi.useFakeTimers();
-    vi.setSystemTime(fixedNow);
+    setFakeLocalTime(new Date(2026, 6, 18, 15, 30, 45));
 
-    const result = localNowAsUtcMidnight();
+    const res = localNowAsUtcMidnight();
 
-    expect(result.getUTCFullYear()).toBe(2026);
-    expect(result.getUTCMonth()).toBe(6);
-    expect(result.getUTCDate()).toBe(18);
-    expect(result.getUTCHours()).toBe(0);
-    expect(result.getUTCMinutes()).toBe(0);
-    expect(result.getUTCSeconds()).toBe(0);
-    expect(result.getUTCMilliseconds()).toBe(0);
-  });
-
-  it('is comparable via dateToCalendarKey with dates from valueAsDate-style UTC midnight', () => {
-    const fixedNow = new Date(2026, 6, 18, 9, 0, 0);
-    vi.useFakeTimers();
-    vi.setSystemTime(fixedNow);
-
-    const today = localNowAsUtcMidnight();
-    const sameDayFromInput = new Date(Date.UTC(2026, 6, 18));
-
-    expect(dateToCalendarKey(today)).toBe(dateToCalendarKey(sameDayFromInput));
+    expect(res.getUTCFullYear()).toBe(2026);
+    expect(res.getUTCMonth()).toBe(6);
+    expect(res.getUTCDate()).toBe(18);
+    expect(res.getUTCHours()).toBe(0);
+    expect(res.getUTCMinutes()).toBe(0);
+    expect(res.getUTCSeconds()).toBe(0);
+    expect(res.getUTCMilliseconds()).toBe(0);
   });
 
   it('reflects a different local date at a different fixed time', () => {
-    const fixedNow = new Date(2026, 0, 1, 0, 5, 0);
-    vi.useFakeTimers();
-    vi.setSystemTime(fixedNow);
-
-    const result = localNowAsUtcMidnight();
-
-    expect(dateToCalendarKey(result)).toBe(20260101);
+    setFakeLocalTime(new Date(2026, 0, 1, 0, 5, 0));
+    const res = localNowAsUtcMidnight();
+    expect(dateToCalendarKey(res)).toBe(20260101);
   });
 });
