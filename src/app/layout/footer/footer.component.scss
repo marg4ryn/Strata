@@ -8,36 +8,36 @@
   color: var(--text-secondary);
   border-top: solid 1px var(--border-subtle);
   font-size: small;
-}
 
-.footer__about-link {
-  background-color: var(--bg-primary);
-  color: var(--text-secondary);
-  border: none;
-  padding: 0.25rem;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  transition:
-    color 0.1s ease,
-    transform 0.1s ease;
+  &__about-link {
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      color 0.1s ease,
+      transform 0.1s ease;
 
-  &:hover {
-    color: var(--accent-hover);
-    transform: scale(1.05);
-  }
+    &:hover {
+      color: var(--accent-hover);
+      transform: scale(1.05);
+    }
 
-  &:focus-visible {
-    color: var(--accent-primary);
-    transform: scale(1.05);
-  }
+    &:focus-visible {
+      color: var(--accent-primary);
+      transform: scale(1.05);
+    }
 
-  &:active {
-    color: var(--accent-active);
-    transform: scale(0.9);
-  }
+    &:active {
+      color: var(--accent-active);
+      transform: scale(0.9);
+    }
 
-  &--active {
-    color: var(--accent-primary);
+    &--active {
+      color: var(--accent-primary);
+    }
   }
 }

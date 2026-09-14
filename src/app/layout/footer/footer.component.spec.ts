@@ -10,7 +10,7 @@ describe('FooterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent, getTranslocoModule()],
+      imports: [getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
 
@@ -25,7 +25,7 @@ describe('FooterComponent', () => {
     expect(span.textContent).toContain('2026 Strata');
   });
 
-  it('renders about link with routerLink="/about"', () => {
+  it('renders about link with routerLink', () => {
     const link: HTMLAnchorElement = fixture.nativeElement.querySelector('.footer__about-link');
     expect(link).toBeTruthy();
     expect(link.getAttribute('href')).toBe('/about');
