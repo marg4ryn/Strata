@@ -12,13 +12,13 @@ describe('InfoTooltipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InfoTooltipComponent, getTranslocoModule()],
+      imports: [getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InfoTooltipComponent);
     component = fixture.componentInstance;
 
-    fixture.componentRef.setInput('textKey', 'Przykładowa treść tooltipa');
+    fixture.componentRef.setInput('textKey', 'testKey');
 
     overlayContainer = TestBed.inject(OverlayContainer);
     overlayContainerElement = overlayContainer.getContainerElement();
@@ -43,21 +43,14 @@ describe('InfoTooltipComponent', () => {
     expect(getTooltip()).toBeNull();
   });
 
-  it('should show tooltip on button mouseenter', async () => {
+  it('should show tooltip on button mouseenter and hide on mouseleave', async () => {
     getButton().dispatchEvent(new MouseEvent('mouseenter'));
     fixture.detectChanges();
     await fixture.whenStable();
 
     const tooltip = getTooltip();
     expect(tooltip).not.toBeNull();
-    expect(tooltip?.textContent).toContain('Przykładowa treść tooltipa');
-  });
-
-  it('should hide tooltip on button mouseleave', async () => {
-    getButton().dispatchEvent(new MouseEvent('mouseenter'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(getTooltip()).not.toBeNull();
+    expect(tooltip?.textContent).toContain('testKey');
 
     getButton().dispatchEvent(new MouseEvent('mouseleave'));
     fixture.detectChanges();
