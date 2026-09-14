@@ -1,10 +1,12 @@
 import { computed, Directive, input } from '@angular/core';
 
+export type ButtonVariant = 'primary' | 'secondary' | 'danger';
+
 @Directive({
   selector: 'button[btn]',
   host: { '[class]': 'variantClass()' },
 })
 export class ButtonDirective {
-  variant = input<'primary' | 'secondary' | 'danger'>('primary', { alias: 'btn' });
+  variant = input<ButtonVariant>('primary', { alias: 'btn' });
   variantClass = computed(() => `btn btn--${this.variant()}`);
 }

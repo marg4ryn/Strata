@@ -1,15 +1,36 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 import { ButtonDirective } from './button.directive';
+import type { ButtonVariant } from './button.directive';
+
+const VARIANTS: ButtonVariant[] = ['primary', 'secondary', 'danger'];
 
 @Component({
   template: `<button [btn]="variant()">Click</button>`,
   imports: [ButtonDirective],
 })
 class TestHostComponent {
-  variant = signal<'primary' | 'secondary' | 'danger'>('primary');
+  variant = signal<ButtonVariant>('primary');
+}
+
+@Component({
+  template: `<button btn="primary">Click</button>`,
+  imports: [ButtonDirective],
+})
+class DefaultHostComponent {}
+
+function getButton(fixture: ComponentFixture<unknown>): HTMLButtonElement {
+  return fixture.nativeElement.querySelector('button');
+}
+
+function expectOnlyVariantClass(fixture: ComponentFixture<unknown>, active: ButtonVariant): void {
+  const button = getButton(fixture);
+  expect(button.classList.contains('btn')).toBe(true);
+
+  for (const variant of VARIANTS) {
+    expect(button.classList.contains(`btn--${variant}`)).toBe(variant === active);
+  }
 }
 
 describe('ButtonDirective', () => {
@@ -25,54 +46,47 @@ describe('ButtonDirective', () => {
   });
 
   it('applies default class', () => {
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-
-    expect(button.classList.contains('btn')).toBeTruthy();
-    expect(button.classList.contains('btn--primary')).toBeTruthy();
-    expect(button.classList.contains('btn--secondary')).toBeFalsy();
-    expect(button.classList.contains('btn--danger')).toBeFalsy();
+    expectOnlyVariantClass(fixture, 'primary');
   });
 
   it('applies secondary class', () => {
     fixture.componentInstance.variant.set('secondary');
     fixture.detectChanges();
 
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-
-    expect(button.classList.contains('btn')).toBeTruthy();
-    expect(button.classList.contains('btn--primary')).toBeFalsy();
-    expect(button.classList.contains('btn--secondary')).toBeTruthy();
-    expect(button.classList.contains('btn--danger')).toBeFalsy();
+    expectOnlyVariantClass(fixture, 'secondary');
   });
 
   it('applies danger class', () => {
     fixture.componentInstance.variant.set('danger');
     fixture.detectChanges();
 
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-
-    expect(button.classList.contains('btn')).toBeTruthy();
-    expect(button.classList.contains('btn--primary')).toBeFalsy();
-    expect(button.classList.contains('btn--secondary')).toBeFalsy();
-    expect(button.classList.contains('btn--danger')).toBeTruthy();
+    expectOnlyVariantClass(fixture, 'danger');
   });
 
-  it('exposes directive instance', () => {
-    const directive = fixture.debugElement
-      .query(By.directive(ButtonDirective))
-      .injector.get(ButtonDirective);
+  it('reacts to repeated changes on the same instance', () => {
+    fixture.componentInstance.variant.set('danger');
+    fixture.detectChanges();
+    expectOnlyVariantClass(fixture, 'danger');
 
-    expect(directive.variant()).toBe('primary');
-  });
-
-  it('updates input value on host change', () => {
     fixture.componentInstance.variant.set('secondary');
     fixture.detectChanges();
+    expectOnlyVariantClass(fixture, 'secondary');
 
-    const directive = fixture.debugElement
-      .query(By.directive(ButtonDirective))
-      .injector.get(ButtonDirective);
+    fixture.componentInstance.variant.set('primary');
+    fixture.detectChanges();
+    expectOnlyVariantClass(fixture, 'primary');
+  });
+});
 
-    expect(directive.variant()).toBe('secondary');
+describe('ButtonDirective', () => {
+  it('applies the class when the directive is used as a static attribute', async () => {
+    await TestBed.configureTestingModule({
+      imports: [DefaultHostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(DefaultHostComponent);
+    fixture.detectChanges();
+
+    expectOnlyVariantClass(fixture, 'primary');
   });
 });
