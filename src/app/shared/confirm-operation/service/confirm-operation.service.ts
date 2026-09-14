@@ -1,6 +1,6 @@
 import { Service, inject, DestroyRef } from '@angular/core';
-import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { Overlay } from '@angular/cdk/overlay';
 
 import { ConfirmOperationComponent } from '../component/confirm-operation.component';
 
@@ -8,7 +8,7 @@ export type ModalType = 'confirm' | 'danger';
 
 @Service()
 export class ConfirmOperationService {
-  private overlay = inject(Overlay);
+  private readonly overlay = inject(Overlay);
 
   confirm(
     destroyRef: DestroyRef,
@@ -28,16 +28,11 @@ export class ConfirmOperationService {
       const portal = new ComponentPortal(ConfirmOperationComponent);
       const componentRef = overlayRef.attach(portal);
 
-      if (labelKey) {
-        componentRef.setInput('labelKey', labelKey);
-      }
-      if (type) {
-        componentRef.setInput('type', type);
-      }
-      if (params) {
-        componentRef.setInput('params', params);
-      }
-
+      Object.entries({ labelKey, type, params }).forEach(([key, value]) => {
+        if (value) {
+          componentRef.setInput(key, value);
+        }
+      });
       componentRef.changeDetectorRef.detectChanges();
 
       const cleanup = (result: boolean) => {

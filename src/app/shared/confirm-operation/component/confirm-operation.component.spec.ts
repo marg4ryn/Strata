@@ -10,7 +10,7 @@ describe('ConfirmOperationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmOperationComponent, getTranslocoModule()],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: InteractivityChecker,
@@ -71,7 +71,7 @@ describe('ConfirmOperationComponent', () => {
       expect(component.type()).toBe('danger');
     });
 
-    it('confirm button gets danger variant, cancel gets initial focus', async () => {
+    it('when confirm button gets danger variant, cancel gets initial focus', async () => {
       fixture.componentRef.setInput('type', 'danger');
       fixture.detectChanges();
       await fixture.whenStable();
@@ -82,7 +82,7 @@ describe('ConfirmOperationComponent', () => {
       expect(confirm.hasAttribute('cdkFocusInitial')).toBe(false);
     });
 
-    it('confirm button gets primary variant, confirm gets initial focus', async () => {
+    it('when confirm button gets primary variant, confirm gets initial focus', async () => {
       fixture.componentRef.setInput('type', 'confirm');
       fixture.detectChanges();
       await fixture.whenStable();

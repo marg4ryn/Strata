@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { DestroyRef } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
+import { DestroyRef } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 
 import { ConfirmOperationService } from './confirm-operation.service';
@@ -49,6 +49,7 @@ describe('ConfirmOperationService', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: Overlay, useValue: overlayMock }],
     });
+
     service = TestBed.inject(ConfirmOperationService);
   });
 
