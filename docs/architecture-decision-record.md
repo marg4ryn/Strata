@@ -128,7 +128,6 @@ Observed with: Angular `22.1.8`, Vitest `4.1.11`
 ### Decision
 Component tests use real child components instead of stubs. They are therefore effectively integration tests. All dependencies required by child components must be provided in the test configuration. This is a workaround for a specific coverage-instrumentation gap, not a preference for integration-style tests. It avoids coverage numbers being distorted by a tooling limitation rather than actual test gaps.
 
-
 ### Consequences
 Tests require more dependencies and are slower than isolated unit tests. In exchange, coverage numbers remain accurate and reflect real test gaps instead of tooling artifacts. This decision should be revisited once the Angular/Vitest ecosystem provides a reliable way to preserve code coverage for overridden/recompiled components.
 

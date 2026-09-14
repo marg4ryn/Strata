@@ -1,13 +1,13 @@
 <button
-  type="button"
-  #triggerButton
-  #trigger="cdkOverlayOrigin"
-  cdkOverlayOrigin
   class="dropdown__trigger"
-  [attr.aria-label]="ariaLabelKey() | transloco"
+  type="button"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  #triggerButton
+  (click)="toggle()"
   aria-haspopup="listbox"
   [attr.aria-expanded]="isOpen()"
-  (click)="toggle()"
+  [attr.aria-label]="ariaLabelKey() | transloco"
 >
   <span>
     {{ currentOption?.labelKey ? (currentOption!.labelKey! | transloco) : currentOption?.label }}

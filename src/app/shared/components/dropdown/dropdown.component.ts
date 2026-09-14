@@ -1,7 +1,15 @@
-import { A11yModule } from '@angular/cdk/a11y';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  input,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { CdkListbox, CdkListboxModule } from '@angular/cdk/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
+import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface DropdownOption<T> {
@@ -13,6 +21,7 @@ export interface DropdownOption<T> {
 @Component({
   selector: 'app-dropdown',
   imports: [A11yModule, CdkListbox, CdkListboxModule, OverlayModule, TranslocoPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss',
 })
@@ -25,8 +34,7 @@ export class DropdownComponent<T> {
   readonly openedChange = output<boolean>();
 
   private readonly listbox = viewChild.required(CdkListbox);
-  private readonly triggerButton =
-    viewChild.required<ElementRef<HTMLButtonElement>>('triggerButton');
+  private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('triggerButton');
 
   readonly isOpen = signal(false);
 
@@ -50,7 +58,7 @@ export class DropdownComponent<T> {
     }
 
     this.setOpen(false);
-    setTimeout(() => this.triggerButton().nativeElement.focus(), 0);
+    setTimeout(() => this.trigger().nativeElement.focus(), 0);
   }
 
   toggle(): void {
