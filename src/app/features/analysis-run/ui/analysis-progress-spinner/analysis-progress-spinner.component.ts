@@ -13,7 +13,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
 import { ButtonDirective } from '@app/shared/directives/button.directive';
 import { LoadingSpinnerComponent } from '@app/shared/components/loading-spinner/loading-spinner.component';
 import { PendingAnalysis } from '../../analysis-run.model';

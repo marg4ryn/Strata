@@ -3,7 +3,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ButtonDirective } from '@app/shared/directives/button.directive';
-import { ModalType } from '../service/confirm-operation.service';
+import type { ModalType } from '../services/confirm-operation.service';
 
 @Component({
   selector: 'app-confirm-operation-modal',

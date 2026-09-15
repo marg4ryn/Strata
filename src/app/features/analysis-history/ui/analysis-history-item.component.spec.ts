@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
 import { AnalysisHistoryEntry } from '../analysis-history.model';
 import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';

@@ -1,6 +1,8 @@
 .info-tooltip-wrapper {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .info-button {

@@ -54,40 +54,6 @@
   gap: 10px;
 }
 
-.header__action {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border: none;
-  cursor: pointer;
-  width: 33px;
-  transition:
-    color 0.25s ease,
-    transform 0.2s ease;
-
-  &:hover {
-    color: var(--accent-primary);
-    transform: scale(1.2);
-  }
-
-  &:focus-visible {
-    color: var(--accent-primary);
-    transform: scale(1.05);
-  }
-
-  &:active {
-    color: var(--accent-active);
-    transform: scale(0.9);
-  }
-
-  &--active {
-    color: var(--accent-primary);
-  }
-}
-
 .header__action-icon {
   width: 30px;
 }

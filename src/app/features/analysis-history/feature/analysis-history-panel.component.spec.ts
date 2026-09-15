@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/service/confirm-operation.service';
+import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
 import { AnalysisHistoryPanelComponent } from './analysis-history-panel.component';
 import { AnalysisHistoryFacade } from '../analysis-history.facade';
 import { AnalysisHistoryEntry } from '../analysis-history.model';

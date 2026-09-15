@@ -1,0 +1,17 @@
+<button
+  #trigger
+  class="panel-trigger"
+  type="button"
+  [title]="label()"
+  [attr.aria-label]="label()"
+  [class.panel-trigger--active]="facade().showPanel()"
+  [attr.aria-expanded]="facade().showPanel()"
+  (click)="toggle()"
+>
+  <ng-content select="[trigger-icon]" />
+  <ng-content select="[trigger-badge]" />
+</button>
+
+<ng-template cdkPortal #portalRef="cdkPortal">
+  <ng-content select="[panel-content]" />
+</ng-template>

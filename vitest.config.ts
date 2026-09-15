@@ -7,7 +7,6 @@ export default defineConfig({
     setupFiles: ['./test-setup.ts'],
     coverage: {
       provider: 'istanbul',
-      exclude: ['src/app/layout/header/*'],
     },
     environmentOptions: {
       jsdom: {

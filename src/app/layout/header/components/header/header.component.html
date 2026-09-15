@@ -9,16 +9,9 @@
 </button>
 
 <div class="header__actions">
-  <button
-    #notifBtn
-    class="header__action"
-    [title]="'header.notifications' | transloco"
-    [attr.aria-label]="'header.notifications' | transloco"
-    [class.header__action--active]="notifications.showPanel()"
-    [attr.aria-expanded]="notifications.showPanel()"
-    (click)="toggleNotificationsPanel()"
-  >
+  <app-panel-trigger [facade]="notifications" [label]="'header.notifications' | transloco">
     <svg
+      trigger-icon
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
       class="header__action-icon"
@@ -31,7 +24,7 @@
       />
     </svg>
     @if (notifications.unreadNotificationsCount() > 0) {
-      <span class="header__action-badge">
+      <span trigger-badge class="header__action-badge">
         {{
           notifications.unreadNotificationsCount() > 9
             ? '9+'
@@ -39,18 +32,12 @@
         }}
       </span>
     }
-  </button>
+    <app-notification-panel panel-content />
+  </app-panel-trigger>
 
-  <button
-    #historyBtn
-    class="header__action"
-    [title]="'header.analysisHistory' | transloco"
-    [attr.aria-label]="'header.analysisHistory' | transloco"
-    [class.header__action--active]="history.showPanel()"
-    [attr.aria-expanded]="history.showPanel()"
-    (click)="toggleHistoryPanel()"
-  >
+  <app-panel-trigger [facade]="history" [label]="'header.analysisHistory' | transloco">
     <svg
+      trigger-icon
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
       class="header__action-icon"
@@ -66,18 +53,12 @@
         fill="currentColor"
       />
     </svg>
-  </button>
+    <app-analysis-history-panel panel-content />
+  </app-panel-trigger>
 
-  <button
-    #settingsBtn
-    class="header__action"
-    [title]="'header.settings' | transloco"
-    [attr.aria-label]="'header.settings' | transloco"
-    [class.header__action--active]="settings.showPanel()"
-    [attr.aria-expanded]="settings.showPanel()"
-    (click)="toggleSettingsPanel()"
-  >
+  <app-panel-trigger [facade]="settings" [label]="'header.settings' | transloco">
     <svg
+      trigger-icon
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 640"
       class="header__action-icon"
@@ -89,17 +70,6 @@
         fill="currentColor"
       />
     </svg>
-  </button>
+    <app-settings-panel panel-content />
+  </app-panel-trigger>
 </div>
-
-<ng-template cdkPortal #notifPortal="cdkPortal">
-  <app-notification-panel />
-</ng-template>
-
-<ng-template cdkPortal #historyPortal="cdkPortal">
-  <app-analysis-history-panel />
-</ng-template>
-
-<ng-template cdkPortal #settingsPortal="cdkPortal">
-  <app-settings-panel />
-</ng-template>

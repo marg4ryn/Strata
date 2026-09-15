@@ -2,7 +2,7 @@ import { Service, inject, DestroyRef } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay } from '@angular/cdk/overlay';
 
-import { ConfirmOperationComponent } from '../component/confirm-operation.component';
+import { ConfirmOperationComponent } from '../components/confirm-operation.component';
 
 export type ModalType = 'confirm' | 'danger';
 
