@@ -26,6 +26,7 @@ describe('AnalysisRunFacade', () => {
   };
 
   let analysisRunService: {
+    navigateToStartNewAnalysis: ReturnType<typeof vi.fn>;
     tryToReconnect: ReturnType<typeof vi.fn>;
     startNewAnalysis: ReturnType<typeof vi.fn>;
     abortAnalysis: ReturnType<typeof vi.fn>;
@@ -47,6 +48,7 @@ describe('AnalysisRunFacade', () => {
     };
 
     analysisRunService = {
+      navigateToStartNewAnalysis: vi.fn(),
       tryToReconnect: vi.fn(),
       startNewAnalysis: vi.fn(),
       abortAnalysis: vi.fn(),
@@ -104,6 +106,11 @@ describe('AnalysisRunFacade', () => {
 
     service.startNewAnalysis(data);
     expect(analysisRunService.startNewAnalysis).toHaveBeenCalledWith(data);
+  });
+
+  it('handles navigateToStartNewAnalysis', () => {
+    service.navigateToStartNewAnalysis();
+    expect(analysisRunService.navigateToStartNewAnalysis).toHaveBeenCalledOnce();
   });
 
   it('handles tryToReconnect', () => {

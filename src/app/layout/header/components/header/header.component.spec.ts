@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Overlay } from '@angular/cdk/overlay';
 import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { MockService } from 'ng-mocks';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
+import { AnalysisRunFacade } from '@app/features/analysis-run/analysis-run.facade';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
 import { SettingsFacade } from '@app/features/settings/settings.facade';
@@ -20,11 +20,11 @@ describe('HeaderComponent', () => {
   let unreadNotificationsCountSignal: ReturnType<typeof signal<number>>;
 
   let confirm: ReturnType<typeof MockService<ConfirmOperationService>>;
+  let analysisRun: ReturnType<typeof MockService<AnalysisRunFacade>>;
   let notifications: ReturnType<typeof MockService<NotificationsFacade>>;
   let history: ReturnType<typeof MockService<AnalysisHistoryFacade>>;
   let settings: ReturnType<typeof MockService<SettingsFacade>>;
   let overlay: ReturnType<typeof MockService<Overlay>>;
-  let router: ReturnType<typeof MockService<Router>>;
 
   beforeEach(async () => {
     unreadNotificationsCountSignal = signal(0);
@@ -46,12 +46,12 @@ describe('HeaderComponent', () => {
 
     confirm = MockService(ConfirmOperationService);
     overlay = MockService(Overlay);
-    router = MockService(Router);
+    analysisRun = MockService(AnalysisRunFacade);
 
     await TestBed.configureTestingModule({
       imports: [HeaderComponent, getTranslocoModule()],
       providers: [
-        { provide: Router, useValue: router },
+        { provide: AnalysisRunFacade, useValue: analysisRun },
         { provide: ConfirmOperationService, useValue: confirm },
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },
@@ -110,22 +110,22 @@ describe('HeaderComponent', () => {
     expect(badge).toBeFalsy();
   });
 
-  it('navigates to root when confirmed', async () => {
+  it('calls analysisRun facade when confirmed', async () => {
     (confirm.confirm as ReturnType<typeof vi.fn>).mockResolvedValue(true);
 
     const button = fixture.debugElement.query(By.css('button'));
     button.nativeElement.click();
     await fixture.whenStable();
 
-    expect(router.navigate).toHaveBeenCalledWith(['']);
+    expect(analysisRun.navigateToStartNewAnalysis).toHaveBeenCalled();
   });
 
-  it('does not navigate when confirmation is rejected', async () => {
+  it('does not call analysisRun facade when confirmation is rejected', async () => {
     (confirm.confirm as ReturnType<typeof vi.fn>).mockResolvedValue(false);
 
     await component.startNewAnalysis();
 
-    expect(router.navigate).not.toHaveBeenCalled();
+    expect(analysisRun.navigateToStartNewAnalysis).not.toHaveBeenCalled();
   });
 
   it('passes destroyRef and correct params to confirmModal', async () => {

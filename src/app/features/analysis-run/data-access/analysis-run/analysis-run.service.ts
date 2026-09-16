@@ -1,4 +1,5 @@
 import { Service, inject, effect, untracked } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
@@ -26,6 +27,7 @@ export class AnalysisRunService {
   private readonly logger = inject(LoggerService);
   private readonly notifications = inject(NotificationsFacade);
   private readonly history = inject(AnalysisHistoryFacade);
+  private readonly router = inject(Router);
 
   constructor() {
     effect(() => {
@@ -56,6 +58,10 @@ export class AnalysisRunService {
         });
       }
     });
+  }
+
+  navigateToStartNewAnalysis(): void {
+    this.router.navigate(['']);
   }
 
   async tryToReconnect(): Promise<void> {

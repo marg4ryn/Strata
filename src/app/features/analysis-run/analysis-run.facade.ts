@@ -17,6 +17,10 @@ export class AnalysisRunFacade {
   readonly errorType = computed(() => this.store.errorType());
   readonly pendingAnalysis = computed(() => this.store.pendingAnalysis());
 
+  navigateToStartNewAnalysis(): void {
+    this.service.navigateToStartNewAnalysis();
+  }
+
   startNewAnalysis(formData: AnalysisTargetFormModel): void {
     void this.service.startNewAnalysis(formData);
   }
