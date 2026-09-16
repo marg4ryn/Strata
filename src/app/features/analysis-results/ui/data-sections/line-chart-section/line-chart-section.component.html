@@ -6,6 +6,7 @@
       </span>
       @if (series().length > 0) {
         <app-dropdown
+          #dropdown
           class="line-chart-section__dropdown"
           [options]="options"
           [value]="selectedPeriod()"

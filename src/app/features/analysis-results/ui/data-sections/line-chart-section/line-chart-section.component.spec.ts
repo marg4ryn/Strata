@@ -108,4 +108,15 @@ describe('LineChartSectionComponent', () => {
       .componentInstance as LineChartComponent;
     expect(chart.period()).toBe('biweek');
   });
+
+  it('does not render the line chart or the dropdown when the series array is empty', () => {
+    fixture.componentRef.setInput('series', []);
+    fixture.detectChanges();
+    const chart = fixture.debugElement.query(By.directive(LineChartComponent));
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent));
+    const message = fixture.debugElement.query(By.css('.line-chart-section__no-data'));
+    expect(chart).toBeFalsy();
+    expect(dropdown).toBeFalsy();
+    expect(message).toBeTruthy();
+  });
 });
