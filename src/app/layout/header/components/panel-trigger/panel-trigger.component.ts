@@ -57,10 +57,12 @@ export class PanelTriggerComponent implements AfterViewInit, OnDestroy {
   toggle(): void {
     if (this.facade().showPanel()) {
       this.facade().closePanel();
-    } else {
-      this.coordinator.notifyOpened(this.facade());
-      this.facade().openPanel();
+      return;
     }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    this.coordinator.notifyOpened(this.facade());
+    this.facade().openPanel();
   }
 
   ngOnDestroy(): void {

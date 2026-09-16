@@ -38,11 +38,14 @@ describe('PanelTriggerComponent', () => {
   let outsidePointerEvents$: Subject<MouseEvent>;
   let overlayRefMock: any;
   let overlayMock: any;
+  let scrollToSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(async () => {
     detachments$ = new Subject();
     keydownEvents$ = new Subject();
     outsidePointerEvents$ = new Subject();
+
+    scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
 
     overlayRefMock = {
       attach: vi.fn(),
@@ -182,6 +185,13 @@ describe('PanelTriggerComponent', () => {
 
       expect(host.facade.closePanel).toHaveBeenCalled();
       expect(notifySpy).not.toHaveBeenCalled();
+    });
+
+    it('scrolls to top when opening the panel', () => {
+      const trigger = fixture.nativeElement.querySelector('.panel-trigger');
+      trigger.click();
+
+      expect(scrollToSpy).toHaveBeenCalledWith({ top: 0, behavior: 'auto' });
     });
   });
 });
