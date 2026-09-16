@@ -52,3 +52,12 @@ Users interested in the application can visit the About Page, accessible from th
 | About Page |
 |:---:|
 | <img src="./docs/screens/about.png" width="900"/> |
+
+
+## 🧪 Tests
+
+The application is tested using the Vitest + Istanbul stack. Unit tests are used wherever possible. However, components that embed child components are tested using integration tests to avoid losing code coverage (see `docs/architecture-decision-record.md` – *Why do component tests use real child components instead of stubs?*). The test suite achieves 100% code coverage (see the **Code Coverage** below).
+
+| Code Coverage |
+|:---:|
+| <img src="./docs/screens/code_coverage.png" width="900"/> |
