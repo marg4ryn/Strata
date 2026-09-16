@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
-import { CdkListbox } from '@angular/cdk/listbox';
 
+import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LangPreference } from '@app/core/language/language.model';
@@ -18,13 +19,14 @@ describe('LanguageSwitcherComponent', () => {
 
   beforeEach(async () => {
     vi.useFakeTimers();
+
     facade = {
       langPreference: signal('en'),
       setPreference: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
-      imports: [LanguageSwitcherComponent, getTranslocoModule()],
+      imports: [LanguageSwitcherComponent, DropdownComponent, getTranslocoModule()],
       providers: [{ provide: LanguageFacade, useValue: facade }],
     }).compileComponents();
 
@@ -58,129 +60,44 @@ describe('LanguageSwitcherComponent', () => {
     expect(getButton().textContent).toContain('System');
   });
 
-  // it('toggles visibility on click', () => {
-  //   getButton().click();
-  //   fixture.detectChanges();
+  it('opens dropdown and emits openedChange(true) when trigger clicked', () => {
+    const emitted: boolean[] = [];
+    component.openedChange.subscribe((value) => emitted.push(value));
 
-  //   expect(component.isOpen()).toBe(true);
-  //   expect(document.querySelector('.lang-switcher__panel')).toBeTruthy();
-  // });
+    getButton().click();
+    fixture.detectChanges();
 
-  // it('sets aria-expanded according to open state', () => {
-  //   expect(getButton().getAttribute('aria-expanded')).toBe('false');
+    expect(component.isOpen()).toBeTruthy();
+    expect(emitted).toEqual([true]);
+  });
 
-  //   component.toggle();
-  //   fixture.detectChanges();
+  it('does not call setPreference when selecting the current language', () => {
+    const closeSpy = vi.spyOn(component, 'close');
 
-  //   expect(getButton().getAttribute('aria-expanded')).toBe('true');
-  // });
-  //
-  // it('emits openedChange on toggle', () => {
-  //   const emitted: boolean[] = [];
-  //   component.openedChange.subscribe((v) => emitted.push(v));
+    component.select('en');
 
-  //   component.toggle();
-  //   fixture.detectChanges();
-  //   component.toggle();
-  //   fixture.detectChanges();
+    expect(facade.setPreference).not.toHaveBeenCalled();
+    expect(closeSpy).toHaveBeenCalledOnce();
+  });
 
-  //   expect(emitted).toEqual([true, false]);
-  // });
+  it('calls setPreference and closes when selecting a different language', () => {
+    const closeSpy = vi.spyOn(component, 'close');
 
-  // it('focuses listbox when overlay is attached', async () => {
-  //   const focusSpy = vi.spyOn(CdkListbox.prototype, 'focus');
+    component.select('pl' as LangPreference);
 
-  //   component.toggle();
-  //   fixture.detectChanges();
-  //   await fixture.whenStable();
+    expect(facade.setPreference).toHaveBeenCalledExactlyOnceWith('pl');
+    expect(closeSpy).toHaveBeenCalledOnce();
+  });
 
-  //   expect(focusSpy).toHaveBeenCalled();
-  // });
+  it('emits selectionChange from dropdown and calls select() through the binding', () => {
+    const selectSpy = vi.spyOn(component, 'select');
+    const dropdown = fixture.debugElement.query(By.directive(DropdownComponent))
+      .componentInstance as DropdownComponent<LangPreference>;
 
-  // it('selects option and triggers facade when preference changes', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
+    dropdown.selectionChange.emit('pl' as LangPreference);
+    fixture.detectChanges();
 
-  //   const options = document.querySelectorAll('.lang-switcher__option');
-  //   (options[0] as HTMLElement).click();
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(facade.setPreference).toHaveBeenCalled();
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('does not call facade when selecting the current preference', () => {
-  //   component.select(['en']);
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(facade.setPreference).not.toHaveBeenCalled();
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('does not call facade when selection is empty', () => {
-  //   component.select([]);
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(facade.setPreference).not.toHaveBeenCalled();
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('closes panel on Enter keydown in listbox', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
-
-  //   const listboxEl = document.querySelector('.lang-switcher__panel') as HTMLElement;
-  //   listboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('closes panel on Space keydown in listbox', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
-
-  //   const listboxEl = document.querySelector('.lang-switcher__panel') as HTMLElement;
-  //   listboxEl.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('closes on backdrop click', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
-
-  //   const backdrop = document.querySelector('.cdk-overlay-backdrop') as HTMLElement;
-  //   backdrop.click();
-  //   fixture.detectChanges();
-
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('closes on overlay detach', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
-
-  //   component.isOpen.set(false);
-  //   fixture.detectChanges();
-
-  //   expect(component.isOpen()).toBe(false);
-  // });
-
-  // it('restores focus to trigger button after closing', () => {
-  //   component.toggle();
-  //   fixture.detectChanges();
-
-  //   component.close();
-  //   fixture.detectChanges();
-  //   vi.advanceTimersByTime(0);
-
-  //   expect(document.activeElement).toBe(getButton());
-  // });
+    expect(selectSpy).toHaveBeenCalledExactlyOnceWith('pl');
+    expect(facade.setPreference).toHaveBeenCalledExactlyOnceWith('pl');
+  });
 });

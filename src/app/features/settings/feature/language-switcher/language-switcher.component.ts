@@ -8,24 +8,24 @@ import {
 } from '@angular/core';
 
 import { LanguageFacade } from '@app/core/language/language.facade';
-import { LangPreference, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
-import {
-  DropdownComponent,
-  DropdownOption,
-} from '@app/shared/components/dropdown/dropdown.component';
+import { LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
+import type { LangPreference } from '@app/core/language/language.model';
+import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
+import type { DropdownOption } from '@app/shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-language-switcher',
   imports: [DropdownComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './language-switcher.component.html',
+  styleUrl: './language-switcher.component.scss',
 })
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);
 
   readonly openedChange = output<boolean>();
 
-  private readonly dropdown = viewChild.required(DropdownComponent);
+  private readonly dropdown = viewChild.required<DropdownComponent<string>>('dropdown');
   readonly current = this.facade.langPreference;
   readonly isOpen = signal(false);
 

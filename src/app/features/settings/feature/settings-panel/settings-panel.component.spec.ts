@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { signal } from '@angular/core';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
+import { By } from '@angular/platform-browser';
+import { signal } from '@angular/core';
 
 import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
 import { LanguageFacade } from '@app/core/language/language.facade';
@@ -46,6 +47,11 @@ describe('SettingsPanelComponent', () => {
     fixture.detectChanges();
   });
 
+  function getTrigger(): HTMLButtonElement {
+    return fixture.debugElement.query(By.css('.lang-switcher__trigger .dropdown__trigger'))
+      .nativeElement as HTMLButtonElement;
+  }
+
   it('has cdkTrapFocus applied to container', () => {
     const settingsContainer = fixture.nativeElement.querySelector('.settings-panel');
     expect(settingsContainer.getAttribute('cdktrapfocus')).not.toBeNull();
@@ -70,26 +76,26 @@ describe('SettingsPanelComponent', () => {
     expect(sectionEl.querySelector('app-language-switcher')).toBeTruthy();
   });
 
-  // it('sets innerOverlayOpen to true when real language switcher opens', () => {
-  //   const trigger: HTMLButtonElement =
-  //     fixture.nativeElement.querySelector('.lang-switcher__trigger');
-  //   trigger.click();
-  //   fixture.detectChanges();
+  it('initially innerOverlayOpen is false', () => {
+    expect(component.innerOverlayOpen()).toBeFalsy();
+  });
 
-  //   expect(component.innerOverlayOpen()).toBe(true);
-  // });
+  it('sets innerOverlayOpen to true when real language switcher opens', () => {
+    getTrigger().click();
+    fixture.detectChanges();
 
-  // it('disables cdkTrapFocus while inner overlay is open', () => {
-  //   const trapFocusDebugEl = fixture.debugElement.query((el) =>
-  //     el.nativeElement.classList.contains('settings-panel'),
-  //   );
-  //   const trapFocusDirective = trapFocusDebugEl.injector.get(CdkTrapFocus);
+    expect(component.innerOverlayOpen()).toBeTruthy();
+  });
 
-  //   const trigger: HTMLButtonElement =
-  //     fixture.nativeElement.querySelector('.lang-switcher__trigger');
-  //   trigger.click();
-  //   fixture.detectChanges();
+  it('disables cdkTrapFocus while inner overlay is open', () => {
+    const trapFocusDebugEl = fixture.debugElement.query((el) =>
+      el.nativeElement.classList.contains('settings-panel'),
+    );
+    const trapFocusDirective = trapFocusDebugEl.injector.get(CdkTrapFocus);
 
-  //   expect(trapFocusDirective.enabled).toBe(false);
-  // });
+    getTrigger().click();
+    fixture.detectChanges();
+
+    expect(trapFocusDirective.enabled).toBeFalsy();
+  });
 });

@@ -1,6 +1,8 @@
 <app-dropdown
+  #dropdown
   [options]="options"
   [value]="current()"
+  class="lang-switcher__trigger"
   ariaLabelKey="settings.language.dropdownAriaLabel"
   (selectionChange)="select($event)"
   (openedChange)="onOpenedChange($event)"
