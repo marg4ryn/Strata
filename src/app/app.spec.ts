@@ -9,7 +9,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { CACHE_CONFIG } from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
 import type { CacheConfig } from './features/analysis-results/data-access/analysis-results-cached-fetcher/cache.config';
 
-describe.skip('App', () => {
+describe('App', () => {
   const config: CacheConfig = {
     maxCaches: 2,
     registryCacheName: 'test-reg',
@@ -25,6 +25,7 @@ describe.skip('App', () => {
 
   it('creates the app', () => {
     const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
   });
 
