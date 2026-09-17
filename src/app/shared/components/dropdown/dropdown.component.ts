@@ -11,6 +11,7 @@ import { CdkListbox, CdkListboxModule } from '@angular/cdk/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 export interface DropdownOption<T> {
   value: T;
@@ -28,7 +29,7 @@ export interface DropdownOption<T> {
 export class DropdownComponent<T> {
   readonly options = input.required<readonly DropdownOption<T>[]>();
   readonly value = input.required<T>();
-  readonly ariaLabelKey = input('dropdown.ariaLabel');
+  readonly ariaLabelKey = input<string>(marker('common.ariaLabel.selectOption'));
 
   readonly selectionChange = output<T>();
   readonly openedChange = output<boolean>();

@@ -1,5 +1,6 @@
 import { Service, inject, effect, untracked } from '@angular/core';
 import { Router } from '@angular/router';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { LoggerService } from '@app/core/logging/logger.service';
 import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
@@ -37,7 +38,7 @@ export class AnalysisRunService {
       if (result !== null) {
         untracked(() => {
           this.logger.info('Analysis Run Service handled the analysis results');
-          this.notifications.sendNotificationSuccess('notifications.analysisRun.success', {
+          this.notifications.sendNotificationSuccess(marker('analysisRun.notifications.success'), {
             repoName: this.getRepoName(),
           });
           const analysisHistoryEntry = this.constructAnalysisHistoryEntry(
@@ -52,7 +53,7 @@ export class AnalysisRunService {
       if (error !== null) {
         untracked(() => {
           this.logger.info('Analysis Run Service handled an analysis error');
-          this.notifications.sendNotificationError('notifications.analysisRun.error', {
+          this.notifications.sendNotificationError(marker('analysisRun.notifications.error'), {
             repoName: this.getRepoName(),
           });
         });
@@ -185,7 +186,7 @@ export class AnalysisRunService {
     this.logger.info(
       `Analysis Run Service received a request to abandon analysis with sessionId: ${sessionId}`,
     );
-    this.notifications.sendNotificationInfo('notifications.analysisRun.abandon', {
+    this.notifications.sendNotificationInfo(marker('analysisRun.notifications.abandon'), {
       repoName: this.getRepoName(),
     });
     await this.clearData();
@@ -202,7 +203,7 @@ export class AnalysisRunService {
 
     if (confirmed) {
       this.logger.debug(`Abort for sessionId ${sessionId} confirmed by server`);
-      this.notifications.sendNotificationInfo('notifications.analysisRun.abort', {
+      this.notifications.sendNotificationInfo(marker('analysisRun.notifications.abort'), {
         repoName: this.getRepoName(),
       });
       await this.clearData();
@@ -211,7 +212,7 @@ export class AnalysisRunService {
       this.logger.warn(
         `Abort for sessionId ${sessionId} not confirmed by server - analysis result already arrived or timed out`,
       );
-      this.notifications.sendNotificationWarning('notifications.analysisRun.abortError', {
+      this.notifications.sendNotificationWarning(marker('analysisRun.notifications.abortError'), {
         repoName: this.getRepoName(),
       });
       this.storage.deleteSessionId();
@@ -234,7 +235,7 @@ export class AnalysisRunService {
       `Analysis Run Service received a request to cancel analysis with sessionId: ${sessionId}`,
     );
     this.store.error.set(null);
-    this.notifications.sendNotificationInfo('notifications.analysisRun.cancel', {
+    this.notifications.sendNotificationInfo(marker('analysisRun.notifications.cancel'), {
       repoName: this.getRepoName(),
     });
     await this.clearData();

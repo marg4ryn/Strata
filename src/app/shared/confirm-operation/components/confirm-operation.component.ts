@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { ButtonDirective } from '@app/shared/directives/button.directive';
 import type { ModalType } from '../services/confirm-operation.service';
@@ -13,7 +14,7 @@ import type { ModalType } from '../services/confirm-operation.service';
   styleUrl: './confirm-operation.component.scss',
 })
 export class ConfirmOperationComponent {
-  readonly labelKey = input<string>('confirmations.default');
+  readonly labelKey = input<string>(marker('confirmations.default'));
   readonly params = input<Record<string, unknown>>({});
   readonly type = input<ModalType>('danger');
 

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
 import { AnalysisRunFacade } from '@app/features/analysis-run/analysis-run.facade';
@@ -37,7 +38,7 @@ export class HeaderComponent {
   async startNewAnalysis(): Promise<void> {
     const confirmed = await this.confirmModal.confirm(
       this.destroyRef,
-      'confirmations.startNewAnalysis',
+      marker('confirmations.startNewAnalysis'),
       'confirm',
     );
     if (!confirmed) return;

@@ -11,6 +11,7 @@ import {
 } from '@angular/forms/signals';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { localNowAsUtcMidnight } from '@app/shared/utils/date.utils';
 import { ButtonDirective } from '@app/shared/directives/button.directive';
@@ -50,14 +51,14 @@ export class AnalysisTargetFormComponent {
       debounce(schemaPath.targetURL, 300);
 
       required(schemaPath.targetURL, {
-        message: 'analysisRun.form.urlRequired',
+        message: marker('analysisRun.form.urlRequired'),
       });
       required(schemaPath.startDate, {
-        message: 'analysisRun.form.startDateRequired',
+        message: marker('analysisRun.form.startDateRequired'),
         when: ({ valueOf }) => valueOf(schemaPath.limitRange),
       });
       required(schemaPath.endDate, {
-        message: 'analysisRun.form.endDateRequired',
+        message: marker('analysisRun.form.endDateRequired'),
         when: ({ valueOf }) => valueOf(schemaPath.limitRange),
       });
 
@@ -68,18 +69,30 @@ export class AnalysisTargetFormComponent {
         when: ({ valueOf }) => !valueOf(schemaPath.limitRange),
       });
 
-      url(schemaPath.targetURL, 'analysisRun.form.urlInvalid');
+      url(schemaPath.targetURL, marker('analysisRun.form.urlInvalid'));
       maxLength(schemaPath.targetURL, 500);
 
-      afterDate(schemaPath.startDate, this.minDate, 'analysisRun.form.dateTooEarly', {
+      afterDate(schemaPath.startDate, this.minDate, marker('analysisRun.form.dateTooEarly'), {
         date: this.minDate.toISOString(),
       });
-      afterDate(schemaPath.endDate, this.minDate, 'analysisRun.form.dateTooEarly', {
+      afterDate(schemaPath.endDate, this.minDate, marker('analysisRun.form.dateTooEarly'), {
         date: this.minDate.toISOString(),
       });
-      afterDate(schemaPath.endDate, schemaPath.startDate, 'analysisRun.form.endBeforeStart');
-      beforeDate(schemaPath.startDate, localNowAsUtcMidnight, 'analysisRun.form.dateInFuture');
-      beforeDate(schemaPath.endDate, localNowAsUtcMidnight, 'analysisRun.form.dateInFuture');
+      afterDate(
+        schemaPath.endDate,
+        schemaPath.startDate,
+        marker('analysisRun.form.endBeforeStart'),
+      );
+      beforeDate(
+        schemaPath.startDate,
+        localNowAsUtcMidnight,
+        marker('analysisRun.form.dateInFuture'),
+      );
+      beforeDate(
+        schemaPath.endDate,
+        localNowAsUtcMidnight,
+        marker('analysisRun.form.dateInFuture'),
+      );
     },
     {
       submission: {
@@ -111,6 +124,6 @@ export class AnalysisTargetFormComponent {
   }
 
   errorMessage(error: ValidationError): string | null {
-    return error.message ?? 'analysisRun.form.dateInvalid';
+    return error.message ?? marker('analysisRun.form.dateInvalid');
   }
 }

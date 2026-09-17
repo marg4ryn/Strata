@@ -63,9 +63,7 @@ describe('LineChartSectionComponent', () => {
   });
 
   it('passes aria-label to the dropdown', () => {
-    expect(dropdown.ariaLabelKey()).toBe(
-      'analysisResults.repositoryDetails.lineChartSectionDropdown',
-    );
+    expect(dropdown.ariaLabelKey()).toBe('analysisResults.aggregation.ariaLabel');
   });
 
   it('delegates close to the dropdown', () => {

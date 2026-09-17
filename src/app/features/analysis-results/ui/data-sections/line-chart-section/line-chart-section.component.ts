@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, signal, viewChild } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
 import type { DropdownOption } from '@app/shared/components/dropdown/dropdown.component';
@@ -23,14 +24,15 @@ export class LineChartSectionComponent {
   modes = input<LineChartAggregationMode[]>(['sum']);
 
   private readonly dropdown = viewChild.required<DropdownComponent<string>>('dropdown');
+  readonly ariaLabelKey = marker('analysisResults.aggregation.ariaLabel');
   readonly selectedPeriod = signal<LineChartAggregationPeriod>('week');
   readonly isOpen = signal(false);
 
   readonly options: DropdownOption<LineChartAggregationPeriod>[] = [
-    { value: 'day', labelKey: 'analysisResults.repositoryDetails.aggregationDay' },
-    { value: 'week', labelKey: 'analysisResults.repositoryDetails.aggregationWeek' },
-    { value: 'biweek', labelKey: 'analysisResults.repositoryDetails.aggregationBiweek' },
-    { value: 'month', labelKey: 'analysisResults.repositoryDetails.aggregationMonth' },
+    { value: 'day', labelKey: marker('analysisResults.aggregation.day') },
+    { value: 'week', labelKey: marker('analysisResults.aggregation.week') },
+    { value: 'biweek', labelKey: marker('analysisResults.aggregation.biweek') },
+    { value: 'month', labelKey: marker('analysisResults.aggregation.month') },
   ];
 
   get currentOption(): DropdownOption<LineChartAggregationPeriod> {

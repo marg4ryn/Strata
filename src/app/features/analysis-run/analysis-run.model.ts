@@ -1,13 +1,15 @@
+import { marker } from '@jsverse/transloco-keys-manager/marker';
+
 import type { ISODateString } from '@app/shared/utils/date.utils';
 
-export enum AnalysisStatus {
-  QUEUED = 'analysisRun.progress.queued',
-  CLONING = 'analysisRun.progress.cloning',
-  UPDATING = 'analysisRun.progress.updating',
-  PROCESSING_DATA = 'analysisRun.progress.processing',
-  ANALYZING = 'analysisRun.progress.analyzing',
-  FINALIZING = 'analysisRun.progress.finalizing',
-}
+export const AnalysisStatus = {
+  QUEUED: marker('analysisRun.progress.queued'),
+  CLONING: marker('analysisRun.progress.cloning'),
+  UPDATING: marker('analysisRun.progress.updating'),
+  PROCESSING_DATA: marker('analysisRun.progress.processing'),
+  ANALYZING: marker('analysisRun.progress.analyzing'),
+  FINALIZING: marker('analysisRun.progress.finalizing'),
+} as const;
 
 export type AnalysisStatusKey = keyof typeof AnalysisStatus;
 

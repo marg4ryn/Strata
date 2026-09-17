@@ -10,7 +10,7 @@
           class="line-chart-section__dropdown"
           [options]="options"
           [value]="selectedPeriod()"
-          ariaLabelKey="analysisResults.repositoryDetails.lineChartSectionDropdown"
+          [ariaLabelKey]="ariaLabelKey"
           (selectionChange)="select($event)"
         />
       }

@@ -6,6 +6,7 @@ import {
   output,
   viewChild,
 } from '@angular/core';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { LanguageFacade } from '@app/core/language/language.facade';
 import { LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language/language.model';
@@ -26,11 +27,12 @@ export class LanguageSwitcherComponent {
   readonly openedChange = output<boolean>();
 
   private readonly dropdown = viewChild.required<DropdownComponent<string>>('dropdown');
+  readonly ariaLabelKey = marker('settings.language.ariaLabel');
   readonly current = this.facade.langPreference;
   readonly isOpen = signal(false);
 
   readonly options: DropdownOption<LangPreference>[] = [
-    { value: SYSTEM_PREFERENCE, labelKey: 'settings.language.system' },
+    { value: SYSTEM_PREFERENCE, labelKey: marker('settings.language.system') },
     ...LANGUAGES,
   ];
 

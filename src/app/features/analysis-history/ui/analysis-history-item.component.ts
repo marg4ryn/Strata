@@ -8,6 +8,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
 import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
@@ -36,7 +37,7 @@ export class AnalysisHistoryItemComponent {
   async loadAnalysis(): Promise<void> {
     const confirmed = await this.confirmModal.confirm(
       this.destroyRef,
-      'confirmations.loadAnalysis',
+      marker('confirmations.loadAnalysis'),
       'confirm',
       { repoName: this.repoName() },
     );
@@ -48,7 +49,7 @@ export class AnalysisHistoryItemComponent {
     event.stopPropagation();
     const confirmed = await this.confirmModal.confirm(
       this.destroyRef,
-      'confirmations.deleteAnalysis',
+      marker('confirmations.deleteAnalysis'),
       'danger',
       { repoName: this.repoName() },
     );

@@ -2,37 +2,46 @@
   <ng-template #content let-data>
     <div class="repository-details">
       @let info = data?.details?.info;
+      <!-- t(analysisResults.repositoryDetails.analysis.id.label, analysisResults.repositoryDetails.analysis.dateRange.label, analysisResults.repositoryDetails.analysis.started.label, analysisResults.repositoryDetails.analysis.completed.label, analysisResults.repositoryDetails.analysis.duration.label) -->
       <app-data-list-section
         [items]="[
           {
-            labelKey: 'analysisResults.repositoryDetails.analysisId',
+            labelKey: 'analysisResults.repositoryDetails.analysis.id.label',
             value: info.id,
             valueType: 'text',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.analysisDateRange',
+            labelKey: 'analysisResults.repositoryDetails.analysis.dateRange.label',
             value: { start: info.analysisRangeStartDate, end: info.analysisRangeEndDate },
             valueType: 'dateRange',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.analysisStarted',
+            labelKey: 'analysisResults.repositoryDetails.analysis.started.label',
             value: info.analysisStartedAt,
             valueType: 'dateTime',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.analysisCompleted',
+            labelKey: 'analysisResults.repositoryDetails.analysis.completed.label',
             value: info.analysisFinishedAt,
             valueType: 'dateTime',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.analysisDuration',
+            labelKey: 'analysisResults.repositoryDetails.analysis.duration.label',
             value: info.analysisTimeInSeconds,
             valueType: 'duration',
           },
         ]"
       >
         <div class="section-title">
-          <a class="section-title__link" [href]="info.repositoryUrl" target="_blank">
+          <a
+            class="section-title__link"
+            [href]="info.repositoryUrl"
+            [title]="
+              'analysisResults.repositoryDetails.analysis.linkTitle'
+                | transloco: { owner: info.repositoryOwner, name: info.repositoryName }
+            "
+            target="_blank"
+          >
             {{ info.repositoryOwner }}/{{ info.repositoryName }}
           </a>
           <span class="section-title__badge">{{ info.repositoryPlatform }}</span>
@@ -40,125 +49,129 @@
       </app-data-list-section>
 
       @let statistics = data?.details?.statistics;
+      <!-- t(analysisResults.repositoryDetails.statistics.uniqueAuthors.label, analysisResults.repositoryDetails.statistics.uniqueAuthors.info, analysisResults.repositoryDetails.statistics.activeAuthors.label, analysisResults.repositoryDetails.statistics.activeAuthors.info, analysisResults.repositoryDetails.statistics.commits.label, analysisResults.repositoryDetails.statistics.commits.info, analysisResults.repositoryDetails.statistics.files.label, analysisResults.repositoryDetails.statistics.fileTypes.label) -->
       <app-data-list-section
         [items]="[
           {
-            labelKey: 'analysisResults.repositoryDetails.authors',
-            tooltipKey: 'analysisResults.repositoryDetails.uniqueAuthorsTooltip',
+            labelKey: 'analysisResults.repositoryDetails.statistics.uniqueAuthors.label',
+            tooltipKey: 'analysisResults.repositoryDetails.statistics.uniqueAuthors.info',
             value: statistics.authors,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.activeAuthors',
-            tooltipKey: 'analysisResults.repositoryDetails.activeAuthorsTooltip',
+            labelKey: 'analysisResults.repositoryDetails.statistics.activeAuthors.label',
+            tooltipKey: 'analysisResults.repositoryDetails.statistics.activeAuthors.info',
             value: statistics.activeAuthors,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.commits',
-            tooltipKey: 'analysisResults.repositoryDetails.commitsTooltip',
+            labelKey: 'analysisResults.repositoryDetails.statistics.commits.label',
+            tooltipKey: 'analysisResults.repositoryDetails.statistics.commits.info',
             value: statistics.commits,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.files',
+            labelKey: 'analysisResults.repositoryDetails.statistics.files.label',
             value: statistics.files,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.fileTypes',
+            labelKey: 'analysisResults.repositoryDetails.statistics.fileTypes.label',
             value: statistics.fileTypeStatistics.length,
             valueType: 'number',
           },
         ]"
         ><div class="section-title">
           <span class="section-title__label">{{
-            'analysisResults.repositoryDetails.repositoryStatistics' | transloco
+            'analysisResults.repositoryDetails.statistics.title' | transloco
           }}</span>
         </div>
       </app-data-list-section>
 
       @let staticAnalysis = data?.details?.staticAnalysis;
+      <!-- t(analysisResults.repositoryDetails.quality.bugs.label, analysisResults.repositoryDetails.quality.bugs.info, analysisResults.repositoryDetails.quality.vulnerabilities.label, analysisResults.repositoryDetails.quality.vulnerabilities.info, analysisResults.repositoryDetails.quality.codeSmells.label, analysisResults.repositoryDetails.quality.codeSmells.info, analysisResults.repositoryDetails.quality.complexity.label, analysisResults.repositoryDetails.quality.complexity.info, analysisResults.repositoryDetails.quality.duplicatedLines.label, analysisResults.repositoryDetails.quality.duplicatedLines.info) -->
       <app-data-list-section
         [items]="[
           {
-            labelKey: 'analysisResults.repositoryDetails.bugs',
-            tooltipKey: 'analysisResults.repositoryDetails.bugsTooltip',
+            labelKey: 'analysisResults.repositoryDetails.quality.bugs.label',
+            tooltipKey: 'analysisResults.repositoryDetails.quality.bugs.info',
             value: staticAnalysis?.bugs,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.vulnerabilities',
-            tooltipKey: 'analysisResults.repositoryDetails.vulnerabilitiesTooltip',
+            labelKey: 'analysisResults.repositoryDetails.quality.vulnerabilities.label',
+            tooltipKey: 'analysisResults.repositoryDetails.quality.vulnerabilities.info',
             value: staticAnalysis?.vulnerabilities,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.codeSmells',
-            tooltipKey: 'analysisResults.repositoryDetails.codeSmellsTooltip',
+            labelKey: 'analysisResults.repositoryDetails.quality.codeSmells.label',
+            tooltipKey: 'analysisResults.repositoryDetails.quality.codeSmells.info',
             value: staticAnalysis?.codeSmells,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.complexity',
-            tooltipKey: 'analysisResults.repositoryDetails.complexityTooltip',
+            labelKey: 'analysisResults.repositoryDetails.quality.complexity.label',
+            tooltipKey: 'analysisResults.repositoryDetails.quality.complexity.info',
             value: staticAnalysis?.complexity,
             valueType: 'number',
           },
           {
-            labelKey: 'analysisResults.repositoryDetails.duplicatedLinesDensity',
-            tooltipKey: 'analysisResults.repositoryDetails.duplicatedLinesDensityTooltip',
+            labelKey: 'analysisResults.repositoryDetails.quality.duplicatedLines.label',
+            tooltipKey: 'analysisResults.repositoryDetails.quality.duplicatedLines.info',
             value: staticAnalysis?.duplicatedLinesDensity,
             valueType: 'percent',
           },
         ]"
         ><div class="section-title">
           <span class="section-title__label">
-            {{ 'analysisResults.repositoryDetails.codeQuality' | transloco }}
+            {{ 'analysisResults.repositoryDetails.quality.title' | transloco }}
           </span>
         </div>
       </app-data-list-section>
 
+      <!-- t(analysisResults.charts.codeBreakdown.code.legend, analysisResults.charts.codeBreakdown.code.tooltip, analysisResults.charts.codeBreakdown.comments.legend, analysisResults.charts.codeBreakdown.comments.tooltip, analysisResults.charts.codeBreakdown.blank.legend, analysisResults.charts.codeBreakdown.blank.tooltip) -->
       <app-doughnut-chart-section
         [items]="[
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
+            legendLabelKey: 'analysisResults.charts.codeBreakdown.code.legend',
+            tooltipLabelKey: 'analysisResults.charts.codeBreakdown.code.tooltip',
             value: statistics.codeLines,
             color: '#2563eb',
           },
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.commentsLegendLabel',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.commentsTooltipLabel',
+            legendLabelKey: 'analysisResults.charts.codeBreakdown.comments.legend',
+            tooltipLabelKey: 'analysisResults.charts.codeBreakdown.comments.tooltip',
             value: statistics.commentLines,
             color: '#22c55e',
           },
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.blankLegendLabel',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.blankTooltipLabel',
+            legendLabelKey: 'analysisResults.charts.codeBreakdown.blank.legend',
+            tooltipLabelKey: 'analysisResults.charts.codeBreakdown.blank.tooltip',
             value: statistics.blankLines,
             color: '#e2e8f0',
           },
         ]"
         ><div class="section-title">
           <span class="section-title__label">
-            {{ 'analysisResults.repositoryDetails.numberOfLines' | transloco }}
+            {{ 'analysisResults.charts.codeBreakdown.title' | transloco }}
           </span>
         </div>
       </app-doughnut-chart-section>
 
+      <!-- t(analysisResults.charts.authors.unique.legend, analysisResults.charts.authors.unique.tooltip, analysisResults.charts.authors.active.legend, analysisResults.charts.authors.active.tooltip, analysisResults.charts.authors.info) -->
       <app-line-chart-section
         [modes]="['max', 'max']"
         [series]="[
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.lineChartUniqueAuthorsLegend',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartUniqueAuthorsTooltip',
+            legendLabelKey: 'analysisResults.charts.authors.unique.legend',
+            tooltipLabelKey: 'analysisResults.charts.authors.unique.tooltip',
             color: '#9b5cff',
             points: uniqueAuthorsSeries(),
           },
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.lineChartActiveAuthorsLegend',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartActiveAuthorsTooltip',
+            legendLabelKey: 'analysisResults.charts.authors.active.legend',
+            tooltipLabelKey: 'analysisResults.charts.authors.active.tooltip',
             color: '#ff4fd8',
             points: activeAuthorsSeries(),
           },
@@ -166,22 +179,23 @@
       >
         <div class="section-title">
           <span class="section-title__label">{{
-            'analysisResults.repositoryDetails.lineChartAuthorsTitle' | transloco
+            'analysisResults.charts.authors.title' | transloco
           }}</span>
           <app-info-tooltip
             class="section-title__tooltip"
-            textKey="analysisResults.repositoryDetails.lineChartAuthorsInfoTooltip"
+            textKey="analysisResults.charts.authors.info"
             [iconSize]="22"
           />
         </div>
       </app-line-chart-section>
 
+      <!-- t(analysisResults.charts.commits.commits.legend, analysisResults.charts.commits.commits.tooltip, analysisResults.charts.commits.info) -->
       <app-line-chart-section
         [modes]="['sum']"
         [series]="[
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.lineChartCommitLegend',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartCommitTooltip',
+            legendLabelKey: 'analysisResults.charts.commits.commits.legend',
+            tooltipLabelKey: 'analysisResults.charts.commits.commits.tooltip',
             color: '#2563eb',
             points: commitSeries(),
           },
@@ -189,28 +203,29 @@
       >
         <div class="section-title">
           <span class="section-title__label">{{
-            'analysisResults.repositoryDetails.lineChartCommitTitle' | transloco
+            'analysisResults.charts.commits.title' | transloco
           }}</span>
           <app-info-tooltip
             class="section-title__tooltip"
-            textKey="analysisResults.repositoryDetails.lineChartCommitInfoTooltip"
+            textKey="analysisResults.charts.commits.info"
             [iconSize]="22"
           />
         </div>
       </app-line-chart-section>
 
+      <!-- t(analysisResults.charts.changeDynamics.total.legend, analysisResults.charts.changeDynamics.total.tooltip, analysisResults.charts.changeDynamics.changed.legend, analysisResults.charts.changeDynamics.changed.tooltip, analysisResults.charts.changeDynamics.info) -->
       <app-line-chart-section
         [modes]="['max', 'sum']"
         [series]="[
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.lineChartTotalLegend',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartTotalTooltip',
+            legendLabelKey: 'analysisResults.charts.changeDynamics.total.legend',
+            tooltipLabelKey: 'analysisResults.charts.changeDynamics.total.tooltip',
             color: '#f3f4f6',
             points: totalLinesSeries(),
           },
           {
-            legendLabelKey: 'analysisResults.repositoryDetails.lineChartChangedLegend',
-            tooltipLabelKey: 'analysisResults.repositoryDetails.lineChartChangedTooltip',
+            legendLabelKey: 'analysisResults.charts.changeDynamics.changed.legend',
+            tooltipLabelKey: 'analysisResults.charts.changeDynamics.changed.tooltip',
             color: '#f59e0b',
             points: linesChangedSeries(),
           },
@@ -218,11 +233,11 @@
       >
         <div class="section-title">
           <span class="section-title__label">{{
-            'analysisResults.repositoryDetails.lineChartLinesTitle' | transloco
+            'analysisResults.charts.changeDynamics.title' | transloco
           }}</span>
           <app-info-tooltip
             class="section-title__tooltip"
-            textKey="analysisResults.repositoryDetails.lineChartLinesInfoTooltip"
+            textKey="analysisResults.charts.changeDynamics.info"
             [iconSize]="22"
           />
         </div>

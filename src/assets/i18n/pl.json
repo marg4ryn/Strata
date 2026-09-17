@@ -4,41 +4,45 @@
     "cancel": "Anuluj",
     "close": "Zamknij",
     "loading": "Ładowanie",
-    "noData": "Brak danych do wyświetlenia"
+    "noData": "Brak danych do wyświetlenia",
+    "ariaLabel": {
+      "moreInfo": "Więcej informacji",
+      "selectOption": "Wybierz opcję"
+    }
   },
+
   "meta": {
     "description": "Strata to narzędzie do analizy behawioralnej repozytoriów, które łączy historię zmian i strukturę kodu, pomagając wykrywać hotspoty oraz wskazywać obszary wymagające największej uwagi."
   },
+
   "header": {
     "startNewAnalysis": "Rozpocznij nową analizę",
     "notifications": "Powiadomienia",
     "analysisHistory": "Historia analiz",
     "settings": "Ustawienia"
   },
+
   "footer": {
     "about": {
       "title": "O narzędziu",
       "button": "O narzędziu"
     }
   },
+
   "confirmations": {
     "default": "Tej operacji nie można cofnąć. Jesteś pewny?",
     "startNewAnalysis": "Rozpocząć nową analizę?",
     "loadAnalysis": "Wczytać analizę {{ repoName }}?",
     "deleteAnalysis": "Czy jesteś pewny, że chcesz usunąć analizę {{ repoName }}? Tej operacji nie można cofnąć."
   },
+
   "duration": {
     "hoursMinutes": "{{ hours }} godz. {{ minutes }} min",
     "hoursOnly": "{{ hours }} godz.",
     "minutesSeconds": "{{ minutes }} min {{ seconds }} s",
     "secondsOnly": "{{ seconds }} s"
   },
-  "tooltip": {
-    "ariaLabel": "Więcej informacji"
-  },
-  "dropdown": {
-    "ariaLabel": "Wybierz opcję"
-  },
+
   "notifications": {
     "panel": {
       "header": "Powiadomienia",
@@ -48,16 +52,9 @@
     },
     "item": {
       "remove": "Usuń powiadomienie"
-    },
-    "analysisRun": {
-      "success": "Analiza {{ repoName }} zakończyła się pomyślnie",
-      "error": "Analiza {{ repoName }} zakończyła się błędem",
-      "cancel": "Analiza {{ repoName }} została anulowana",
-      "abandon": "Analiza {{ repoName }} została porzucona",
-      "abort": "Analiza {{ repoName }} została przerwana",
-      "abortError": "Nie udało się przerwać analizy {{ repoName }} — serwer nie odpowiada"
     }
   },
+
   "analysisHistory": {
     "panel": {
       "header": "Historia analiz",
@@ -69,6 +66,7 @@
       "delete": "Usuń analizę"
     }
   },
+
   "settings": {
     "panel": {
       "header": "Ustawienia",
@@ -77,47 +75,49 @@
     "language": {
       "header": "Język",
       "system": "Systemowy",
-      "dropdownAriaLabel": "Wybierz język"
+      "ariaLabel": "Wybierz język"
     }
   },
+
   "about": {
-    "section1": {
+    "codeHistory": {
       "title": "Kod ma swoją historię",
       "content": "Strata jest narzędziem do analizy behawioralnej, czyli badania ewolucji repozytoriów w czasie. Uwzględnia nie tylko aktualny stan projektu, ale również sposób, w jaki zmieniał się kod oraz jak pracują nad nim programiści. Jej podstawowym założeniem jest to, że sam kod nie przedstawia pełnego obrazu systemu. Dwa fragmenty kodu mogą wyglądać podobnie pod względem struktury i jakości, ale mieć zupełnie inne znaczenie dla projektu, jeśli jeden z nich jest rzadko modyfikowany, a drugi jest stale zmieniany przez wielu programistów. Sama nazwa narzędzia nawiązuje do warstw skalnych, które gromadzą się w czasie i zapisują historię procesów, które je ukształtowały (z ang. strata – warstwa skalna). W przypadku oprogramowania takimi warstwami są kolejne zmiany zapisywane w systemach kontroli wersji. To właśnie one pozwalają zbadać procesy, które ukształtowały system."
     },
-    "section2": {
+    "cityBuiltFromCode": {
       "title": "Miasto zbudowane z kodu",
       "content": "Jednym ze sposobów przedstawienia zależności w repozytorium jest wizualizacja Code City. Każdy plik staje się w nim budynkiem: jego wysokość odpowiada liczbie jego zmian, a szerokość długości pliku mierzonej w liniach kodu. Budynki są rozmieszczone na platformach reprezentujących foldery projektu. Taka forma nie ma zastępować danych liczbowych. Ma wykorzystać coś, w czym człowiek jest szczególnie dobry – rozpoznawanie wzorców wizualnych. Zamiast przeglądać setki wartości, można zobaczyć strukturę projektu jako całość i dostrzec miejsca wyróżniające się na tle reszty, które w tradycyjnym zestawieniu danych mogłyby pozostać niezauważone."
     },
-    "section3": {
+    "applications": {
       "title": "Zastosowania",
       "content": "W dużych systemach nie jest możliwe jednoczesne rozwiązanie wszystkich problemów jakościowych, dlatego kluczowa staje się ich właściwa priorytetyzacja. Spojrzenie na kod przez pryzmat jego historii pozwala wskazać obszary, które mają szczególne znaczenie dla rozwoju systemu. Przykładem są hotspoty, czyli fragmenty kodu, które są jednocześnie złożone i często modyfikowane. Zwykle wymagają one refaktoryzacji, dodatkowego testowania lub przynajmniej szczególnej uwagi podczas przeglądów kodu. Strata dostarcza danych i pomaga określić, gdzie warto zainwestować dostępny czas i zasoby, aby osiągnąć największe korzyści. Nie zastępuje ona analizy statycznej, lecz nadaje jej kontekst – pokazuje, które problemy są istotne z perspektywy rzeczywistego użytkowania oraz ewolucji systemu."
     },
-    "section4": {
+    "peopleBehindCode": {
       "title": "Za kodem stoją ludzie",
       "content": "Historia repozytorium opisuje jednak nie tylko pliki. Jest również zapisem pracy zespołu. To ludzie podejmują decyzje, wprowadzają zmiany i gromadzą wiedzę o poszczególnych częściach systemu. Strata pozwala spojrzeć na repozytorium także z tej perspektywy – zobaczyć, jak rozkłada się aktywność pomiędzy członków zespołu, moduły i obszary systemu oraz gdzie koncentruje się wiedza. Nie jest to próba oceniania programistów. Chodzi raczej o pokazanie zależności, które mogą mieć znaczenie dla sposobu rozwijania systemu, komunikacji w zespole i przepływu wiedzy."
     },
-    "section5": {
+    "targetAudience": {
       "title": "Dla kogo",
       "content": "Taki sposób analizy może być szczególnie przydatny dla programistów wdrażających się do nowych projektów oraz architektów i liderów technicznych odpowiedzialnych za rozwój i utrzymanie systemów. Może być również pomocny w komunikacji z menedżerami, ponieważ dzięki wizualizacjom pozwala w przystępny sposób przedstawić obraz systemu oraz poprzeć proponowane kierunki jego rozwoju. Nie zastępuje ekspertyzy osób zaangażowanych w rozwój systemu, lecz dostarcza rzeczywistych danych, na podstawie których można podejmować trafniejsze decyzje."
     },
-    "section6": {
+    "limitations": {
       "title": "Ograniczenia",
       "content": "Narzędzie obsługuje wyłącznie Git oraz publiczne repozytoria znajdujące się w GitHub i GitLab. Analizowane są pojedyncze repozytoria, dlatego nie wspieramy architektur opartych na mikroserwisach. Istotny jest również zakres analizowanej historii. Wyniki zależą od tego, jaki okres zostanie wybrany, a niewłaściwy zakres czasowy może prowadzić między innymi do błędnej identyfikacji hotspotów. Na wyniki wpływa także sposób pracy zespołu. Jeden programista może wykonywać wiele małych commitów, podczas gdy inny może łączyć większy zestaw zmian w pojedynczym commicie. Dlatego wyniki Straty należy interpretować w kontekście historii konkretnego projektu. Spójny styl kodowania, formatowania i tworzenia commitów zwiększa wiarygodność analizy, ale nie eliminuje potrzeby spojrzenia na dane z szerszej perspektywy."
     },
-    "section7": {
+    "technologies": {
       "title": "Technologie",
-      "subTitle1": "Frontend",
-      "subTitle2": "Wizualizacje",
-      "subTitle3": "Backend",
-      "subTitle4": "Analiza"
+      "frontend": "Frontend",
+      "visualizations": "Wizualizacje",
+      "backend": "Backend",
+      "analysis": "Analiza"
     },
-    "section8": {
+    "team": {
       "title": "Zespół projektowy",
       "supervisorLabel": "Promotor",
       "supervisorDegree": "dr inż."
     }
   },
+
   "analysisRun": {
     "progress": {
       "connecting": "Łączenie",
@@ -129,6 +129,14 @@
       "finalizing": "Finalizowanie",
       "aborting": "Przerywanie...",
       "abort": "Przerwij"
+    },
+    "notifications": {
+      "success": "Analiza {{ repoName }} zakończyła się pomyślnie",
+      "error": "Analiza {{ repoName }} zakończyła się błędem",
+      "cancel": "Analiza {{ repoName }} została anulowana",
+      "abandon": "Analiza {{ repoName }} została porzucona",
+      "abort": "Analiza {{ repoName }} została przerwana",
+      "abortError": "Nie udało się przerwać analizy {{ repoName }} — serwer nie odpowiada"
     },
     "infoPanel": {
       "startDate": "Rozpoczęto",
@@ -164,60 +172,86 @@
       "notFound": "Analiza, której szukasz, nie istnieje."
     },
     "repositoryDetails": {
-      "analysisDateRange": "Zakres analizy",
-      "analysisId": "ID analizy",
-      "analysisStarted": "Rozpoczęcie analizy",
-      "analysisCompleted": "Zakończenie analizy",
-      "analysisDuration": "Czas trwania",
-      "repositoryStatistics": "Statystyki repozytorium",
-      "codeQuality": "Jakość kodu",
-      "numberOfLines": "Liczba linii",
-      "authors": "Unikalni autorzy",
-      "uniqueAuthorsTooltip": "Łączna liczba autorów, którzy dodali co najmniej jeden commit do analizowanego repozytorium.",
-      "activeAuthors": "Aktywni autorzy",
-      "activeAuthorsTooltip": "Liczba autorów, którzy dodali co najmniej jeden commit do analizowanego repozytorium w ciągu ostatnich 6 miesięcy.",
-      "commits": "Commity",
-      "commitsTooltip": "Łączna liczba commitów w analizowanym repozytorium. Commit to zapis zmian w kodzie, który pozwala śledzić historię projektu.",
-      "files": "Pliki",
-      "fileTypes": "Typy plików",
-      "bugs": "Błędy",
-      "bugsTooltip": "Liczba błędów mogących powodować nieprawidłowe działanie kodu w runtime. Im więcej, tym większe ryzyko awarii.",
-      "vulnerabilities": "Podatności",
-      "vulnerabilitiesTooltip": "Liczba podatności bezpieczeństwa, np. SQL Injection, hardcoded hasła czy słaba kryptografia.",
-      "codeSmells": "Zapachy kodu",
-      "codeSmellsTooltip": "Tzw. Code Smells – liczba problemów wpływających na czytelność i utrzymywalność kodu, np. zbyt długie metody, duplikacja lub złe nazewnictwo. Wysoka wartość oznacza większy dług techniczny.",
-      "complexity": "Złożoność",
-      "complexityTooltip": "Złożoność cyklomatyczna, czyli liczba niezależnych ścieżek wykonania w kodzie. Wyższa wartość oznacza trudniejszy do zrozumienia i testowania kod oraz większe ryzyko błędów. Metryka jest agregowana dla całego projektu.",
-      "duplicatedLinesDensity": "Gęstość zduplikowanych linii",
-      "duplicatedLinesDensityTooltip": "Procent zduplikowanych linii kodu względem wszystkich linii. Niska wartość jest pożądana; wysoka może oznaczać nadmierne kopiowanie kodu i utrudniać jego utrzymanie.",
-      "codeLegendLabel": "Kod",
-      "codeTooltipLabel": "Linie kodu",
-      "commentsLegendLabel": "Komentarze",
-      "commentsTooltipLabel": "Linie komentarzy",
-      "blankLegendLabel": "Puste",
-      "blankTooltipLabel": "Linie puste",
-      "repositoryLinkTitle": "Otwórz repozytorium {{owner}}/{{name}}",
-      "aggregationDay": "Dzień",
-      "aggregationWeek": "Tydzień",
-      "aggregationBiweek": "Dwa tygodnie",
-      "aggregationMonth": "Miesiąc",
-      "lineChartSectionDropdown": "Wybierz przedział",
-      "lineChartCommitTitle": "Commity",
-      "lineChartCommitInfoTooltip": "Commity: Liczba commitów w czasie. Pokazuje tempo wprowadzania zmian w repozytorium.",
-      "lineChartCommitLegend": "Commity",
-      "lineChartCommitTooltip": "Liczba commitów",
-      "lineChartAuthorsTitle": "Autorzy",
-      "lineChartAuthorsInfoTooltip": "Autorzy: Liczba unikalnych i aktywnych autorów w czasie. Unikalni autorzy to wszystkie osoby, które kiedykolwiek dodały commit, a aktywni — te, które zrobiły to w ciągu ostatnich 6 miesięcy.",
-      "lineChartUniqueAuthorsLegend": "Unikalni",
-      "lineChartUniqueAuthorsTooltip": "Unikalni autorzy",
-      "lineChartActiveAuthorsLegend": "Aktywni",
-      "lineChartActiveAuthorsTooltip": "Aktywni autorzy",
-      "lineChartLinesTitle": "Dynamika zmian",
-      "lineChartLinesInfoTooltip": "Dynamika zmian: Liczba dodanych i usuniętych linii kodu w czasie na tle całkowitego rozmiaru systemu. Pomaga ocenić tempo zmian i stopień stabilizacji kodu.",
-      "lineChartChangedLegend": "Zmodyfikowane",
-      "lineChartChangedTooltip": "Linie modyfikowane",
-      "lineChartTotalLegend": "Łącznie",
-      "lineChartTotalTooltip": "Wszystkie linie"
+      "analysis": {
+        "linkTitle": "Otwórz repozytorium {{owner}}/{{name}}",
+        "id": { "label": "ID analizy" },
+        "dateRange": { "label": "Zakres analizy" },
+        "started": { "label": "Rozpoczęcie analizy" },
+        "completed": { "label": "Zakończenie analizy" },
+        "duration": { "label": "Czas trwania" }
+      },
+      "statistics": {
+        "title": "Statystyki repozytorium",
+        "uniqueAuthors": {
+          "label": "Unikalni autorzy",
+          "info": "Liczba autorów, którzy dodali co najmniej jeden commit do repozytorium."
+        },
+        "activeAuthors": {
+          "label": "Aktywni autorzy",
+          "info": "Liczba autorów, którzy dodali co najmniej jeden commit w ciągu ostatnich 6 miesięcy."
+        },
+        "commits": {
+          "label": "Commity",
+          "info": "Łączna liczba commitów w repozytorium. Commit to zapis zmian wprowadzonych w kodzie."
+        },
+        "files": { "label": "Pliki" },
+        "fileTypes": { "label": "Typy plików" }
+      },
+      "quality": {
+        "title": "Jakość kodu",
+        "bugs": {
+          "label": "Błędy",
+          "info": "Liczba błędów, które mogą powodować nieprawidłowe działanie aplikacji. Wyższa wartość oznacza większe ryzyko awarii."
+        },
+        "vulnerabilities": {
+          "label": "Podatności",
+          "info": "Liczba podatności związanych z bezpieczeństwem, takich jak SQL injection, hasła zapisane w kodzie lub słabe algorytmy kryptograficzne."
+        },
+        "codeSmells": {
+          "label": "Zapachy kodu",
+          "info": "Tzw. Code Smells – problemy wpływające na czytelność i łatwość utrzymania kodu, takie jak zbyt długie metody, duplikacja kodu lub nieczytelne nazewnictwo. Wyższa wartość oznacza większy dług techniczny."
+        },
+        "complexity": {
+          "label": "Złożoność",
+          "info": "Złożoność cyklomatyczna, czyli liczba niezależnych ścieżek wykonania w kodzie. Wyższa wartość oznacza kod trudniejszy do zrozumienia i testowania. Metryka jest agregowana dla całego projektu."
+        },
+        "duplicatedLines": {
+          "label": "Duplicated lines density",
+          "info": "Procent zduplikowanych linii względem wszystkich linii kodu. Wyższa wartość oznacza więcej duplikacji kodu i może utrudniać jego utrzymanie."
+        }
+      }
+    },
+    "charts": {
+      "codeBreakdown": {
+        "title": "Liczba linii",
+        "code": { "legend": "Kod", "tooltip": "Linie kodu" },
+        "comments": { "legend": "Komentarze", "tooltip": "Linie komentarzy" },
+        "blank": { "legend": "Puste", "tooltip": "Linie puste" }
+      },
+      "authors": {
+        "title": "Autorzy",
+        "info": "Autorzy: Liczba unikalnych i aktywnych autorów w czasie. Unikalni autorzy to osoby, które kiedykolwiek dodały commit, a aktywni autorzy to osoby, które dodały co najmniej jeden commit w ciągu ostatnich 6 miesięcy.",
+        "unique": { "legend": "Unikalni", "tooltip": "Unikalni autorzy" },
+        "active": { "legend": "Aktywni", "tooltip": "Aktywni autorzy" }
+      },
+      "commits": {
+        "title": "Commity",
+        "info": "Commity: Liczba commitów w czasie, pokazująca tempo wprowadzania zmian w repozytorium.",
+        "commits": { "legend": "Commity", "tooltip": "Liczba commitów" }
+      },
+      "changeDynamics": {
+        "title": "Dynamika zmian",
+        "info": "Dynamika zmian: Liczba dodanych i usuniętych linii kodu w czasie, przedstawiona na tle całkowitego rozmiaru systemu. Pomaga ocenić tempo zmian i stopień stabilizacji kodu.",
+        "total": { "legend": "Łącznie", "tooltip": "Wszystkie linie" },
+        "changed": { "legend": "Zmodyfikowane", "tooltip": "Linie modyfikowane" }
+      }
+    },
+    "aggregation": {
+      "day": "Dzień",
+      "week": "Tydzień",
+      "biweek": "Dwa tygodnie",
+      "month": "Miesiąc",
+      "ariaLabel": "Wybierz przedział"
     }
   }
 }

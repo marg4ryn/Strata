@@ -9,7 +9,7 @@ let nextId = 0;
   imports: [OverlayModule, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './info-tooltip.component.html',
-  styleUrls: ['./info-tooltip.component.scss'],
+  styleUrl: './info-tooltip.component.scss',
 })
 export class InfoTooltipComponent implements OnInit {
   textKey = input.required<string>();

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, computed, debounced } from '@angular/core';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { AnalysisTargetFormComponent } from '../ui/analysis-target-form/analysis-target-form.component';
 import { AnalysisProgressSpinnerComponent } from '../ui/analysis-progress-spinner/analysis-progress-spinner.component';
@@ -24,7 +25,7 @@ export class AnalysisRunPageComponent {
 
   readonly labelKey = computed(() => {
     const progress = this.facade.progress();
-    return progress ? `${AnalysisStatus[progress]}` : 'analysisRun.progress.connecting';
+    return progress ? `${AnalysisStatus[progress]}` : marker('analysisRun.progress.connecting');
   });
 
   readonly debouncedLabelKey = debounced(this.labelKey, 800);

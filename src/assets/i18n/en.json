@@ -4,41 +4,45 @@
     "cancel": "Cancel",
     "close": "Close",
     "loading": "Loading",
-    "noData": "No data to display"
+    "noData": "No data to display",
+    "ariaLabel": {
+      "moreInfo": "More information",
+      "selectOption": "Select an option"
+    }
   },
+
   "meta": {
     "description": "Strata is a tool for behavioral analysis of software repositories, combining change history and code structure to identify hotspots and highlight areas that require the most attention."
   },
+
   "header": {
     "startNewAnalysis": "Start a new analysis",
     "notifications": "Notifications",
     "analysisHistory": "Analysis history",
     "settings": "Settings"
   },
+
   "footer": {
     "about": {
       "title": "About the tool",
       "button": "About"
     }
   },
+
   "confirmations": {
     "default": "This operation cannot be undone. Are you sure?",
     "startNewAnalysis": "Start a new analysis?",
     "loadAnalysis": "Load the {{ repoName }} analysis?",
     "deleteAnalysis": "Are you sure you want to delete the {{ repoName }} analysis? This operation cannot be undone."
   },
+
   "duration": {
     "hoursMinutes": "{{ hours }}h {{ minutes }}m",
     "hoursOnly": "{{ hours }}h",
     "minutesSeconds": "{{ minutes }}m {{ seconds }}s",
     "secondsOnly": "{{ seconds }}s"
   },
-  "tooltip": {
-    "ariaLabel": "More information"
-  },
-  "dropdown": {
-    "ariaLabel": "Select an option"
-  },
+
   "notifications": {
     "panel": {
       "header": "Notifications",
@@ -48,16 +52,9 @@
     },
     "item": {
       "remove": "Remove notification"
-    },
-    "analysisRun": {
-      "success": "{{ repoName }} analysis was successful",
-      "error": "{{ repoName }} analysis ended with an error",
-      "cancel": "{{ repoName }} analysis cancelled",
-      "abandon": "{{ repoName }} analysis abandoned",
-      "abort": "{{ repoName }} analysis aborted",
-      "abortError": "{{ repoName }} analysis abort failed - server not responding"
     }
   },
+
   "analysisHistory": {
     "panel": {
       "header": "Analysis history",
@@ -69,6 +66,7 @@
       "delete": "Delete analysis"
     }
   },
+
   "settings": {
     "panel": {
       "header": "Settings",
@@ -77,47 +75,49 @@
     "language": {
       "header": "Language",
       "system": "System",
-      "dropdownAriaLabel": "Select language"
+      "ariaLabel": "Select language"
     }
   },
+
   "about": {
-    "section1": {
+    "codeHistory": {
       "title": "Code Has a History",
       "content": "Strata is a tool for behavioral analysis, that is, for studying the evolution of repositories over time. It considers not only the current state of a project, but also how the code has changed and how developers work on it. Its fundamental premise is that code alone does not provide a complete picture of a system. Two pieces of code may look similar in terms of structure and quality, yet have completely different significance for the project if one is rarely modified while the other is constantly changed by multiple developers. The application's name refers to rock strata – layers that accumulate over time, recording the history of everything that shaped them. In software, these layers are the successive changes recorded in version control systems. They are what make it possible to study the processes that shaped the system."
     },
-    "section2": {
+    "cityBuiltFromCode": {
       "title": "A City Built from Code",
       "content": "One way to represent dependencies within a repository is through a Code City visualization. In it, each file becomes a building: its height corresponds to the number of changes made to it, while its width represents the length of the file measured in lines of code. The buildings are arranged on platforms representing the project's folders. This form of visualization is not meant to replace numerical data. Instead, it takes advantage of something humans are particularly good at – recognizing visual patterns. Rather than examining hundreds of values, you can see the structure of the project as a whole and identify areas that stand out from the rest, which might otherwise go unnoticed in a traditional data presentation."
     },
-    "section3": {
+    "applications": {
       "title": "Applications",
       "content": "In large systems, it is not possible to address all quality issues at once, which makes proper prioritization essential. Looking at code through the lens of its history makes it possible to identify areas that are particularly important to the system's development. One example is hotspots, which are pieces of code that are both complex and frequently modified. They usually require refactoring, additional testing, or at least special attention during code reviews. Strata provides data and helps determine where to invest available time and resources to achieve the greatest benefits. It does not replace static analysis, but rather provides it with context – showing which issues are significant from the perspective of the system's actual use and evolution."
     },
-    "section4": {
+    "peopleBehindCode": {
       "title": "Behind the Code Are People",
       "content": "The history of a repository describes more than just its files. It is also a record of the team's work. People make decisions, introduce changes, and accumulate knowledge about different parts of the system. Strata makes it possible to view a repository from this perspective as well-revealing how activity is distributed across team members, modules, and areas of the system, and where expertise is concentrated. This is not an attempt to evaluate developers. Rather, it aims to highlight relationships that may influence how the system is developed, how the team communicates, and how knowledge is shared."
     },
-    "section5": {
+    "targetAudience": {
       "title": "Who Is It For?",
       "content": "This approach to analysis can be particularly useful for developers onboarding to new projects, as well as architects and technical leaders responsible for the development and maintenance of systems. It can also support communication with managers by providing an accessible way to present an overview of the system through visualizations and support proposed development directions with data. It does not replace the expertise of those involved in developing the system, but provides real-world data that can be used to make better-informed decisions."
     },
-    "section6": {
+    "limitations": {
       "title": "Limitations",
       "content": "The tool supports Git and public repositories hosted on GitHub and GitLab only. It analyzes individual repositories, so architectures based on microservices are not supported. The scope of the analyzed history is also important. Results depend on the selected time period, and an inappropriate timeframe may lead, among other things, to incorrect identification of hotspots. Results are also influenced by the team's workflow. One developer may make many small commits, while another may combine a larger set of changes into a single commit. Therefore, Strata's results should be interpreted in the context of the history of the specific project. Consistent coding, formatting, and commit practices increase the reliability of the analysis, but do not eliminate the need to consider the data from a broader perspective."
     },
-    "section7": {
+    "technologies": {
       "title": "Technologies",
-      "subTitle1": "Frontend",
-      "subTitle2": "Visualizations",
-      "subTitle3": "Backend",
-      "subTitle4": "Analysis"
+      "frontend": "Frontend",
+      "visualizations": "Visualizations",
+      "backend": "Backend",
+      "analysis": "Analysis"
     },
-    "section8": {
+    "team": {
       "title": "Project team",
       "supervisorLabel": "Supervisor",
       "supervisorDegree": "Dr."
     }
   },
+
   "analysisRun": {
     "progress": {
       "connecting": "Connecting",
@@ -129,6 +129,14 @@
       "finalizing": "Finalizing",
       "aborting": "Aborting...",
       "abort": "Abort"
+    },
+    "notifications": {
+      "success": "{{ repoName }} analysis was successful",
+      "error": "{{ repoName }} analysis ended with an error",
+      "cancel": "{{ repoName }} analysis cancelled",
+      "abandon": "{{ repoName }} analysis abandoned",
+      "abort": "{{ repoName }} analysis aborted",
+      "abortError": "{{ repoName }} analysis abort failed - server not responding"
     },
     "infoPanel": {
       "startDate": "Started at",
@@ -158,66 +166,93 @@
       "dateInFuture": "Date cannot be in the future"
     }
   },
+
   "analysisResults": {
     "resource": {
       "error": "Error",
       "notFound": "The analysis you are looking for does not exist."
     },
     "repositoryDetails": {
-      "analysisDateRange": "Analysis date range",
-      "analysisId": "Analysis ID",
-      "analysisStarted": "Analysis started",
-      "analysisCompleted": "Analysis completed",
-      "analysisDuration": "Analysis duration",
-      "repositoryStatistics": "Repository statistics",
-      "codeQuality": "Code quality",
-      "numberOfLines": "Number of lines",
-      "authors": "Unique authors",
-      "uniqueAuthorsTooltip": "Total number of authors who have added at least one commit to the analyzed repository.",
-      "activeAuthors": "Active authors",
-      "activeAuthorsTooltip": "Number of authors who have made at least one commit to the analyzed repository within the last 6 months.",
-      "commits": "Commits",
-      "commitsTooltip": "Total number of commits in the analyzed repository. A commit is a record of code changes that helps track the project's history.",
-      "files": "Files",
-      "fileTypes": "File types",
-      "bugs": "Bugs",
-      "bugsTooltip": "Number of bugs that may cause incorrect runtime behavior. The higher the number, the greater the risk of failures.",
-      "vulnerabilities": "Vulnerabilities",
-      "vulnerabilitiesTooltip": "Number of security vulnerabilities, such as SQL injection, hardcoded passwords, or weak cryptography.",
-      "codeSmells": "Code Smells",
-      "codeSmellsTooltip": "Number of issues affecting code readability and maintainability, such as overly long methods, duplication, or poor naming. A higher value indicates greater technical debt.",
-      "complexity": "Complexity",
-      "complexityTooltip": "Cyclomatic complexity, i.e. the number of independent execution paths in the code. A higher value indicates code that is harder to understand and test, with a greater risk of errors. The metric is aggregated for the entire project.",
-      "duplicatedLinesDensity": "Duplicated lines density",
-      "duplicatedLinesDensityTooltip": "Percentage of duplicated lines relative to all lines of code. A low value is desirable; a high value may indicate excessive code duplication and make maintenance more difficult.",
-      "codeLegendLabel": "Code",
-      "codeTooltipLabel": "Lines of code",
-      "commentsLegendLabel": "Comments",
-      "commentsTooltipLabel": "Comment lines",
-      "blankLegendLabel": "Blank",
-      "blankTooltipLabel": "Blank lines",
-      "repositoryLinkTitle": "Open repository {{owner}}/{{name}}",
-      "aggregationDay": "Day",
-      "aggregationWeek": "Week",
-      "aggregationBiweek": "Two weeks",
-      "aggregationMonth": "Month",
-      "lineChartSectionDropdown": "Select interval",
-      "lineChartCommitTitle": "Commits",
-      "lineChartCommitInfoTooltip": "Commits: Number of commits over time. Shows the pace at which changes are introduced to the repository.",
-      "lineChartCommitLegend": "Commits",
-      "lineChartCommitTooltip": "Number of commits",
-      "lineChartAuthorsTitle": "Authors",
-      "lineChartAuthorsInfoTooltip": "Authors: Number of unique and active authors over time. Unique authors are all people who have ever added a commit, while active authors are those who have done so within the last 6 months.",
-      "lineChartUniqueAuthorsLegend": "Unique",
-      "lineChartUniqueAuthorsTooltip": "Unique authors",
-      "lineChartActiveAuthorsLegend": "Active",
-      "lineChartActiveAuthorsTooltip": "Active authors",
-      "lineChartLinesTitle": "Change dynamics",
-      "lineChartLinesInfoTooltip": "Change dynamics: Number of added and removed lines of code over time, shown against the total system size. Helps assess the pace of changes and the degree of code stabilization.",
-      "lineChartChangedLegend": "Modified",
-      "lineChartChangedTooltip": "Modified lines",
-      "lineChartTotalLegend": "Total",
-      "lineChartTotalTooltip": "All lines"
+      "analysis": {
+        "linkTitle": "Open repository {{owner}}/{{name}}",
+        "id": { "label": "Analysis ID" },
+        "dateRange": { "label": "Analysis date range" },
+        "started": { "label": "Analysis started" },
+        "completed": { "label": "Analysis completed" },
+        "duration": { "label": "Analysis duration" }
+      },
+      "statistics": {
+        "title": "Repository statistics",
+        "uniqueAuthors": {
+          "label": "Unique authors",
+          "info": "Number of authors who have added at least one commit to the repository."
+        },
+        "activeAuthors": {
+          "label": "Active authors",
+          "info": "Number of authors who have added at least one commit within the last 6 months."
+        },
+        "commits": {
+          "label": "Commits",
+          "info": "Total number of commits in the repository. A commit records a set of changes made to the codebase."
+        },
+        "files": { "label": "Files" },
+        "fileTypes": { "label": "File types" }
+      },
+      "quality": {
+        "title": "Code quality",
+        "bugs": {
+          "label": "Bugs",
+          "info": "Number of bugs that may cause incorrect runtime behavior. A higher value indicates a greater risk of failures."
+        },
+        "vulnerabilities": {
+          "label": "Vulnerabilities",
+          "info": "Number of security vulnerabilities, such as SQL injection, hardcoded passwords, or weak cryptography."
+        },
+        "codeSmells": {
+          "label": "Code Smells",
+          "info": "Number of issues affecting code readability and maintainability, such as long methods, duplication, or poor naming. A higher value indicates greater technical debt."
+        },
+        "complexity": {
+          "label": "Complexity",
+          "info": "Cyclomatic complexity, measuring the number of independent execution paths in the code. A higher value indicates code that is harder to understand and test. The metric is aggregated for the entire project."
+        },
+        "duplicatedLines": {
+          "label": "Duplicated lines density",
+          "info": "Percentage of duplicated lines relative to all lines of code. A higher value indicates more code duplication and can make maintenance more difficult."
+        }
+      }
+    },
+    "charts": {
+      "codeBreakdown": {
+        "title": "Number of lines",
+        "code": { "legend": "Code", "tooltip": "Lines of code" },
+        "comments": { "legend": "Comments", "tooltip": "Comment lines" },
+        "blank": { "legend": "Blank", "tooltip": "Blank lines" }
+      },
+      "authors": {
+        "title": "Authors",
+        "info": "Authors: Number of unique and active authors over time. Unique authors have ever added a commit, while active authors have added at least one commit within the last 6 months.",
+        "unique": { "legend": "Unique", "tooltip": "Unique authors" },
+        "active": { "legend": "Active", "tooltip": "Active authors" }
+      },
+      "commits": {
+        "title": "Commits",
+        "info": "Commits: Number of commits over time, showing the pace at which changes are introduced to the repository.",
+        "commits": { "legend": "Commits", "tooltip": "Number of commits" }
+      },
+      "changeDynamics": {
+        "title": "Change dynamics",
+        "info": "Change dynamics: Number of added and removed lines of code over time, shown against the total system size. Helps assess the pace of change and code stabilization.",
+        "total": { "legend": "Total", "tooltip": "All lines" },
+        "changed": { "legend": "Modified", "tooltip": "Modified lines" }
+      }
+    },
+    "aggregation": {
+      "day": "Day",
+      "week": "Week",
+      "biweek": "Two weeks",
+      "month": "Month",
+      "ariaLabel": "Select interval"
     }
   }
 }

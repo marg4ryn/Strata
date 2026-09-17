@@ -12,20 +12,20 @@ describe('DoughnutChartComponent', () => {
 
   const sampleItems: DoughnutChartItem[] = [
     {
-      legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
-      tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
+      legendLabelKey: 'analysisResults.charts.codeBreakdown.code.legend',
+      tooltipLabelKey: 'analysisResults.charts.codeBreakdown.code.tooltip',
       value: 100,
       color: '#111111',
     },
     {
-      legendLabelKey: 'analysisResults.repositoryDetails.commentsLegendLabel',
-      tooltipLabelKey: 'analysisResults.repositoryDetails.commentsTooltipLabel',
+      legendLabelKey: 'analysisResults.charts.codeBreakdown.comments.legend',
+      tooltipLabelKey: 'analysisResults.charts.codeBreakdown.comments.tooltip',
       value: 50,
       color: '#222222',
     },
     {
-      legendLabelKey: 'analysisResults.repositoryDetails.blankLegendLabel',
-      tooltipLabelKey: 'analysisResults.repositoryDetails.blankTooltipLabel',
+      legendLabelKey: 'analysisResults.charts.codeBreakdown.blank.legend',
+      tooltipLabelKey: 'analysisResults.charts.codeBreakdown.blank.tooltip',
       value: 25,
       color: '#333333',
     },
@@ -83,8 +83,8 @@ describe('DoughnutChartComponent', () => {
 
     const updatedItems: DoughnutChartItem[] = [
       {
-        legendLabelKey: 'analysisResults.repositoryDetails.codeLegendLabel',
-        tooltipLabelKey: 'analysisResults.repositoryDetails.codeTooltipLabel',
+        legendLabelKey: 'analysisResults.charts.codeBreakdown.code.legend',
+        tooltipLabelKey: 'analysisResults.charts.codeBreakdown.code.tooltip',
         value: 999,
         color: '#444444',
       },
