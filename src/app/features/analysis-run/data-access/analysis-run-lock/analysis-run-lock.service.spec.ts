@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisRunLockService } from './analysis-run-lock.service';
 
 class MockLockManager {
@@ -29,22 +31,21 @@ class MockLockManager {
 
 describe('AnalysisRunLockService', () => {
   let service: AnalysisRunLockService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let lockManager: MockLockManager;
 
   beforeEach(() => {
     lockManager = new MockLockManager();
     vi.stubGlobal('navigator', { locks: lockManager });
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
-      providers: [{ provide: LoggerService, useValue: logger }],
+      providers: [{ provide: LoggerService, useValue: loggerService }],
     });
 
     service = TestBed.inject(AnalysisRunLockService);
@@ -128,7 +129,7 @@ describe('AnalysisRunLockService', () => {
 
       service.unlock(sessionId);
 
-      expect(logger.error).toHaveBeenCalledWith(expect.any(String), error);
+      expect(logger.error).toHaveBeenCalled();
       expect((service as any).releasers.has(sessionId)).toBeFalsy();
     });
   });

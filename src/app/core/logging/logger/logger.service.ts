@@ -1,7 +1,8 @@
 import { Service } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { LogLevel } from './logger.enum';
+import { ContextLogger } from '../context-logger/context-logger';
+import { LogLevel } from '../logger.enum';
 
 @Service()
 export class LoggerService {
@@ -24,7 +25,11 @@ export class LoggerService {
     this.log(LogLevel.ERROR, message, ...params);
   }
 
-  private log(level: LogLevel, message: any, ...params: any[]): void {
+  withContext(context: string): ContextLogger {
+    return new ContextLogger(this, context);
+  }
+
+  log(level: LogLevel, message: any, ...params: any[]): void {
     if (!this.isEnabled || level < this.logLevel) return;
 
     const timestamp = new Date().toISOString();

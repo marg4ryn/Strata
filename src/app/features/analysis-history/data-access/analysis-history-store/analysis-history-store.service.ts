@@ -1,31 +1,26 @@
-import { Service, signal, inject } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 @Service()
 export class AnalysisHistoryStoreService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisHistoryStoreService');
 
   readonly analysisHistory = signal<AnalysisHistoryEntry[] | null>(null);
   readonly showPanel = signal<boolean>(false);
 
   addAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry): void {
     this.analysisHistory.update((history) => [...(history ?? []), analysisHistoryEntry]);
-    this.logger.info(
-      'Analysis Hsitory Store Service added analysis history entry: ',
-      analysisHistoryEntry,
-    );
+    this.logger.info('History entry added', { analysisId: analysisHistoryEntry.analysisId });
   }
 
   removeAnalysisHistoryEntry(analysisId: string): void {
-    if (!this.analysisHistory()) return;
-    const filteredHistory = this.analysisHistory()!.filter(
-      (entry) => entry.analysisId !== analysisId,
-    );
-    this.analysisHistory.set(filteredHistory.length < 1 ? null : filteredHistory);
-    this.logger.info(
-      `Analysis Hsitory Store Service removed analysis history entry with analysisId: ${analysisId}`,
-    );
+    const currentEntries = this.analysisHistory();
+    if (!currentEntries) return;
+
+    const filtered = currentEntries.filter((e) => e.analysisId !== analysisId);
+    this.analysisHistory.set(filtered.length < 1 ? null : filtered);
+    this.logger.info('History entry removed', { analysisId });
   }
 }

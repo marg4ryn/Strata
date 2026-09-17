@@ -1,41 +1,35 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { SettingsService } from './settings.service';
 import { SettingsStoreService } from '../settings-store/settings-store.service';
 
 describe('SettingsService', () => {
   let service: SettingsService;
-  let store: {
-    showPanel: ReturnType<typeof signal<boolean>>;
-  };
-
-  let logger: {
-    debug: ReturnType<typeof vi.fn>;
-    info: ReturnType<typeof vi.fn>;
-    warn: ReturnType<typeof vi.fn>;
-    error: ReturnType<typeof vi.fn>;
-  };
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
+  let store: { showPanel: ReturnType<typeof signal<boolean>> };
 
   beforeEach(() => {
     store = {
       showPanel: signal(false),
     };
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
         { provide: SettingsStoreService, useValue: store },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
       ],
     });
+
     service = TestBed.inject(SettingsService);
   });
 

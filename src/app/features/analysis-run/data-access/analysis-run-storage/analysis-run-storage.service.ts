@@ -1,56 +1,41 @@
 import { Service, inject } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { StorageService } from '@app/core/storage/storage.service';
 import { PendingAnalysis } from '../../analysis-run.model';
 
 @Service()
 export class AnalysisRunStorageService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisRunStorageService');
   private readonly storage = inject(StorageService);
 
   private readonly sessionIdKey = 'sessionId';
   private readonly pendingAnalysesKey = 'pendingAnalyses';
 
   getSessionId(): string | null {
-    const sessionId = this.storage.getItem<string>(sessionStorage, this.sessionIdKey);
-    this.logger.debug(
-      `Analysis Run Storage Service returned sessionId: ${sessionId} from sessionStorage`,
-    );
-    return sessionId;
+    return this.storage.getItem<string>(sessionStorage, this.sessionIdKey);
   }
 
   saveSessionId(sessionId: string): void {
     this.storage.setItem<string>(sessionStorage, this.sessionIdKey, sessionId);
-    this.logger.info(
-      `Analysis Run Storage Service saved sessionId: ${sessionId} to sessionStorage`,
-    );
+    this.logger.debug('Session ID saved', { sessionId });
   }
 
   deleteSessionId(): void {
+    const sessionId = this.getSessionId();
     this.storage.removeItem(sessionStorage, this.sessionIdKey);
-    this.logger.info('Analysis Run Storage removed sessionId from sessionStorage');
+    this.logger.debug('Session ID removed', { sessionId });
   }
 
   getPendingAnalyses(): PendingAnalysis[] | null {
-    const pendingAnalyses = this.storage.getItem<PendingAnalysis[]>(
-      localStorage,
-      this.pendingAnalysesKey,
-    );
-    this.logger.debug(
-      'Analysis Run Storage Service returned pendingAnalyses from localStorage',
-      pendingAnalyses,
-    );
-    return pendingAnalyses;
+    return this.storage.getItem<PendingAnalysis[]>(localStorage, this.pendingAnalysesKey);
   }
 
   savePendingAnalysis(pendingAnalysis: PendingAnalysis): void {
     const pendingAnalyses = this.getPendingAnalyses() ?? [];
     const updatedAnalyses = [...pendingAnalyses, pendingAnalysis];
     this.storage.setItem<PendingAnalysis[]>(localStorage, this.pendingAnalysesKey, updatedAnalyses);
-    this.logger.info(
-      `Analysis Run Storage Service saved pendingAnalysis with sessionId: ${pendingAnalysis.sessionId} to localStorage`,
-    );
+    this.logger.debug('Pending analysis saved', { sessionId: pendingAnalysis.sessionId });
   }
 
   deletePendingAnalysis(sessionId: string): void {
@@ -63,14 +48,11 @@ export class AnalysisRunStorageService {
       this.clearPendingAnalyses();
     } else {
       this.storage.setItem(localStorage, this.pendingAnalysesKey, filteredAnalyses);
-      this.logger.info(
-        `Analysis Run Storage Service removed pendingAnalysis with sessionId: ${sessionId} from localStorage`,
-      );
     }
+    this.logger.debug('Pending analysis removed', { sessionId });
   }
 
   clearPendingAnalyses(): void {
     this.storage.removeItem(localStorage, this.pendingAnalysesKey);
-    this.logger.info('Analysis Run Storage removed pendingAnalyses from localStorage');
   }
 }

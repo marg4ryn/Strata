@@ -1,18 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
   let service: StorageService;
-  let logger: ReturnType<typeof MockService<LoggerService>>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
 
   beforeEach(() => {
-    logger = MockService(LoggerService);
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
-      providers: [{ provide: LoggerService, useValue: logger }],
+      providers: [{ provide: LoggerService, useValue: loggerService }],
     });
 
     service = TestBed.inject(StorageService);
@@ -39,7 +44,7 @@ describe('StorageService', () => {
       const res = service.getItem<string>(sessionStorage, 'key');
       expect(res).toBeNull();
       expect(sessionStorage.getItem('key')).toBeNull();
-      expect(logger.error).toHaveBeenCalledOnce();
+      expect(logger.warn).toHaveBeenCalledOnce();
     });
 
     it('logs and swallows error when storage read fails', () => {

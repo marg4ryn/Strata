@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { signal } from '@angular/core';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
@@ -21,7 +23,7 @@ import { AnalysisRunLockService } from '../analysis-run-lock/analysis-run-lock.s
 
 describe('AnalysisRunService', () => {
   let service: AnalysisRunService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
 
   let store: {
     pendingAnalysis: ReturnType<typeof signal<PendingAnalysis | null>>;
@@ -124,12 +126,11 @@ describe('AnalysisRunService', () => {
       navigate: vi.fn(),
     };
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
@@ -138,7 +139,7 @@ describe('AnalysisRunService', () => {
         { provide: AnalysisRunStorageService, useValue: storage },
         { provide: AnalysisRunWebSocketService, useValue: websocket },
         { provide: AnalysisRunLockService, useValue: locker },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: NotificationsFacade, useValue: notifications },
         { provide: AnalysisHistoryFacade, useValue: history },
         { provide: AnalysisResultsFacade, useValue: results },

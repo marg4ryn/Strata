@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { PanelOverlayController } from './panel-overlay.controller';
+import { PanelOverlayController } from './panel-overlay-controller';
 import type { PanelFacade } from '../services/panel-coordinator.service';
 
 describe('PanelOverlayController', () => {

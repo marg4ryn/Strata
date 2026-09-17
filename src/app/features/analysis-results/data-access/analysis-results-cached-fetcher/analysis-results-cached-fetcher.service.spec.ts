@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisResultsCachedFetcherService } from './analysis-results-cached-fetcher.service';
 import { CACHE_CONFIG } from './cache.config';
 import type { CacheConfig } from './cache.config';
@@ -44,17 +46,21 @@ describe('AnalysisResultsCachedFetcherService', () => {
   const response = new Response(JSON.stringify(data));
 
   let service: AnalysisResultsCachedFetcherService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let config: CacheConfig;
   let mockCaches: MockCacheStorage;
 
   beforeEach(() => {
-    logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    logger = MockService(ContextLogger);
     config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: CACHE_CONFIG, useValue: config },
       ],
     });

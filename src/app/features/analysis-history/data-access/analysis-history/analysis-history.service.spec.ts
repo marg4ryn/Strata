@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
 import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
 import { AnalysisHistoryService } from './analysis-history.service';
@@ -22,7 +23,7 @@ class MockBroadcastChannel {
 
 describe('AnalysisHistoryService', () => {
   let service: AnalysisHistoryService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let mockChannel: MockBroadcastChannel;
 
   let store: {
@@ -58,16 +59,15 @@ describe('AnalysisHistoryService', () => {
       clearAnalysisHistory: vi.fn(),
     };
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
-
     results = {
       navigateToAnalysis: vi.fn(),
     };
+
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     mockChannel = new MockBroadcastChannel();
     class MockBroadcastChannelConstructor {
@@ -82,10 +82,11 @@ describe('AnalysisHistoryService', () => {
       providers: [
         { provide: AnalysisHistoryStoreService, useValue: store },
         { provide: AnalysisHistoryStorageService, useValue: storage },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: AnalysisResultsFacade, useValue: results },
       ],
     });
+
     service = TestBed.inject(AnalysisHistoryService);
   });
 

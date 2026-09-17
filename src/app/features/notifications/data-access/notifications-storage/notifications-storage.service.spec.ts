@@ -1,13 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { StorageService } from '@app/core/storage/storage.service';
 import { NotificationsStorageService } from './notifications-storage.service';
 import { Notification } from '../../notifications.model';
 
 describe('NotificationsStorageService', () => {
   let service: NotificationsStorageService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
 
   let storage: {
     setItem: ReturnType<typeof vi.fn>;
@@ -22,19 +24,19 @@ describe('NotificationsStorageService', () => {
       removeItem: vi.fn(),
     };
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: StorageService, useValue: storage },
       ],
     });
+
     service = TestBed.inject(NotificationsStorageService);
   });
 

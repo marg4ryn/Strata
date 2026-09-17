@@ -1,11 +1,11 @@
-import { Service, signal, inject } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { AnalysisStatusKey, PendingAnalysis, ErrorType } from '../../analysis-run.model';
 
 @Service()
 export class AnalysisRunStoreService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisRunStoreService');
 
   readonly pendingAnalysis = signal<PendingAnalysis | null>(null);
   readonly progress = signal<AnalysisStatusKey | null>(null);
@@ -23,7 +23,7 @@ export class AnalysisRunStoreService {
     this.result.set(null);
     this.error.set(null);
     this.errorType.set(null);
-    this.logger.info('Analysis Run Store Service reset analysis state');
+    this.logger.info('Analysis state reset');
   }
 
   resetState(): void {
@@ -35,6 +35,6 @@ export class AnalysisRunStoreService {
     this.isBusy.set(false);
     this.isAborting.set(false);
     this.showModal.set(false);
-    this.logger.info('Analysis Run Store Service reset state');
+    this.logger.info('State reset');
   }
 }

@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { CACHE_CONFIG } from './cache.config';
 
 interface CacheRegistryEntry {
@@ -10,7 +10,7 @@ interface CacheRegistryEntry {
 
 @Service()
 export class AnalysisResultsCachedFetcherService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisResultsCachedFetcherService');
   private readonly config = inject(CACHE_CONFIG);
 
   async getOrFetch<T>(cacheName: string, cacheKey: string, fetchFn: () => Promise<T>): Promise<T> {
@@ -18,17 +18,13 @@ export class AnalysisResultsCachedFetcherService {
     await this.touchRegistry(cacheName);
 
     if (cached) {
-      this.logger.info(
-        `Analysis Results Cached Fetcher Service returned from cache: ${cacheName}/${cacheKey}`,
-      );
+      this.logger.debug('Cache hit', { cacheName, cacheKey });
       return cached;
     }
 
     const data = await fetchFn();
     await this.tryWriteToCache<T>(cacheName, cacheKey, data);
-    this.logger.info(
-      `Analysis Results Cached Fetcher Service fetched data for: ${cacheName}/${cacheKey}`,
-    );
+    this.logger.debug('Cache miss - data fetched and stored', { cacheName, cacheKey });
     return data;
   }
 
@@ -38,10 +34,7 @@ export class AnalysisResultsCachedFetcherService {
     try {
       cache = await caches.open(cacheName);
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to open cache: ${cacheName}`,
-        error,
-      );
+      this.logger.warn('Failed to open cache', { cacheName, error });
       return null;
     }
 
@@ -50,10 +43,7 @@ export class AnalysisResultsCachedFetcherService {
     try {
       response = await cache.match(cacheKey);
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to read key: ${cacheKey}`,
-        error,
-      );
+      this.logger.warn('Failed to read key from cache', { cacheKey, error });
       return null;
     }
 
@@ -64,10 +54,10 @@ export class AnalysisResultsCachedFetcherService {
     try {
       return (await response.json()) as T;
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to parse: ${cacheKey}, clearing corrupted data`,
+      this.logger.warn('Failed to parse cached data, clearing corrupted entry', {
+        cacheKey,
         error,
-      );
+      });
       await this.deleteCacheKey(cache, cacheKey);
       return null;
     }
@@ -79,10 +69,7 @@ export class AnalysisResultsCachedFetcherService {
       const response = new Response(JSON.stringify(data));
       await cache.put(cacheKey, response);
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to save to cache: ${cacheName}/${cacheKey}`,
-        error,
-      );
+      this.logger.warn('Failed to save to cache', { cacheName, cacheKey, error });
     }
   }
 
@@ -107,10 +94,7 @@ export class AnalysisResultsCachedFetcherService {
       if (!response) return [];
       return (await response.json()) as CacheRegistryEntry[];
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to read cache registry`,
-        error,
-      );
+      this.logger.warn('Failed to read cache registry', { error });
       return [];
     }
   }
@@ -120,10 +104,7 @@ export class AnalysisResultsCachedFetcherService {
       const cache = await caches.open(this.config.registryCacheName);
       await cache.put(this.config.registryKey, new Response(JSON.stringify(registry)));
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to save cache registry`,
-        error,
-      );
+      this.logger.warn('Failed to save cache registry', { error });
     }
   }
 
@@ -140,6 +121,8 @@ export class AnalysisResultsCachedFetcherService {
 
       const evictedNames = new Set(toEvict.map((entry) => entry.cacheName));
       await this.writeRegistry(registry.filter((entry) => !evictedNames.has(entry.cacheName)));
+
+      this.logger.debug('Evicted old caches to enforce limits', { evictedCount: toEvict.length });
     }
   }
 
@@ -147,10 +130,7 @@ export class AnalysisResultsCachedFetcherService {
     try {
       await cache.delete(cacheKey);
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to delete: ${cacheKey}`,
-        error,
-      );
+      this.logger.warn('Failed to delete cache key', { cacheKey, error });
     }
   }
 
@@ -158,10 +138,7 @@ export class AnalysisResultsCachedFetcherService {
     try {
       await caches.delete(cacheName);
     } catch (error) {
-      this.logger.warn(
-        `Analysis Results Cached Fetcher Service failed to delete: ${cacheName}`,
-        error,
-      );
+      this.logger.warn('Failed to delete cache', { cacheName, error });
     }
   }
 }

@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 import type { Mock } from 'vitest';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisResultsService } from './analysis-results.service';
 import { CACHE_CONFIG } from '../analysis-results-cached-fetcher/cache.config';
 import type { CacheConfig } from '../analysis-results-cached-fetcher/cache.config';
@@ -12,7 +14,7 @@ describe('AnalysisResultsService', () => {
   const analysisId = '123';
 
   let service: AnalysisResultsService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let config: CacheConfig;
   let cachedFetcher: { getOrFetch: Mock };
   let api: {
@@ -23,7 +25,7 @@ describe('AnalysisResultsService', () => {
 
   beforeEach(() => {
     cachedFetcher = { getOrFetch: vi.fn() };
-    logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    logger = MockService(ContextLogger);
     config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
     api = {
       fetchRepositoryDetails: vi.fn(),
@@ -31,11 +33,15 @@ describe('AnalysisResultsService', () => {
       fetchAuthorStatistics: vi.fn(),
     };
 
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
+
     TestBed.configureTestingModule({
       providers: [
         { provide: AnalysisResultsCachedFetcherService, useValue: cachedFetcher },
         { provide: AnalysisResultsApiService, useValue: api },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: CACHE_CONFIG, useValue: config },
       ],
     });

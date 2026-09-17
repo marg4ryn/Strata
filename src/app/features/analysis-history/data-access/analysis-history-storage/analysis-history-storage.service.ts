@@ -1,26 +1,18 @@
 import { Service, inject } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { StorageService } from '@app/core/storage/storage.service';
 import { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 @Service()
 export class AnalysisHistoryStorageService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisHistoryStorageService');
   private readonly storage = inject(StorageService);
 
   private readonly analysisHistoryKey = 'analysisHistory';
 
   getAnalysisHistory(): AnalysisHistoryEntry[] | null {
-    const analysisHistory = this.storage.getItem<AnalysisHistoryEntry[]>(
-      localStorage,
-      this.analysisHistoryKey,
-    );
-    this.logger.debug(
-      'Analysis History Storage Service returned analysisHistory from localStorage',
-      analysisHistory,
-    );
-    return analysisHistory;
+    return this.storage.getItem<AnalysisHistoryEntry[]>(localStorage, this.analysisHistoryKey);
   }
 
   saveAnalysisHistoryEntry(analysisHistoryEntry: AnalysisHistoryEntry): void {
@@ -31,9 +23,7 @@ export class AnalysisHistoryStorageService {
       this.analysisHistoryKey,
       updatedAnalysisHistory,
     );
-    this.logger.info(
-      `Analysis History Storage Service saved analysisHistoryEntry with analysisId: ${analysisHistoryEntry.analysisId} to localStorage`,
-    );
+    this.logger.debug('History entry saved', { analysisId: analysisHistoryEntry.analysisId });
   }
 
   removeAnalysisHistoryEntry(analysisId: string): void {
@@ -46,14 +36,12 @@ export class AnalysisHistoryStorageService {
       this.clearAnalysisHistory();
     } else {
       this.storage.setItem(localStorage, this.analysisHistoryKey, filteredHistory);
-      this.logger.info(
-        `Analysis History Storage Service removed analysisHistoryEntry with analysisId: ${analysisId} from localStorage`,
-      );
+      this.logger.debug('History entry removed', { analysisId });
     }
   }
 
   clearAnalysisHistory(): void {
     this.storage.removeItem(localStorage, this.analysisHistoryKey);
-    this.logger.info('Analysis History Storage removed analysisHistory from localStorage');
+    this.logger.info('All history entries cleared');
   }
 }

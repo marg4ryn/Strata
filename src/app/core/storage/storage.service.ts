@@ -1,17 +1,17 @@
-import { Service, inject } from '@angular/core';
+import { Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 
 @Service()
 export class StorageService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('StorageService');
 
   getItem<T>(storage: Storage, key: string): T | null {
     let raw: string | null;
     try {
       raw = storage.getItem(key);
     } catch (error) {
-      this.logger.error(`Storage Service failed to read: ${key}`, error);
+      this.logger.error('Storage read failed', { key, error });
       return null;
     }
 
@@ -20,7 +20,7 @@ export class StorageService {
     try {
       return JSON.parse(raw) as T;
     } catch (error) {
-      this.logger.error(`Storage Service failed to parse: ${key}, clearing corrupted data`, error);
+      this.logger.warn('Invalid stored data, removing', { key, error });
       this.removeItem(storage, key);
       return null;
     }
@@ -30,7 +30,7 @@ export class StorageService {
     try {
       storage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      this.logger.error(`Storage Service failed to save: ${key}`, error);
+      this.logger.error('Storage write failed', { key, error });
     }
   }
 
@@ -38,7 +38,7 @@ export class StorageService {
     try {
       storage.removeItem(key);
     } catch (error) {
-      this.logger.error(`Storage Service failed to remove: ${key}`, error);
+      this.logger.error('Storage removal failed', { key, error });
     }
   }
 }

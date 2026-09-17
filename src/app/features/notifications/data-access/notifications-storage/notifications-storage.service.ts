@@ -1,34 +1,26 @@
 import { inject, Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { StorageService } from '@app/core/storage/storage.service';
 import { Notification } from '../../notifications.model';
 
 @Service()
 export class NotificationsStorageService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('NotificationsStorageService');
   private readonly storage = inject(StorageService);
 
   private readonly notificationsKey = 'notifications';
   private readonly unreadNotificationsCountKey = 'unreadNotificationsCount';
 
   getNotifications(): Notification[] | null {
-    const notifications = this.storage.getItem<Notification[]>(
-      sessionStorage,
-      this.notificationsKey,
-    );
-    this.logger.debug(
-      'Notifications Storage Service returned notifications from sessionStorage',
-      notifications,
-    );
-    return notifications;
+    return this.storage.getItem<Notification[]>(sessionStorage, this.notificationsKey);
   }
 
   saveNotification(notification: Notification): void {
     const notifications = this.getNotifications() ?? [];
     const updatedNotifications = [...notifications, notification];
     this.storage.setItem(sessionStorage, this.notificationsKey, updatedNotifications);
-    this.logger.info('Notifications Storage Service saved notification to sessionStorage');
+    this.logger.debug('Notification saved', { sentAt: notification.sentAt });
   }
 
   removeNotification(sentAt: number): void {
@@ -43,38 +35,25 @@ export class NotificationsStorageService {
       this.clearNotifications();
     } else {
       this.storage.setItem(sessionStorage, this.notificationsKey, filteredNotifications);
-      this.logger.info('Notifications Storage Service removed notification from sessionStorage');
+      this.logger.debug('Notification removed', { sentAt });
     }
   }
 
   clearNotifications(): void {
     this.storage.removeItem(sessionStorage, this.notificationsKey);
-    this.logger.info('Notifications Storage Service removed notifications from sessionStorage');
+    this.logger.info('All notifications cleared');
   }
 
   getUnreadNotificationsCount(): number | null {
-    const unreadNotificationsCount = this.storage.getItem<number>(
-      sessionStorage,
-      this.unreadNotificationsCountKey,
-    );
-    this.logger.debug(
-      'Notifications Storage Service returned unread notifications count from sessionStorage',
-      unreadNotificationsCount,
-    );
-    return unreadNotificationsCount;
+    return this.storage.getItem<number>(sessionStorage, this.unreadNotificationsCountKey);
   }
 
   saveUnreadNotificationsCount(count: number): void {
     this.storage.setItem<number>(sessionStorage, this.unreadNotificationsCountKey, count);
-    this.logger.info(
-      'Notifications Storage Service saved unread notifications count to sessionStorage',
-    );
+    this.logger.debug('Unread notifications count updated', { count });
   }
 
   clearUnreadNotificationsCount(): void {
     this.storage.removeItem(sessionStorage, this.unreadNotificationsCountKey);
-    this.logger.info(
-      'Notifications Storage Service removed unread notifications count from sessionStorage',
-    );
   }
 }

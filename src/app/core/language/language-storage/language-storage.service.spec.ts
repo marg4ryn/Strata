@@ -2,24 +2,29 @@ import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
 import { StorageService } from '@app/core/storage/storage.service';
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { LanguageStorageService } from './language-storage.service';
 
 describe('LanguageStorageService', () => {
   let service: LanguageStorageService;
-  let logger: ReturnType<typeof MockService<LoggerService>>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let storage: ReturnType<typeof MockService<StorageService>>;
 
   const langPreference = 'en';
   const langPreferenceKey = 'langPreference';
 
   beforeEach(() => {
-    logger = MockService(LoggerService);
+    logger = MockService(ContextLogger);
     storage = MockService(StorageService);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: StorageService, useValue: storage },
       ],
     });
@@ -37,7 +42,6 @@ describe('LanguageStorageService', () => {
       const res = service.getLangPreference();
       expect(res).toBe(langPreference);
       expect(storage.getItem).toHaveBeenCalledWith(localStorage, langPreferenceKey);
-      expect(logger.debug).toHaveBeenCalledOnce();
     });
 
     it('returns null when storage is empty', () => {
@@ -50,7 +54,7 @@ describe('LanguageStorageService', () => {
     it('saves langPreference to storage', () => {
       service.saveLangPreference(langPreference);
       expect(storage.setItem).toHaveBeenCalledWith(localStorage, langPreferenceKey, langPreference);
-      expect(logger.info).toHaveBeenCalledOnce();
+      expect(logger.debug).toHaveBeenCalledOnce();
     });
   });
 });

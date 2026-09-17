@@ -1,11 +1,11 @@
-import { Service, signal, inject } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { Notification } from '../../notifications.model';
 
 @Service()
 export class NotificationsStoreService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('NotificationsStoreService');
 
   readonly unreadNotificationsCount = signal<number>(0);
   readonly notifications = signal<Notification[] | null>(null);
@@ -13,15 +13,15 @@ export class NotificationsStoreService {
 
   addNotification(notification: Notification): void {
     this.notifications.update((notifications) => [...(notifications ?? []), notification]);
-    this.logger.info('Notifications Store Service added notification: ', notification);
+    this.logger.info('Notification added', { sentAt: notification.sentAt });
   }
 
   removeNotification(sentAt: number): void {
-    if (!this.notifications()) return;
-    const filteredNotifications = this.notifications()!.filter(
-      (notification) => notification.sentAt !== sentAt,
-    );
-    this.notifications.set(filteredNotifications.length < 1 ? null : filteredNotifications);
-    this.logger.info(`Notifications Store Service removed notification sent at: ${sentAt}`);
+    const currentNotifications = this.notifications();
+    if (!currentNotifications) return;
+
+    const filtered = currentNotifications.filter((n) => n.sentAt !== sentAt);
+    this.notifications.set(filtered.length < 1 ? null : filtered);
+    this.logger.info('Notification removed', { sentAt });
   }
 }

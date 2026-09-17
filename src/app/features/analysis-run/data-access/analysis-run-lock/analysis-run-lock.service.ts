@@ -1,10 +1,10 @@
-import { inject, Service } from '@angular/core';
+import { Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 
 @Service()
 export class AnalysisRunLockService {
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisRunLockService');
   private readonly prefix = 'session-';
   private readonly releasers = new Map<string, () => void>();
 
@@ -12,16 +12,12 @@ export class AnalysisRunLockService {
     const name = this.prefix + sessionId;
 
     if (this.releasers.has(sessionId)) {
-      this.logger.debug(
-        `Analysis Run Lock Service did not try to lock sessionId: ${sessionId} - sessionId in use`,
-      );
+      this.logger.debug('Lock aborted - already in use', { sessionId });
       return false;
     }
 
     if (!navigator.locks) {
-      this.logger.error(
-        `Analysis Run Lock Service unavailable - Web Locks API not supported (sessionId: ${sessionId})`,
-      );
+      this.logger.error('Web Locks API not supported', { sessionId });
       return false;
     }
 
@@ -46,19 +42,14 @@ export class AnalysisRunLockService {
 
       if (acquired) {
         this.releasers.set(sessionId, release);
-        this.logger.info(`Analysis Run Lock Service locked sessionId: ${sessionId}`);
+        this.logger.info('Lock acquired', { sessionId });
       } else {
-        this.logger.debug(
-          `Analysis Run Lock Service was not able to lock sessionId: ${sessionId} - sessionId in use`,
-        );
+        this.logger.debug('Lock rejected - in use by another tab', { sessionId });
       }
 
       return acquired;
-    } catch (err) {
-      this.logger.error(
-        `Analysis Run Lock Service failed to acquire lock for sessionId: ${sessionId}`,
-        err,
-      );
+    } catch (error) {
+      this.logger.error('Failed to acquire lock', { sessionId, error });
       return false;
     }
   }
@@ -67,20 +58,15 @@ export class AnalysisRunLockService {
     const release = this.releasers.get(sessionId);
 
     if (!release) {
-      this.logger.debug(
-        `Analysis Run Lock Service did not try to unlock sessionId: ${sessionId} - no active lock found`,
-      );
+      this.logger.debug('Unlock aborted - no active lock found', { sessionId });
       return;
     }
 
     try {
       release();
-      this.logger.info(`Analysis Run Lock Service unlocked sessionId: ${sessionId}`);
-    } catch (err) {
-      this.logger.error(
-        `Analysis Run Lock Service failed to release lock for sessionId: ${sessionId}`,
-        err,
-      );
+      this.logger.info('Lock released', { sessionId });
+    } catch (error) {
+      this.logger.error('Failed to release lock', { sessionId, error });
     } finally {
       this.releasers.delete(sessionId);
     }

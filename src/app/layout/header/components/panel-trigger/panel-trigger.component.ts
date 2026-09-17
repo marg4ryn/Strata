@@ -14,7 +14,7 @@ import {
 import { CdkPortal } from '@angular/cdk/portal';
 import { Overlay } from '@angular/cdk/overlay';
 
-import { PanelOverlayController } from '../../controllers/panel-overlay.controller';
+import { PanelOverlayController } from '../../panel-overlay-controller/panel-overlay-controller';
 import { PanelCoordinatorService } from '../../services/panel-coordinator.service';
 import type { PanelFacade } from '../../services/panel-coordinator.service';
 

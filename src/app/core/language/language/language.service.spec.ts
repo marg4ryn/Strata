@@ -6,7 +6,8 @@ import type { Translation } from '@jsverse/transloco';
 import { MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { LanguageService } from './language.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
@@ -15,7 +16,7 @@ import type { LangPreference } from '../language.model';
 
 describe('LanguageService', () => {
   let service: LanguageService;
-  let logger: ReturnType<typeof MockService<LoggerService>>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let storage: ReturnType<typeof MockService<LanguageStorageService>>;
   let browser: ReturnType<typeof MockService<BrowserLanguageService>>;
   let transloco: ReturnType<typeof MockService<TranslocoService>>;
@@ -23,12 +24,16 @@ describe('LanguageService', () => {
   let store: { langPreference: ReturnType<typeof signal<LangPreference>> };
 
   beforeEach(() => {
-    logger = MockService(LoggerService);
+    logger = MockService(ContextLogger);
     storage = MockService(LanguageStorageService);
     browser = MockService(BrowserLanguageService);
     transloco = MockService(TranslocoService);
     meta = MockService(Meta);
     store = { langPreference: signal('system') };
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     vi.mocked(transloco.load).mockReturnValue(of({} as Translation));
 
@@ -38,7 +43,7 @@ describe('LanguageService', () => {
         { provide: LanguageStorageService, useValue: storage },
         { provide: BrowserLanguageService, useValue: browser },
         { provide: TranslocoService, useValue: transloco },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
         { provide: Meta, useValue: meta },
       ],
     });

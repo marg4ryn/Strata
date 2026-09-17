@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisRunWebSocketService } from './analysis-run-web-socket.service';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
 import { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';
@@ -37,6 +39,7 @@ class MockWebSocket {
 
 describe('AnalysisRunWebSocketService', () => {
   let service: AnalysisRunWebSocketService;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
   let store: {
     progress: ReturnType<typeof signal<AnalysisStatusKey | null>>;
     result: ReturnType<typeof signal<string | null>>;
@@ -45,7 +48,6 @@ describe('AnalysisRunWebSocketService', () => {
     isBusy: ReturnType<typeof signal<boolean>>;
     isAborting: ReturnType<typeof signal<boolean>>;
   };
-  let logger: Partial<LoggerService>;
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -61,17 +63,16 @@ describe('AnalysisRunWebSocketService', () => {
       errorType: signal(null),
     };
 
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
       providers: [
         { provide: AnalysisRunStoreService, useValue: store },
-        { provide: LoggerService, useValue: logger },
+        { provide: LoggerService, useValue: loggerService },
       ],
     });
 

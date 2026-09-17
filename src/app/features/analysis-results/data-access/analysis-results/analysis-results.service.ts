@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
 import type {
@@ -12,16 +12,14 @@ import type {
 
 @Service()
 export class AnalysisResultsService {
-  private readonly api = inject(AnalysisResultsApiService);
-  private readonly logger = inject(LoggerService);
+  private readonly logger = injectLogger('AnalysisResultsService');
   private readonly cachedFetcher = inject(AnalysisResultsCachedFetcherService);
+  private readonly api = inject(AnalysisResultsApiService);
 
   private readonly apiVersion = 'v1';
 
   async getRepositorySummary(analysisId: string): Promise<RepositorySummary> {
-    this.logger.info(
-      `Analysis Results Service received a request to fetch repository summary data for analysisId: ${analysisId}`,
-    );
+    this.logger.info('Fetching repository summary data', { analysisId });
 
     const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
 

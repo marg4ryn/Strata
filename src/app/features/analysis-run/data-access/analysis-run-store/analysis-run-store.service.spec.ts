@@ -1,23 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger.service';
+import { LoggerService } from '@app/core/logging/logger/logger.service';
+import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
 import { AnalysisRunStoreService } from './analysis-run-store.service';
 import { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisRunStoreService', () => {
   let service: AnalysisRunStoreService;
-  let logger: Partial<LoggerService>;
+  let logger: ReturnType<typeof MockService<ContextLogger>>;
 
   beforeEach(() => {
-    logger = {
-      debug: vi.fn(),
-      info: vi.fn(),
-      warn: vi.fn(),
-      error: vi.fn(),
-    };
+    logger = MockService(ContextLogger);
+
+    const loggerService = MockService(LoggerService, {
+      withContext: () => logger,
+    });
 
     TestBed.configureTestingModule({
-      providers: [{ provide: LoggerService, useValue: logger }],
+      providers: [{ provide: LoggerService, useValue: loggerService }],
     });
 
     service = TestBed.inject(AnalysisRunStoreService);

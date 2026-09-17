@@ -1,8 +1,9 @@
 import type { MockInstance } from 'vitest';
 
 import { environment } from '@env/environment';
+import { ContextLogger } from '../context-logger/context-logger';
 import { LoggerService } from './logger.service';
-import { LogLevel } from './logger.enum';
+import { LogLevel } from '../logger.enum';
 
 vi.mock('@env/environment', () => ({
   environment: {
@@ -97,6 +98,24 @@ describe('LoggerService', () => {
       service.warn('baz');
       service.error('foo');
       Object.values(consoleSpies).forEach((spy) => expect(spy).not.toHaveBeenCalled());
+    });
+  });
+
+  describe('withContext', () => {
+    it('returns a ContextLogger instance', () => {
+      const contextLogger = service.withContext('StorageService');
+      expect(contextLogger).toBeInstanceOf(ContextLogger);
+    });
+
+    it('prefixes messages logged through the returned ContextLogger', () => {
+      const contextLogger = service.withContext('StorageService');
+
+      contextLogger.debug('foo');
+
+      expect(consoleSpies.debug).toHaveBeenCalledWith(
+        expect.stringContaining('[DEBUG]'),
+        '[StorageService] foo',
+      );
     });
   });
 });
