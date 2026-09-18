@@ -86,7 +86,7 @@ export class AnalysisRunService {
     const acquired = await this.locker.lock(sessionId);
 
     if (!acquired) {
-      this.logger.debug('Reconnected to analysis', { sessionId });
+      this.logger.debug('Analysis is already being processed by another tab', { sessionId });
       this.storage.deleteSessionId();
       return await this.tryToResumeAnalysis();
     }
@@ -97,7 +97,7 @@ export class AnalysisRunService {
     );
 
     if (!filteredAnalyses || filteredAnalyses.length < 1) {
-      this.logger.debug('Analysis is already handled by another tab', { sessionId });
+      this.logger.debug('Analysis has already been processed by another tab', { sessionId });
       this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
       return await this.tryToResumeAnalysis();
@@ -125,7 +125,7 @@ export class AnalysisRunService {
       const acquired = await this.locker.lock(sessionId);
 
       if (!acquired) {
-        this.logger.debug('Could not take over analysis; it is handled by another tab', {
+        this.logger.debug('Could not take over analysis; it is being processed by another tab', {
           sessionId,
         });
         continue;
@@ -137,7 +137,7 @@ export class AnalysisRunService {
       );
 
       if (!freshFilteredAnalyses || freshFilteredAnalyses.length < 1) {
-        this.logger.debug('Could not take over analysis; it is handled by another tab', {
+        this.logger.debug('Could not take over analysis; it is being processed by another tab', {
           sessionId,
         });
         await this.locker.unlock(sessionId);
