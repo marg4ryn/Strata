@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Location } from '@angular/common';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import AboutPageComponent from './about-page.component';
+import { AboutPageComponent } from './about-page.component';
 
 describe('AboutPageComponent', () => {
   let component: AboutPageComponent;
