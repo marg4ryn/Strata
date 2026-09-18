@@ -1,43 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService , ContextLogger } from '@app/core/logging';
-
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LockService } from '@app/core/lock';
 import { AnalysisRunLockService } from './analysis-run-lock.service';
-
-class MockLockManager {
-  locks = new Set<string>();
-
-  async request(
-    name: string,
-    options: { ifAvailable?: boolean },
-    callback: (lock: { name: string } | null) => Promise<void> | void,
-  ): Promise<void> {
-    const available = !this.locks.has(name);
-
-    if (!available) {
-      await callback(null);
-      return;
-    }
-
-    this.locks.add(name);
-    try {
-      await callback({ name });
-    } finally {
-      this.locks.delete(name);
-    }
-  }
-}
 
 describe('AnalysisRunLockService', () => {
   let service: AnalysisRunLockService;
-  let logger: ReturnType<typeof MockService<ContextLogger>>;
-  let lockManager: MockLockManager;
+  let logger: ContextLogger;
+  let locker: LockService;
 
   beforeEach(() => {
-    lockManager = new MockLockManager();
-    vi.stubGlobal('navigator', { locks: lockManager });
-
+    locker = MockService(LockService);
     logger = MockService(ContextLogger);
 
     const loggerService = MockService(LoggerService, {
@@ -45,92 +19,60 @@ describe('AnalysisRunLockService', () => {
     });
 
     TestBed.configureTestingModule({
-      providers: [{ provide: LoggerService, useValue: loggerService }],
+      providers: [
+        AnalysisRunLockService,
+        { provide: LockService, useValue: locker },
+        { provide: LoggerService, useValue: loggerService },
+      ],
     });
 
     service = TestBed.inject(AnalysisRunLockService);
   });
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   const sessionId = '123';
+  const expectedKey = `session-${sessionId}`;
 
   describe('lock', () => {
-    it('locks available sessionId', async () => {
+    it('returns true when lock is acquired', async () => {
+      vi.spyOn(locker, 'lock').mockResolvedValue(true);
+
       const res = await service.lock(sessionId);
 
-      expect(res).toBeTruthy();
-      expect(logger.info).toHaveBeenCalled();
+      expect(locker.lock).toHaveBeenCalledWith(expectedKey);
+      expect(res).toBe(true);
     });
 
-    it('does not lock sessionId that is already tracked internally', async () => {
-      await service.lock(sessionId);
-      const res = await service.lock(sessionId);
-
-      expect(res).toBeFalsy();
-      expect(logger.debug).toHaveBeenCalled();
-    });
-
-    it('does not lock sessionId held by Web Locks API but not tracked internally', async () => {
-      lockManager.locks.add(`session-${sessionId}`);
+    it('returns false when lock is NOT acquired', async () => {
+      vi.spyOn(locker, 'lock').mockResolvedValue(false);
 
       const res = await service.lock(sessionId);
 
-      expect(res).toBeFalsy();
-      expect(logger.debug).toHaveBeenCalled();
-    });
-
-    it('returns false when Web Locks API is not supported', async () => {
-      vi.stubGlobal('navigator', {});
-
-      const res = await service.lock(sessionId);
-
-      expect(res).toBeFalsy();
-      expect(logger.error).toHaveBeenCalled();
-    });
-
-    it('handles error thrown by navigator.locks.request', async () => {
-      const error = new Error('boom');
-      vi.spyOn(lockManager, 'request').mockRejectedValue(error);
-
-      const res = await service.lock(sessionId);
-
-      expect(res).toBeFalsy();
-      expect(logger.error).toHaveBeenCalled();
+      expect(locker.lock).toHaveBeenCalledWith(expectedKey);
+      expect(res).toBe(false);
     });
   });
 
   describe('unlock', () => {
-    it('unlocks a locked sessionId', async () => {
-      const release = vi.fn();
-      (service as any).releasers.set(sessionId, release);
+    it('returns true when lock is released', async () => {
+      vi.spyOn(locker, 'unlock').mockResolvedValue(true);
 
-      await service.unlock(sessionId);
+      const res = await service.unlock(sessionId);
 
-      expect(release).toHaveBeenCalled();
-      expect(logger.info).toHaveBeenCalled();
-      expect((service as any).releasers.has(sessionId)).toBeFalsy();
+      expect(locker.unlock).toHaveBeenCalledWith(expectedKey);
+      expect(res).toBe(true);
     });
 
-    it('does nothing when unlocking sessionId with no active lock', () => {
-      service.unlock(sessionId);
+    it('returns false when lock is NOT released', async () => {
+      vi.spyOn(locker, 'unlock').mockResolvedValue(false);
 
-      expect(logger.debug).toHaveBeenCalled();
-      expect(logger.info).not.toHaveBeenCalled();
-    });
+      const res = await service.unlock(sessionId);
 
-    it('handles error thrown by release function during unlock', () => {
-      const error = new Error('release failed');
-      (service as any).releasers.set(sessionId, () => {
-        throw error;
-      });
-
-      service.unlock(sessionId);
-
-      expect(logger.error).toHaveBeenCalled();
-      expect((service as any).releasers.has(sessionId)).toBeFalsy();
+      expect(locker.unlock).toHaveBeenCalledWith(expectedKey);
+      expect(res).toBe(false);
     });
   });
 });
