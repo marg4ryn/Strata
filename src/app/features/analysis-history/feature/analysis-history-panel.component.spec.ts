@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
+import { getTranslocoModule } from '@app/core/transloco';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { AnalysisHistoryPanelComponent } from './analysis-history-panel.component';
 import { AnalysisHistoryFacade } from '../analysis-history.facade';
-import { AnalysisHistoryEntry } from '../analysis-history.model';
+import type { AnalysisHistoryEntry } from '../analysis-history.model';
 
 describe('AnalysisHistoryPanelComponent', () => {
   let component: AnalysisHistoryPanelComponent;

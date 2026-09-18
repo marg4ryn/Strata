@@ -1,6 +1,6 @@
 import { Service } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
+import { injectLogger } from '@app/core/logging';
 
 @Service()
 export class StorageService {

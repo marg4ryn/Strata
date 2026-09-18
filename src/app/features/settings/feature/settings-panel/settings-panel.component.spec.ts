@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LanguageFacade } from '@app/core/language/language.facade';
-import { LangPreference } from '@app/core/language/language.model';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LanguageFacade } from '@app/core/language';
+import type { LangPreference } from '@app/core/language';
 import { SettingsPanelComponent } from './settings-panel.component';
 import { SettingsFacade } from '../../settings.facade';
 

@@ -2,11 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
+import { LoggerService, ContextLogger } from '@app/core/logging';
 import { AnalysisRunWebSocketService } from './analysis-run-web-socket.service';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
-import { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';
+import type { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];

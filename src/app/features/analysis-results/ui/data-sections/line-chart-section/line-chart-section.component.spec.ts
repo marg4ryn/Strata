@@ -3,8 +3,8 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
+import { getTranslocoModule } from '@app/core/transloco';
+import { DropdownComponent } from '@app/shared/components';
 import { LineChartSectionComponent } from './line-chart-section.component';
 import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
 import type {

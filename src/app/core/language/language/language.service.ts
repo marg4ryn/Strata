@@ -2,7 +2,7 @@ import { Service, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { TranslocoService } from '@jsverse/transloco';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
+import { injectLogger } from '@app/core/logging';
 import { BrowserLanguageService } from '../browser-language/browser-language.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';
 import { LanguageStoreService } from '../language-store/language-store.service';

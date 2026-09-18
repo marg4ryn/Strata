@@ -6,8 +6,8 @@ import type { Translation } from '@jsverse/transloco';
 import { MockService } from 'ng-mocks';
 import { of } from 'rxjs';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
+import { LoggerService , ContextLogger } from '@app/core/logging';
+
 import { LanguageService } from './language.service';
 import { LanguageStoreService } from '../language-store/language-store.service';
 import { LanguageStorageService } from '../language-storage/language-storage.service';

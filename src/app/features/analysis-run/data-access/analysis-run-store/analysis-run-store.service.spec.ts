@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
+import { LoggerService, ContextLogger } from '@app/core/logging';
 import { AnalysisRunStoreService } from './analysis-run-store.service';
-import { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
+import type { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisRunStoreService', () => {
   let service: AnalysisRunStoreService;

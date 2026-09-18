@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, input, signal, viewChild } from '@a
 import { TranslocoPipe } from '@jsverse/transloco';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
-import type { DropdownOption } from '@app/shared/components/dropdown/dropdown.component';
+import { DropdownComponent } from '@app/shared/components';
+import type { DropdownOption } from '@app/shared/components';
 import { DataSectionComponent } from '../data-section/data-section.component';
 import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
 import type {

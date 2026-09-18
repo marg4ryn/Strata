@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
+import { getTranslocoModule } from '@app/core/transloco';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { AnalysisProgressSpinnerComponent } from './analysis-progress-spinner.component';
 
 describe('AnalysisProgressSpinnerComponent', () => {
@@ -96,10 +97,10 @@ describe('AnalysisProgressSpinnerComponent', () => {
     expect(confirmModal.confirm).toHaveBeenCalledWith(expect.anything());
   });
 
-  it('does not emit abort when confirm modal is cancelled', async () => {
+  it('does not emit abortEvent when confirm modal is cancelled', async () => {
     confirmModal.confirm.mockResolvedValue(false);
     const spy = vi.fn();
-    component.abort.subscribe(spy);
+    component.abortEvent.subscribe(spy);
     fixture.detectChanges();
 
     getButtons().abort.click();
@@ -108,10 +109,10 @@ describe('AnalysisProgressSpinnerComponent', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('emits abort when confirm modal is confirmed', async () => {
+  it('emits abortEvent when confirm modal is confirmed', async () => {
     confirmModal.confirm.mockResolvedValue(true);
     const spy = vi.fn();
-    component.abort.subscribe(spy);
+    component.abortEvent.subscribe(spy);
     fixture.detectChanges();
 
     getButtons().abort.click();

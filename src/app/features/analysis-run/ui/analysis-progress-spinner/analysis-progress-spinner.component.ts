@@ -1,8 +1,6 @@
+import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
-  AfterViewInit,
-  ElementRef,
-  OnDestroy,
   Component,
   input,
   output,
@@ -13,10 +11,10 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
-import { ButtonDirective } from '@app/shared/directives/button.directive';
-import { LoadingSpinnerComponent } from '@app/shared/components/loading-spinner/loading-spinner.component';
-import { PendingAnalysis } from '../../analysis-run.model';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
+import { ButtonDirective } from '@app/shared/directives';
+import { LoadingSpinnerComponent } from '@app/shared/components';
+import type { PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
@@ -37,7 +35,7 @@ export class AnalysisProgressSpinnerComponent implements AfterViewInit, OnDestro
   readonly labelKey = input<string>('');
   readonly isAborting = input<boolean>(false);
 
-  readonly abort = output<void>();
+  readonly abortEvent = output<void>();
 
   ngAfterViewInit(): void {
     this.focusMonitor.focusVia(this.firstButton(), 'program');
@@ -50,6 +48,6 @@ export class AnalysisProgressSpinnerComponent implements AfterViewInit, OnDestro
   async abortAnalysis(): Promise<void> {
     const confirmed = await this.confirmModal.confirm(this.destroyRef);
     if (!confirmed) return;
-    this.abort.emit();
+    this.abortEvent.emit();
   }
 }

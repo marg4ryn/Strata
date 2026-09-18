@@ -1,8 +1,9 @@
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService } from '@jsverse/transloco';
 
-import type { ISODateString, ISOLocalDateTime } from '../../utils/date.utils';
+import type { ISODateString, ISOLocalDateTime } from '@app/shared/utils';
 
 @Pipe({
   name: 'localizedDate',

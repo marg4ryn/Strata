@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LocalizedDatePipe } from '@app/shared/pipes';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
-import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
+import type { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('AnalysisUnfinishedModalComponent', () => {
   let component: AnalysisUnfinishedModalComponent;
@@ -98,9 +99,9 @@ describe('AnalysisUnfinishedModalComponent', () => {
     expect(transformSpy).toHaveBeenCalledWith(range.endDate);
   });
 
-  it('emits resume when resume button is clicked', () => {
+  it('emits resumeEvent when resume button is clicked', () => {
     const spy = vi.fn();
-    component.resume.subscribe(spy);
+    component.resumeEvent.subscribe(spy);
 
     getButtons().resume.click();
 
@@ -115,10 +116,10 @@ describe('AnalysisUnfinishedModalComponent', () => {
     expect(confirmModal.confirm).toHaveBeenCalledOnce();
   });
 
-  it('does not emit abandon when confirm modal is cancelled', async () => {
+  it('does not emit abandonEvent when confirm modal is cancelled', async () => {
     confirmModal.confirm.mockResolvedValue(false);
     const spy = vi.fn();
-    component.abandon.subscribe(spy);
+    component.abandonEvent.subscribe(spy);
 
     getButtons().abandon.click();
     await fixture.whenStable();
@@ -126,10 +127,10 @@ describe('AnalysisUnfinishedModalComponent', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('emits abandon when confirm modal is confirmed', async () => {
+  it('emits abandonEvent when confirm modal is confirmed', async () => {
     confirmModal.confirm.mockResolvedValue(true);
     const spy = vi.fn();
-    component.abandon.subscribe(spy);
+    component.abandonEvent.subscribe(spy);
 
     getButtons().abandon.click();
     await fixture.whenStable();

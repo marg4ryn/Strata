@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { SettingsSectionComponent } from './settings-section.component';
 
 describe('SettingsSectionComponent', () => {
-  let component: SettingsSectionComponent;
   let fixture: ComponentFixture<SettingsSectionComponent>;
 
   beforeEach(async () => {
@@ -13,7 +13,6 @@ describe('SettingsSectionComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsSectionComponent);
-    component = fixture.componentInstance;
     fixture.componentRef.setInput('headerKey', 'test');
     fixture.detectChanges();
     await fixture.whenStable();

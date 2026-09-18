@@ -1,7 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { ConfirmOperationComponent } from './confirm-operation.component';
 
 describe('ConfirmOperationComponent', () => {
@@ -47,18 +48,18 @@ describe('ConfirmOperationComponent', () => {
   });
 
   describe('outputs', () => {
-    it('emits cancel when cancel button is clicked', () => {
+    it('emits dismissEvent when cancel button is clicked', () => {
       const spy = vi.fn();
-      component.cancel.subscribe(spy);
+      component.dismissEvent.subscribe(spy);
 
       getButtons().cancel.click();
 
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('emits confirm when confirm button is clicked', () => {
+    it('emits confirmEvent when confirm button is clicked', () => {
       const spy = vi.fn();
-      component.confirm.subscribe(spy);
+      component.confirmEvent.subscribe(spy);
 
       getButtons().confirm.click();
 

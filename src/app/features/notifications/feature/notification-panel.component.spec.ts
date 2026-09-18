@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { NotificationsFacade } from '../notifications.facade';
 import { NotificationPanelComponent } from './notification-panel.component';
-import { Notification } from '../notifications.model';
+import type { Notification } from '../notifications.model';
 
 describe('NotificationPanelComponent', () => {
-  let component: NotificationPanelComponent;
   let fixture: ComponentFixture<NotificationPanelComponent>;
 
   let facade: {
@@ -40,7 +40,6 @@ describe('NotificationPanelComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationPanelComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 

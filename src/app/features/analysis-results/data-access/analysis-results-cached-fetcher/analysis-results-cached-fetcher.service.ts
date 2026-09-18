@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
+import { injectLogger } from '@app/core/logging';
 import { CACHE_CONFIG } from './cache.config';
 
 interface CacheRegistryEntry {

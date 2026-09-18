@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { LocalizedDatePipe } from './localized-date.pipe';
 
 describe('LocalizedDatePipe', () => {

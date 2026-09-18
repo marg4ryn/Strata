@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { Overlay } from '@angular/cdk/overlay';
-import { DestroyRef } from '@angular/core';
+import type { DestroyRef } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 
 import { ConfirmOperationService } from './confirm-operation.service';
 
 describe('ConfirmOperationService', () => {
   let service: ConfirmOperationService;
-  let cancel$: Subject<void>;
-  let confirm$: Subject<void>;
+  let dismissEvent$: Subject<void>;
+  let confirmEvent$: Subject<void>;
   let backdropClick$: Subject<void>;
   let keydownEvents$: Subject<KeyboardEvent>;
   let detachments$: Subject<void>;
@@ -17,8 +17,8 @@ describe('ConfirmOperationService', () => {
   let overlayMock: any;
 
   beforeEach(() => {
-    cancel$ = new Subject();
-    confirm$ = new Subject();
+    dismissEvent$ = new Subject();
+    confirmEvent$ = new Subject();
     backdropClick$ = new Subject();
     keydownEvents$ = new Subject();
     detachments$ = new Subject();
@@ -26,7 +26,7 @@ describe('ConfirmOperationService', () => {
     componentRefMock = {
       setInput: vi.fn(),
       changeDetectorRef: { detectChanges: vi.fn() },
-      instance: { cancel: cancel$, confirm: confirm$ },
+      instance: { dismissEvent: dismissEvent$, confirmEvent: confirmEvent$ },
     };
 
     overlayRefMock = {
@@ -61,16 +61,16 @@ describe('ConfirmOperationService', () => {
     } as unknown as DestroyRef & { trigger: () => void };
   };
 
-  it('resolves true and disposes overlay on confirm', async () => {
+  it('resolves true and disposes overlay on confirmEvent', async () => {
     const promise = service.confirm(fakeDestroyRef());
-    confirm$.next();
+    confirmEvent$.next();
     await expect(promise).resolves.toBe(true);
     expect(overlayRefMock.dispose).toHaveBeenCalled();
   });
 
-  it('resolves false on cancel', async () => {
+  it('resolves false on dismissEvent', async () => {
     const promise = service.confirm(fakeDestroyRef());
-    cancel$.next();
+    dismissEvent$.next();
     await expect(promise).resolves.toBe(false);
   });
 
@@ -110,7 +110,7 @@ describe('ConfirmOperationService', () => {
     expect(componentRefMock.setInput).not.toHaveBeenCalled();
   });
 
-  it('unsubscribes cancel/confirm on detachment', () => {
+  it('unsubscribes dismiss/confirm on detachment', () => {
     const unsubSpy = vi.spyOn(Subscription.prototype, 'unsubscribe');
     service.confirm(fakeDestroyRef());
     const callsBefore = unsubSpy.mock.calls.length;
@@ -126,7 +126,7 @@ describe('ConfirmOperationService', () => {
     const focusSpy = vi.spyOn(btn, 'focus');
 
     const promise = service.confirm(fakeDestroyRef());
-    confirm$.next();
+    confirmEvent$.next();
     await promise;
 
     expect(focusSpy).toHaveBeenCalled();

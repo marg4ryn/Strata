@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { DataListSectionComponent } from './data-list-section.component';
 import type { DataListItem } from './data-list-section.component';
 
 describe('DataListSectionComponent', () => {
-  let component: DataListSectionComponent;
   let fixture: ComponentFixture<DataListSectionComponent>;
 
   const setItems = async (items: DataListItem[]) => {
@@ -22,7 +22,6 @@ describe('DataListSectionComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(DataListSectionComponent);
-    component = fixture.componentInstance;
   });
 
   it('shows the no data message when the items array is empty', async () => {

@@ -1,7 +1,7 @@
 import type { MockInstance } from 'vitest';
 
 import { environment } from '@env/environment';
-import { ContextLogger } from '../context-logger/context-logger';
+import { ContextLogger } from '../context-logger/context-logger.decorator';
 import { LoggerService } from './logger.service';
 import { LogLevel } from '../logger.enum';
 

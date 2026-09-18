@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LocalizedDatePipe } from '@app/shared/pipes';
 import { NotificationItemComponent } from './notification-item.component';
-import { Notification } from '../notifications.model';
+import type { Notification } from '../notifications.model';
 
 describe('NotificationItemComponent', () => {
   let component: NotificationItemComponent;

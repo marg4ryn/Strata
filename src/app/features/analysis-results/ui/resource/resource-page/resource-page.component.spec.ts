@@ -5,7 +5,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { ResourcePageComponent } from './resource-page.component';
 import { AnalysisErrorComponent } from '../analysis-error/analysis-error.component';
 import { AnalysisLoadingComponent } from '../analysis-loading/analysis-loading.component';

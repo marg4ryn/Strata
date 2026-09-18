@@ -1,8 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { DropdownComponent, DropdownOption } from './dropdown.component';
+import { getTranslocoModule } from '@app/core/transloco';
+import type { DropdownOption } from './dropdown.component';
+import { DropdownComponent } from './dropdown.component';
 
 describe('DropdownComponent', () => {
   let component: DropdownComponent<string>;

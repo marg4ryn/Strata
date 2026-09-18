@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
 
 import { AnalysisRunPageComponent } from './features/analysis-run/feature/analysis-run-page.component';
 

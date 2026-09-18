@@ -1,17 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { AnalysisRunPageComponent } from './analysis-run-page.component';
 import { AnalysisRunFacade } from '../analysis-run.facade';
-import {
-  AnalysisStatus,
-  AnalysisStatusKey,
-  ErrorType,
-  PendingAnalysis,
-} from '../analysis-run.model';
+import type { AnalysisStatusKey, ErrorType, PendingAnalysis } from '../analysis-run.model';
+import { AnalysisStatus } from '../analysis-run.model';
 
 describe('AnalysisRunPageComponent', () => {
   let component: AnalysisRunPageComponent;

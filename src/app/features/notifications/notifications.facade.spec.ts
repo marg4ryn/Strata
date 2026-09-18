@@ -4,7 +4,7 @@ import { signal } from '@angular/core';
 import { NotificationsFacade } from './notifications.facade';
 import { NotificationsStoreService } from './data-access/notifications-store/notifications-store.service';
 import { NotificationsService } from './data-access/notifications/notifications.service';
-import { Notification } from './notifications.model';
+import type { Notification } from './notifications.model';
 
 describe('NotificationsFacade', () => {
   let service: NotificationsFacade;

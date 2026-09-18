@@ -1,4 +1,5 @@
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import type { PipeTransform} from '@angular/core';
+import { Pipe, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService } from '@jsverse/transloco';
 

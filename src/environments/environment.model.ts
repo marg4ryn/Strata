@@ -1,4 +1,4 @@
-import { LogLevel } from '@app/core/logging/logger.enum';
+import type { LogLevel } from '@app/core/logging';
 
 export interface Environment {
   production: boolean;

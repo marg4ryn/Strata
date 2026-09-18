@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
-import { StorageService } from '@app/core/storage/storage.service';
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import { StorageService } from '@app/core/storage';
 import { AnalysisRunStorageService } from './analysis-run-storage.service';
-import { PendingAnalysis, AnalysisTarget, DateRange } from '../../analysis-run.model';
+import type { PendingAnalysis, AnalysisTarget, DateRange } from '../../analysis-run.model';
 
 describe('AnalysisRunStorageService', () => {
   let service: AnalysisRunStorageService;

@@ -1,8 +1,8 @@
 import { inject, Service } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
-import { AnalysisStatusKey } from '../../analysis-run.model';
+import { injectLogger } from '@app/core/logging';
+import type { AnalysisStatusKey } from '../../analysis-run.model';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
 
 type WsMessage =

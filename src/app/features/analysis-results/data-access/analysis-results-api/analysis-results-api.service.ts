@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { HttpService } from '@app/core/http/http.service';
+import { HttpService } from '@app/core/http';
 import type {
   RepositoryDetails,
   RepositoryTrends,

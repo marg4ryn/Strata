@@ -1,15 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Overlay } from '@angular/cdk/overlay';
 import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
-import { AnalysisRunFacade } from '@app/features/analysis-run/analysis-run.facade';
-import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
-import { SettingsFacade } from '@app/features/settings/settings.facade';
+import { getTranslocoModule } from '@app/core/transloco';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history';
+import { NotificationsFacade } from '@app/features/notifications';
+import { AnalysisRunFacade } from '@app/features/analysis-run';
+import { SettingsFacade } from '@app/features/settings';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { PanelTriggerComponent } from '../panel-trigger/panel-trigger.component';
 import { HeaderComponent } from './header.component';
 

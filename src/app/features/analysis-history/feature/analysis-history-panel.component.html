@@ -33,8 +33,8 @@
       @for (h of facade.analysisHistory(); track h.analysisId) {
         <app-analysis-history-item
           [historyEntry]="h"
-          (remove)="facade.removeAnalysisHistoryEntry($event)"
-          (load)="loadAnalysis($event)"
+          (removeEntry)="facade.removeAnalysisHistoryEntry($event)"
+          (loadEntry)="loadAnalysis($event)"
         />
       }
     } @else {

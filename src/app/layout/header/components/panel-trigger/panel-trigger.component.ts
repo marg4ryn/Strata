@@ -1,9 +1,10 @@
+import type {
+  AfterViewInit,
+  OnDestroy} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   EnvironmentInjector,
   Component,
-  AfterViewInit,
-  OnDestroy,
   ViewChild,
   ElementRef,
   input,
@@ -14,7 +15,7 @@ import {
 import { CdkPortal } from '@angular/cdk/portal';
 import { Overlay } from '@angular/cdk/overlay';
 
-import { PanelOverlayController } from '../../panel-overlay-controller/panel-overlay-controller';
+import { PanelOverlayController } from '../../controllers/panel-overlay.controller';
 import { PanelCoordinatorService } from '../../services/panel-coordinator.service';
 import type { PanelFacade } from '../../services/panel-coordinator.service';
 

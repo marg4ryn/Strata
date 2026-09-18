@@ -1,5 +1,7 @@
-import { Component, input, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ConnectionPositionPair, OverlayModule } from '@angular/cdk/overlay';
+import type { OnInit} from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import type { ConnectionPositionPair} from '@angular/cdk/overlay';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 let nextId = 0;

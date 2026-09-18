@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
+import { injectLogger } from '@app/core/logging';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
 import type {

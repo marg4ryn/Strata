@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import type { Mock } from 'vitest';
 
-import { HttpService } from '@app/core/http/http.service';
+import { HttpService } from '@app/core/http';
 import { AnalysisResultsApiService } from './analysis-results-api.service';
 
 describe('AnalysisResultsApiService', () => {

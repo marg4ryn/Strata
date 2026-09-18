@@ -1,6 +1,6 @@
-import { ElementRef } from '@angular/core';
-import { CdkPortal } from '@angular/cdk/portal';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import type { ElementRef } from '@angular/core';
+import type { CdkPortal } from '@angular/cdk/portal';
+import type { Overlay, OverlayRef } from '@angular/cdk/overlay';
 
 import type { PanelFacade } from '../services/panel-coordinator.service';
 

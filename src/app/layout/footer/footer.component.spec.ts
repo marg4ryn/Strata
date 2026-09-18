@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { FooterComponent } from './footer.component';
 
 describe('FooterComponent', () => {
-  let component: FooterComponent;
   let fixture: ComponentFixture<FooterComponent>;
 
   beforeEach(async () => {
@@ -15,7 +15,6 @@ describe('FooterComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(FooterComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
     await fixture.whenStable();
   });

@@ -2,16 +2,16 @@ import { Service, inject, effect, untracked } from '@angular/core';
 import { Router } from '@angular/router';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
-import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
-import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
-import { AnalysisHistoryEntry } from '@app/features/analysis-history/analysis-history.model';
+import { injectLogger } from '@app/core/logging';
+import { AnalysisResultsFacade } from '@app/features/analysis-results';
+import { NotificationsFacade } from '@app/features/notifications';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history';
+import type { AnalysisHistoryEntry } from '@app/features/analysis-history';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
 import { AnalysisRunStorageService } from '../analysis-run-storage/analysis-run-storage.service';
 import { AnalysisRunWebSocketService } from '../analysis-run-web-socket/analysis-run-web-socket.service';
 import { AnalysisRunLockService } from '../analysis-run-lock/analysis-run-lock.service';
-import {
+import type {
   AnalysisTarget,
   AnalysisTargetFormModel,
   DateRange,

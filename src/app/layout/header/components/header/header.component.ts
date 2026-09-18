@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular
 import { TranslocoPipe } from '@jsverse/transloco';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
-import { AnalysisRunFacade } from '@app/features/analysis-run/analysis-run.facade';
-import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { NotificationPanelComponent } from '@app/features/notifications/feature/notification-panel.component';
-import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
-import { AnalysisHistoryPanelComponent } from '@app/features/analysis-history/feature/analysis-history-panel.component';
-import { SettingsFacade } from '@app/features/settings/settings.facade';
-import { SettingsPanelComponent } from '@app/features/settings/feature/settings-panel/settings-panel.component';
+import {
+  AnalysisHistoryFacade,
+  AnalysisHistoryPanelComponent,
+} from '@app/features/analysis-history';
+import { NotificationsFacade, NotificationPanelComponent } from '@app/features/notifications';
+import { SettingsFacade, SettingsPanelComponent } from '@app/features/settings';
+import { AnalysisRunFacade } from '@app/features/analysis-run';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { PanelCoordinatorService } from '../../services/panel-coordinator.service';
 import { PanelTriggerComponent } from '../panel-trigger/panel-trigger.component';
 

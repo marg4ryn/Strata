@@ -1,8 +1,8 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
-import { StorageService } from '@app/core/storage/storage.service';
-import { AnalysisHistoryEntry } from '../../analysis-history.model';
+import { injectLogger } from '@app/core/logging';
+import { StorageService } from '@app/core/storage';
+import type { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 @Service()
 export class AnalysisHistoryStorageService {

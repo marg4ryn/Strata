@@ -1,10 +1,10 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
-import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
+import { injectLogger } from '@app/core/logging';
+import { AnalysisResultsFacade } from '@app/features/analysis-results';
 import { AnalysisHistoryStoreService } from '../analysis-history-store/analysis-history-store.service';
 import { AnalysisHistoryStorageService } from '../analysis-history-storage/analysis-history-storage.service';
-import { AnalysisHistoryEntry } from '../../analysis-history.model';
+import type { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 @Service()
 export class AnalysisHistoryService {

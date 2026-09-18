@@ -3,13 +3,12 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { DoughnutChartSectionComponent } from './doughnut-chart-section.component';
 import { DoughnutChartComponent } from '../../charts/doughnut-chart/doughnut-chart.component';
 import type { DoughnutChartItem } from '../../charts/doughnut-chart/doughnut-chart.component';
 
 describe('DoughnutChartSectionComponent', () => {
-  let component: DoughnutChartSectionComponent;
   let fixture: ComponentFixture<DoughnutChartSectionComponent>;
 
   const sampleItems: DoughnutChartItem[] = [
@@ -28,7 +27,6 @@ describe('DoughnutChartSectionComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(DoughnutChartSectionComponent);
-    component = fixture.componentInstance;
     fixture.componentRef.setInput('items', sampleItems);
     fixture.detectChanges();
     await fixture.whenStable();

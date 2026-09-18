@@ -1,4 +1,5 @@
-import { Service, inject, DestroyRef } from '@angular/core';
+import type { DestroyRef } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay } from '@angular/cdk/overlay';
 
@@ -41,8 +42,8 @@ export class ConfirmOperationService {
         resolve(result);
       };
 
-      const cancelSub = componentRef.instance.cancel.subscribe(() => cleanup(false));
-      const confirmSub = componentRef.instance.confirm.subscribe(() => cleanup(true));
+      const cancelSub = componentRef.instance.dismissEvent.subscribe(() => cleanup(false));
+      const confirmSub = componentRef.instance.confirmEvent.subscribe(() => cleanup(true));
 
       overlayRef.backdropClick().subscribe(() => cleanup(false));
       overlayRef.keydownEvents().subscribe((e) => {

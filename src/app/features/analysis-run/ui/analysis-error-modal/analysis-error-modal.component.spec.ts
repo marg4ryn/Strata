@@ -1,7 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { AnalysisErrorModalComponent } from './analysis-error-modal.component';
 
 describe('AnalysisErrorModalComponent', () => {
@@ -44,18 +45,18 @@ describe('AnalysisErrorModalComponent', () => {
       expect(body.textContent).toContain('Server error');
     });
 
-    it('emits cancel when cancel button is clicked', () => {
+    it('emits cancelEvent when cancel button is clicked', () => {
       const spy = vi.fn();
-      component.cancel.subscribe(spy);
+      component.cancelEvent.subscribe(spy);
 
       getButtons().cancel.click();
 
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('emits retry when retry button is clicked during connection error', () => {
+    it('emits retryEvent when retry button is clicked during connection error', () => {
       const spy = vi.fn();
-      component.retry.subscribe(spy);
+      component.retryEvent.subscribe(spy);
       fixture.componentRef.setInput('errorType', 'connection');
       fixture.detectChanges();
 
@@ -64,9 +65,9 @@ describe('AnalysisErrorModalComponent', () => {
       expect(spy).toHaveBeenCalledOnce();
     });
 
-    it('does not emit retry when server error occurs', () => {
+    it('does not emit retryEvent when server error occurs', () => {
       const spy = vi.fn();
-      component.retry.subscribe(spy);
+      component.retryEvent.subscribe(spy);
       fixture.componentRef.setInput('errorType', 'server');
       fixture.detectChanges();
 

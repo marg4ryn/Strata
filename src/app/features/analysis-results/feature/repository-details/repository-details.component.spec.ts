@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 import type { Mock } from 'vitest';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { RepositoryDetailsComponent } from './repository-details.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 

@@ -1,4 +1,5 @@
-import { Component, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import type { AfterViewInit } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 

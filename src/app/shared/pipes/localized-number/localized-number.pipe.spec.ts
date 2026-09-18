@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { LocalizedNumberPipe } from './localized-number.pipe';
 
 describe('LocalizedNumberPipe', () => {

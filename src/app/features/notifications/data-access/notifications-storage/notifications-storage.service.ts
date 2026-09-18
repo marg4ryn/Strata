@@ -1,8 +1,8 @@
 import { inject, Service } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging/inject-logger/inject-logger';
-import { StorageService } from '@app/core/storage/storage.service';
-import { Notification } from '../../notifications.model';
+import { injectLogger } from '@app/core/logging';
+import { StorageService } from '@app/core/storage';
+import type { Notification } from '../../notifications.model';
 
 @Service()
 export class NotificationsStorageService {

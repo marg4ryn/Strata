@@ -1,7 +1,8 @@
+import type {
+  ElementRef} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   input,
   output,
   signal,

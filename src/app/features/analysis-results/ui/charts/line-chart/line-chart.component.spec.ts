@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TranslocoService } from '@jsverse/transloco';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
+import { getTranslocoModule } from '@app/core/transloco';
 import { LineChartComponent } from './line-chart.component';
 import type { LineChartSeries } from './line-chart.component';
 

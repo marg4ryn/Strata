@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LocalizedDatePipe } from '@app/shared/pipes';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
 import { AnalysisHistoryItemComponent } from './analysis-history-item.component';
-import { AnalysisHistoryEntry } from '../analysis-history.model';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
+import type { AnalysisHistoryEntry } from '../analysis-history.model';
 
 describe('AnalysisHistoryItemComponent', () => {
   let component: AnalysisHistoryItemComponent;
@@ -112,10 +113,10 @@ describe('AnalysisHistoryItemComponent', () => {
   });
 
   describe('loadAnalysis', () => {
-    it('emits load with analysisId when confirmed', async () => {
+    it('emits loadEntry with analysisId when confirmed', async () => {
       confirmModalMock.confirm.mockResolvedValue(true);
       const spy = vi.fn();
-      component.load.subscribe(spy);
+      component.loadEntry.subscribe(spy);
 
       await component.loadAnalysis();
 
@@ -128,10 +129,10 @@ describe('AnalysisHistoryItemComponent', () => {
       expect(spy).toHaveBeenCalledWith(baseEntry.analysisId);
     });
 
-    it('does not emit load when not confirmed', async () => {
+    it('does not emit loadEntry when not confirmed', async () => {
       confirmModalMock.confirm.mockResolvedValue(false);
       const spy = vi.fn();
-      component.load.subscribe(spy);
+      component.loadEntry.subscribe(spy);
 
       await component.loadAnalysis();
 
@@ -140,10 +141,10 @@ describe('AnalysisHistoryItemComponent', () => {
   });
 
   describe('removeHistoryEntry', () => {
-    it('emits remove with analysisId when confirmed, and stops propagation', async () => {
+    it('emits removeEntry with analysisId when confirmed, and stops propagation', async () => {
       confirmModalMock.confirm.mockResolvedValue(true);
       const spy = vi.fn();
-      component.remove.subscribe(spy);
+      component.removeEntry.subscribe(spy);
       const event = { stopPropagation: vi.fn() } as unknown as Event;
 
       await component.removeHistoryEntry(event);
@@ -158,10 +159,10 @@ describe('AnalysisHistoryItemComponent', () => {
       expect(spy).toHaveBeenCalledWith(baseEntry.analysisId);
     });
 
-    it('does not emit remove when not confirmed', async () => {
+    it('does not emit removeEntry when not confirmed', async () => {
       confirmModalMock.confirm.mockResolvedValue(false);
       const spy = vi.fn();
-      component.remove.subscribe(spy);
+      component.removeEntry.subscribe(spy);
       const event = { stopPropagation: vi.fn() } as unknown as Event;
 
       await component.removeHistoryEntry(event);

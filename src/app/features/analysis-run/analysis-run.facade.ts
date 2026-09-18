@@ -2,7 +2,7 @@ import { inject, Service, computed } from '@angular/core';
 
 import { AnalysisRunStoreService } from './data-access/analysis-run-store/analysis-run-store.service';
 import { AnalysisRunService } from './data-access/analysis-run/analysis-run.service';
-import { AnalysisTargetFormModel } from './analysis-run.model';
+import type { AnalysisTargetFormModel } from './analysis-run.model';
 
 @Service()
 export class AnalysisRunFacade {

@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
-import { StorageService } from '@app/core/storage/storage.service';
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import { StorageService } from '@app/core/storage';
 import { NotificationsStorageService } from './notifications-storage.service';
-import { Notification } from '../../notifications.model';
+import type { Notification } from '../../notifications.model';
 
 describe('NotificationsStorageService', () => {
   let service: NotificationsStorageService;

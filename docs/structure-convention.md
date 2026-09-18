@@ -9,6 +9,15 @@ The application architecture is inspired by the feature-oriented approach common
 * [`app/layout/`](#core-and-layout-directories-structure) — components responsible for the page layout, such as the header and footer.
 * [`app/shared/`](#shared-directory-structure) — reusable directives, components, and pipes that are not related to a specific domain.
 
+Each subdirectory within the directories listed above is treated as an module. To expose elements outside its own scope, it must provide a public API through an `index.ts` file. Direct access to module's internal files is not allowed. This rule is enforced by the linter.
+
+The following dependencies are allowed:
+
+* `feature` → `core`, `shared`, `feature`
+* `layout` → `core`, `shared`, `feature`
+* `core` → `core`, `shared`
+* `shared` → `core`, `shared`
+
 ## Feature Directory Structure
 
 Each feature in `app/features/` has the following structure:

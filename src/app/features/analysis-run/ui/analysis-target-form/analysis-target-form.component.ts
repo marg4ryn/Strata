@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal, output, inject } from '@angular/core';
+import type { ValidationError } from '@angular/forms/signals';
 import {
   form,
   FormField,
@@ -7,16 +8,21 @@ import {
   required,
   maxLength,
   debounce,
-  ValidationError,
 } from '@angular/forms/signals';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { localNowAsUtcMidnight } from '@app/shared/utils/date.utils';
-import { ButtonDirective } from '@app/shared/directives/button.directive';
-import { url, afterDate, beforeDate, ParamValidationError } from '../../utils/validators';
-import { AnalysisTargetFormModel } from '../../analysis-run.model';
+import { localNowAsUtcMidnight } from '@app/shared/utils';
+import { ButtonDirective } from '@app/shared/directives';
+import type { ParamValidationError } from '../../utils/validators';
+import { url, afterDate, beforeDate } from '../../utils/validators';
+import type { AnalysisTargetFormModel } from '../../analysis-run.model';
+
+interface FormFieldLike {
+  touched(): boolean;
+  invalid(): boolean;
+}
 
 @Component({
   selector: 'app-analysis-target-form',
@@ -109,7 +115,7 @@ export class AnalysisTargetFormComponent {
     },
   );
 
-  isInvalid(field: () => any): boolean {
+  isInvalid(field: () => FormFieldLike): boolean {
     return field().touched() && field().invalid();
   }
 

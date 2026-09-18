@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
 
-import { DropdownComponent } from '@app/shared/components/dropdown/dropdown.component';
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LanguageFacade } from '@app/core/language/language.facade';
-import { LangPreference } from '@app/core/language/language.model';
+import { DropdownComponent } from '@app/shared/components';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LanguageFacade } from '@app/core/language';
+import type { LangPreference } from '@app/core/language';
 import { LanguageSwitcherComponent } from './language-switcher.component';
 
 describe('LanguageSwitcherComponent', () => {

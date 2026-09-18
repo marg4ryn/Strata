@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
-import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import type { AnalysisTarget } from '@app/features/analysis-run';
 import { AnalysisHistoryStoreService } from './analysis-history-store.service';
-import { AnalysisHistoryEntry } from '../../analysis-history.model';
+import type { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 describe('AnalysisHistoryStoreService', () => {
   let service: AnalysisHistoryStoreService;

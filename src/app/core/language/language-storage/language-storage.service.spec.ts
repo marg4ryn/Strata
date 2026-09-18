@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { StorageService } from '@app/core/storage/storage.service';
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
+import { StorageService } from '@app/core/storage';
+import { LoggerService, ContextLogger } from '@app/core/logging';
 import { LanguageStorageService } from './language-storage.service';
 
 describe('LanguageStorageService', () => {

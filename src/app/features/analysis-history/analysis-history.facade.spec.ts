@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 
-import { AnalysisTarget } from '../analysis-run/analysis-run.model';
+import type { AnalysisTarget } from '@app/features/analysis-run';
 import { AnalysisHistoryFacade } from './analysis-history.facade';
 import { AnalysisHistoryStoreService } from './data-access/analysis-history-store/analysis-history-store.service';
 import { AnalysisHistoryService } from './data-access/analysis-history/analysis-history.service';
-import { AnalysisHistoryEntry } from './analysis-history.model';
+import type { AnalysisHistoryEntry } from './analysis-history.model';
 
 describe('AnalysisHistoryFacade', () => {
   let service: AnalysisHistoryFacade;

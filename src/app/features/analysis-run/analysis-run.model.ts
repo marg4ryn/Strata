@@ -1,6 +1,6 @@
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import type { ISODateString } from '@app/shared/utils/date.utils';
+import type { ISODateString } from '@app/shared/utils';
 
 export const AnalysisStatus = {
   QUEUED: marker('analysisRun.progress.queued'),

@@ -3,13 +3,12 @@ import { Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
-import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
-import { NotificationsFacade } from '@app/features/notifications/notifications.facade';
-import { AnalysisHistoryFacade } from '@app/features/analysis-history/analysis-history.facade';
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import { AnalysisResultsFacade } from '@app/features/analysis-results';
+import { NotificationsFacade } from '@app/features/notifications';
+import { AnalysisHistoryFacade } from '@app/features/analysis-history';
 import { AnalysisRunService } from './analysis-run.service';
-import {
+import type {
   AnalysisStatusKey,
   PendingAnalysis,
   AnalysisTargetFormModel,

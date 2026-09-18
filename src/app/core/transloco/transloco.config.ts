@@ -1,7 +1,7 @@
 import { isDevMode } from '@angular/core';
 import type { TranslocoConfig } from '@jsverse/transloco';
 
-import { AVAILABLE_LANGS } from '@app/core/language/language.model';
+import { AVAILABLE_LANGS } from '@app/core/language';
 
 export const translocoConfig: Partial<TranslocoConfig> = {
   availableLangs: AVAILABLE_LANGS,

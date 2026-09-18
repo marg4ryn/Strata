@@ -1,8 +1,6 @@
+import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import {
   ChangeDetectionStrategy,
-  AfterViewInit,
-  ElementRef,
-  OnDestroy,
   Component,
   input,
   output,
@@ -13,8 +11,8 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ButtonDirective } from '@app/shared/directives/button.directive';
-import { ErrorType, PendingAnalysis } from '../../analysis-run.model';
+import { ButtonDirective } from '@app/shared/directives';
+import type { ErrorType, PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
 
 @Component({
@@ -36,8 +34,8 @@ export class AnalysisErrorModalComponent implements AfterViewInit, OnDestroy {
 
   readonly showRetry = computed(() => this.errorType() === 'connection');
 
-  readonly retry = output<void>();
-  readonly cancel = output<void>();
+  readonly retryEvent = output<void>();
+  readonly cancelEvent = output<void>();
 
   private get focusTarget(): ElementRef<HTMLButtonElement> | undefined {
     return this.retryButton() ?? this.cancelButton();
@@ -54,10 +52,10 @@ export class AnalysisErrorModalComponent implements AfterViewInit, OnDestroy {
   }
 
   retryAnalysis(): void {
-    this.retry.emit();
+    this.retryEvent.emit();
   }
 
   cancelAnalysis(): void {
-    this.cancel.emit();
+    this.cancelEvent.emit();
   }
 }

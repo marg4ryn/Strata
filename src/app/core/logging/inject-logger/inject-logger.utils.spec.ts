@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { runInInjectionContext, EnvironmentInjector } from '@angular/core';
 
-import { injectLogger } from './inject-logger';
+import { injectLogger } from './inject-logger.utils';
 import { LoggerService } from '../logger/logger.service';
 
 describe('injectLogger', () => {

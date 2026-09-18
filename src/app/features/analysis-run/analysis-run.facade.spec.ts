@@ -4,7 +4,7 @@ import { signal } from '@angular/core';
 import { AnalysisRunFacade } from './analysis-run.facade';
 import { AnalysisRunStoreService } from './data-access/analysis-run-store/analysis-run-store.service';
 import { AnalysisRunService } from './data-access/analysis-run/analysis-run.service';
-import {
+import type {
   AnalysisTargetFormModel,
   AnalysisStatusKey,
   PendingAnalysis,

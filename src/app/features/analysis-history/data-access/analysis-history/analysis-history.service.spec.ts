@@ -2,14 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
-import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-results.facade';
-import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
+import { LoggerService, ContextLogger } from '@app/core/logging';
+import { AnalysisResultsFacade } from '@app/features/analysis-results';
+import type { AnalysisTarget } from '@app/features/analysis-run';
 import { AnalysisHistoryService } from './analysis-history.service';
 import { AnalysisHistoryStoreService } from '../analysis-history-store/analysis-history-store.service';
 import { AnalysisHistoryStorageService } from '../analysis-history-storage/analysis-history-storage.service';
-import { AnalysisHistoryEntry } from '../../analysis-history.model';
+import type { AnalysisHistoryEntry } from '../../analysis-history.model';
 
 class MockBroadcastChannel {
   onmessage: ((event: MessageEvent) => void) | null = null;
@@ -71,7 +70,7 @@ describe('AnalysisHistoryService', () => {
 
     mockChannel = new MockBroadcastChannel();
     class MockBroadcastChannelConstructor {
-      constructor(_name: string) {
+      constructor() {
         return mockChannel;
       }
     }

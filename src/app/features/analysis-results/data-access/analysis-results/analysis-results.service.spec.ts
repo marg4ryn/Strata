@@ -2,8 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 import type { Mock } from 'vitest';
 
-import { LoggerService } from '@app/core/logging/logger/logger.service';
-import { ContextLogger } from '@app/core/logging/context-logger/context-logger';
+import { LoggerService , ContextLogger } from '@app/core/logging';
 import { AnalysisResultsService } from './analysis-results.service';
 import { CACHE_CONFIG } from '../analysis-results-cached-fetcher/cache.config';
 import type { CacheConfig } from '../analysis-results-cached-fetcher/cache.config';

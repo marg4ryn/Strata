@@ -1,4 +1,4 @@
-import { LoggerService } from '../logger/logger.service';
+import type { LoggerService } from '../logger/logger.service';
 
 export class ContextLogger {
   constructor(
@@ -6,16 +6,19 @@ export class ContextLogger {
     private readonly context: string,
   ) {}
 
-  debug(message: any, ...params: any[]): void {
+  debug(message: unknown, ...params: unknown[]): void {
     this.logger.debug(`[${this.context}] ${message}`, ...params);
   }
-  info(message: any, ...params: any[]): void {
+
+  info(message: unknown, ...params: unknown[]): void {
     this.logger.info(`[${this.context}] ${message}`, ...params);
   }
-  warn(message: any, ...params: any[]): void {
+
+  warn(message: unknown, ...params: unknown[]): void {
     this.logger.warn(`[${this.context}] ${message}`, ...params);
   }
-  error(message: any, ...params: any[]): void {
+
+  error(message: unknown, ...params: unknown[]): void {
     this.logger.error(`[${this.context}] ${message}`, ...params);
   }
 }

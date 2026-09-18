@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
-import { ButtonDirective } from '@app/shared/directives/button.directive';
-import { PendingAnalysis } from '../../analysis-run.model';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
+import { LocalizedDatePipe } from '@app/shared/pipes';
+import { ButtonDirective } from '@app/shared/directives';
+import type { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({
   selector: 'app-analysis-unfinished-modal',
@@ -26,16 +26,16 @@ export class AnalysisUnfinishedModalComponent {
 
   readonly pendingAnalysis = input<PendingAnalysis | null>();
 
-  readonly resume = output<void>();
-  readonly abandon = output<void>();
+  readonly resumeEvent = output<void>();
+  readonly abandonEvent = output<void>();
 
   resumeAnalysis(): void {
-    this.resume.emit();
+    this.resumeEvent.emit();
   }
 
   async abandonAnalysis(): Promise<void> {
     const confirmed = await this.confirmModal.confirm(this.destroyRef);
     if (!confirmed) return;
-    this.abandon.emit();
+    this.abandonEvent.emit();
   }
 }

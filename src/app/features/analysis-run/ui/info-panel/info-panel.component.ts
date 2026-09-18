@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
-import { PendingAnalysis } from '../../analysis-run.model';
+import { LocalizedDatePipe } from '@app/shared/pipes';
+import type { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({
   selector: 'app-info-panel',

@@ -1,4 +1,4 @@
-import { AnalysisTarget } from '@app/features/analysis-run/analysis-run.model';
+import type { AnalysisTarget } from '@app/features/analysis-run';
 
 export interface AnalysisHistoryEntry {
   analysisId: string;

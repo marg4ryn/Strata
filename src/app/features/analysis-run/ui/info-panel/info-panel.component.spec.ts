@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { getTranslocoModule } from '@app/core/transloco/transloco-testing.module';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
+import { getTranslocoModule } from '@app/core/transloco';
+import { LocalizedDatePipe } from '@app/shared/pipes';
 import { InfoPanelComponent } from './info-panel.component';
-import { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
+import type { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 
 describe('InfoPanelComponent', () => {
-  let component: InfoPanelComponent;
   let fixture: ComponentFixture<InfoPanelComponent>;
 
   const range: DateRange = {
@@ -31,7 +31,6 @@ describe('InfoPanelComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(InfoPanelComponent);
-    component = fixture.componentInstance;
   });
 
   function setInput(value: PendingAnalysis): void {

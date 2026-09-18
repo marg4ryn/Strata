@@ -3,21 +3,21 @@
     [error]="facade.error()"
     [errorType]="facade.errorType()"
     [pendingAnalysis]="facade.pendingAnalysis()"
-    (retry)="facade.retryAnalysis()"
-    (cancel)="facade.cancelAnalysis()"
+    (retryEvent)="facade.retryAnalysis()"
+    (cancelEvent)="facade.cancelAnalysis()"
   />
 } @else if (facade.isBusy()) {
   <app-analysis-progress-spinner
     [labelKey]="debouncedLabelKey.value()"
     [isAborting]="facade.isAborting()"
     [pendingAnalysis]="facade.pendingAnalysis()"
-    (abort)="facade.abortAnalysis()"
+    (abortEvent)="facade.abortAnalysis()"
   />
 } @else if (facade.showModal()) {
   <app-analysis-unfinished-modal
     [pendingAnalysis]="facade.pendingAnalysis()"
-    (resume)="facade.resumeAnalysis()"
-    (abandon)="facade.abandonAnalysis()"
+    (resumeEvent)="facade.resumeAnalysis()"
+    (abandonEvent)="facade.abandonAnalysis()"
   />
 } @else {
   <app-analysis-target-form (analysisTargetData)="facade.startNewAnalysis($event)" />

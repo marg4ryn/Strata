@@ -10,9 +10,9 @@ import {
 import { TranslocoPipe } from '@jsverse/transloco';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation/services/confirm-operation.service';
-import { LocalizedDatePipe } from '@app/shared/pipes/localized-date/localized-date.pipe';
-import { AnalysisHistoryEntry } from '../analysis-history.model';
+import { ConfirmOperationService } from '@app/shared/confirm-operation';
+import { LocalizedDatePipe } from '@app/shared/pipes';
+import type { AnalysisHistoryEntry } from '../analysis-history.model';
 
 @Component({
   selector: 'app-analysis-history-item',
@@ -26,8 +26,8 @@ export class AnalysisHistoryItemComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly historyEntry = input.required<AnalysisHistoryEntry>();
-  readonly remove = output<string>();
-  readonly load = output<string>();
+  readonly removeEntry = output<string>();
+  readonly loadEntry = output<string>();
 
   readonly repoName = computed(() => {
     const repoName = this.historyEntry().target.targetURL.split('/').slice(-2).join('/') || '';
@@ -42,7 +42,7 @@ export class AnalysisHistoryItemComponent {
       { repoName: this.repoName() },
     );
     if (!confirmed) return;
-    this.load.emit(this.historyEntry().analysisId);
+    this.loadEntry.emit(this.historyEntry().analysisId);
   }
 
   async removeHistoryEntry(event: Event): Promise<void> {
@@ -54,7 +54,7 @@ export class AnalysisHistoryItemComponent {
       { repoName: this.repoName() },
     );
     if (!confirmed) return;
-    this.remove.emit(this.historyEntry().analysisId);
+    this.removeEntry.emit(this.historyEntry().analysisId);
   }
 
   handleRemoveHistoryEntryKeydown(event: KeyboardEvent): void {
