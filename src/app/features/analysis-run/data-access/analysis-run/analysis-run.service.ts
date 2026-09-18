@@ -37,7 +37,7 @@ export class AnalysisRunService {
 
       if (result !== null) {
         untracked(() => {
-          this.logger.info('Handled analysis result', { result });
+          this.logger.info('Analysis completed', { result });
           this.notifications.sendNotificationSuccess(marker('analysisRun.notifications.success'), {
             repoName: this.getRepoName(),
           });
@@ -52,7 +52,7 @@ export class AnalysisRunService {
 
       if (error !== null) {
         untracked(() => {
-          this.logger.info('Handled analysis error', { error });
+          this.logger.info('Analysis failed', { error });
           this.notifications.sendNotificationError(marker('analysisRun.notifications.error'), {
             repoName: this.getRepoName(),
           });
@@ -66,10 +66,10 @@ export class AnalysisRunService {
   }
 
   async tryToReconnect(): Promise<void> {
-    this.logger.debug('Reconnecting to an ongoing analysis');
+    this.logger.debug('Attempting to reconnect to analysis');
 
     if (this.store.isBusy()) {
-      this.logger.info('Reconnected to an ongoing analysis', {
+      this.logger.info('Reconnected to analysis', {
         sessionId: this.store.pendingAnalysis()?.sessionId,
       });
       return;
@@ -79,14 +79,14 @@ export class AnalysisRunService {
     const sessionId = this.storage.getSessionId();
 
     if (sessionId === null) {
-      this.logger.debug('Did not found an ongoing analysis');
+      this.logger.debug('No ongoing analysis found');
       return this.tryToResumeAnalysis();
     }
 
     const acquired = await this.locker.lock(sessionId);
 
     if (!acquired) {
-      this.logger.debug('Found an ongoing analysis, but another card took over', { sessionId });
+      this.logger.debug('Reconnected to analysis', { sessionId });
       this.storage.deleteSessionId();
       return await this.tryToResumeAnalysis();
     }
@@ -97,35 +97,35 @@ export class AnalysisRunService {
     );
 
     if (!filteredAnalyses || filteredAnalyses.length < 1) {
-      this.logger.debug('Found an ongoing analysis, but another card took over', { sessionId });
+      this.logger.debug('Analysis is already handled by another tab', { sessionId });
       this.storage.deleteSessionId();
       await this.locker.unlock(sessionId);
       return await this.tryToResumeAnalysis();
     }
 
-    this.logger.info('Reconnected to an ongoing analysis', { sessionId });
+    this.logger.info('Reconnected to analysis', { sessionId });
     this.store.pendingAnalysis.set(filteredAnalyses[0]);
     this.webSocket.connect({ sessionId: sessionId });
   }
 
   async tryToResumeAnalysis(): Promise<void> {
-    this.logger.debug('Trying to resume any pending analysis');
+    this.logger.debug('Attempting to resume a pending analysis');
 
     const initialPendingAnalyses = this.storage.getPendingAnalyses();
 
     if (!initialPendingAnalyses || initialPendingAnalyses.length < 1) {
       this.store.showModal.set(false);
-      this.logger.debug('Did not found any pending analysis');
+      this.logger.debug('No pending analysis found');
       return;
     }
 
     for (const pendingAnalysis of initialPendingAnalyses) {
       const sessionId = pendingAnalysis.sessionId;
-      this.logger.debug('Trying to take over the analysis', { sessionId });
+      this.logger.debug('Attempting to take over analysis', { sessionId });
       const acquired = await this.locker.lock(sessionId);
 
       if (!acquired) {
-        this.logger.debug('Could not take over the analysis – it belongs to another tab', {
+        this.logger.debug('Could not take over analysis; it is handled by another tab', {
           sessionId,
         });
         continue;
@@ -137,14 +137,14 @@ export class AnalysisRunService {
       );
 
       if (!freshFilteredAnalyses || freshFilteredAnalyses.length < 1) {
-        this.logger.debug('Could not take over the analysis – it belongs to another tab', {
+        this.logger.debug('Could not take over analysis; it is handled by another tab', {
           sessionId,
         });
         await this.locker.unlock(sessionId);
         continue;
       }
 
-      this.logger.info('Reconnected to the unfinished analysis', { sessionId });
+      this.logger.info('Resumed pending analysis', { sessionId });
       this.store.pendingAnalysis.set(pendingAnalysis);
       this.store.showModal.set(true);
       return;
@@ -152,11 +152,11 @@ export class AnalysisRunService {
   }
 
   async startNewAnalysis(formData: AnalysisTargetFormModel): Promise<void> {
-    this.logger.info('User submitted the form', { formData });
+    this.logger.info('Analysis form submitted', { formData });
     const pendingAnalysis = this.constructPendingAnalysis(formData);
-    this.logger.debug('Constructed pending analysis', { pendingAnalysis });
+    this.logger.debug('Pending analysis created', { pendingAnalysis });
     const connectionParams = this.constructConnectionParams(pendingAnalysis);
-    this.logger.debug('Constructed connection params', { connectionParams });
+    this.logger.debug('WebSocket connection parameters created', { connectionParams });
 
     await this.locker.lock(pendingAnalysis.sessionId);
     this.store.pendingAnalysis.set(pendingAnalysis);
@@ -185,7 +185,7 @@ export class AnalysisRunService {
 
   async abortAnalysis(): Promise<void> {
     const sessionId = this.store.pendingAnalysis()!.sessionId;
-    this.logger.info('Trying to abort the analysis', { sessionId });
+    this.logger.info('Attempting to abort analysis', { sessionId });
 
     const confirmed = await this.webSocket.abort();
 
@@ -208,7 +208,7 @@ export class AnalysisRunService {
 
   retryAnalysis(): void {
     const sessionId = this.store.pendingAnalysis()!.sessionId;
-    this.logger.info('Analysis retried', { sessionId });
+    this.logger.info('Analysis retry initiated', { sessionId });
     this.store.error.set(null);
     this.webSocket.connect({ sessionId: sessionId });
   }
@@ -226,7 +226,7 @@ export class AnalysisRunService {
 
   async clearData(): Promise<void> {
     const sessionId = this.store.pendingAnalysis()!.sessionId;
-    this.logger.info('Analysis deleted', { sessionId });
+    this.logger.info('Analysis data cleared', { sessionId });
     this.storage.deleteSessionId();
     this.storage.deletePendingAnalysis(sessionId);
     await this.locker.unlock(sessionId);

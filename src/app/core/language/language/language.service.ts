@@ -33,7 +33,6 @@ export class LanguageService {
     const validated = this.validate(preference);
     this.storage.saveLangPreference(validated);
     this.store.langPreference.set(validated);
-    this.logger.info('Preference changed', { preference: validated });
     this.apply(validated);
   }
 
