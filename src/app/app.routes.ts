@@ -1,6 +1,6 @@
 import type { Routes } from '@angular/router';
 
-import { AnalysisRunPageComponent } from './features/analysis-run/feature/analysis-run-page.component';
+import { AnalysisRunPageComponent } from './features/analysis-run';
 
 export const routes: Routes = [
   {
@@ -9,13 +9,10 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    loadComponent: () => import('./features/about/about-page.component'),
+    loadComponent: () => import('./features/about').then((m) => m.AboutPageComponent),
   },
   {
     path: 'analysis/:id',
-    loadChildren: () =>
-      import('./features/analysis-results/analysis-results.routes').then(
-        (m) => m.analysisResultsRoutes,
-      ),
+    loadChildren: () => import('./features/analysis-results').then((m) => m.analysisResultsRoutes),
   },
 ];

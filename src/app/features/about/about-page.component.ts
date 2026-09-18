@@ -14,7 +14,7 @@ interface TeamMember {
   templateUrl: './about-page.component.html',
   styleUrl: './about-page.component.scss',
 })
-export default class AboutPageComponent implements AfterViewInit {
+export class AboutPageComponent implements AfterViewInit {
   @ViewChild('backBtn', { read: ElementRef }) backBtn!: ElementRef<HTMLButtonElement>;
 
   private readonly location = inject(Location);
