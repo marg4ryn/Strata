@@ -61,3 +61,10 @@ The application is tested using the Vitest + Istanbul stack. Unit tests are used
 | Code Coverage |
 |:---:|
 | <img src="./docs/screens/code_coverage.png" width="900"/> |
+
+
+## 🤖 AI
+
+The application wasn't vibe-coded, but AI definitely helped me along the way. ChatGPT saved me a lot of time when generating documentation. Copilot helped me track down the cause of several frustrating component layout bugs (missing `min-width: 0`). Claude, on the other hand, generated solid test files and SCSS and supported me while learning Angular.
+
+This is my first Angular project and, at the same time, my playground for learning the technology. Claude acts as a mentor here, helping me especially with the areas I find the most challenging: Angular CDK Overlay and writing component tests. I'm still learning both, and I plan to keep building my skills and exploring Angular further.
