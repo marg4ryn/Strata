@@ -8,6 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "lint": "eslint .",
     "i18n:find": "transloco-keys-manager find",
     "i18n:extract": "transloco-keys-manager extract"
   },
