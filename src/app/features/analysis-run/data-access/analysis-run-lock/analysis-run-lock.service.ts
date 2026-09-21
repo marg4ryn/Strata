@@ -1,23 +1,68 @@
-import { Service, inject } from '@angular/core';
+import { Service } from '@angular/core';
 
 import { injectLogger } from '@app/core/logging';
-import { LockService } from '@app/core/lock';
 
 @Service()
 export class AnalysisRunLockService {
   private readonly logger = injectLogger('AnalysisRunLockService');
-  private readonly locker = inject(LockService);
+
+  private readonly releasers = new Map<string, () => void>();
   private readonly prefix = 'session-';
 
   async lock(sessionId: string): Promise<boolean> {
-    const acquired = await this.locker.lock(`${this.prefix}${sessionId}`);
-    this.logger.debug(`Lock ${acquired ? 'acquired' : 'not acquired'}`, { sessionId });
-    return acquired;
+    const name = `${this.prefix}${sessionId}`;
+
+    if (this.releasers.has(name)) {
+      this.logger.debug('Lock not acquired (already held in this tab)', { sessionId });
+      return false;
+    }
+
+    if (!navigator.locks) {
+      this.logger.error('Web Locks API not supported', { sessionId });
+      return false;
+    }
+
+    let release!: () => void;
+    const holdPromise = new Promise<void>((resolve) => (release = resolve));
+
+    try {
+      const acquired = await new Promise<boolean>((resolve, reject) => {
+        navigator.locks
+          .request(name, { mode: 'exclusive', ifAvailable: true }, async (lock) => {
+            if (!lock) {
+              resolve(false);
+              return;
+            }
+            resolve(true);
+            await holdPromise;
+          })
+          .catch(reject);
+      });
+
+      if (acquired) {
+        this.releasers.set(name, release);
+      }
+
+      this.logger.debug(`Lock ${acquired ? 'acquired' : 'not acquired'}`, { sessionId });
+      return acquired;
+    } catch (error) {
+      this.logger.error('Failed to acquire lock', { sessionId, error });
+      return false;
+    }
   }
 
-  async unlock(sessionId: string): Promise<boolean> {
-    const released = await this.locker.unlock(`${this.prefix}${sessionId}`);
-    this.logger.debug(`Lock ${released ? 'released' : 'not released'}`, { sessionId });
-    return released;
+  unlock(sessionId: string): boolean {
+    const name = `${this.prefix}${sessionId}`;
+    const release = this.releasers.get(name);
+
+    if (!release) {
+      this.logger.debug('Lock not released (not held)', { sessionId });
+      return false;
+    }
+
+    this.releasers.delete(name);
+    release();
+    this.logger.debug('Lock released', { sessionId });
+    return true;
   }
 }

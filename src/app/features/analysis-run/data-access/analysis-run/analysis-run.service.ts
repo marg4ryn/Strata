@@ -99,7 +99,7 @@ export class AnalysisRunService {
     if (!filteredAnalyses || filteredAnalyses.length < 1) {
       this.logger.debug('Analysis has already been processed by another tab', { sessionId });
       this.storage.deleteSessionId();
-      await this.locker.unlock(sessionId);
+      this.locker.unlock(sessionId);
       return await this.tryToResumeAnalysis();
     }
 
@@ -140,7 +140,7 @@ export class AnalysisRunService {
         this.logger.debug('Could not take over analysis; it is being processed by another tab', {
           sessionId,
         });
-        await this.locker.unlock(sessionId);
+        this.locker.unlock(sessionId);
         continue;
       }
 
@@ -202,7 +202,7 @@ export class AnalysisRunService {
         repoName: this.getRepoName(),
       });
       this.storage.deleteSessionId();
-      await this.locker.unlock(sessionId);
+      this.locker.unlock(sessionId);
     }
   }
 
@@ -229,7 +229,7 @@ export class AnalysisRunService {
     this.logger.info('Analysis data cleared', { sessionId });
     this.storage.deleteSessionId();
     this.storage.deletePendingAnalysis(sessionId);
-    await this.locker.unlock(sessionId);
+    this.locker.unlock(sessionId);
     this.store.resetAnalysisState();
   }
 
