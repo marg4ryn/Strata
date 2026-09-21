@@ -1,6 +1,7 @@
 import { Service, inject } from '@angular/core';
 
 import { injectLogger } from '@app/core/logging';
+import { AnalysisResultsLockService } from '../analysis-results-lock/analysis-results-lock.service';
 import { CACHE_CONFIG } from './cache.config';
 
 interface CacheRegistryEntry {
@@ -11,13 +12,14 @@ interface CacheRegistryEntry {
 @Service()
 export class AnalysisResultsCachedFetcherService {
   private readonly logger = injectLogger('AnalysisResultsCachedFetcherService');
+  private readonly locker = inject(AnalysisResultsLockService);
   private readonly config = inject(CACHE_CONFIG);
 
   async getOrFetch<T>(cacheName: string, cacheKey: string, fetchFn: () => Promise<T>): Promise<T> {
     const cached = await this.tryReadFromCache<T>(cacheName, cacheKey);
     await this.touchRegistry(cacheName);
 
-    if (cached) {
+    if (cached !== null) {
       this.logger.debug('Cache hit', { cacheName, cacheKey });
       return cached;
     }
@@ -74,17 +76,42 @@ export class AnalysisResultsCachedFetcherService {
   }
 
   private async touchRegistry(cacheName: string): Promise<void> {
-    const registry = await this.readRegistry();
-    const existing = registry.find((entry) => entry.cacheName === cacheName);
+    try {
+      await this.locker.runExclusive(`${this.config.registryCacheName}`, async () => {
+        const registry = await this.readRegistry();
+        const now = Date.now();
+        const existing = registry.find((e) => e.cacheName === cacheName);
 
-    if (existing) {
-      existing.lastUsed = Date.now();
-    } else {
-      registry.push({ cacheName, lastUsed: Date.now() });
+        if (existing) {
+          existing.lastUsed = now;
+        } else {
+          registry.push({ cacheName, lastUsed: now });
+        }
+
+        await this.enforceMaxCaches(registry);
+      });
+    } catch (error) {
+      this.logger.warn('Failed to update cache registry', { cacheName, error });
+    }
+  }
+
+  private async enforceMaxCaches(registry: CacheRegistryEntry[]): Promise<void> {
+    const overflow = registry.length - this.config.maxCaches;
+    const toEvict =
+      overflow > 0 ? [...registry].sort((a, b) => a.lastUsed - b.lastUsed).slice(0, overflow) : [];
+    const evictedNames = new Set(toEvict.map((e) => e.cacheName));
+
+    await this.writeRegistry(registry.filter((e) => !evictedNames.has(e.cacheName)));
+
+    for (const name of evictedNames) {
+      await this.deleteCacheName(name);
     }
 
-    await this.writeRegistry(registry);
-    await this.enforceMaxCaches();
+    if (evictedNames.size > 0) {
+      this.logger.debug('Evicted old caches to enforce limits', {
+        evictedCount: evictedNames.size,
+      });
+    }
   }
 
   private async readRegistry(): Promise<CacheRegistryEntry[]> {
@@ -105,24 +132,6 @@ export class AnalysisResultsCachedFetcherService {
       await cache.put(this.config.registryKey, new Response(JSON.stringify(registry)));
     } catch (error) {
       this.logger.warn('Failed to save cache registry', { error });
-    }
-  }
-
-  private async enforceMaxCaches(): Promise<void> {
-    const registry = await this.readRegistry();
-
-    if (registry.length > this.config.maxCaches) {
-      const sorted = [...registry].sort((a, b) => a.lastUsed - b.lastUsed);
-      const toEvict = sorted.slice(0, registry.length - this.config.maxCaches);
-
-      for (const entry of toEvict) {
-        await this.deleteCacheName(entry.cacheName);
-      }
-
-      const evictedNames = new Set(toEvict.map((entry) => entry.cacheName));
-      await this.writeRegistry(registry.filter((entry) => !evictedNames.has(entry.cacheName)));
-
-      this.logger.debug('Evicted old caches to enforce limits', { evictedCount: toEvict.length });
     }
   }
 

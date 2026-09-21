@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService , ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logging';
 import { AnalysisResultsCachedFetcherService } from './analysis-results-cached-fetcher.service';
+import { AnalysisResultsLockService } from '../analysis-results-lock/analysis-results-lock.service';
 import { CACHE_CONFIG } from './cache.config';
 import type { CacheConfig } from './cache.config';
 
@@ -46,11 +47,16 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
   let service: AnalysisResultsCachedFetcherService;
   let logger: ReturnType<typeof MockService<ContextLogger>>;
+  let locker: ReturnType<typeof MockService<AnalysisResultsLockService>>;
   let config: CacheConfig;
   let mockCaches: MockCacheStorage;
 
   beforeEach(() => {
     logger = MockService(ContextLogger);
+
+    locker = MockService(AnalysisResultsLockService);
+    vi.spyOn(locker, 'runExclusive').mockImplementation((_name, fn) => fn());
+
     config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
 
     const loggerService = MockService(LoggerService, {
@@ -59,6 +65,7 @@ describe('AnalysisResultsCachedFetcherService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        { provide: AnalysisResultsLockService, useValue: locker },
         { provide: LoggerService, useValue: loggerService },
         { provide: CACHE_CONFIG, useValue: config },
       ],
@@ -185,6 +192,39 @@ describe('AnalysisResultsCachedFetcherService', () => {
       const res = await registryCache.match(config.registryKey);
       return res ? await res.json() : [];
     };
+
+    describe('locking', () => {
+      it('updates registry under lock named after registry cache', async () => {
+        const fetchFn = vi.fn().mockResolvedValue(data);
+
+        await service.getOrFetch(cacheName, cacheKey, fetchFn);
+
+        expect(locker.runExclusive).toHaveBeenCalledOnce();
+        expect(locker.runExclusive).toHaveBeenCalledWith(
+          config.registryCacheName,
+          expect.any(Function),
+        );
+      });
+
+      it('does not touch registry outside of lock callback', async () => {
+        vi.spyOn(locker, 'runExclusive').mockResolvedValue(undefined);
+        const fetchFn = vi.fn().mockResolvedValue(data);
+
+        await service.getOrFetch(cacheName, cacheKey, fetchFn);
+
+        expect(await readRegistry()).toEqual([]);
+      });
+
+      it('returns data and logs warning when lock fails', async () => {
+        vi.spyOn(locker, 'runExclusive').mockRejectedValue(new Error('lock failed'));
+        const fetchFn = vi.fn().mockResolvedValue(data);
+
+        const res = await service.getOrFetch(cacheName, cacheKey, fetchFn);
+
+        expect(res).toEqual(data);
+        expect(logger.warn).toHaveBeenCalled();
+      });
+    });
 
     it('adds new entry to registry on first use', async () => {
       const fetchFn = vi.fn().mockResolvedValue(data);
