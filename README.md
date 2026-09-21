@@ -27,7 +27,7 @@ If an error occurs or the WebSocket connection is interrupted, the application a
 
 | Target Form | Loading Screen | Analysis Error | Unfinished Analysis |
 |:---:|:---:|:---:|:---:|
-| <img src="./docs/analysis-run/screens/target_form.png" width="200"/> | <img src="./docs/analysis-run/screens/loading_screen.png" width="200"/> | <img src="./docs/analysis-run/screens/analysis_error.png" width="200"/> | <img src="./docs/analysis-run/screens/unfinished_analysis.png" width="200"/> |
+| <img src="./docs/screens/target_form.png" width="200"/> | <img src="./docs/screens/loading_screen.png" width="200"/> | <img src="./docs/screens/analysis_error.png" width="200"/> | <img src="./docs/screens/unfinished_analysis.png" width="200"/> |
 
 
 ### Additional Features
