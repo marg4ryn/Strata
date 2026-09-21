@@ -245,6 +245,12 @@
         "info": "Change dynamics: Number of added and removed lines of code over time, shown against the total system size. Helps assess the pace of change and code stabilization.",
         "total": { "legend": "Total", "tooltip": "All lines" },
         "changed": { "legend": "Modified", "tooltip": "Modified lines" }
+      },
+      "codeChurn": {
+        "title": "Code churn",
+        "info": "Code churn: Number of added and deleted lines of code over time. Helps assess the intensity of code changes and identify periods of increased development activity.",
+        "added": { "legend": "Added", "tooltip": "Added lines" },
+        "deleted": { "legend": "Deleted", "tooltip": "Deleted lines" }
       }
     },
     "aggregation": {

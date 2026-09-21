@@ -5,12 +5,12 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { LineChartComponent } from './line-chart.component';
+import { BarChartComponent } from './bar-chart.component';
 import type { ChartSeries } from '../../../utils/aggregation/aggregation';
 
-describe('LineChartComponent', () => {
-  let component: LineChartComponent;
-  let fixture: ComponentFixture<LineChartComponent>;
+describe('BarChartComponent', () => {
+  let component: BarChartComponent;
+  let fixture: ComponentFixture<BarChartComponent>;
   let transloco: TranslocoService;
 
   const seriesA: ChartSeries = {
@@ -32,11 +32,11 @@ describe('LineChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LineChartComponent, getTranslocoModule()],
+      imports: [BarChartComponent, getTranslocoModule()],
       providers: [provideCharts(withDefaultRegisterables())],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LineChartComponent);
+    fixture = TestBed.createComponent(BarChartComponent);
     component = fixture.componentInstance;
     transloco = TestBed.inject(TranslocoService);
 
@@ -131,8 +131,8 @@ describe('LineChartComponent', () => {
     expect(monthLabelsCount).toBe(1);
   });
 
-  it('sets chart type to line', () => {
-    expect(component.chartType).toBe('line');
+  it('sets chart type to bar', () => {
+    expect(component.chartType).toBe('bar');
   });
 
   it('disables the built-in chart.js legend', () => {
@@ -157,7 +157,7 @@ describe('LineChartComponent', () => {
     fixture.componentRef.setInput('series', [seriesA, seriesB]);
     fixture.detectChanges();
 
-    const items = fixture.debugElement.queryAll(By.css('.line-chart__legend-item'));
+    const items = fixture.debugElement.queryAll(By.css('.bar-chart__legend-item'));
     expect(items).toHaveLength(2);
   });
 
@@ -165,7 +165,7 @@ describe('LineChartComponent', () => {
     fixture.componentRef.setInput('series', [seriesA]);
     fixture.detectChanges();
 
-    const rectangle = fixture.debugElement.query(By.css('.line-chart__legend-rectangle'))
+    const rectangle = fixture.debugElement.query(By.css('.bar-chart__legend-rectangle'))
       .nativeElement as HTMLElement;
     expect(rectangle.style.background).toBe('rgb(255, 0, 0)');
   });
@@ -182,5 +182,28 @@ describe('LineChartComponent', () => {
 
     const plLabel = component.chartData()!.labels![0];
     expect(plLabel).not.toBe(enLabel);
+  });
+
+  it('formats tooltip value using parsed y value or zero', () => {
+    const options = component.chartOptions();
+
+    const label = options!.plugins!.tooltip!.callbacks!.label as (context: {
+      dataset: { label: string };
+      parsed: { y: number | null };
+    }) => string;
+
+    expect(
+      label({
+        dataset: { label: 'Added' },
+        parsed: { y: -1234 },
+      }),
+    ).toBe(' Added: 1,234');
+
+    expect(
+      label({
+        dataset: { label: 'Added' },
+        parsed: { y: null },
+      }),
+    ).toBe(' Added: 0');
   });
 });

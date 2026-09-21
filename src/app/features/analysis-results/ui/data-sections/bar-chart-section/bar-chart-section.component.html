@@ -1,0 +1,28 @@
+<app-data-section class="bar-chart-section">
+  <ng-container slot="header">
+    <div class="bar-chart-section__header">
+      <span class="bar-chart-section__title">
+        <ng-content />
+      </span>
+      @if (series().length > 0) {
+        <app-dropdown
+          #dropdown
+          class="bar-chart-section__dropdown"
+          [options]="options"
+          [value]="selectedPeriod()"
+          [ariaLabelKey]="ariaLabelKey"
+          (selectionChange)="select($event)"
+        />
+      }
+    </div>
+  </ng-container>
+  <ng-container slot="content">
+    @if (series().length > 0) {
+      <app-bar-chart [series]="series()" [period]="selectedPeriod()" />
+    } @else {
+      <span class="bar-chart-section__no-data">
+        {{ 'common.noData' | transloco }}
+      </span>
+    }
+  </ng-container>
+</app-data-section>

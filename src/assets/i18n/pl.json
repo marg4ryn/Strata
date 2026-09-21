@@ -216,7 +216,7 @@
           "info": "Złożoność cyklomatyczna, czyli liczba niezależnych ścieżek wykonania w kodzie. Wyższa wartość oznacza kod trudniejszy do zrozumienia i testowania. Metryka jest agregowana dla całego projektu."
         },
         "duplicatedLines": {
-          "label": "Duplicated lines density",
+          "label": "Gęstość duplikacji linii",
           "info": "Procent zduplikowanych linii względem wszystkich linii kodu. Wyższa wartość oznacza więcej duplikacji kodu i może utrudniać jego utrzymanie."
         }
       }
@@ -244,6 +244,12 @@
         "info": "Dynamika zmian: Liczba dodanych i usuniętych linii kodu w czasie, przedstawiona na tle całkowitego rozmiaru systemu. Pomaga ocenić tempo zmian i stopień stabilizacji kodu.",
         "total": { "legend": "Łącznie", "tooltip": "Wszystkie linie" },
         "changed": { "legend": "Zmodyfikowane", "tooltip": "Linie modyfikowane" }
+      },
+      "codeChurn": {
+        "title": "Rotacja kodu",
+        "info": "Rotacja kodu (code churn): Liczba dodanych i usuniętych linii kodu w czasie. Pomaga ocenić intensywność zmian w kodzie i zidentyfikować okresy wzmożonej aktywności programistycznej.",
+        "added": { "legend": "Dodane", "tooltip": "Linie dodane" },
+        "deleted": { "legend": "Usunięte", "tooltip": "Linie usunięte" }
       }
     },
     "aggregation": {

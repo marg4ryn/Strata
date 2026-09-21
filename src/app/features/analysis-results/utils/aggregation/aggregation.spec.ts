@@ -1,11 +1,7 @@
-import type {
-  LineChartDataPoint,
-  LineChartAggregationMode,
-  LineChartAggregationPeriod,
-} from '../../ui/charts/line-chart/line-chart.component';
-import { aggregatePoints } from './aggregation';
+import { aggregatePoints, formatBucketLabel } from './aggregation';
+import type { ChartDataPoint, ChartAggregationMode, ChartAggregationPeriod } from './aggregation';
 
-function point(date: string, value: number): LineChartDataPoint {
+function point(date: string, value: number): ChartDataPoint {
   return { date, value };
 }
 
@@ -141,7 +137,7 @@ describe('aggregatePoints', () => {
 
     it('falls back to "sum" for an unknown aggregation mode', () => {
       const points = [point('2024-01-01', 5), point('2024-01-01', 3)];
-      const result = aggregatePoints(points, 'day', 'invalid' as LineChartAggregationMode);
+      const result = aggregatePoints(points, 'day', 'invalid' as ChartAggregationMode);
       expect(result.get('2024-01-01')).toBe(8);
     });
 
@@ -167,7 +163,7 @@ describe('aggregatePoints', () => {
   });
 
   describe('edge cases', () => {
-    it.each(['day', 'week', 'biweek', 'month'] as LineChartAggregationPeriod[])(
+    it.each(['day', 'week', 'biweek', 'month'] as ChartAggregationPeriod[])(
       'returns an empty map for an empty array (period: %s)',
       (period) => {
         const result = aggregatePoints([], period, 'sum');
@@ -185,8 +181,22 @@ describe('aggregatePoints', () => {
 
     it('buckets under an empty key for an unknown aggregation period', () => {
       const points = [point('2024-01-01', 5)];
-      const result = aggregatePoints(points, 'invalid' as LineChartAggregationPeriod, 'sum');
+      const result = aggregatePoints(points, 'invalid' as ChartAggregationPeriod, 'sum');
       expect(result.get('')).toBe(5);
     });
+  });
+});
+
+describe('formatBucketLabel', () => {
+  it('formats month aggregation bucket key as month and year', () => {
+    const label = formatBucketLabel('2024-03', 'month', 'en');
+    expect(label).toContain('2024');
+    expect(label.toLowerCase()).toContain('march');
+  });
+
+  it('formats non-month aggregation bucket key as day and month', () => {
+    const label = formatBucketLabel('2024-03-15', 'day', 'en');
+    expect(label).toContain('15');
+    expect(label.toLowerCase()).toContain('march');
   });
 });

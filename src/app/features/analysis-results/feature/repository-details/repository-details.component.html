@@ -242,6 +242,34 @@
           />
         </div>
       </app-line-chart-section>
+
+      <app-bar-chart-section
+        [series]="[
+          {
+            legendLabelKey: 'analysisResults.charts.codeChurn.added.legend',
+            tooltipLabelKey: 'analysisResults.charts.codeChurn.added.tooltip',
+            color: '#16b866',
+            points: linesAddedSeries(),
+          },
+          {
+            legendLabelKey: 'analysisResults.charts.codeChurn.deleted.legend',
+            tooltipLabelKey: 'analysisResults.charts.codeChurn.deleted.tooltip',
+            color: '#e63946',
+            points: linesDeletedSeries(),
+          },
+        ]"
+      >
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.charts.codeChurn.title' | transloco
+          }}</span>
+          <app-info-tooltip
+            class="section-title__tooltip"
+            textKey="analysisResults.charts.codeChurn.info"
+            [iconSize]="22"
+          />
+        </div>
+      </app-bar-chart-section>
     </div>
   </ng-template>
 </app-resource-page>

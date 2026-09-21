@@ -1,0 +1,20 @@
+<div class="bar-chart">
+  <div class="bar-chart__scroll">
+    <div
+      class="bar-chart__canvas-container"
+      [style.width.px]="chartWidth()"
+      [style.height.px]="chartHeight()"
+    >
+      <canvas baseChart [type]="chartType" [data]="chartData()" [options]="chartOptions()"></canvas>
+    </div>
+  </div>
+
+  <ul class="bar-chart__legend">
+    @for (s of series(); track s.legendLabelKey) {
+      <li class="bar-chart__legend-item">
+        <span class="bar-chart__legend-rectangle" [style.background]="s.color"></span>
+        {{ s.legendLabelKey | transloco }}
+      </li>
+    }
+  </ul>
+</div>

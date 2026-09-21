@@ -1,0 +1,40 @@
+.bar-chart-section {
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  &__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__dropdown {
+    align-self: start;
+    flex-shrink: 0;
+  }
+
+  &__no-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: var(--text-disabled);
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+
+  app-bar-chart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

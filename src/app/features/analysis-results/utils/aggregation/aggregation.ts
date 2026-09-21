@@ -1,17 +1,28 @@
 import type { ISODateString } from '@app/shared/utils';
-import type {
-  LineChartDataPoint,
-  LineChartAggregationMode,
-  LineChartAggregationPeriod,
-} from '../../ui/charts/line-chart/line-chart.component';
+
+export type ChartAggregationMode = 'sum' | 'max';
+
+export type ChartAggregationPeriod = 'day' | 'week' | 'biweek' | 'month';
+
+export interface ChartDataPoint {
+  date: ISODateString;
+  value: number;
+}
+
+export interface ChartSeries {
+  legendLabelKey: string;
+  tooltipLabelKey: string;
+  color: string;
+  points: ChartDataPoint[];
+}
 
 const MS_PER_DAY = 86_400_000;
 const MIDNIGHT_UTC = 'T00:00:00Z';
 
 export function aggregatePoints(
-  points: LineChartDataPoint[],
-  period: LineChartAggregationPeriod,
-  mode: LineChartAggregationMode = 'sum',
+  points: ChartDataPoint[],
+  period: ChartAggregationPeriod,
+  mode: ChartAggregationMode = 'sum',
 ): Map<string, number> {
   const buckets = new Map<string, number>();
   const biweekAnchor = period === 'biweek' ? getBiweekAnchor(points) : undefined;
@@ -26,7 +37,7 @@ export function aggregatePoints(
   return buckets;
 }
 
-function getBiweekAnchor(points: LineChartDataPoint[]): number | undefined {
+function getBiweekAnchor(points: ChartDataPoint[]): number | undefined {
   if (points.length === 0) return undefined;
   const earliest = points.reduce((min, p) => (p.date < min ? p.date : min), points[0].date);
   return getWeekStart(earliest).getTime();
@@ -42,7 +53,7 @@ function getWeekStart(date: ISODateString): Date {
 
 function getBucketKey(
   date: ISODateString,
-  period: LineChartAggregationPeriod,
+  period: ChartAggregationPeriod,
   biweekAnchor?: number,
 ): string {
   switch (period) {
@@ -68,4 +79,23 @@ function getBucketKey(
       period satisfies never;
       return '';
   }
+}
+
+export function formatBucketLabel(
+  key: string,
+  period: ChartAggregationPeriod,
+  lang: string,
+): string {
+  if (period === 'month') {
+    const [year, month] = key.split('-');
+    return new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(lang, {
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  return new Date(key + MIDNIGHT_UTC).toLocaleDateString(lang, {
+    day: '2-digit',
+    month: 'long',
+  });
 }

@@ -5,23 +5,18 @@ import { marker } from '@jsverse/transloco-keys-manager/marker';
 import { DropdownComponent } from '@app/shared/components';
 import type { DropdownOption } from '@app/shared/components';
 import { DataSectionComponent } from '../data-section/data-section.component';
-import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
-import type {
-  ChartAggregationMode,
-  ChartAggregationPeriod,
-  ChartSeries,
-} from '../../../utils/aggregation/aggregation';
+import { BarChartComponent } from '../../charts/bar-chart/bar-chart.component';
+import type { ChartAggregationPeriod, ChartSeries } from '../../../utils/aggregation/aggregation';
 
 @Component({
-  selector: 'app-line-chart-section',
-  imports: [LineChartComponent, DropdownComponent, DataSectionComponent, TranslocoPipe],
+  selector: 'app-bar-chart-section',
+  imports: [BarChartComponent, DropdownComponent, DataSectionComponent, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './line-chart-section.component.html',
-  styleUrl: './line-chart-section.component.scss',
+  styleUrl: './bar-chart-section.component.scss',
+  templateUrl: './bar-chart-section.component.html',
 })
-export class LineChartSectionComponent {
+export class BarChartSectionComponent {
   series = input.required<ChartSeries[]>();
-  modes = input<ChartAggregationMode[]>(['sum']);
 
   private readonly dropdown = viewChild.required<DropdownComponent<string>>('dropdown');
   readonly ariaLabelKey = marker('analysisResults.aggregation.ariaLabel');

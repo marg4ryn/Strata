@@ -5,13 +5,13 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { getTranslocoModule } from '@app/core/transloco';
 import { DropdownComponent } from '@app/shared/components';
-import { LineChartSectionComponent } from './line-chart-section.component';
-import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
+import { BarChartSectionComponent } from './bar-chart-section.component';
+import { BarChartComponent } from '../../charts/bar-chart/bar-chart.component';
 import type { ChartAggregationPeriod, ChartSeries } from '../../../utils/aggregation/aggregation';
 
-describe('LineChartSectionComponent', () => {
-  let component: LineChartSectionComponent;
-  let fixture: ComponentFixture<LineChartSectionComponent>;
+describe('BarChartSectionComponent', () => {
+  let component: BarChartSectionComponent;
+  let fixture: ComponentFixture<BarChartSectionComponent>;
   let dropdown: DropdownComponent<string>;
 
   const mockSeries: ChartSeries[] = [
@@ -20,11 +20,11 @@ describe('LineChartSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LineChartSectionComponent, getTranslocoModule()],
+      imports: [BarChartSectionComponent, getTranslocoModule()],
       providers: [provideCharts(withDefaultRegisterables())],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LineChartSectionComponent);
+    fixture = TestBed.createComponent(BarChartSectionComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('series', mockSeries);
     await fixture.whenStable();
@@ -96,20 +96,20 @@ describe('LineChartSectionComponent', () => {
     expect(component.selectedPeriod()).toBe('month');
   });
 
-  it('passes updated aggregation period to the line chart', () => {
+  it('passes updated aggregation period to the bar chart', () => {
     component.select('biweek');
     fixture.detectChanges();
-    const chart = fixture.debugElement.query(By.directive(LineChartComponent))
-      .componentInstance as LineChartComponent;
+    const chart = fixture.debugElement.query(By.directive(BarChartComponent))
+      .componentInstance as BarChartComponent;
     expect(chart.period()).toBe('biweek');
   });
 
-  it('does not render the line chart or the dropdown when the series array is empty', () => {
+  it('does not render the bar chart or the dropdown when the series array is empty', () => {
     fixture.componentRef.setInput('series', []);
     fixture.detectChanges();
-    const chart = fixture.debugElement.query(By.directive(LineChartComponent));
+    const chart = fixture.debugElement.query(By.directive(BarChartComponent));
     const dropdown = fixture.debugElement.query(By.directive(DropdownComponent));
-    const message = fixture.debugElement.query(By.css('.line-chart-section__no-data'));
+    const message = fixture.debugElement.query(By.css('.bar-chart-section__no-data'));
     expect(chart).toBeFalsy();
     expect(dropdown).toBeFalsy();
     expect(message).toBeTruthy();

@@ -8,7 +8,8 @@ import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { DataListSectionComponent } from '../../ui/data-sections/data-list-section/data-list-section.component';
 import { DoughnutChartSectionComponent } from '../../ui/data-sections/doughnut-chart-section/doughnut-chart-section.component';
 import { LineChartSectionComponent } from '../../ui/data-sections/line-chart-section/line-chart-section.component';
-import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.component';
+import { BarChartSectionComponent } from '../../ui/data-sections/bar-chart-section/bar-chart-section.component';
+import type { ChartDataPoint } from '../../utils/aggregation/aggregation';
 
 @Component({
   selector: 'app-repository-details',
@@ -18,6 +19,7 @@ import type { LineChartDataPoint } from '../../ui/charts/line-chart/line-chart.c
     DataListSectionComponent,
     DoughnutChartSectionComponent,
     LineChartSectionComponent,
+    BarChartSectionComponent,
     InfoTooltipComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +36,7 @@ export class RepositoryDetailsComponent {
     () => this.id(),
   );
 
-  commitSeries = computed<LineChartDataPoint[]>(
+  commitSeries = computed<ChartDataPoint[]>(
     () =>
       this.resource.value()?.trends.map((entry) => ({
         date: entry.date,
@@ -42,7 +44,7 @@ export class RepositoryDetailsComponent {
       })) ?? [],
   );
 
-  uniqueAuthorsSeries = computed<LineChartDataPoint[]>(
+  uniqueAuthorsSeries = computed<ChartDataPoint[]>(
     () =>
       this.resource.value()?.trends.map((entry) => ({
         date: entry.date,
@@ -50,7 +52,7 @@ export class RepositoryDetailsComponent {
       })) ?? [],
   );
 
-  activeAuthorsSeries = computed<LineChartDataPoint[]>(
+  activeAuthorsSeries = computed<ChartDataPoint[]>(
     () =>
       this.resource.value()?.trends.map((entry) => ({
         date: entry.date,
@@ -58,7 +60,7 @@ export class RepositoryDetailsComponent {
       })) ?? [],
   );
 
-  linesChangedSeries = computed<LineChartDataPoint[]>(
+  linesChangedSeries = computed<ChartDataPoint[]>(
     () =>
       this.resource.value()?.trends.map((entry) => ({
         date: entry.date,
@@ -66,7 +68,7 @@ export class RepositoryDetailsComponent {
       })) ?? [],
   );
 
-  totalLinesSeries = computed(() => {
+  totalLinesSeries = computed<ChartDataPoint[]>(() => {
     let totalLines = 0;
 
     return (
@@ -83,4 +85,20 @@ export class RepositoryDetailsComponent {
         }) ?? []
     );
   });
+
+  linesAddedSeries = computed<ChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: entry.linesAdded,
+      })) ?? [],
+  );
+
+  linesDeletedSeries = computed<ChartDataPoint[]>(
+    () =>
+      this.resource.value()?.trends.map((entry) => ({
+        date: entry.date,
+        value: -entry.linesDeleted,
+      })) ?? [],
+  );
 }
