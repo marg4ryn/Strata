@@ -3,7 +3,7 @@
     <div class="repository-details">
       @let info = data?.details?.info;
       <!-- t(analysisResults.repositoryDetails.analysis.id.label, analysisResults.repositoryDetails.analysis.dateRange.label, analysisResults.repositoryDetails.analysis.started.label, analysisResults.repositoryDetails.analysis.completed.label, analysisResults.repositoryDetails.analysis.duration.label) -->
-      <app-data-list-section
+      <app-list-section
         [items]="[
           {
             labelKey: 'analysisResults.repositoryDetails.analysis.id.label',
@@ -46,11 +46,11 @@
           </a>
           <span class="section-title__badge">{{ info.repositoryPlatform }}</span>
         </div>
-      </app-data-list-section>
+      </app-list-section>
 
       @let statistics = data?.details?.statistics;
       <!-- t(analysisResults.repositoryDetails.statistics.uniqueAuthors.label, analysisResults.repositoryDetails.statistics.uniqueAuthors.info, analysisResults.repositoryDetails.statistics.activeAuthors.label, analysisResults.repositoryDetails.statistics.activeAuthors.info, analysisResults.repositoryDetails.statistics.commits.label, analysisResults.repositoryDetails.statistics.commits.info, analysisResults.repositoryDetails.statistics.files.label, analysisResults.repositoryDetails.statistics.fileTypes.label) -->
-      <app-data-list-section
+      <app-list-section
         [items]="[
           {
             labelKey: 'analysisResults.repositoryDetails.statistics.uniqueAuthors.label',
@@ -86,11 +86,11 @@
             'analysisResults.repositoryDetails.statistics.title' | transloco
           }}</span>
         </div>
-      </app-data-list-section>
+      </app-list-section>
 
       @let staticAnalysis = data?.details?.staticAnalysis;
       <!-- t(analysisResults.repositoryDetails.quality.bugs.label, analysisResults.repositoryDetails.quality.bugs.info, analysisResults.repositoryDetails.quality.vulnerabilities.label, analysisResults.repositoryDetails.quality.vulnerabilities.info, analysisResults.repositoryDetails.quality.codeSmells.label, analysisResults.repositoryDetails.quality.codeSmells.info, analysisResults.repositoryDetails.quality.complexity.label, analysisResults.repositoryDetails.quality.complexity.info, analysisResults.repositoryDetails.quality.duplicatedLines.label, analysisResults.repositoryDetails.quality.duplicatedLines.info) -->
-      <app-data-list-section
+      <app-list-section
         [items]="[
           {
             labelKey: 'analysisResults.repositoryDetails.quality.bugs.label',
@@ -128,7 +128,7 @@
             {{ 'analysisResults.repositoryDetails.quality.title' | transloco }}
           </span>
         </div>
-      </app-data-list-section>
+      </app-list-section>
 
       <!-- t(analysisResults.charts.codeBreakdown.code.legend, analysisResults.charts.codeBreakdown.code.tooltip, analysisResults.charts.codeBreakdown.comments.legend, analysisResults.charts.codeBreakdown.comments.tooltip, analysisResults.charts.codeBreakdown.blank.legend, analysisResults.charts.codeBreakdown.blank.tooltip) -->
       <app-doughnut-chart-section
@@ -243,6 +243,7 @@
         </div>
       </app-line-chart-section>
 
+      <!-- t(analysisResults.charts.codeChurn.added.legend, analysisResults.charts.codeChurn.added.tooltip, analysisResults.charts.codeChurn.deleted.legend, analysisResults.charts.codeChurn.deleted.tooltip, analysisResults.charts.codeChurn.info) -->
       <app-bar-chart-section
         [series]="[
           {
@@ -270,6 +271,73 @@
           />
         </div>
       </app-bar-chart-section>
+
+      <!-- t(analysisResults.tables.fileTypes.fileType.label, analysisResults.tables.fileTypes.files.label, analysisResults.tables.fileTypes.files.tooltip, analysisResults.tables.fileTypes.code.label, analysisResults.tables.fileTypes.code.tooltip, analysisResults.tables.fileTypes.blank.label, analysisResults.tables.fileTypes.blank.tooltip,analysisResults.tables.fileTypes.comments.label, analysisResults.tables.fileTypes.comments.tooltip) -->
+      <app-table-section
+        [rows]="fileTypesRows()"
+        [columns]="[
+          { headerKey: 'analysisResults.tables.fileTypes.fileType.label', valueType: 'text' },
+          {
+            headerKey: 'analysisResults.tables.fileTypes.files.label',
+            tooltipKey: 'analysisResults.tables.fileTypes.files.tooltip',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.fileTypes.code.label',
+            tooltipKey: 'analysisResults.tables.fileTypes.code.tooltip',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.fileTypes.blank.label',
+            tooltipKey: 'analysisResults.tables.fileTypes.blank.tooltip',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.fileTypes.comments.label',
+            tooltipKey: 'analysisResults.tables.fileTypes.comments.tooltip',
+            valueType: 'number',
+          },
+        ]"
+      >
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.tables.fileTypes.title' | transloco
+          }}</span>
+        </div>
+      </app-table-section>
+
+      <!-- t(analysisResults.tables.authors.name.label, analysisResults.tables.authors.commits.label, analysisResults.tables.authors.lead.label, analysisResults.tables.authors.lead.tooltip, analysisResults.tables.authors.added.label, analysisResults.tables.authors.added.tooltip,analysisResults.tables.authors.deleted.label, analysisResults.tables.authors.deleted.tooltip) -->
+      <app-table-section
+        [rows]="authorsRows()"
+        [columns]="[
+          { headerKey: 'analysisResults.tables.authors.name.label', valueType: 'text' },
+          {
+            headerKey: 'analysisResults.tables.authors.commits.label',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.authors.lead.label',
+            tooltipKey: 'analysisResults.tables.authors.lead.tooltip',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.authors.added.label',
+            tooltipKey: 'analysisResults.tables.authors.added.tooltip',
+            valueType: 'number',
+          },
+          {
+            headerKey: 'analysisResults.tables.authors.deleted.label',
+            tooltipKey: 'analysisResults.tables.authors.deleted.tooltip',
+            valueType: 'number',
+          },
+        ]"
+      >
+        <div class="section-title">
+          <span class="section-title__label">{{
+            'analysisResults.tables.authors.title' | transloco
+          }}</span>
+        </div>
+      </app-table-section>
     </div>
   </ng-template>
 </app-resource-page>

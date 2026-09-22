@@ -253,6 +253,30 @@
         "deleted": { "legend": "Deleted", "tooltip": "Deleted lines" }
       }
     },
+    "tables": {
+      "fileTypes": {
+        "title": "File Types",
+        "fileType": { "label": "File Type" },
+        "files": { "label": "Files", "tooltip": "Number of files of this type." },
+        "code": { "label": "Code", "tooltip": "Number of lines of code in files of this type." },
+        "blank": { "label": "Blank", "tooltip": "Number of blank lines in files of this type." },
+        "comments": {
+          "label": "Comments",
+          "tooltip": "Number of comment lines in files of this type."
+        }
+      },
+      "authors": {
+        "title": "Authors",
+        "name": { "label": "Name" },
+        "commits": { "label": "Commits" },
+        "lead": {
+          "label": "Primary Files",
+          "tooltip": "Number of files for which the author is the primary contributor."
+        },
+        "added": { "label": "Added", "tooltip": "Number of lines added." },
+        "deleted": { "label": "Deleted", "tooltip": "Number of lines deleted." }
+      }
+    },
     "aggregation": {
       "day": "Day",
       "week": "Week",

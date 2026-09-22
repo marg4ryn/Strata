@@ -1,12 +1,12 @@
-<app-data-section class="data-list-section">
+<app-data-section class="list-section">
   <ng-container slot="header">
-    <span class="data-list-section__title">
+    <span class="list-section__title">
       <ng-content />
     </span>
   </ng-container>
 
   <ng-container slot="content">
-    <dl class="data-list-section__list">
+    <dl class="list-section__list">
       @for (item of items(); track item.labelKey) {
         <div>
           <dt>
@@ -42,7 +42,7 @@
                 }
               }
             } @else {
-              <span class="data-list-section__no-data">
+              <span class="list-section__no-data">
                 {{ 'common.noData' | transloco }}
               </span>
             }

@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { DataListSectionComponent } from './data-list-section.component';
-import type { DataListItem } from './data-list-section.component';
+import { ListSectionComponent } from './list-section.component';
+import type { DataListItem } from './list-section.component';
 
-describe('DataListSectionComponent', () => {
-  let fixture: ComponentFixture<DataListSectionComponent>;
+describe('ListSectionComponent', () => {
+  let fixture: ComponentFixture<ListSectionComponent>;
 
   const setItems = async (items: DataListItem[]) => {
     fixture.componentRef.setInput('items', items);
@@ -18,15 +18,15 @@ describe('DataListSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataListSectionComponent, getTranslocoModule()],
+      imports: [ListSectionComponent, getTranslocoModule()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DataListSectionComponent);
+    fixture = TestBed.createComponent(ListSectionComponent);
   });
 
   it('shows the no data message when the items array is empty', async () => {
     await setItems([{ labelKey: 'testLabel', value: null, valueType: 'text' }]);
-    const message = fixture.debugElement.query(By.css('.data-list-section__no-data'));
+    const message = fixture.debugElement.query(By.css('.list-section__no-data'));
     expect(message).toBeTruthy();
   });
 
@@ -41,7 +41,7 @@ describe('DataListSectionComponent', () => {
 
   it('renders label and text value', async () => {
     await setItems([{ labelKey: 'testLabel', value: 'testValue', valueType: 'text' }]);
-    const row = fixture.debugElement.query(By.css('.data-list-section__list > div'))
+    const row = fixture.debugElement.query(By.css('.list-section__list > div'))
       .nativeElement as HTMLElement;
     expect(row.querySelector('dt')?.textContent).toContain('testLabel');
     expect(row.querySelector('dd')?.textContent).toContain('testValue');
@@ -96,7 +96,7 @@ describe('DataListSectionComponent', () => {
       { labelKey: 'testLabel', value: '1', valueType: 'text' },
       { labelKey: 'testLabel', value: '2', valueType: 'text' },
     ]);
-    const rows = fixture.debugElement.queryAll(By.css('.data-list-section__list > div'));
+    const rows = fixture.debugElement.queryAll(By.css('.list-section__list > div'));
     expect(rows.length).toBe(2);
   });
 });

@@ -1,0 +1,69 @@
+<app-data-section class="table-section">
+  <ng-container slot="header">
+    <span class="table-section__title">
+      <ng-content />
+    </span>
+  </ng-container>
+
+  <ng-container slot="content">
+    @if (columns().length > 0) {
+      <div class="table-section__scroll">
+        <table class="table-section__table">
+          <tr class="table-section__row">
+            @for (col of columns(); track $index) {
+              <th
+                class="table-section__header-cell"
+                tabindex="0"
+                role="columnheader"
+                [attr.aria-sort]="
+                  sortColumnIndex() === $index
+                    ? sortDirection() === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                "
+                (click)="onSortColumn($index)"
+                (keydown.enter)="onSortColumn($index)"
+                (keydown.space)="onSortColumn($index); $event.preventDefault()"
+              >
+                <span class="table-section__header-content">
+                  @if (sortColumnIndex() === $index) {
+                    <span
+                      class="table-section__sort-icon"
+                      [class.table-section__sort-icon--desc]="sortDirection() === 'desc'"
+                    >
+                      ▲
+                    </span>
+                  }
+                  {{ col.headerKey | transloco }}
+                  @if (col.tooltipKey) {
+                    <app-info-tooltip [textKey]="col.tooltipKey" [iconSize]="14" />
+                  }
+                </span>
+              </th>
+            }
+          </tr>
+          @for (row of sortedRows(); track $index) {
+            <tr class="table-section__row">
+              @for (cell of row; track $index) {
+                @if (cell.valueType === 'number') {
+                  <td class="table-section__cell table-section__cell--numeric">
+                    {{ cell.value | localizedNumber }}
+                  </td>
+                } @else {
+                  <td class="table-section__cell">
+                    {{ cell.value }}
+                  </td>
+                }
+              }
+            </tr>
+          }
+        </table>
+      </div>
+    } @else {
+      <span class="table-section__no-data">
+        {{ 'common.noData' | transloco }}
+      </span>
+    }
+  </ng-container>
+</app-data-section>

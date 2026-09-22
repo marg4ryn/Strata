@@ -252,6 +252,30 @@
         "deleted": { "legend": "Usunięte", "tooltip": "Linie usunięte" }
       }
     },
+    "tables": {
+      "fileTypes": {
+        "title": "Typy plików",
+        "fileType": { "label": "Typ pliku" },
+        "files": { "label": "Pliki", "tooltip": "Liczba plików o danym typie." },
+        "code": { "label": "Kod", "tooltip": "Liczba linii kodu w plikach o danym typie." },
+        "blank": { "label": "Puste", "tooltip": "Liczba linii pustych w plikach o danym typie." },
+        "comments": {
+          "label": "Komentarze",
+          "tooltip": "Liczba linii komentarzy w plikach o danym typie."
+        }
+      },
+      "authors": {
+        "title": "Autorzy",
+        "name": { "label": "Imię" },
+        "commits": { "label": "Commity" },
+        "lead": {
+          "label": "Główne pliki",
+          "tooltip": "Liczba plików, których dany autor jest głównym twórcą."
+        },
+        "added": { "label": "Dodane", "tooltip": "Liczba dodanych linii." },
+        "deleted": { "label": "Usunięte", "tooltip": "Liczba usuniętych linii." }
+      }
+    },
     "aggregation": {
       "day": "Dzień",
       "week": "Tydzień",

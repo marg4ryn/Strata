@@ -5,20 +5,14 @@ import { LocalizedDurationPipe, LocalizedNumberPipe, LocalizedDatePipe } from '@
 import { InfoTooltipComponent } from '@app/shared/components';
 import { DataSectionComponent } from '../data-section/data-section.component';
 
-export type DataListItemValueType =
-  | 'number'
-  | 'percent'
-  | 'date'
-  | 'dateTime'
-  | 'dateRange'
-  | 'duration'
-  | 'text';
+export type ListItemValueType =
+  'number' | 'percent' | 'date' | 'dateTime' | 'dateRange' | 'duration' | 'text';
 
 export interface DataListItem {
   labelKey: string;
   tooltipKey?: string;
   value: unknown;
-  valueType: DataListItemValueType;
+  valueType: ListItemValueType;
 }
 
 export interface DateRangeValue {
@@ -27,7 +21,7 @@ export interface DateRangeValue {
 }
 
 @Component({
-  selector: 'app-data-list-section',
+  selector: 'app-list-section',
   imports: [
     DataSectionComponent,
     InfoTooltipComponent,
@@ -37,10 +31,10 @@ export interface DateRangeValue {
     LocalizedDurationPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './data-list-section.component.html',
-  styleUrl: './data-list-section.component.scss',
+  templateUrl: './list-section.component.html',
+  styleUrl: './list-section.component.scss',
 })
-export class DataListSectionComponent {
+export class ListSectionComponent {
   items = input.required<DataListItem[]>();
 
   asDateRange(value: unknown): DateRangeValue {
