@@ -38,4 +38,9 @@ describe('AnalysisResultsApiService', () => {
     service.fetchAuthorStatistics(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/authors/statistics`);
   });
+
+  it('delegates fetchDeveloperRelationships to HttpService', () => {
+    service.fetchDeveloperRelationships(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/authors/coupling`);
+  });
 });

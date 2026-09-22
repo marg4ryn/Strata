@@ -26,8 +26,11 @@ Each feature in `app/features/` has the following structure:
 * `feature/` — smart components — components responsible for the feature's business logic.
 * `ui/` — dumb components — presentational components specific to the given feature.
 * `utils/` — utility functions not directly related to a specific class.
+* `models/` —  TypeScript interfaces/types for the feature.
 
 The distinction between `feature/` and `ui/` is not based on the amount of logic, but on the type of dependencies injected into the component. A component belongs in `ui/` if it uses only `input()`/`output()` or generic, domain-agnostic services. A component belongs in `feature/` if it injects data-access or a facade, knows about routing, or makes business decisions based on domain data.
+
+The `models/` directory is introduced when a `.model.ts` file located directly in the `feature/` directory becomes too large.
 
 There is a possibility of creating a subfeature when the extracted part has its own, independent data-access logic and exposes that logic externally through its own facade. The parent feature communicates with the subfeature only through it. Mere growth in the number of components, dedicated routing, or a separate shell are not sufficient reasons to extract a subfeature.
 

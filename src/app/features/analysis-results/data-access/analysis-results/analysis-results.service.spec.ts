@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 import type { Mock } from 'vitest';
 
-import { LoggerService , ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logging';
 import { AnalysisResultsService } from './analysis-results.service';
 import { CACHE_CONFIG } from '../analysis-results-cached-fetcher/cache.config';
 import type { CacheConfig } from '../analysis-results-cached-fetcher/cache.config';
@@ -20,16 +20,22 @@ describe('AnalysisResultsService', () => {
     fetchRepositoryDetails: Mock;
     fetchRepositoryTrends: Mock;
     fetchAuthorStatistics: Mock;
+    fetchDeveloperRelationships: Mock;
   };
 
   beforeEach(() => {
     cachedFetcher = { getOrFetch: vi.fn() };
+    cachedFetcher.getOrFetch.mockImplementation(
+      (_cacheName: string, _cacheKey: string, fetcher: () => Promise<unknown>) => fetcher(),
+    );
+
     logger = MockService(ContextLogger);
     config = { maxCaches: 2, registryCacheName: 'test-reg', registryKey: '/test' };
     api = {
       fetchRepositoryDetails: vi.fn(),
       fetchRepositoryTrends: vi.fn(),
       fetchAuthorStatistics: vi.fn(),
+      fetchDeveloperRelationships: vi.fn(),
     };
 
     const loggerService = MockService(LoggerService, {
@@ -53,12 +59,6 @@ describe('AnalysisResultsService', () => {
   });
 
   describe('getRepositorySummary', () => {
-    beforeEach(() => {
-      cachedFetcher.getOrFetch.mockImplementation(
-        (_cacheName: string, _cacheKey: string, fetcher: () => Promise<unknown>) => fetcher(),
-      );
-    });
-
     it('calls getOrFetch with correct cache keys for all 3 endpoints', async () => {
       api.fetchRepositoryDetails.mockResolvedValue({});
       api.fetchRepositoryTrends.mockResolvedValue({});
@@ -118,6 +118,29 @@ describe('AnalysisResultsService', () => {
       api.fetchAuthorStatistics.mockResolvedValue({});
 
       await expect(service.getRepositorySummary(analysisId)).rejects.toThrow('Network error');
+    });
+  });
+
+  describe('getDeveloperRelationships', () => {
+    it('calls getOrFetch with correct cache keys', async () => {
+      api.fetchDeveloperRelationships.mockResolvedValue({});
+
+      await service.getDeveloperRelationships(analysisId);
+
+      const expectedCacheName = expect.stringContaining(`analysis:${analysisId}`);
+
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+        expectedCacheName,
+        '/developer-relationships',
+        expect.any(Function),
+      );
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledTimes(1);
+      expect(api.fetchDeveloperRelationships).toHaveBeenCalledWith(analysisId);
+    });
+
+    it('propagates an error when one of the fetches fails', async () => {
+      api.fetchDeveloperRelationships.mockRejectedValue(new Error('Network error'));
+      await expect(service.getDeveloperRelationships(analysisId)).rejects.toThrow('Network error');
     });
   });
 });

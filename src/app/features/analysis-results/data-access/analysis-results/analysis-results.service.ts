@@ -8,6 +8,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
+  AuthorCoupling,
 } from '../../analysis-results.model';
 
 @Service()
@@ -36,5 +37,19 @@ export class AnalysisResultsService {
     ]);
 
     return { details, trends, authors };
+  }
+
+  async getDeveloperRelationships(analysisId: string): Promise<AuthorCoupling[]> {
+    this.logger.info('Fetching developer relationships data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const coupling = await this.cachedFetcher.getOrFetch<AuthorCoupling[]>(
+      cacheName,
+      '/developer-relationships',
+      () => this.api.fetchDeveloperRelationships(analysisId),
+    );
+
+    return coupling;
   }
 }

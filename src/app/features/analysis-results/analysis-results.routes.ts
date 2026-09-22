@@ -8,4 +8,11 @@ export const analysisResultsRoutes: Routes = [
         (m) => m.RepositoryDetailsComponent,
       ),
   },
+  {
+    path: 'developer-relationships',
+    loadComponent: () =>
+      import('./feature/developer-relationships/developer-relationships.component').then(
+        (m) => m.DeveloperRelationshipsComponent,
+      ),
+  },
 ];

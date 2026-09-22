@@ -9,11 +9,11 @@ describe('AnalysisResultsFacade', () => {
   const analysisId = '123';
 
   let service: AnalysisResultsFacade;
-  let analysisResults: { getRepositorySummary: Mock };
+  let analysisResults: { getRepositorySummary: Mock; getDeveloperRelationships: Mock };
   let router: { navigate: Mock };
 
   beforeEach(() => {
-    analysisResults = { getRepositorySummary: vi.fn() };
+    analysisResults = { getRepositorySummary: vi.fn(), getDeveloperRelationships: vi.fn() };
     router = { navigate: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -38,5 +38,10 @@ describe('AnalysisResultsFacade', () => {
   it('delegates getRepositorySummary to AnalysisResultsService', () => {
     service.getRepositorySummary(analysisId);
     expect(analysisResults.getRepositorySummary).toHaveBeenCalledWith(analysisId);
+  });
+
+  it('delegates getDeveloperRelationships to AnalysisResultsService', () => {
+    service.getDeveloperRelationships(analysisId);
+    expect(analysisResults.getDeveloperRelationships).toHaveBeenCalledWith(analysisId);
   });
 });

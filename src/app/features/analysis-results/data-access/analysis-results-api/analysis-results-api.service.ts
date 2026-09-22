@@ -5,6 +5,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
+  AuthorCoupling,
 } from '../../analysis-results.model';
 
 @Service()
@@ -21,5 +22,9 @@ export class AnalysisResultsApiService {
 
   fetchAuthorStatistics(analysisId: string): Promise<AuthorStatistics[]> {
     return this.http.get<AuthorStatistics[]>(`/analysis/${analysisId}/authors/statistics`);
+  }
+
+  fetchDeveloperRelationships(analysisId: string): Promise<AuthorCoupling[]> {
+    return this.http.get<AuthorCoupling[]>(`/analysis/${analysisId}/authors/coupling`);
   }
 }

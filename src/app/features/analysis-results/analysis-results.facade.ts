@@ -2,7 +2,7 @@ import { Service, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
-import type { RepositorySummary } from './analysis-results.model';
+import type { RepositorySummary, AuthorCoupling } from './analysis-results.model';
 
 @Service()
 export class AnalysisResultsFacade {
@@ -15,5 +15,9 @@ export class AnalysisResultsFacade {
 
   getRepositorySummary(analysisId: string): Promise<RepositorySummary> {
     return this.service.getRepositorySummary(analysisId);
+  }
+
+  getDeveloperRelationships(analysisId: string): Promise<AuthorCoupling[]> {
+    return this.service.getDeveloperRelationships(analysisId);
   }
 }
