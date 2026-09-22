@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AnalysisRunFacade } from './analysis-run.facade';
 import { AnalysisRunStoreService } from './data-access/analysis-run-store/analysis-run-store.service';
@@ -36,6 +37,10 @@ describe('AnalysisRunFacade', () => {
     abandonAnalysis: ReturnType<typeof vi.fn>;
   };
 
+  let router: {
+    navigate: ReturnType<typeof vi.fn>;
+  };
+
   beforeEach(() => {
     store = {
       pendingAnalysis: signal(null),
@@ -58,9 +63,15 @@ describe('AnalysisRunFacade', () => {
       abandonAnalysis: vi.fn(),
     };
 
+    router = {
+      navigate: vi.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         AnalysisRunFacade,
+        { provide: Router, useValue: router },
+
         { provide: AnalysisRunStoreService, useValue: store },
         { provide: AnalysisRunService, useValue: analysisRunService },
       ],
@@ -110,7 +121,7 @@ describe('AnalysisRunFacade', () => {
 
   it('handles navigateToStartNewAnalysis', () => {
     service.navigateToStartNewAnalysis();
-    expect(analysisRunService.navigateToStartNewAnalysis).toHaveBeenCalledOnce();
+    expect(router.navigate).toHaveBeenCalledWith(['']);
   });
 
   it('handles tryToReconnect', () => {

@@ -1,5 +1,4 @@
 import { Service, inject, effect, untracked } from '@angular/core';
-import { Router } from '@angular/router';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { injectLogger } from '@app/core/logging';
@@ -28,7 +27,6 @@ export class AnalysisRunService {
   private readonly locker = inject(AnalysisRunLockService);
   private readonly notifications = inject(NotificationsFacade);
   private readonly history = inject(AnalysisHistoryFacade);
-  private readonly router = inject(Router);
 
   constructor() {
     effect(() => {
@@ -59,10 +57,6 @@ export class AnalysisRunService {
         });
       }
     });
-  }
-
-  navigateToStartNewAnalysis(): void {
-    this.router.navigate(['']);
   }
 
   async tryToReconnect(): Promise<void> {

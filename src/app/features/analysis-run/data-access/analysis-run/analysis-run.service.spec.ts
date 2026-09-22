@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
@@ -70,10 +69,6 @@ describe('AnalysisRunService', () => {
     navigateToAnalysis: ReturnType<typeof vi.fn>;
   };
 
-  let router: {
-    navigate: ReturnType<typeof vi.fn>;
-  };
-
   beforeEach(() => {
     store = {
       pendingAnalysis: signal(null),
@@ -121,10 +116,6 @@ describe('AnalysisRunService', () => {
       navigateToAnalysis: vi.fn(),
     };
 
-    router = {
-      navigate: vi.fn(),
-    };
-
     logger = MockService(ContextLogger);
 
     const loggerService = MockService(LoggerService, {
@@ -133,7 +124,6 @@ describe('AnalysisRunService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: Router, useValue: router },
         { provide: AnalysisRunStoreService, useValue: store },
         { provide: AnalysisRunStorageService, useValue: storage },
         { provide: AnalysisRunWebSocketService, useValue: websocket },
@@ -174,13 +164,6 @@ describe('AnalysisRunService', () => {
       TestBed.tick();
       expect(notifications.sendNotificationError).toHaveBeenCalledOnce();
       expect(logger.info).toHaveBeenCalled();
-    });
-  });
-
-  describe('navigateToStartNewAnalysis', () => {
-    it('calls router with correct path', () => {
-      service.navigateToStartNewAnalysis();
-      expect(router.navigate).toHaveBeenCalledWith(['']);
     });
   });
 

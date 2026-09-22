@@ -1,4 +1,5 @@
 import { inject, Service, computed } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AnalysisRunStoreService } from './data-access/analysis-run-store/analysis-run-store.service';
 import { AnalysisRunService } from './data-access/analysis-run/analysis-run.service';
@@ -8,6 +9,7 @@ import type { AnalysisTargetFormModel } from './analysis-run.model';
 export class AnalysisRunFacade {
   private readonly store = inject(AnalysisRunStoreService);
   private readonly service = inject(AnalysisRunService);
+  private readonly router = inject(Router);
 
   readonly showModal = computed(() => this.store.showModal());
   readonly isBusy = computed(() => this.store.isBusy());
@@ -18,7 +20,7 @@ export class AnalysisRunFacade {
   readonly pendingAnalysis = computed(() => this.store.pendingAnalysis());
 
   navigateToStartNewAnalysis(): void {
-    this.service.navigateToStartNewAnalysis();
+    this.router.navigate(['']);
   }
 
   startNewAnalysis(formData: AnalysisTargetFormModel): void {
