@@ -1,0 +1,73 @@
+<table class="table" [class.table--compact]="compact()">
+  <thead>
+    <tr class="table__row">
+      @for (col of columns(); track $index) {
+        <th
+          class="table__header-cell"
+          scope="col"
+          [attr.tabindex]="sortable() ? 0 : null"
+          role="columnheader"
+          [attr.aria-sort]="
+            sortColumnIndex() === $index
+              ? sortDirection() === 'asc'
+                ? 'ascending'
+                : 'descending'
+              : 'none'
+          "
+          (click)="onSortColumn($index)"
+          (keydown.enter)="onSortColumn($index)"
+          (keydown.space)="onSortColumn($index); $event.preventDefault()"
+        >
+          <span class="table__header-content">
+            @if (sortColumnIndex() === $index) {
+              <span
+                class="table__sort-icon"
+                [class.table__sort-icon--desc]="sortDirection() === 'desc'"
+              >
+                ▲
+              </span>
+            }
+            {{ col.headerKey | transloco }}
+            @if (col.tooltipKey) {
+              <app-info-tooltip [textKey]="col.tooltipKey" [iconSize]="14" [position]="'bottom'" />
+            }
+          </span>
+        </th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of sortedRows(); track rowKey(row)) {
+      <tr
+        class="table__row"
+        [class.table__row--selected]="selectedRowKey() === rowKey(row)"
+        [class.table__row--focused]="focusedRowKey() === rowKey(row)"
+        [attr.tabindex]="clickable() ? 0 : null"
+        [attr.role]="clickable() ? 'button' : null"
+        (mouseenter)="setFocusedRow(row)"
+        (mouseleave)="setFocusedRow(null)"
+        (focus)="setFocusedRow(row)"
+        (blur)="setFocusedRow(null)"
+        (click)="selectRow(row)"
+        (keydown.enter)="selectRow(row)"
+        (keydown.space)="selectRow(row); $event.preventDefault()"
+      >
+        @for (cell of row; track $index) {
+          <td
+            class="table__cell"
+            [class.table__cell--numeric]="cell.valueType !== 'text'"
+            [class.table__cell--clickable]="clickable()"
+          >
+            @if (cell.valueType === 'number') {
+              {{ cell.value | localizedNumber }}
+            } @else if (cell.valueType === 'percent') {
+              {{ cell.value | localizedNumber: '1.0-2' : 'percent' }}
+            } @else {
+              {{ cell.value }}
+            }
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+</table>
