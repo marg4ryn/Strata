@@ -77,7 +77,7 @@ export class RepositoryDetailsComponent {
     return (
       this.resource
         .value()
-        ?.trends.sort((a, b) => a.date.localeCompare(b.date))
+        ?.trends.slice().sort((a, b) => a.date.localeCompare(b.date))
         .map((e) => {
           totalLines += e.linesAdded - e.linesDeleted;
 
