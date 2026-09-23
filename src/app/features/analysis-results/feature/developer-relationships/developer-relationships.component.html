@@ -1,0 +1,13 @@
+<app-resource-page [data]="resource">
+  <ng-template #content let-data>
+    <div class="developer-relationships">
+      @if (data?.length > 0) {
+        <app-chord-diagram [data]="data" />
+      } @else {
+        <span class="developer-relationships__no-data">
+          {{ 'common.noData' | transloco }}
+        </span>
+      }
+    </div>
+  </ng-template>
+</app-resource-page>
