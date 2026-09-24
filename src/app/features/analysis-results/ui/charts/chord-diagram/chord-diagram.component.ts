@@ -2,9 +2,10 @@ import {
   Component,
   ChangeDetectionStrategy,
   input,
-  output,
+  model,
   viewChild,
   afterNextRender,
+  effect,
 } from '@angular/core';
 import type { ElementRef, OnDestroy } from '@angular/core';
 import * as d3 from 'd3';
@@ -35,28 +36,65 @@ const RIBBON_TRANSPARENCY_DISABLED = 0.1;
 })
 export class ChordDiagramComponent implements OnDestroy {
   data = input<AuthorCoupling[] | null>(null);
-  authorHover = output<string | null>();
+  hoveredAuthor = model<string | null>(null);
+  selectedAuthor = model<string | null>(null);
 
   private containerRef = viewChild<ElementRef<HTMLDivElement>>('container');
 
   private svgGroup: d3.Selection<SVGGElement, unknown, null, undefined> | null = null;
   private colors = d3.schemeCategory10.concat(d3.schemePaired);
   private resizeObserver: ResizeObserver | null = null;
+  private renderFrame: number | null = null;
+  private renderedSize: { width: number; height: number } | null = null;
+  private renderedAuthors: string[] = [];
+  private renderedChords: d3.Chords | null = null;
+  private hoveredRibbon: d3.Chord | null = null;
 
   constructor() {
-    afterNextRender(() => {
-      this.createChordDiagram();
+    effect(() => {
+      const hovered = this.hoveredAuthor();
+      const selected = this.selectedAuthor();
 
-      const el = this.containerRef()?.nativeElement;
-      if (el) {
-        this.resizeObserver = new ResizeObserver(() => this.createChordDiagram());
-        this.resizeObserver.observe(el);
+      if (!this.renderedChords) return;
+
+      if (hovered) {
+        if (
+          (this.hoveredRibbon &&
+            this.hoveredRibbon.source.index === this.renderedAuthors.indexOf(hovered)) ||
+          this.hoveredRibbon?.target.index === this.renderedAuthors.indexOf(hovered)
+        ) {
+          this.highlightRibbon(this.hoveredRibbon);
+        } else {
+          this.highlightAuthor(hovered);
+        }
+        return;
       }
+
+      if (selected) {
+        this.highlightAuthor(selected);
+      } else {
+        this.resetHighlight();
+      }
+    });
+
+    afterNextRender(() => {
+      const container = this.containerRef()?.nativeElement;
+      if (container) {
+        this.resizeObserver = new ResizeObserver(() => {
+          this.scheduleRender();
+        });
+        this.resizeObserver.observe(container);
+      }
+
+      this.scheduleRender();
     });
   }
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
+    if (this.renderFrame !== null) {
+      cancelAnimationFrame(this.renderFrame);
+    }
     const el = this.containerRef()?.nativeElement;
     if (el) {
       d3.select(el).selectAll('*').remove();
@@ -68,38 +106,46 @@ export class ChordDiagramComponent implements OnDestroy {
     const container = this.containerRef()?.nativeElement;
     if (!container || !authorData || authorData.length === 0) return;
 
-    d3.select(container).selectAll('*').remove();
-
     const size = this.getContainerSize(container);
     if (!size) return;
+    if (this.renderedSize?.width === size.width && this.renderedSize.height === size.height) {
+      return;
+    }
 
     const { width, height } = size;
+    this.renderedSize = size;
+    d3.select(container).selectAll('*').remove();
     const minDimension = Math.min(width, height);
     const outerRadius = minDimension * DIAGRAM_SIZE;
     const innerRadius = outerRadius * ARC_THICKNESS;
 
     const { authors, matrix } = this.buildAdjacencyMatrix(authorData);
     const chords = this.computeChords(matrix, this.getArcGapSize());
+    this.renderedAuthors = authors;
+    this.renderedChords = chords;
 
     this.svgGroup = this.createSvgRoot(container, width, height);
-    this.renderBackgroundGlow(this.svgGroup, outerRadius);
 
     const arcGroups = this.renderArcGroups(this.svgGroup, chords.groups);
-    this.renderArcs(arcGroups, innerRadius, outerRadius, chords, authors);
+    this.renderArcs(arcGroups, innerRadius, outerRadius, authors);
     this.renderLabels(arcGroups, outerRadius, minDimension, authors);
     this.renderRibbons(this.svgGroup, chords, innerRadius, authors);
+  }
+
+  private scheduleRender(): void {
+    if (this.renderFrame !== null) return;
+
+    this.renderFrame = requestAnimationFrame(() => {
+      this.renderFrame = null;
+      this.createChordDiagram();
+    });
   }
 
   private getContainerSize(container: HTMLDivElement): { width: number; height: number } | null {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    if (width < 100 || height < 100) {
-      console.log(`width: ${width}; height: ${height}`);
-      return null;
-    }
-
-    return { width, height };
+    return width > 0 && height > 0 ? { width, height } : null;
   }
 
   private buildAdjacencyMatrix(authorData: AuthorCoupling[]): {
@@ -150,27 +196,6 @@ export class ChordDiagramComponent implements OnDestroy {
       .attr('transform', `translate(${width / 2}, ${height / 2})`);
   }
 
-  private renderBackgroundGlow(
-    svg: d3.Selection<SVGGElement, unknown, null, undefined>,
-    outerRadius: number,
-  ): void {
-    svg
-      .append('defs')
-      .append('filter')
-      .attr('id', 'blur')
-      .append('feGaussianBlur')
-      .attr('stdDeviation', 20);
-
-    svg
-      .append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', outerRadius + 10)
-      .attr('fill', 'rgba(0, 0, 0, 0.5)')
-      .attr('filter', 'url(#blur)')
-      .attr('class', 'background-circle');
-  }
-
   private renderArcGroups(
     svg: d3.Selection<SVGGElement, unknown, null, undefined>,
     chordGroups: d3.ChordGroup[],
@@ -187,7 +212,6 @@ export class ChordDiagramComponent implements OnDestroy {
     groups: d3.Selection<SVGGElement, ChordGroupWithAngle, SVGGElement, unknown>,
     innerRadius: number,
     outerRadius: number,
-    chords: d3.Chords,
     authors: string[],
   ): void {
     const arc = d3.arc<ChordGroupWithAngle>().innerRadius(innerRadius).outerRadius(outerRadius);
@@ -203,48 +227,54 @@ export class ChordDiagramComponent implements OnDestroy {
       )
       .attr('d', arc)
       .style('cursor', 'pointer')
-      .on('mouseover', (_event, d) => this.highlightConnected(d, chords))
-      .on('mouseout', () => this.resetHighlight())
-      .on('mouseover.emit', (_event, d) => this.authorHover.emit(authors[d.index]))
-      .on('mouseout.emit', () => this.authorHover.emit(null));
+      .on('mouseover', (_event, d) => {
+        this.hoveredRibbon = null;
+        this.hoveredAuthor.set(authors[d.index]);
+      })
+      .on('mouseout', () => {
+        this.hoveredRibbon = null;
+        this.hoveredAuthor.set(null);
+      })
+      .on('click', (_event, d) => this.toggleSelectedAuthor(authors[d.index]));
   }
 
-  private highlightConnected(group: d3.ChordGroup, chords: d3.Chords): void {
-    if (!this.svgGroup) return;
+  private renderRibbons(
+    svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+    chords: d3.Chords,
+    innerRadius: number,
+    authors: string[],
+  ): void {
+    const ribbon = d3.ribbon<d3.Chord, d3.ChordSubgroup>().radius(innerRadius);
 
-    const connectedIndices = new Set<number>([group.index]);
-    chords.forEach((c) => {
-      if (c.source.index === group.index) connectedIndices.add(c.target.index);
-      if (c.target.index === group.index) connectedIndices.add(c.source.index);
-    });
-
-    this.svgGroup
-      .selectAll<SVGPathElement, ChordGroupWithAngle>('g > path')
-      .style('opacity', (d) =>
-        connectedIndices.has(d.index) ? ARC_TRANSPARENCY_NORMAL : ARC_TRANSPARENCY_DISABLED,
-      );
-
-    this.svgGroup
-      .selectAll<SVGTextElement, ChordGroupWithAngle>('g > text')
-      .style('opacity', (d) =>
-        connectedIndices.has(d.index) ? LABEL_TRANSPARENCY_NORMAL : LABEL_TRANSPARENCY_DISABLED,
-      );
-
-    this.svgGroup
-      .selectAll<SVGPathElement, d3.Chord>('.chord')
-      .style('opacity', (c) =>
-        c.source.index === group.index || c.target.index === group.index
-          ? RIBBON_TRANSPARENCY_HIGHLIGHT
-          : RIBBON_TRANSPARENCY_DISABLED,
-      );
-  }
-
-  private resetHighlight(): void {
-    if (!this.svgGroup) return;
-
-    this.svgGroup.selectAll('g > path').style('opacity', ARC_TRANSPARENCY_NORMAL);
-    this.svgGroup.selectAll('g > text').style('opacity', LABEL_TRANSPARENCY_NORMAL);
-    this.svgGroup.selectAll('.chord').style('opacity', RIBBON_TRANSPARENCY_NORMAL);
+    svg
+      .append('g')
+      .attr('fill-opacity', RIBBON_TRANSPARENCY_NORMAL)
+      .selectAll<SVGPathElement, d3.Chord>('path')
+      .data(chords)
+      .enter()
+      .append('path')
+      .attr('class', 'chord')
+      .attr('d', ribbon)
+      .style('fill', (d) => this.colors[d.source.index % this.colors.length])
+      .style('stroke', (d) =>
+        d3
+          .rgb(this.colors[d.source.index % this.colors.length])
+          .darker()
+          .toString(),
+      )
+      .style('opacity', RIBBON_TRANSPARENCY_NORMAL)
+      .style('cursor', 'pointer')
+      .on('mouseover', (_event, d) => {
+        this.hoveredRibbon = d;
+        this.hoveredAuthor.set(authors[d.source.index]);
+      })
+      .on('mouseout', () => {
+        this.hoveredRibbon = null;
+        this.hoveredAuthor.set(null);
+      })
+      .on('click', (_event, d) => this.toggleSelectedAuthor(authors[d.source.index]))
+      .append('title')
+      .text((d) => `${authors[d.source.index]} → ${authors[d.target.index]}: ${d.source.value}`);
   }
 
   private renderLabels(
@@ -280,43 +310,86 @@ export class ChordDiagramComponent implements OnDestroy {
       .style('text-shadow', '0 0 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)');
   }
 
-  private renderRibbons(
-    svg: d3.Selection<SVGGElement, unknown, null, undefined>,
-    chords: d3.Chords,
-    innerRadius: number,
-    authors: string[],
-  ): void {
-    const ribbon = d3.ribbon<d3.Chord, d3.ChordSubgroup>().radius(innerRadius);
+  private highlightAuthor(author: string): void {
+    if (!this.renderedChords) return;
 
-    svg
-      .append('g')
-      .attr('fill-opacity', RIBBON_TRANSPARENCY_NORMAL)
-      .selectAll<SVGPathElement, d3.Chord>('path')
-      .data(chords)
-      .enter()
-      .append('path')
-      .attr('class', 'chord')
-      .attr('d', ribbon)
-      .style('fill', (d) => this.colors[d.source.index % this.colors.length])
-      .style('stroke', (d) =>
-        d3
-          .rgb(this.colors[d.source.index % this.colors.length])
-          .darker()
-          .toString(),
-      )
-      .style('opacity', RIBBON_TRANSPARENCY_NORMAL)
-      .style('cursor', 'pointer')
-      .on('mouseover', function () {
-        d3.select(this).style('opacity', RIBBON_TRANSPARENCY_HIGHLIGHT);
-      })
-      .on('mouseout', function () {
-        d3.select(this).style('opacity', RIBBON_TRANSPARENCY_NORMAL);
-      })
-      .on('mouseover.emit', (_event, d) => {
-        this.authorHover.emit(`${authors[d.source.index]}; ${authors[d.target.index]}`);
-      })
-      .on('mouseout.emit', () => this.authorHover.emit(null))
-      .append('title')
-      .text((d) => `${authors[d.source.index]} → ${authors[d.target.index]}: ${d.source.value}`);
+    const index = this.renderedAuthors.indexOf(author);
+    if (index === -1) {
+      this.resetHighlight();
+      return;
+    }
+
+    const group = this.renderedChords.groups.find((item) => item.index === index);
+    if (group) this.highlightConnected(group, this.renderedChords);
+  }
+
+  private highlightConnected(group: d3.ChordGroup, chords: d3.Chords): void {
+    if (!this.svgGroup) return;
+
+    const connectedIndices = new Set<number>([group.index]);
+    chords.forEach((c) => {
+      if (c.source.index === group.index) connectedIndices.add(c.target.index);
+      if (c.target.index === group.index) connectedIndices.add(c.source.index);
+    });
+
+    this.svgGroup
+      .selectAll<SVGPathElement, ChordGroupWithAngle>('g > path')
+      .style('opacity', (d) =>
+        connectedIndices.has(d.index) ? ARC_TRANSPARENCY_NORMAL : ARC_TRANSPARENCY_DISABLED,
+      );
+
+    this.svgGroup
+      .selectAll<SVGTextElement, ChordGroupWithAngle>('g > text')
+      .style('opacity', (d) =>
+        connectedIndices.has(d.index) ? LABEL_TRANSPARENCY_NORMAL : LABEL_TRANSPARENCY_DISABLED,
+      );
+
+    this.svgGroup
+      .selectAll<SVGPathElement, d3.Chord>('.chord')
+      .style('opacity', (c) =>
+        c.source.index === group.index || c.target.index === group.index
+          ? RIBBON_TRANSPARENCY_HIGHLIGHT
+          : RIBBON_TRANSPARENCY_DISABLED,
+      );
+  }
+
+  private highlightRibbon(chord: d3.Chord): void {
+    if (!this.svgGroup) return;
+
+    const { source, target } = chord;
+    const endpointIndices = new Set<number>([source.index, target.index]);
+    const isSameRibbon = (c: d3.Chord) =>
+      (c.source.index === source.index && c.target.index === target.index) ||
+      (c.source.index === target.index && c.target.index === source.index);
+
+    this.svgGroup
+      .selectAll<SVGPathElement, ChordGroupWithAngle>('g > path')
+      .style('opacity', (d) =>
+        endpointIndices.has(d.index) ? ARC_TRANSPARENCY_NORMAL : ARC_TRANSPARENCY_DISABLED,
+      );
+
+    this.svgGroup
+      .selectAll<SVGTextElement, ChordGroupWithAngle>('g > text')
+      .style('opacity', (d) =>
+        endpointIndices.has(d.index) ? LABEL_TRANSPARENCY_NORMAL : LABEL_TRANSPARENCY_DISABLED,
+      );
+
+    this.svgGroup
+      .selectAll<SVGPathElement, d3.Chord>('.chord')
+      .style('opacity', (c) =>
+        isSameRibbon(c) ? RIBBON_TRANSPARENCY_HIGHLIGHT : RIBBON_TRANSPARENCY_DISABLED,
+      );
+  }
+
+  private resetHighlight(): void {
+    if (!this.svgGroup) return;
+
+    this.svgGroup.selectAll('g > path').style('opacity', ARC_TRANSPARENCY_NORMAL);
+    this.svgGroup.selectAll('g > text').style('opacity', LABEL_TRANSPARENCY_NORMAL);
+    this.svgGroup.selectAll('.chord').style('opacity', RIBBON_TRANSPARENCY_NORMAL);
+  }
+
+  private toggleSelectedAuthor(author: string): void {
+    this.selectedAuthor.set(this.selectedAuthor() === author ? null : author);
   }
 }
