@@ -221,6 +221,23 @@
         }
       }
     },
+    "developerRelationships": {
+      "developers": "Autorzy",
+      "relatedDevelopers": "Powiązani autorzy",
+      "selectDeveloper": "Wybierz autora",
+      "table": {
+        "name": { "label": "Autor" },
+        "coupledAuthors": { "label": "Powiązania", "tooltip": "Liczba powiązanych autorów." },
+        "totalChanges": { "label": "Zmiany", "tooltip": "Liczba wprowadzonych zmian." },
+        "filesChanged": { "label": "Pliki", "tooltip": "Liczba zmodyfikowanych plików." },
+        "percentage": { "label": "Powiązanie", "tooltip": "Procent powiązania." },
+        "sharedChanges": { "label": "Zmiany", "tooltip": "Liczba wspólnych zmian." },
+        "sharedFilesChanged": {
+          "label": "Pliki",
+          "tooltip": "Liczba wspólnie modyfikowanych plików."
+        }
+      }
+    },
     "charts": {
       "codeBreakdown": {
         "title": "Liczba linii",
@@ -266,7 +283,7 @@
       },
       "authors": {
         "title": "Autorzy",
-        "name": { "label": "Imię" },
+        "name": { "label": "Autor" },
         "commits": { "label": "Commity" },
         "lead": {
           "label": "Główne pliki",

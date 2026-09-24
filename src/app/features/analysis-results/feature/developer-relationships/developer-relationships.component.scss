@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
   width: 100%;
   padding: 2rem;
   margin: 0 auto;
@@ -9,9 +10,10 @@
 
 .developer-relationships {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
   flex: 1;
-  height: 100%;
+  min-height: 0;
 
   &__no-data {
     margin: auto;
@@ -25,6 +27,88 @@
     flex-direction: column;
     justify-content: center;
     flex: 1;
+    height: auto;
     min-height: 0;
+  }
+}
+
+.developer-lists {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 370px;
+  min-width: 0;
+}
+
+.developer-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--bg-primary);
+
+  h2 {
+    flex-wrap: nowrap;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  &:first-child {
+    flex: 1;
+  }
+
+  &:last-child {
+    flex: 1;
+  }
+
+  &__table-wrapper {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: var(--text-disabled);
+    font-size: 0.875rem;
+    font-style: italic;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .developer-relationships {
+    flex-direction: column;
+    min-height: 30rem;
+  }
+
+  .developer-relationships > app-chord-diagram {
+    flex: 0 0 28rem;
+    height: 28rem;
+    min-height: 28rem;
+  }
+
+  .developer-lists {
+    flex: 1 1 50%;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .developer-list {
+    flex: 1;
   }
 }

@@ -2,7 +2,48 @@
   <ng-template #content let-data>
     <div class="developer-relationships">
       @if (data?.length > 0) {
-        <app-chord-diagram [data]="data" />
+        <app-chord-diagram
+          [data]="authors()"
+          [(hoveredAuthor)]="hoveredAuthor"
+          [(selectedAuthor)]="selectedAuthor"
+        />
+        <aside class="developer-lists">
+          <section class="developer-list">
+            <h2>{{ 'analysisResults.developerRelationships.developers' | transloco }}</h2>
+            <div class="developer-list__table-wrapper">
+              <app-table
+                [columns]="developerColumns"
+                [rows]="authorRows()"
+                [clickable]="true"
+                [compact]="true"
+                [sortable]="true"
+                [(focusedRowKey)]="hoveredAuthor"
+                [(selectedRowKey)]="selectedAuthor"
+              />
+            </div>
+          </section>
+
+          <section class="developer-list">
+            <h2>{{ 'analysisResults.developerRelationships.relatedDevelopers' | transloco }}</h2>
+            @if (relatedAuthors().length > 0) {
+              <div class="developer-list__table-wrapper">
+                <app-table
+                  [columns]="relatedDeveloperColumns"
+                  [rows]="relatedAuthorRows()"
+                  [clickable]="true"
+                  [compact]="true"
+                  [sortable]="true"
+                  [(focusedRowKey)]="hoveredAuthor"
+                  [(selectedRowKey)]="selectedAuthor"
+                />
+              </div>
+            } @else {
+              <span class="developer-list__empty">{{
+                'analysisResults.developerRelationships.selectDeveloper' | transloco
+              }}</span>
+            }
+          </section>
+        </aside>
       } @else {
         <span class="developer-relationships__no-data">
           {{ 'common.noData' | transloco }}
