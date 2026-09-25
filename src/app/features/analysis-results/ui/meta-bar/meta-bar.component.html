@@ -1,0 +1,9 @@
+<div class="analysis-meta-bar">
+  <span class="analysis-meta-bar__repo-name">{{ repoName() }}</span>
+  @if (dateRange()) {
+    <span class="analysis-meta-bar__date-range"
+      >, {{ dateRange()?.startDate | localizedDate: { dateStyle: 'short' } }} –
+      {{ dateRange()?.endDate | localizedDate: { dateStyle: 'short' } }}</span
+    >
+  }
+</div>

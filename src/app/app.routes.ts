@@ -13,6 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'analysis/:id',
+    loadComponent: () =>
+      import('./features/analysis-results').then((m) => m.AnalysisResultsShellComponent),
     loadChildren: () => import('./features/analysis-results').then((m) => m.analysisResultsRoutes),
   },
 ];
