@@ -244,6 +244,8 @@ describe('DropdownComponent', () => {
    * coverage across all tests. The standard AOT tests still cover the original template,
    * while this overridden test allows the instrumented TypeScript class to synchronously
    * resolve and execute the `CdkListbox` token.
+   *
+   * See docs/testing-coverage-caveats.
    **/
 
   it('should explicitly resolve viewChild queries to satisfy Istanbul coverage', async () => {

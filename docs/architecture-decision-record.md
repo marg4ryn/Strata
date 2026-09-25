@@ -18,7 +18,7 @@ Vue is simpler and provides fewer features directly within the framework than An
 
 ### Consequences
 
-The project structure and naming conventions must be maintained consistently to preserve the intended predictability ([see: Application Directory Structure Standard](#architecture-application-directory-structure-standard)).
+The project structure and naming conventions must be maintained consistently to preserve the intended predictability ([see: Application Directory Structure Convention](#architecture-why-this-application-directory-structure-convention)).
 
 Choosing Angular also means greater reliance on its ecosystem and conventions. In return, I get a consistent environment with many features available without having to select and integrate additional libraries.
 
@@ -50,7 +50,7 @@ The application needs a consistent and predictable standard for organizing direc
 
 ### Decision
 
-I adopted the organization standard described in detail in `structure-convention.md`.
+I adopted the organization standard described in detail in [structure-convention.md](./structure-convention.md).
 
 ### Alternatives Considered
 
@@ -124,6 +124,8 @@ The translation structure remains simple and predictable, with minimal configura
 Child components can normally be replaced with stubs to isolate the component under test. However, calling `TestBed.overrideComponent` / `overrideTemplate` forces Angular to recompile that component's definition (`ɵcmp`) at runtime, outside the module that was originally instrumented for coverage. As a result, code coverage tools (both V8 and Istanbul) lose the link between the recompiled component and its instrumented source, and report 0% coverage for it — even though the component is fully exercised by other tests. `ng-mocks` does not solve this issue because it uses `overrideComponent` internally and triggers the same recompilation.
 
 Observed with: Angular `22.1.8`, Vitest `4.1.11`
+
+This is one of several known coverage-tooling limitations; see [testing-coverage-caveats.md](./testing-coverage-caveats.md) for related cases.
 
 ### Decision
 Component tests use real child components instead of stubs. They are therefore effectively integration tests. All dependencies required by child components must be provided in the test configuration. This is a workaround for a specific coverage-instrumentation gap, not a preference for integration-style tests. It avoids coverage numbers being distorted by a tooling limitation rather than actual test gaps.
