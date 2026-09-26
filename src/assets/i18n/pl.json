@@ -171,6 +171,22 @@
       "error": "Błąd",
       "notFound": "Analiza, której szukasz, nie istnieje."
     },
+
+    "navbar": {
+      "repository": "Repozytorium",
+      "summary": "Podsumowanie",
+      "fileTypes": "Typy plików",
+      "codeHealth": "Kondycja kodu",
+      "hotspots": "Hotspoty",
+      "codeAge": "Wiek kodu",
+      "changeCoupling": "Powiązania zmian",
+      "developers": "Deweloperzy",
+      "developerRelationships": "Powiązania deweloperów",
+      "codeOwners": "Właściciele kodu",
+      "ownershipRisks": "Ryzyka własności",
+      "abandonedCode": "Porzucony kod"
+    },
+
     "repositoryDetails": {
       "analysis": {
         "linkTitle": "Otwórz repozytorium {{owner}}/{{name}}",
@@ -180,6 +196,7 @@
         "completed": { "label": "Zakończenie analizy" },
         "duration": { "label": "Czas trwania" }
       },
+
       "statistics": {
         "title": "Statystyki repozytorium",
         "uniqueAuthors": {
@@ -197,6 +214,7 @@
         "files": { "label": "Pliki" },
         "fileTypes": { "label": "Typy plików" }
       },
+
       "quality": {
         "title": "Jakość kodu",
         "bugs": {
@@ -221,6 +239,7 @@
         }
       }
     },
+
     "developerRelationships": {
       "developers": "Autorzy",
       "relatedDevelopers": "Powiązani autorzy",
@@ -238,6 +257,7 @@
         }
       }
     },
+
     "charts": {
       "codeBreakdown": {
         "title": "Liczba linii",
@@ -269,6 +289,7 @@
         "deleted": { "legend": "Usunięte", "tooltip": "Linie usunięte" }
       }
     },
+
     "tables": {
       "fileTypes": {
         "title": "Typy plików",
@@ -281,6 +302,7 @@
           "tooltip": "Liczba linii komentarzy w plikach o danym typie."
         }
       },
+
       "authors": {
         "title": "Autorzy",
         "name": { "label": "Autor" },
@@ -293,6 +315,7 @@
         "deleted": { "label": "Usunięte", "tooltip": "Liczba usuniętych linii." }
       }
     },
+
     "aggregation": {
       "day": "Dzień",
       "week": "Tydzień",

@@ -1,5 +1,3 @@
-import type {
-  ElementRef} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +6,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 import { CdkListbox, CdkListboxModule } from '@angular/cdk/listbox';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { A11yModule } from '@angular/cdk/a11y';

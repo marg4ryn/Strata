@@ -1,0 +1,80 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  outline: 1px solid var(--bg-primary);
+  border-bottom: solid 1px var(--border-subtle);
+  padding: 0 15px;
+
+  &__group {
+    position: relative;
+    background-color: var(--bg-primary);
+
+    &--active {
+      border-bottom: 3px solid var(--accent-primary);
+    }
+  }
+
+  &__group-label {
+    font-weight: 300;
+
+    &--active {
+      font-weight: 600;
+    }
+  }
+
+  &__group-toggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    padding: 4px;
+    width: 150px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: none;
+    cursor: pointer;
+    transition: color 0.1s ease;
+
+    &:hover,
+    &:focus-visible,
+    &--open {
+      color: var(--accent-primary);
+    }
+  }
+
+  &__dropdown-link {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    font-weight: 300;
+    text-decoration: none;
+    min-width: 150px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--accent-primary);
+    }
+
+    &--active {
+      font-weight: 600;
+      border-left: 3px solid var(--accent-primary);
+    }
+  }
+}
+
+.dropdown__panel-wrapper {
+  background-color: var(--bg-primary);
+  padding: 15x;
+  width: 150px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0 0 6px 6px;
+}

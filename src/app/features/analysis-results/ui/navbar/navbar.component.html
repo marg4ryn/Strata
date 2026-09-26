@@ -1,0 +1,51 @@
+<nav class="navbar">
+  @for (group of groups(); track group.labelKey) {
+    <div class="navbar__group" [class.navbar__group--active]="isGroupActive(group)">
+      <button
+        type="button"
+        class="navbar__group-toggle"
+        #trigger="cdkMenuTriggerFor"
+        aria-haspopup="listbox"
+        [cdkMenuTriggerFor]="menu"
+        [cdkMenuPosition]="menuPositions"
+        [style.width.px]="isMobile() ? 30 : 150"
+        [class.navbar__group-toggle--open]="trigger.isOpen()"
+        [attr.aria-expanded]="trigger.isOpen()"
+        [attr.aria-label]="'common.ariaLabel.selectOption' | transloco"
+        (pointerenter)="onTriggerHover($event, trigger)"
+        (pointerleave)="onTriggerLeave($event, trigger)"
+      >
+        <ng-container [ngTemplateOutlet]="group.icon" />
+        @if (!isMobile()) {
+          <span
+            class="navbar__group-label"
+            [class.navbar__group-label--active]="isGroupActive(group)"
+            >{{ group.labelKey | transloco }}</span
+          >
+        }
+      </button>
+
+      <ng-template #menu>
+        <div
+          class="dropdown__panel-wrapper"
+          cdkMenu
+          (pointerenter)="$event.pointerType !== 'touch' && clearHoverTimeout()"
+          (pointerleave)="$event.pointerType !== 'touch' && onTriggerLeave($event, trigger)"
+        >
+          @for (link of group.links; track link.labelKey) {
+            <a
+              cdkMenuItem
+              class="navbar__dropdown-link"
+              routerLinkActive="active"
+              #rla="routerLinkActive"
+              [routerLink]="link.path"
+              [class.navbar__dropdown-link--active]="rla.isActive"
+            >
+              {{ link.labelKey | transloco }}
+            </a>
+          }
+        </div>
+      </ng-template>
+    </div>
+  }
+</nav>

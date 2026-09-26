@@ -172,6 +172,22 @@
       "error": "Error",
       "notFound": "The analysis you are looking for does not exist."
     },
+
+    "navbar": {
+      "repository": "Repository",
+      "summary": "Summary",
+      "fileTypes": "File types",
+      "codeHealth": "Code health",
+      "hotspots": "Hotspots",
+      "codeAge": "Code age",
+      "changeCoupling": "Change coupling",
+      "developers": "Developers",
+      "developerRelationships": "Developer relationships",
+      "codeOwners": "Code owners",
+      "ownershipRisks": "Ownership risks",
+      "abandonedCode": "Abandoned code"
+    },
+
     "repositoryDetails": {
       "analysis": {
         "linkTitle": "Open repository {{owner}}/{{name}}",
@@ -181,6 +197,7 @@
         "completed": { "label": "Analysis completed" },
         "duration": { "label": "Analysis duration" }
       },
+
       "statistics": {
         "title": "Repository statistics",
         "uniqueAuthors": {
@@ -198,6 +215,7 @@
         "files": { "label": "Files" },
         "fileTypes": { "label": "File types" }
       },
+
       "quality": {
         "title": "Code quality",
         "bugs": {
@@ -222,6 +240,7 @@
         }
       }
     },
+
     "developerRelationships": {
       "developers": "Authors",
       "relatedDevelopers": "Related authors",
@@ -236,6 +255,7 @@
         "sharedFilesChanged": { "label": "Files", "tooltip": "Number of jointly modified files." }
       }
     },
+
     "charts": {
       "codeBreakdown": {
         "title": "Number of lines",
@@ -267,6 +287,7 @@
         "deleted": { "legend": "Deleted", "tooltip": "Deleted lines" }
       }
     },
+
     "tables": {
       "fileTypes": {
         "title": "File Types",
@@ -279,6 +300,7 @@
           "tooltip": "Number of comment lines in files of this type."
         }
       },
+
       "authors": {
         "title": "Authors",
         "name": { "label": "Author" },
@@ -291,6 +313,7 @@
         "deleted": { "label": "Deleted", "tooltip": "Number of lines deleted." }
       }
     },
+
     "aggregation": {
       "day": "Day",
       "week": "Week",
