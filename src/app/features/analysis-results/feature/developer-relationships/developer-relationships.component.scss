@@ -4,6 +4,7 @@
   flex: 1;
   min-height: 0;
   width: 100%;
+  padding: 2rem;
   margin: 0 auto;
 }
 
@@ -34,7 +35,7 @@
 .developer-lists {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   width: 370px;
   min-width: 0;
 }

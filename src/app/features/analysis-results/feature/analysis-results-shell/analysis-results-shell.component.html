@@ -1,5 +1,7 @@
 <app-navbar [groups]="navbarGroups()" />
-<app-meta-bar [repoName]="repoName()" [dateRange]="dateRange()" />
+<div class="meta-bar">
+  <app-meta-bar [repoName]="repoName()" [dateRange]="dateRange()" />
+</div>
 <div class="content">
   <router-outlet />
 </div>

@@ -1,12 +1,18 @@
 :host {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.meta-bar {
+  position: absolute;
+  top: 40px;
+  right: 1rem;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 0 2rem 2rem 2rem;
 }
