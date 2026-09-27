@@ -26,6 +26,7 @@
     "d3": "^7.9.0",
     "ng2-charts": "^10.0.0",
     "rxjs": "^7.8.2",
+    "three": "^0.186.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
@@ -36,6 +37,7 @@
     "@eslint/js": "^9.39.5",
     "@jsverse/transloco-keys-manager": "^8.1.1",
     "@types/d3": "^7.4.3",
+    "@types/three": "^0.186.0",
     "@vitest/coverage-istanbul": "^4.1.11",
     "angular-eslint": "^22.5.0",
     "eslint": "^9.39.5",
