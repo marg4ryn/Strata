@@ -1,10 +1,5 @@
 import type { ISODateString, ISOLocalDateTime } from '@app/shared/utils';
-
-export interface RepositoryDetails {
-  info: RepositoryInfo;
-  statistics: RepositoryStatistics;
-  staticAnalysis: RepositoryStaticAnalysis;
-}
+import type { AuthorStatistics } from './author-statistics.model';
 
 export interface RepositoryInfo {
   id: string;
@@ -55,18 +50,10 @@ export interface RepositoryTrends {
   linesDeleted: number;
 }
 
-export interface AuthorStatistics {
-  name: string;
-  emails: string[];
-  firstCommitDate: ISODateString;
-  lastCommitDate: ISODateString;
-  isActive: boolean;
-  daysSinceLastCommit: number;
-  commits: number;
-  linesAdded: number;
-  linesDeleted: number;
-  existingFilesModified: number;
-  filesAsLeadAuthor: number;
+export interface RepositoryDetails {
+  info: RepositoryInfo;
+  statistics: RepositoryStatistics;
+  staticAnalysis: RepositoryStaticAnalysis;
 }
 
 export interface RepositorySummary {
