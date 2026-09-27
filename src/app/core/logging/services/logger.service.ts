@@ -1,7 +1,7 @@
 import { Service } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { ContextLogger } from '../context-logger/context-logger.decorator';
+import { ContextLogger } from '../decorators/context-logger.decorator';
 import { LogLevel } from '../logger.enum';
 
 @Service()

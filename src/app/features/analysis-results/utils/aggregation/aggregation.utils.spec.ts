@@ -1,5 +1,9 @@
-import { aggregatePoints, formatBucketLabel } from './aggregation';
-import type { ChartDataPoint, ChartAggregationMode, ChartAggregationPeriod } from './aggregation';
+import { aggregatePoints, formatBucketLabel } from './aggregation.utils';
+import type {
+  ChartDataPoint,
+  ChartAggregationMode,
+  ChartAggregationPeriod,
+} from './aggregation.utils';
 
 function point(date: string, value: number): ChartDataPoint {
   return { date, value };

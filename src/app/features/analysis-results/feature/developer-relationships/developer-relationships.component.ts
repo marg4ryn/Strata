@@ -4,7 +4,7 @@ import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { TableComponent } from '@app/shared/components';
 import type { TableColumn, TableRows } from '@app/shared/components';
-import { pageResource } from '../../utils/page-resource/page-resource';
+import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { ChordDiagramComponent } from '../../ui/charts/chord-diagram/chord-diagram.component';

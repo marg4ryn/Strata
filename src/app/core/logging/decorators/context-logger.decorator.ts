@@ -1,4 +1,4 @@
-import type { LoggerService } from '../logger/logger.service';
+import type { LoggerService } from '../services/logger.service';
 
 export class ContextLogger {
   constructor(

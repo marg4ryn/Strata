@@ -6,7 +6,10 @@ import { DropdownComponent } from '@app/shared/components';
 import type { DropdownOption } from '@app/shared/components';
 import { DataSectionComponent } from '../data-section/data-section.component';
 import { BarChartComponent } from '../../charts/bar-chart/bar-chart.component';
-import type { ChartAggregationPeriod, ChartSeries } from '../../../utils/aggregation/aggregation';
+import type {
+  ChartAggregationPeriod,
+  ChartSeries,
+} from '../../../utils/aggregation/aggregation.utils';
 
 @Component({
   selector: 'app-bar-chart-section',

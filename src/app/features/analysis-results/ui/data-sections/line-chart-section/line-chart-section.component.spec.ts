@@ -7,7 +7,10 @@ import { getTranslocoModule } from '@app/core/transloco';
 import { DropdownComponent } from '@app/shared/components';
 import { LineChartSectionComponent } from './line-chart-section.component';
 import { LineChartComponent } from '../../charts/line-chart/line-chart.component';
-import type { ChartAggregationPeriod, ChartSeries } from '../../../utils/aggregation/aggregation';
+import type {
+  ChartAggregationPeriod,
+  ChartSeries,
+} from '../../../utils/aggregation/aggregation.utils';
 
 describe('LineChartSectionComponent', () => {
   let component: LineChartSectionComponent;

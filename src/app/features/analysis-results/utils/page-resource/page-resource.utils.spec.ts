@@ -1,7 +1,7 @@
 import { EnvironmentInjector, runInInjectionContext, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { pageResource } from './page-resource';
+import { pageResource } from './page-resource.utils';
 
 describe('pageResource', () => {
   it('reloads when the parameter changes', async () => {

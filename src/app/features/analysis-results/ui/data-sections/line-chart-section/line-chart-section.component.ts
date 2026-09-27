@@ -10,7 +10,7 @@ import type {
   ChartAggregationMode,
   ChartAggregationPeriod,
   ChartSeries,
-} from '../../../utils/aggregation/aggregation';
+} from '../../../utils/aggregation/aggregation.utils';
 
 @Component({
   selector: 'app-line-chart-section',

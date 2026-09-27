@@ -4,12 +4,12 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { BaseChartDirective } from 'ng2-charts';
 import type { ChartConfiguration } from 'chart.js';
 
-import { aggregatePoints, formatBucketLabel } from '../../../utils/aggregation/aggregation';
+import { aggregatePoints, formatBucketLabel } from '../../../utils/aggregation/aggregation.utils';
 import type {
   ChartAggregationMode,
   ChartAggregationPeriod,
   ChartSeries,
-} from '../../../utils/aggregation/aggregation';
+} from '../../../utils/aggregation/aggregation.utils';
 
 @Component({
   selector: 'app-line-chart',

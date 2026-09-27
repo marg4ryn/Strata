@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, computed } from '@an
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfoTooltipComponent } from '@app/shared/components';
-import { pageResource } from '../../utils/page-resource/page-resource';
+import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { ListSectionComponent } from '../../ui/data-sections/list-section/list-section.component';
@@ -10,7 +10,7 @@ import { DoughnutChartSectionComponent } from '../../ui/data-sections/doughnut-c
 import { LineChartSectionComponent } from '../../ui/data-sections/line-chart-section/line-chart-section.component';
 import { BarChartSectionComponent } from '../../ui/data-sections/bar-chart-section/bar-chart-section.component';
 import { TableSectionComponent } from '../../ui/data-sections/table-section/table-section.component';
-import type { ChartDataPoint } from '../../utils/aggregation/aggregation';
+import type { ChartDataPoint } from '../../utils/aggregation/aggregation.utils';
 import type { TableRows } from '../../ui/data-sections/table-section/table-section.component';
 
 @Component({
@@ -77,7 +77,8 @@ export class RepositoryDetailsComponent {
     return (
       this.resource
         .value()
-        ?.trends.slice().sort((a, b) => a.date.localeCompare(b.date))
+        ?.trends.slice()
+        .sort((a, b) => a.date.localeCompare(b.date))
         .map((e) => {
           totalLines += e.linesAdded - e.linesDeleted;
 

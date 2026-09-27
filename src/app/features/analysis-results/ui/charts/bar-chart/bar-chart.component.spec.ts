@@ -6,7 +6,7 @@ import { TranslocoService } from '@jsverse/transloco';
 
 import { getTranslocoModule } from '@app/core/transloco';
 import { BarChartComponent } from './bar-chart.component';
-import type { ChartSeries } from '../../../utils/aggregation/aggregation';
+import type { ChartSeries } from '../../../utils/aggregation/aggregation.utils';
 
 describe('BarChartComponent', () => {
   let component: BarChartComponent;

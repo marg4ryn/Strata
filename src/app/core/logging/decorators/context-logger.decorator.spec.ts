@@ -1,5 +1,5 @@
 import { ContextLogger } from './context-logger.decorator';
-import type { LoggerService } from '../logger/logger.service';
+import type { LoggerService } from '../services/logger.service';
 
 describe('ContextLogger', () => {
   let logger: LoggerService;
