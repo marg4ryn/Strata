@@ -60,6 +60,21 @@ describe('AnalysisResultsShellComponent', () => {
     });
   });
 
+  describe('when resource has no value', () => {
+    beforeEach(async () => {
+      await setup(() => facade.getRepositorySummary.mockResolvedValue({}));
+      await fixture.whenStable();
+    });
+
+    it('computes repo name', () => {
+      expect(component.repoName()).toBe('');
+    });
+
+    it('computes date range', () => {
+      expect(component.dateRange()).toBeNull();
+    });
+  });
+
   describe('while resource is loading', () => {
     beforeEach(async () => {
       await setup(() => facade.getRepositorySummary.mockReturnValue(new Promise(() => {})));

@@ -15,4 +15,18 @@ export const analysisResultsRoutes: Routes = [
         (m) => m.DeveloperRelationshipsComponent,
       ),
   },
+  {
+    path: 'code-city',
+    loadComponent: () =>
+      import('./feature/code-city-shell/components/code-city-shell.component').then(
+        (m) => m.CodeCityShellComponent,
+      ),
+    children: [
+      {
+        path: 'file-types',
+        loadComponent: () =>
+          import('./feature/file-types/file-types.component').then((m) => m.FileTypesComponent),
+      },
+    ],
+  },
 ];

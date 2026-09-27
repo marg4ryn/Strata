@@ -1,0 +1,25 @@
+<app-resource-page [data]="resource">
+  <ng-template #content let-data>
+    <div class="code-city-shell">
+      <div class="code-city-shell__column code-city-shell__column--left">
+        <ng-container [ngTemplateOutlet]="state.leftColumn()" />
+      </div>
+
+      <div class="code-city-shell__column code-city-shell__column--right">
+        <ng-container [ngTemplateOutlet]="state.rightColumn()" />
+      </div>
+
+      <div class="code-city-shell__code-city">
+        <app-code-city [data]="data?.cityNode"></app-code-city>
+      </div>
+
+      <div class="code-city-shell__searchbar"></div>
+
+      <div class="code-city-shell__pause-play-button"></div>
+
+      <div class="code-city-shell__page-content">
+        <router-outlet />
+      </div>
+    </div>
+  </ng-template>
+</app-resource-page>

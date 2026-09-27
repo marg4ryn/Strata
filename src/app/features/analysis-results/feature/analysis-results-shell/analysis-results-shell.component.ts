@@ -10,7 +10,7 @@ import type { TemplateRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { pageResource } from '../../utils/page-resource/page-resource';
+import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import { MetaBarComponent } from '../../ui/meta-bar/meta-bar.component';
 import type { DateRange } from '../../ui/meta-bar/meta-bar.component';
@@ -66,7 +66,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.fileTypes'),
-          path: 'developer-relationships',
+          path: 'code-city/file-types',
         },
       ],
     },

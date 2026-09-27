@@ -1,0 +1,52 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.code-city-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  &__code-city {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+
+    &--placeholder {
+      background: var(--color-surface-alt, #eee);
+    }
+  }
+
+  &__searchbar {
+    position: absolute;
+    top: 16px;
+    right: calc(16px + 280px + 12px);
+  }
+
+  &__pause-play-button {
+    margin: 0;
+  }
+
+  &__column {
+    position: absolute;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 280px;
+
+    &--left {
+      left: 16px;
+    }
+
+    &--right {
+      right: 16px;
+    }
+  }
+}
