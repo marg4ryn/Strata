@@ -40,6 +40,6 @@ export class AnalysisResultsApiService {
   }
 
   fetchFileExtensions(analysisId: string): Promise<FileExtension[]> {
-    return this.http.get<FileExtension[]>(`analysis/${analysisId}/files/types`);
+    return this.http.get<FileExtension[]>(`/analysis/${analysisId}/files/types`);
   }
 }
