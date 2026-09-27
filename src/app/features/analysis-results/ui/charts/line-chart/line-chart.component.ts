@@ -77,7 +77,7 @@ export class LineChartComponent {
       interaction: { mode: 'index', intersect: false },
       scales: {
         x: { type: 'category' },
-        y: { beginAtZero: true, ticks: { color: '#ffffff' } },
+        y: { beginAtZero: true, ticks: { color: '#ffffff', stepSize: 1 } },
       },
       plugins: {
         legend: { display: false },
