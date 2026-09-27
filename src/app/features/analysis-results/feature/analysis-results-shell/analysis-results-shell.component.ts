@@ -39,17 +39,19 @@ export class AnalysisResultsShellComponent {
   );
 
   repoName = computed(() => {
+    if (!this.resource.hasValue()) return '';
     const info = this.resource.value()?.details?.info;
     if (!info) return '';
-    return `${info?.repositoryOwner}/${info?.repositoryName}`;
+    return `${info.repositoryOwner}/${info.repositoryName}`;
   });
 
   dateRange = computed<DateRange | null>(() => {
+    if (!this.resource.hasValue()) return null;
     const info = this.resource.value()?.details?.info;
     if (!info) return null;
     return {
-      startDate: info?.analysisRangeStartDate,
-      endDate: info?.analysisRangeEndDate,
+      startDate: info.analysisRangeStartDate,
+      endDate: info.analysisRangeEndDate,
     };
   });
 
