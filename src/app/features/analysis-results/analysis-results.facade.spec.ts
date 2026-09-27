@@ -9,11 +9,21 @@ describe('AnalysisResultsFacade', () => {
   const analysisId = '123';
 
   let service: AnalysisResultsFacade;
-  let analysisResults: { getRepositorySummary: Mock; getDeveloperRelationships: Mock };
+  let analysisResults: {
+    getRepositorySummary: Mock;
+    getDeveloperRelationships: Mock;
+    getCodeCityData: Mock;
+    getFileExtensions: Mock;
+  };
   let router: { navigate: Mock };
 
   beforeEach(() => {
-    analysisResults = { getRepositorySummary: vi.fn(), getDeveloperRelationships: vi.fn() };
+    analysisResults = {
+      getRepositorySummary: vi.fn(),
+      getDeveloperRelationships: vi.fn(),
+      getCodeCityData: vi.fn(),
+      getFileExtensions: vi.fn(),
+    };
     router = { navigate: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -43,5 +53,15 @@ describe('AnalysisResultsFacade', () => {
   it('delegates getDeveloperRelationships to AnalysisResultsService', () => {
     service.getDeveloperRelationships(analysisId);
     expect(analysisResults.getDeveloperRelationships).toHaveBeenCalledWith(analysisId);
+  });
+
+  it('delegates getCodeCityData to AnalysisResultsService', () => {
+    service.getCodeCityData(analysisId);
+    expect(analysisResults.getCodeCityData).toHaveBeenCalledWith(analysisId);
+  });
+
+  it('delegates getFileExtensions to AnalysisResultsService', () => {
+    service.getFileExtensions(analysisId);
+    expect(analysisResults.getFileExtensions).toHaveBeenCalledWith(analysisId);
   });
 });

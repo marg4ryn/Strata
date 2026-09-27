@@ -6,6 +6,9 @@ import type {
   RepositoryTrends,
   AuthorStatistics,
   AuthorCoupling,
+  FileExtension,
+  CityNode,
+  CityItem,
 } from '../../analysis-results.model';
 
 @Service()
@@ -26,5 +29,17 @@ export class AnalysisResultsApiService {
 
   fetchDeveloperRelationships(analysisId: string): Promise<AuthorCoupling[]> {
     return this.http.get<AuthorCoupling[]>(`/analysis/${analysisId}/authors/coupling`);
+  }
+
+  fetchCityNode(analysisId: string): Promise<CityNode> {
+    return this.http.get<CityNode>(`/analysis/${analysisId}/structure`);
+  }
+
+  fetchCityItems(analysisId: string): Promise<CityItem[]> {
+    return this.http.get<CityItem[]>(`/analysis/${analysisId}/items`);
+  }
+
+  fetchFileExtensions(analysisId: string): Promise<FileExtension[]> {
+    return this.http.get<FileExtension[]>(`analysis/${analysisId}/files/types`);
   }
 }

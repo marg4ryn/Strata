@@ -9,6 +9,10 @@ import type {
   RepositoryTrends,
   AuthorStatistics,
   AuthorCoupling,
+  FileExtension,
+  CityNode,
+  CityItem,
+  CodeCityData,
 } from '../../analysis-results.model';
 
 @Service()
@@ -51,5 +55,36 @@ export class AnalysisResultsService {
     );
 
     return coupling;
+  }
+
+  async getCodeCityData(analysisId: string): Promise<CodeCityData> {
+    this.logger.info('Fetching code city data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const [cityNode, cityItems] = await Promise.all([
+      this.cachedFetcher.getOrFetch<CityNode>(cacheName, '/city-node', () =>
+        this.api.fetchCityNode(analysisId),
+      ),
+      this.cachedFetcher.getOrFetch<CityItem[]>(cacheName, '/city-items', () =>
+        this.api.fetchCityItems(analysisId),
+      ),
+    ]);
+
+    return { cityNode, cityItems };
+  }
+
+  async getFileExtensions(analysisId: string): Promise<FileExtension[]> {
+    this.logger.info('Fetching file extensions data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const fileExtensions = await this.cachedFetcher.getOrFetch<FileExtension[]>(
+      cacheName,
+      '/file-extensions',
+      () => this.api.fetchFileExtensions(analysisId),
+    );
+
+    return fileExtensions;
   }
 }

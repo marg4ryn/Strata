@@ -21,6 +21,9 @@ describe('AnalysisResultsService', () => {
     fetchRepositoryTrends: Mock;
     fetchAuthorStatistics: Mock;
     fetchDeveloperRelationships: Mock;
+    fetchCityNode: Mock;
+    fetchCityItems: Mock;
+    fetchFileExtensions: Mock;
   };
 
   beforeEach(() => {
@@ -36,6 +39,9 @@ describe('AnalysisResultsService', () => {
       fetchRepositoryTrends: vi.fn(),
       fetchAuthorStatistics: vi.fn(),
       fetchDeveloperRelationships: vi.fn(),
+      fetchCityNode: vi.fn(),
+      fetchCityItems: vi.fn(),
+      fetchFileExtensions: vi.fn(),
     };
 
     const loggerService = MockService(LoggerService, {
@@ -58,89 +64,107 @@ describe('AnalysisResultsService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('getRepositorySummary', () => {
-    it('calls getOrFetch with correct cache keys for all 3 endpoints', async () => {
-      api.fetchRepositoryDetails.mockResolvedValue({});
-      api.fetchRepositoryTrends.mockResolvedValue({});
-      api.fetchAuthorStatistics.mockResolvedValue({});
+  describe.each([
+    {
+      method: 'getDeveloperRelationships' as const,
+      apiMock: 'fetchDeveloperRelationships' as const,
+      cacheKey: '/developer-relationships',
+    },
+    {
+      method: 'getFileExtensions' as const,
+      apiMock: 'fetchFileExtensions' as const,
+      cacheKey: '/file-extensions',
+    },
+  ])('$method', ({ method, apiMock, cacheKey }) => {
+    it('calls getOrFetch with correct cache key and analysisId', async () => {
+      api[apiMock].mockResolvedValue({});
 
-      await service.getRepositorySummary(analysisId);
-
-      const expectedCacheName = expect.stringContaining(`analysis:${analysisId}`);
-
-      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
-        expectedCacheName,
-        '/repository-details',
-        expect.any(Function),
-      );
-      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
-        expectedCacheName,
-        '/repository-trends',
-        expect.any(Function),
-      );
-      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
-        expectedCacheName,
-        '/author-statistics',
-        expect.any(Function),
-      );
-      expect(cachedFetcher.getOrFetch).toHaveBeenCalledTimes(3);
-    });
-
-    it('calls the api with analysisId for each endpoint', async () => {
-      api.fetchRepositoryDetails.mockResolvedValue({});
-      api.fetchRepositoryTrends.mockResolvedValue({});
-      api.fetchAuthorStatistics.mockResolvedValue({});
-
-      await service.getRepositorySummary(analysisId);
-
-      expect(api.fetchRepositoryDetails).toHaveBeenCalledWith(analysisId);
-      expect(api.fetchRepositoryTrends).toHaveBeenCalledWith(analysisId);
-      expect(api.fetchAuthorStatistics).toHaveBeenCalledWith(analysisId);
-    });
-
-    it('combines results from 3 sources into a single object', async () => {
-      const details = { name: 'test-repo' };
-      const trends = [{ commits: 2 }];
-      const authors = [{ name: 'John Doe' }];
-
-      api.fetchRepositoryDetails.mockResolvedValue(details);
-      api.fetchRepositoryTrends.mockResolvedValue(trends);
-      api.fetchAuthorStatistics.mockResolvedValue(authors);
-
-      const result = await service.getRepositorySummary(analysisId);
-
-      expect(result).toEqual({ details, trends, authors });
-    });
-
-    it('propagates an error when one of the fetches fails', async () => {
-      api.fetchRepositoryDetails.mockResolvedValue({});
-      api.fetchRepositoryTrends.mockRejectedValue(new Error('Network error'));
-      api.fetchAuthorStatistics.mockResolvedValue({});
-
-      await expect(service.getRepositorySummary(analysisId)).rejects.toThrow('Network error');
-    });
-  });
-
-  describe('getDeveloperRelationships', () => {
-    it('calls getOrFetch with correct cache keys', async () => {
-      api.fetchDeveloperRelationships.mockResolvedValue({});
-
-      await service.getDeveloperRelationships(analysisId);
-
-      const expectedCacheName = expect.stringContaining(`analysis:${analysisId}`);
+      await service[method](analysisId);
 
       expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
-        expectedCacheName,
-        '/developer-relationships',
+        expect.stringContaining(`analysis:${analysisId}`),
+        cacheKey,
         expect.any(Function),
       );
       expect(cachedFetcher.getOrFetch).toHaveBeenCalledTimes(1);
-      expect(api.fetchDeveloperRelationships).toHaveBeenCalledWith(analysisId);
+      expect(api[apiMock]).toHaveBeenCalledWith(analysisId);
+    });
+
+    it('propagates an error when the fetch fails', async () => {
+      api[apiMock].mockRejectedValue(new Error('Network error'));
+      await expect(service[method](analysisId)).rejects.toThrow('Network error');
+    });
+  });
+
+  describe.each([
+    {
+      method: 'getRepositorySummary' as const,
+      sources: [
+        {
+          apiMock: 'fetchRepositoryDetails' as const,
+          cacheKey: '/repository-details',
+          resultKey: 'details',
+        },
+        {
+          apiMock: 'fetchRepositoryTrends' as const,
+          cacheKey: '/repository-trends',
+          resultKey: 'trends',
+        },
+        {
+          apiMock: 'fetchAuthorStatistics' as const,
+          cacheKey: '/author-statistics',
+          resultKey: 'authors',
+        },
+      ],
+    },
+    {
+      method: 'getCodeCityData' as const,
+      sources: [
+        { apiMock: 'fetchCityNode' as const, cacheKey: '/city-node', resultKey: 'cityNode' },
+        { apiMock: 'fetchCityItems' as const, cacheKey: '/city-items', resultKey: 'cityItems' },
+      ],
+    },
+  ])('$method', ({ method, sources }) => {
+    it(`calls getOrFetch for each of ${sources.length} endpoints with analysisId in cache name`, async () => {
+      sources.forEach(({ apiMock }) => api[apiMock].mockResolvedValue({}));
+
+      await service[method](analysisId);
+
+      sources.forEach(({ cacheKey }) =>
+        expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+          expect.stringContaining(`analysis:${analysisId}`),
+          cacheKey,
+          expect.any(Function),
+        ),
+      );
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledTimes(sources.length);
+    });
+
+    it('calls the api with analysisId for each endpoint', async () => {
+      sources.forEach(({ apiMock }) => api[apiMock].mockResolvedValue({}));
+
+      await service[method](analysisId);
+
+      sources.forEach(({ apiMock }) => expect(api[apiMock]).toHaveBeenCalledWith(analysisId));
+    });
+
+    it('combines results from all sources into a single object', async () => {
+      const values = sources.map((_, i) => ({ mockValue: i }));
+      sources.forEach(({ apiMock }, i) => api[apiMock].mockResolvedValue(values[i]));
+
+      const result = await service[method](analysisId);
+
+      const expected = Object.fromEntries(
+        sources.map(({ resultKey }, i) => [resultKey, values[i]]),
+      );
+      expect(result).toEqual(expected);
     });
 
     it('propagates an error when one of the fetches fails', async () => {
-      api.fetchDeveloperRelationships.mockRejectedValue(new Error('Network error'));
-      await expect(service.getDeveloperRelationships(analysisId)).rejects.toThrow('Network error');
+      sources.forEach(({ apiMock }) => api[apiMock].mockResolvedValue({}));
+      api[sources[0].apiMock].mockRejectedValue(new Error('Network error'));
+
+      await expect(service[method](analysisId)).rejects.toThrow('Network error');
     });
   });
 });

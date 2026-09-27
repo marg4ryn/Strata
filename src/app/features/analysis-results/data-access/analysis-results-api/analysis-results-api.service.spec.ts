@@ -43,4 +43,19 @@ describe('AnalysisResultsApiService', () => {
     service.fetchDeveloperRelationships(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/authors/coupling`);
   });
+
+  it('delegates fetchCityNode to HttpService', () => {
+    service.fetchCityNode(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/structure`);
+  });
+
+  it('delegates fetchCityItems to HttpService', () => {
+    service.fetchCityItems(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/items`);
+  });
+
+  it('delegates fetchFileExtensions to HttpService', () => {
+    service.fetchFileExtensions(analysisId);
+    expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/files/types`);
+  });
 });
