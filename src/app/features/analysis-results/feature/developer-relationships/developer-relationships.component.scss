@@ -49,17 +49,6 @@
   border-radius: 0.5rem;
   background: var(--bg-primary);
 
-  h2 {
-    flex-wrap: nowrap;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
   &:first-child {
     flex: 1;
   }
@@ -86,6 +75,34 @@
     font-size: 0.875rem;
     font-style: italic;
     padding: 1rem;
+  }
+}
+
+.developer-list-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  min-width: 0;
+  flex-wrap: nowrap;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+
+  &__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__tooltip {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
   }
 }
 

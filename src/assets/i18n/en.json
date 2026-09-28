@@ -242,17 +242,40 @@
     },
 
     "developerRelationships": {
-      "developers": "Authors",
-      "relatedDevelopers": "Related authors",
-      "selectDeveloper": "Select an author",
-      "table": {
+      "developers": {
+        "title": "Authors",
+        "tooltip": "Authors whose changes largely affect the same files as changes made by other authors.",
         "name": { "label": "Author" },
-        "coupledAuthors": { "label": "Relationships", "tooltip": "Number of related authors." },
-        "totalChanges": { "label": "Changes", "tooltip": "Number of changes made." },
-        "filesChanged": { "label": "Files", "tooltip": "Number of modified files." },
-        "percentage": { "label": "Relationship", "tooltip": "Relationship percentage." },
-        "sharedChanges": { "label": "Changes", "tooltip": "Number of shared changes." },
-        "sharedFilesChanged": { "label": "Files", "tooltip": "Number of jointly modified files." }
+        "coupledAuthors": {
+          "label": "Relationships",
+          "tooltip": "Number of authors who most frequently work on the same files as the given author."
+        },
+        "totalChanges": {
+          "label": "Changes",
+          "tooltip": "Total number of changes made by the given author across all files. A single commit affecting multiple files counts as multiple changes."
+        },
+        "filesChanged": {
+          "label": "Files",
+          "tooltip": "Number of unique files modified by the given author."
+        }
+      },
+      "relatedDevelopers": {
+        "title": "Related authors",
+        "tooltip": "Other authors the selected author collaborates with. The values below describe the extent of this relationship.",
+        "selectDeveloper": "Select an author",
+        "name": { "label": "Author" },
+        "percentage": {
+          "label": "Relationship",
+          "tooltip": "Share of the selected author's changes that affect files shared with the related author."
+        },
+        "sharedChanges": {
+          "label": "Changes",
+          "tooltip": "Number of changes made by the selected author in files shared with the related author."
+        },
+        "sharedFilesChanged": {
+          "label": "Files",
+          "tooltip": "Number of unique files modified by both authors."
+        }
       }
     },
 

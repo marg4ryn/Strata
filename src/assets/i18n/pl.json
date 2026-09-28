@@ -241,19 +241,39 @@
     },
 
     "developerRelationships": {
-      "developers": "Autorzy",
-      "relatedDevelopers": "Powiązani autorzy",
-      "selectDeveloper": "Wybierz autora",
-      "table": {
+      "developers": {
+        "title": "Autorzy",
+        "tooltip": "Autorzy, których zmiany dotyczą w dużej mierze tych samych plików co zmiany innych autorów.",
         "name": { "label": "Autor" },
-        "coupledAuthors": { "label": "Powiązania", "tooltip": "Liczba powiązanych autorów." },
-        "totalChanges": { "label": "Zmiany", "tooltip": "Liczba wprowadzonych zmian." },
-        "filesChanged": { "label": "Pliki", "tooltip": "Liczba zmodyfikowanych plików." },
-        "percentage": { "label": "Powiązanie", "tooltip": "Procent powiązania." },
-        "sharedChanges": { "label": "Zmiany", "tooltip": "Liczba wspólnych zmian." },
+        "coupledAuthors": {
+          "label": "Powiązania",
+          "tooltip": "Liczba autorów, którzy najczęściej pracują na tych samych plikach co dany autor."
+        },
+        "totalChanges": {
+          "label": "Zmiany",
+          "tooltip": "Łączna liczba zmian danego autora we wszystkich plikach. Jeden commit obejmujący kilka plików liczy się jako kilka zmian."
+        },
+        "filesChanged": {
+          "label": "Pliki",
+          "tooltip": "Liczba unikalnych plików modyfikowanych przez danego autora."
+        }
+      },
+      "relatedDevelopers": {
+        "title": "Powiązani autorzy",
+        "tooltip": "Inni autorzy, z którym wybrany autor współpracuje. Poniższe wartości opisują skalę tego powiązania.",
+        "selectDeveloper": "Wybierz autora",
+        "name": { "label": "Autor" },
+        "percentage": {
+          "label": "Powiązanie",
+          "tooltip": "Udział zmian wybranego autora, które dotyczą plików wspólnych z powiązanym autorem."
+        },
+        "sharedChanges": {
+          "label": "Zmiany",
+          "tooltip": "Liczba zmian wybranego autora w plikach wspólnych z powiązanym autorem."
+        },
         "sharedFilesChanged": {
           "label": "Pliki",
-          "tooltip": "Liczba wspólnie modyfikowanych plików."
+          "tooltip": "Liczba unikalnych plików modyfikowanych przez obu autorów."
         }
       }
     },

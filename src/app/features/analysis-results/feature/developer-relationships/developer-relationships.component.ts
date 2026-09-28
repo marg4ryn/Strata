@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import { TranslocoPipe } from '@jsverse/transloco';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { TableComponent } from '@app/shared/components';
+import { TableComponent, InfoTooltipComponent } from '@app/shared/components';
 import type { TableColumn, TableRows } from '@app/shared/components';
 import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { ResourcePageComponent } from '../../ui/resource/resource-page/resource-page.component';
@@ -18,6 +18,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
     TranslocoPipe,
     TableComponent,
     OverlayModule,
+    InfoTooltipComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './developer-relationships.component.scss',
@@ -33,44 +34,58 @@ export class DeveloperRelationshipsComponent {
 
   readonly developerColumns: TableColumn[] = [
     {
-      headerKey: marker('analysisResults.developerRelationships.table.name.label'),
+      headerKey: marker('analysisResults.developerRelationships.developers.name.label'),
       valueType: 'text',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.coupledAuthors.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.coupledAuthors.tooltip'),
+      headerKey: marker('analysisResults.developerRelationships.developers.coupledAuthors.label'),
+      tooltipKey: marker(
+        'analysisResults.developerRelationships.developers.coupledAuthors.tooltip',
+      ),
       valueType: 'number',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.totalChanges.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.totalChanges.tooltip'),
+      headerKey: marker('analysisResults.developerRelationships.developers.totalChanges.label'),
+      tooltipKey: marker('analysisResults.developerRelationships.developers.totalChanges.tooltip'),
       valueType: 'number',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.filesChanged.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.filesChanged.tooltip'),
+      headerKey: marker('analysisResults.developerRelationships.developers.filesChanged.label'),
+      tooltipKey: marker('analysisResults.developerRelationships.developers.filesChanged.tooltip'),
       valueType: 'number',
     },
   ];
 
   readonly relatedDeveloperColumns: TableColumn[] = [
     {
-      headerKey: marker('analysisResults.developerRelationships.table.name.label'),
+      headerKey: marker('analysisResults.developerRelationships.relatedDevelopers.name.label'),
       valueType: 'text',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.percentage.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.percentage.tooltip'),
+      headerKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.percentage.label',
+      ),
+      tooltipKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.percentage.tooltip',
+      ),
       valueType: 'percent',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.sharedChanges.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.sharedChanges.tooltip'),
+      headerKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.sharedChanges.label',
+      ),
+      tooltipKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.sharedChanges.tooltip',
+      ),
       valueType: 'number',
     },
     {
-      headerKey: marker('analysisResults.developerRelationships.table.sharedFilesChanged.label'),
-      tooltipKey: marker('analysisResults.developerRelationships.table.sharedFilesChanged.tooltip'),
+      headerKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.sharedFilesChanged.label',
+      ),
+      tooltipKey: marker(
+        'analysisResults.developerRelationships.relatedDevelopers.sharedFilesChanged.tooltip',
+      ),
       valueType: 'number',
     },
   ];

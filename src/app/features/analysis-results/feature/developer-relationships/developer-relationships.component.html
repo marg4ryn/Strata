@@ -8,8 +8,18 @@
           [(selectedAuthor)]="selectedAuthor"
         />
         <aside class="developer-lists">
+          <!--  t(analysisResults.developerRelationships.developers.tooltip) -->
           <section class="developer-list">
-            <h2>{{ 'analysisResults.developerRelationships.developers' | transloco }}</h2>
+            <div class="developer-list-title">
+              <span class="developer-list-title__label">{{
+                'analysisResults.developerRelationships.developers.title' | transloco
+              }}</span>
+              <app-info-tooltip
+                class="developer-list-title__tooltip"
+                [textKey]="'analysisResults.developerRelationships.developers.tooltip'"
+                [iconSize]="18"
+              />
+            </div>
             <div class="developer-list__table-wrapper">
               <app-table
                 [columns]="developerColumns"
@@ -23,8 +33,18 @@
             </div>
           </section>
 
+          <!--  t(analysisResults.developerRelationships.relatedDevelopers.tooltip) -->
           <section class="developer-list">
-            <h2>{{ 'analysisResults.developerRelationships.relatedDevelopers' | transloco }}</h2>
+            <div class="developer-list-title">
+              <span class="developer-list-title__label">{{
+                'analysisResults.developerRelationships.relatedDevelopers.title' | transloco
+              }}</span>
+              <app-info-tooltip
+                class="developer-list-title__tooltip"
+                [textKey]="'analysisResults.developerRelationships.relatedDevelopers.tooltip'"
+                [iconSize]="18"
+              />
+            </div>
             @if (relatedAuthors().length > 0) {
               <div class="developer-list__table-wrapper">
                 <app-table
@@ -39,7 +59,8 @@
               </div>
             } @else {
               <span class="developer-list__empty">{{
-                'analysisResults.developerRelationships.selectDeveloper' | transloco
+                'analysisResults.developerRelationships.relatedDevelopers.selectDeveloper'
+                  | transloco
               }}</span>
             }
           </section>
