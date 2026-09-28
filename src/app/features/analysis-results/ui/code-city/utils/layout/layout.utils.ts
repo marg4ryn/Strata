@@ -1,4 +1,4 @@
-import type { CityNode } from '../../analysis-results.model';
+import type { CityNode } from '../../../../analysis-results.model';
 
 export interface ProcessedNode {
   width: number;
@@ -20,18 +20,18 @@ interface LayoutResult {
   totalDepth: number;
 }
 
-interface SkylineSegment {
+export interface SkylineSegment {
   x: number;
   z: number;
   width: number;
 }
 
-const PLATFORM_HEIGHT = 1;
-const MIN_PLATFORM_WIDTH = 5;
-const MIN_BUILDING_WIDTH = 0.1;
-const MIN_BUILDING_HEIGHT = 0.1;
-const BUILDING_HEIGHT_SCALE = 30;
-const BUILDING_WIDTH_SCALE = 12;
+export const PLATFORM_HEIGHT = 1;
+export const MIN_PLATFORM_WIDTH = 5;
+export const MIN_BUILDING_WIDTH = 0.1;
+export const MIN_BUILDING_HEIGHT = 0.1;
+export const BUILDING_HEIGHT_SCALE = 30;
+export const BUILDING_WIDTH_SCALE = 12;
 
 const MARGIN = 1.5;
 const AREA_BUFFER = 1.4;
@@ -40,7 +40,7 @@ const MAX_WIDTH_FACTOR = 1.4;
 const WIDTH_SEARCH_STEPS = 15;
 const TARGET_ASPECT_RATIO = 1;
 const ASPECT_RATIO_WEIGHT = 100;
-const UNUSED_AREA_WEIGHT = 0.1;
+const UNUSED_AREA_WEIGHT = 0.5;
 
 const EPSILON = 0.1;
 
@@ -71,10 +71,6 @@ export function processNode(node: CityNode): ProcessedNode {
 
   // 3. Folder with children
   const processedChildren = node.children.map(processNode);
-
-  // Sort elements starting with the largest to ensure better packing by the Skyline algorithm.
-  // Store the original indices to maintain the consistency of parallel arrays
-  // after the layout is calculated: the index in node.children must correspond to the index in node.positions.
   const sortedWithIndex = processedChildren
     .map((child, index) => ({ child, index }))
     .sort((a, b) => b.child.width - a.child.width || b.child.height - a.child.height);
@@ -97,10 +93,6 @@ export function processNode(node: CityNode): ProcessedNode {
 }
 
 function optimizeLayout(children: ProcessedNode[]): LayoutResult {
-  if (children.length === 0) {
-    return { positions: [], totalWidth: MARGIN * 2, totalDepth: MARGIN * 2 };
-  }
-
   const occupiedArea = children.reduce(
     (sum, child) => sum + (child.width + MARGIN) * (child.depth + MARGIN),
     0,
@@ -177,7 +169,7 @@ function calculateSkyline(children: ProcessedNode[], containerWidth: number): La
   };
 }
 
-function findBestPosition(
+export function findBestPosition(
   skyline: SkylineSegment[],
   width: number,
   containerWidth: number,
@@ -215,7 +207,12 @@ function findBestPosition(
   return best;
 }
 
-function updateSkyline(skyline: SkylineSegment[], x: number, newZ: number, width: number): void {
+export function updateSkyline(
+  skyline: SkylineSegment[],
+  x: number,
+  newZ: number,
+  width: number,
+): void {
   const endX = x + width;
   const remainingSegments: SkylineSegment[] = [];
 
