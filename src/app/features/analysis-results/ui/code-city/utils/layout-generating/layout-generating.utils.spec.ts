@@ -9,8 +9,8 @@ import {
   BUILDING_WIDTH_SCALE,
   MIN_PLATFORM_WIDTH,
   PLATFORM_HEIGHT,
-} from './layout.utils';
-import type { SkylineSegment, ProcessedNode } from './layout.utils';
+} from './layout-generating.utils';
+import type { SkylineSegment, ProcessedNode } from './layout-generating.utils';
 
 function makeCityNode(overrides: Partial<CityNode>): CityNode {
   return {

@@ -7,7 +7,7 @@ import {
   UNIT_CUBE_EDGES,
   VERTEX_STRIDE,
   EDGE_STRIDE,
-} from './edge-geometry.utils';
+} from './edge-generating.utils';
 
 let createdMeshes: THREE.InstancedMesh[];
 
