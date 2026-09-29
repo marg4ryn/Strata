@@ -9,9 +9,8 @@ export interface ProcessedNode {
 }
 
 interface NodePosition {
-  x: number;
-  z: number;
-  rowDepth: number;
+  centerX: number;
+  centerZ: number;
 }
 
 interface LayoutResult {
@@ -21,9 +20,16 @@ interface LayoutResult {
 }
 
 export interface SkylineSegment {
-  x: number;
-  z: number;
+  startX: number;
+  levelZ: number;
+  length: number;
+}
+
+interface Placement {
+  originX: number;
+  originZ: number;
   width: number;
+  depth: number;
 }
 
 export const PLATFORM_HEIGHT = 1;
@@ -128,41 +134,36 @@ function optimizeLayout(children: ProcessedNode[]): LayoutResult {
 }
 
 function calculateSkyline(children: ProcessedNode[], containerWidth: number): LayoutResult {
-  const skyline: SkylineSegment[] = [{ x: MARGIN, z: MARGIN, width: containerWidth - MARGIN * 2 }];
+  const skyline: SkylineSegment[] = [
+    { startX: MARGIN, levelZ: MARGIN, length: containerWidth - MARGIN * 2 },
+  ];
 
-  const placements = children.map((child) => {
+  const placements: Placement[] = children.map((child) => {
     const widthWithMargin = child.width + MARGIN;
     const depthWithMargin = child.depth + MARGIN;
 
-    const placement = findBestPosition(skyline, widthWithMargin, containerWidth);
+    const best = findBestPosition(skyline, widthWithMargin, containerWidth);
 
-    const x = placement?.x ?? MARGIN;
-    const z = placement?.z ?? Math.max(...skyline.map((segment) => segment.z + MARGIN));
+    const originX = best?.originX ?? MARGIN;
+    const originZ = best?.originZ ?? Math.max(...skyline.map((s) => s.levelZ));
 
-    updateSkyline(skyline, x, z + depthWithMargin, widthWithMargin);
+    updateSkyline(skyline, originX, originZ + depthWithMargin, widthWithMargin);
 
-    return {
-      x,
-      z,
-      width: child.width,
-      depth: child.depth,
-      rowDepth: depthWithMargin,
-    };
+    return { originX, originZ, width: child.width, depth: child.depth };
   });
 
-  const minX = Math.min(...placements.map((p) => p.x));
-  const maxX = Math.max(...placements.map((p) => p.x + p.width));
-  const minZ = Math.min(...placements.map((p) => p.z));
-  const maxZ = Math.max(...placements.map((p) => p.z + p.depth));
+  const minX = Math.min(...placements.map((p) => p.originX));
+  const maxX = Math.max(...placements.map((p) => p.originX + p.width));
+  const minZ = Math.min(...placements.map((p) => p.originZ));
+  const maxZ = Math.max(...placements.map((p) => p.originZ + p.depth));
 
   const offsetX = MARGIN - minX;
   const offsetZ = MARGIN - minZ;
 
   return {
     positions: placements.map((p) => ({
-      x: p.x + p.width / 2 + offsetX,
-      z: p.z + p.depth / 2 + offsetZ,
-      rowDepth: p.rowDepth,
+      centerX: p.originX + p.width / 2 + offsetX,
+      centerZ: p.originZ + p.depth / 2 + offsetZ,
     })),
     totalWidth: maxX - minX + MARGIN * 2,
     totalDepth: maxZ - minZ + MARGIN * 2,
@@ -173,34 +174,36 @@ export function findBestPosition(
   skyline: SkylineSegment[],
   width: number,
   containerWidth: number,
-): { x: number; z: number } | null {
-  let best: { x: number; z: number } | null = null;
+): { originX: number; originZ: number } | null {
+  let best: { originX: number; originZ: number } | null = null;
 
   for (let startIndex = 0; startIndex < skyline.length; startIndex++) {
     const startSegment = skyline[startIndex];
-    if (startSegment.x + width > containerWidth - MARGIN) continue;
+    if (startSegment.startX + width > containerWidth - MARGIN) continue;
 
-    let spanWidth = 0;
-    let spanHeight = startSegment.z;
+    let spanLength = 0;
+    let spanLevelZ = startSegment.levelZ;
 
-    for (let i = startIndex; i < skyline.length && spanWidth < width; i++) {
+    for (let i = startIndex; i < skyline.length && spanLength < width; i++) {
       const isContiguous =
         i === startIndex ||
-        Math.abs(skyline[i].x - (skyline[i - 1].x + skyline[i - 1].width)) <= EPSILON;
+        Math.abs(skyline[i].startX - (skyline[i - 1].startX + skyline[i - 1].length)) <= EPSILON;
 
       if (!isContiguous) break;
 
-      spanWidth += skyline[i].width;
-      spanHeight = Math.max(spanHeight, skyline[i].z);
+      spanLength += skyline[i].length;
+      spanLevelZ = Math.max(spanLevelZ, skyline[i].levelZ);
     }
 
-    if (spanWidth < width) continue;
+    if (spanLength < width) continue;
 
     const isBetter =
-      !best || spanHeight < best.z || (spanHeight === best.z && startSegment.x < best.x);
+      !best ||
+      spanLevelZ < best.originZ ||
+      (Math.abs(spanLevelZ - best.originZ) < EPSILON && startSegment.startX < best.originX);
 
     if (isBetter) {
-      best = { x: startSegment.x, z: spanHeight };
+      best = { originX: startSegment.startX, originZ: spanLevelZ };
     }
   }
 
@@ -209,45 +212,54 @@ export function findBestPosition(
 
 export function updateSkyline(
   skyline: SkylineSegment[],
-  x: number,
-  newZ: number,
-  width: number,
+  startX: number,
+  newLevelZ: number,
+  length: number,
 ): void {
-  const endX = x + width;
+  const endX = startX + length;
   const remainingSegments: SkylineSegment[] = [];
 
   for (const segment of skyline) {
-    const segmentEndX = segment.x + segment.width;
-    const isOutside = segmentEndX <= x + EPSILON || segment.x >= endX - EPSILON;
+    const segmentEndX = segment.startX + segment.length;
+    const isOutside = segmentEndX <= startX + EPSILON || segment.startX >= endX - EPSILON;
 
     if (isOutside) {
       remainingSegments.push(segment);
       continue;
     }
 
-    const leftRemainderWidth = x - segment.x;
-    if (leftRemainderWidth > EPSILON) {
-      remainingSegments.push({ x: segment.x, z: segment.z, width: leftRemainderWidth });
+    const leftRemainderLength = startX - segment.startX;
+    if (leftRemainderLength > EPSILON) {
+      remainingSegments.push({
+        startX: segment.startX,
+        levelZ: segment.levelZ,
+        length: leftRemainderLength,
+      });
     }
 
-    const rightRemainderWidth = segmentEndX - endX;
-    if (rightRemainderWidth > EPSILON) {
-      remainingSegments.push({ x: endX, z: segment.z, width: rightRemainderWidth });
+    const rightRemainderLength = segmentEndX - endX;
+    if (rightRemainderLength > EPSILON) {
+      remainingSegments.push({
+        startX: endX,
+        levelZ: segment.levelZ,
+        length: rightRemainderLength,
+      });
     }
   }
 
-  remainingSegments.push({ x, z: newZ, width });
-  remainingSegments.sort((a, b) => a.x - b.x);
+  remainingSegments.push({ startX, levelZ: newLevelZ, length });
+  remainingSegments.sort((a, b) => a.startX - b.startX);
 
   skyline.length = 0;
   for (const segment of remainingSegments) {
     const previous = skyline[skyline.length - 1];
 
-    const sameHeight = previous && Math.abs(previous.z - segment.z) < EPSILON;
-    const adjacent = previous && Math.abs(previous.x + previous.width - segment.x) < EPSILON;
+    const sameLevel = previous && Math.abs(previous.levelZ - segment.levelZ) < EPSILON;
+    const adjacent =
+      previous && Math.abs(previous.startX + previous.length - segment.startX) < EPSILON;
 
-    if (sameHeight && adjacent) {
-      previous.width += segment.width;
+    if (sameLevel && adjacent) {
+      previous.length += segment.length;
     } else {
       skyline.push(segment);
     }

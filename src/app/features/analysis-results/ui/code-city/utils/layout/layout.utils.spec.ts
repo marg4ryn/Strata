@@ -25,10 +25,10 @@ function assertNoOverlap(result: ProcessedNode) {
   const rects = result.children.map((child, i) => {
     const pos = result.positions[i];
     return {
-      minX: pos.x - child.width / 2,
-      maxX: pos.x + child.width / 2,
-      minZ: pos.z - child.depth / 2,
-      maxZ: pos.z + child.depth / 2,
+      minX: pos.centerX - child.width / 2,
+      maxX: pos.centerX + child.width / 2,
+      minZ: pos.centerZ - child.depth / 2,
+      maxZ: pos.centerZ + child.depth / 2,
     };
   });
 
@@ -111,8 +111,8 @@ describe('processNode', () => {
 
       expect(result.positions).toHaveLength(3);
       expect(result.positions.every((p) => p !== undefined)).toBe(true);
-      expect(typeof result.positions[1].x).toBe('number');
-      expect(typeof result.positions[1].z).toBe('number');
+      expect(typeof result.positions[1].centerX).toBe('number');
+      expect(typeof result.positions[1].centerZ).toBe('number');
     });
 
     it('places children without overlap', () => {
@@ -201,10 +201,10 @@ describe('processNode', () => {
     const position = result.positions[0];
     const child = result.children[0];
 
-    expect(position.x).toBe(result.width / 2);
-    expect(position.z).toBe(result.depth / 2);
-    expect(position.x - child.width / 2).toBeGreaterThan(0);
-    expect(position.z - child.depth / 2).toBeGreaterThan(0);
+    expect(position.centerX).toBe(result.width / 2);
+    expect(position.centerZ).toBe(result.depth / 2);
+    expect(position.centerX - child.width / 2).toBeGreaterThan(0);
+    expect(position.centerZ - child.depth / 2).toBeGreaterThan(0);
   });
 
   it('keeps a directory platform large enough for every child', () => {
@@ -217,10 +217,10 @@ describe('processNode', () => {
 
     for (const [index, child] of result.children.entries()) {
       const position = result.positions[index];
-      expect(position.x - child.width / 2).toBeGreaterThanOrEqual(0);
-      expect(position.x + child.width / 2).toBeLessThanOrEqual(result.width);
-      expect(position.z - child.depth / 2).toBeGreaterThanOrEqual(0);
-      expect(position.z + child.depth / 2).toBeLessThanOrEqual(result.depth);
+      expect(position.centerX - child.width / 2).toBeGreaterThanOrEqual(0);
+      expect(position.centerX + child.width / 2).toBeLessThanOrEqual(result.width);
+      expect(position.centerZ - child.depth / 2).toBeGreaterThanOrEqual(0);
+      expect(position.centerZ + child.depth / 2).toBeLessThanOrEqual(result.depth);
     }
   });
 
@@ -268,75 +268,75 @@ describe('processNode', () => {
 
 describe('updateSkyline', () => {
   it('trims only the left side when the new segment ends at the existing segment end', () => {
-    const skyline = [{ x: 0, z: 0, width: 10 }];
+    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
 
     updateSkyline(skyline, 5, 2, 5); // New segment [5,10) covers the right side of [0,10).
 
-    expect(skyline.some((s) => s.x === 0 && s.width === 5 && s.z === 0)).toBe(true);
-    expect(skyline.some((s) => s.x === 10)).toBe(false);
+    expect(skyline.some((s) => s.startX === 0 && s.length === 5 && s.levelZ === 0)).toBe(true);
+    expect(skyline.some((s) => s.startX === 10)).toBe(false);
   });
 
   it('trims only the right side when the new segment starts at the existing segment start', () => {
-    const skyline = [{ x: 0, z: 0, width: 10 }];
+    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
 
     updateSkyline(skyline, 0, 2, 5); // New segment [0,5) covers the left side of [0,10).
 
-    expect(skyline.some((s) => s.x === 0 && s.z === 0)).toBe(false);
-    expect(skyline.some((s) => s.x === 5 && s.width === 5 && s.z === 0)).toBe(true);
+    expect(skyline.some((s) => s.startX === 0 && s.levelZ === 0)).toBe(false);
+    expect(skyline.some((s) => s.startX === 5 && s.length === 5 && s.levelZ === 0)).toBe(true);
   });
 
   it('trims both sides when the new segment is placed in the middle', () => {
-    const skyline = [{ x: 0, z: 0, width: 10 }];
+    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
 
     updateSkyline(skyline, 3, 2, 4); // New segment [3,7) sits inside [0,10).
 
-    expect(skyline.some((s) => s.x === 0 && s.width === 3)).toBe(true);
-    expect(skyline.some((s) => s.x === 7 && s.width === 3)).toBe(true);
+    expect(skyline.some((s) => s.startX === 0 && s.length === 3)).toBe(true);
+    expect(skyline.some((s) => s.startX === 7 && s.length === 3)).toBe(true);
   });
 
   it('leaves no remainder when the new segment exactly covers the old one', () => {
-    const skyline = [{ x: 0, z: 0, width: 10 }];
+    const skyline = [{ startX: 0, levelZ: 0, length: 10 }];
 
     updateSkyline(skyline, 0, 2, 10);
 
-    expect(skyline).toEqual([{ x: 0, z: 2, width: 10 }]);
+    expect(skyline).toEqual([{ startX: 0, levelZ: 2, length: 10 }]);
   });
 
   it('preserves segments outside the updated range', () => {
-    const skyline = [
-      { x: 0, z: 0, width: 5 },
-      { x: 5, z: 1, width: 5 },
-      { x: 10, z: 0, width: 5 },
+    const skyline: SkylineSegment[] = [
+      { startX: 0, levelZ: 0, length: 5 },
+      { startX: 5, levelZ: 1, length: 5 },
+      { startX: 10, levelZ: 0, length: 5 },
     ];
 
     updateSkyline(skyline, 6, 3, 2);
 
     expect(skyline).toEqual([
-      { x: 0, z: 0, width: 5 },
-      { x: 5, z: 1, width: 1 },
-      { x: 6, z: 3, width: 2 },
-      { x: 8, z: 1, width: 2 },
-      { x: 10, z: 0, width: 5 },
+      { startX: 0, levelZ: 0, length: 5 },
+      { startX: 5, levelZ: 1, length: 1 },
+      { startX: 6, levelZ: 3, length: 2 },
+      { startX: 8, levelZ: 1, length: 2 },
+      { startX: 10, levelZ: 0, length: 5 },
     ]);
   });
 
   it('merges adjacent segments with matching heights', () => {
-    const skyline = [
-      { x: 0, z: 0, width: 5 },
-      { x: 5, z: 0, width: 5 },
+    const skyline: SkylineSegment[] = [
+      { startX: 0, levelZ: 0, length: 5 },
+      { startX: 5, levelZ: 0, length: 5 },
     ];
 
     updateSkyline(skyline, 2, 0, 3);
 
-    expect(skyline).toEqual([{ x: 0, z: 0, width: 10 }]);
+    expect(skyline).toEqual([{ startX: 0, levelZ: 0, length: 10 }]);
   });
 });
 
 describe('findBestPosition', () => {
   it('returns null when disjoint skyline segments cannot fit the requested width', () => {
     const skyline: SkylineSegment[] = [
-      { x: 0, z: 1, width: 2 },
-      { x: 5, z: 1, width: 2 },
+      { startX: 0, levelZ: 1, length: 2 },
+      { startX: 5, levelZ: 1, length: 2 },
     ];
 
     expect(findBestPosition(skyline, 4, 10)).toBeNull();
@@ -344,10 +344,10 @@ describe('findBestPosition', () => {
 
   it('prefers the leftmost segment when candidate positions have equal heights', () => {
     const skyline: SkylineSegment[] = [
-      { x: 5, z: 1, width: 5 },
-      { x: 0, z: 1, width: 5 },
+      { startX: 5, levelZ: 1, length: 5 },
+      { startX: 0, levelZ: 1, length: 5 },
     ];
 
-    expect(findBestPosition(skyline, 2, 10)).toEqual({ x: 0, z: 1 });
+    expect(findBestPosition(skyline, 2, 10)).toEqual({ originX: 0, originZ: 1 });
   });
 });
