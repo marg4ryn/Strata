@@ -76,7 +76,7 @@ export function createAllInstancedMeshes(instanceMap: InstanceMap): {
     });
 
     const group = new THREE.Group();
-    group.add(...meshes);
+    if (meshes.length > 0) group.add(...meshes);
 
     return { group, meshes };
   } finally {
