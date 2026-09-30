@@ -1,4 +1,3 @@
-import type { CityNode } from '../../../../analysis-results.model';
 import {
   findBestPosition,
   processNode,
@@ -10,7 +9,8 @@ import {
   MIN_PLATFORM_WIDTH,
   PLATFORM_HEIGHT,
 } from './layout-generating.utils';
-import type { SkylineSegment, ProcessedNode } from './layout-generating.utils';
+import type { SkylineSegment } from './layout-generating.utils';
+import type { CityNode, ProcessedNode } from '../../code-city.model';
 
 function makeCityNode(overrides: Partial<CityNode>): CityNode {
   return {

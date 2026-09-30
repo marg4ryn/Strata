@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+import { COLORS, UNIT_CUBE } from '../../code-city.model';
+
 interface EdgeInfo {
   positions: Float32Array;
   matrix: THREE.Matrix4;
@@ -16,15 +18,12 @@ const EDGE_RADIAL_SEGMENTS = 4; // square cross-section for minimum cost
 const EDGE_HEIGHT_SEGMENTS = 1;
 const Y_TO_Z_ROTATION = Math.PI / 2; // places the cylinder along the Z axis
 
-export const EDGE_COLOR = 0x000000;
-
 const Z_AXIS = new THREE.Vector3(0, 0, 1);
 const SEGMENT_DIRECTION = new THREE.Vector3();
 const SEGMENT_MIDPOINT = new THREE.Vector3();
 const SEGMENT_SCALE = new THREE.Vector3();
 const SEGMENT_ROTATION = new THREE.Quaternion();
 
-export const UNIT_CUBE = new THREE.BoxGeometry(1, 1, 1);
 export const UNIT_CUBE_EDGES = extractNonBottomEdges(UNIT_CUBE);
 
 const edgeBuffer: EdgeInfo[] = [];
@@ -59,9 +58,11 @@ export function addBoxEdgesToMerge(matrix: THREE.Matrix4): void {
 }
 
 export function createMergedEdges(): THREE.InstancedMesh {
-  const mesh = createEdgesMesh(edgeBuffer);
-  clearEdgeBuffer();
-  return mesh;
+  try {
+    return createEdgesMesh(edgeBuffer);
+  } finally {
+    clearEdgeBuffer();
+  }
 }
 
 export function clearEdgeBuffer(): void {
@@ -78,7 +79,7 @@ function createEdgesMesh(entries: readonly EdgeInfo[]): THREE.InstancedMesh {
   );
   geometry.rotateX(Y_TO_Z_ROTATION);
 
-  const material = new THREE.MeshBasicMaterial({ color: EDGE_COLOR });
+  const material = new THREE.MeshBasicMaterial({ color: COLORS.edge });
   const mesh = new THREE.InstancedMesh(geometry, material, countEdges(entries));
 
   const start = new THREE.Vector3();

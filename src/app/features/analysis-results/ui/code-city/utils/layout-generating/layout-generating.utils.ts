@@ -1,17 +1,4 @@
-import type { CityNode } from '../../../../analysis-results.model';
-
-export interface ProcessedNode {
-  width: number;
-  depth: number;
-  height: number;
-  children: ProcessedNode[];
-  positions: NodePosition[];
-}
-
-interface NodePosition {
-  centerX: number;
-  centerZ: number;
-}
+import type { CityNode, ProcessedNode, NodePosition } from '../../code-city.model';
 
 interface LayoutResult {
   positions: NodePosition[];
