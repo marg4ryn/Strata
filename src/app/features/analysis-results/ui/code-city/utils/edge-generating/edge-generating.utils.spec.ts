@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import {
   addBoxEdgesToMerge,
-  clearPendingEdges,
+  clearEdgeBuffer,
   createMergedEdges,
   UNIT_CUBE_EDGES,
   VERTEX_STRIDE,
@@ -19,11 +19,11 @@ function createAndTrackMergedEdges(): THREE.InstancedMesh {
 
 beforeEach(() => {
   createdMeshes = [];
-  clearPendingEdges();
+  clearEdgeBuffer();
 });
 
 afterEach(() => {
-  clearPendingEdges();
+  clearEdgeBuffer();
   createdMeshes.forEach((mesh) => {
     mesh.geometry.dispose();
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
@@ -92,10 +92,10 @@ describe('createMergedEdges', () => {
   });
 });
 
-describe('clearPendingEdges', () => {
+describe('clearEdgeBuffer', () => {
   it('removes queued edges', () => {
     addBoxEdgesToMerge(new THREE.Matrix4());
-    clearPendingEdges();
+    clearEdgeBuffer();
 
     expect(createAndTrackMergedEdges().count).toBe(0);
   });

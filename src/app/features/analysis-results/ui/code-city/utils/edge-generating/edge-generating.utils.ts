@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 
-interface EdgeMergeEntry {
+interface EdgeInfo {
   positions: Float32Array;
   matrix: THREE.Matrix4;
 }
 
-// constants must be defined before UNIT_CUBE_EDGES
 export const VERTEX_STRIDE = 3; // x, y, z
 export const EDGE_STRIDE = VERTEX_STRIDE * 2; // 2 vertices per edge
 const Y_OFFSET = 1;
@@ -28,7 +27,7 @@ const SEGMENT_ROTATION = new THREE.Quaternion();
 export const UNIT_CUBE = new THREE.BoxGeometry(1, 1, 1);
 export const UNIT_CUBE_EDGES = extractNonBottomEdges(UNIT_CUBE);
 
-const pendingEdgeEntries: EdgeMergeEntry[] = [];
+const edgeBuffer: EdgeInfo[] = [];
 
 function extractNonBottomEdges(geometry: THREE.BufferGeometry): Float32Array {
   const edges = new THREE.EdgesGeometry(geometry);
@@ -56,20 +55,20 @@ function extractNonBottomEdges(geometry: THREE.BufferGeometry): Float32Array {
 }
 
 export function addBoxEdgesToMerge(matrix: THREE.Matrix4): void {
-  pendingEdgeEntries.push({ positions: UNIT_CUBE_EDGES, matrix });
+  edgeBuffer.push({ positions: UNIT_CUBE_EDGES, matrix });
 }
 
 export function createMergedEdges(): THREE.InstancedMesh {
-  const mesh = createEdgesMesh(pendingEdgeEntries);
-  clearPendingEdges();
+  const mesh = createEdgesMesh(edgeBuffer);
+  clearEdgeBuffer();
   return mesh;
 }
 
-export function clearPendingEdges(): void {
-  pendingEdgeEntries.length = 0;
+export function clearEdgeBuffer(): void {
+  edgeBuffer.length = 0;
 }
 
-function createEdgesMesh(entries: readonly EdgeMergeEntry[]): THREE.InstancedMesh {
+function createEdgesMesh(entries: readonly EdgeInfo[]): THREE.InstancedMesh {
   const geometry = new THREE.CylinderGeometry(
     EDGE_RADIUS,
     EDGE_RADIUS,
@@ -101,7 +100,7 @@ function createEdgesMesh(entries: readonly EdgeMergeEntry[]): THREE.InstancedMes
   return mesh;
 }
 
-function countEdges(entries: readonly EdgeMergeEntry[]): number {
+function countEdges(entries: readonly EdgeInfo[]): number {
   return entries.reduce((sum, { positions }) => sum + positions.length / EDGE_STRIDE, 0);
 }
 
