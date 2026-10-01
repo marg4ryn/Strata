@@ -7,10 +7,7 @@ import {
 import type { EdgeInfo } from '../utils/edge-generating/edge-generating.utils';
 import { createAllInstancedMeshes } from '../utils/mesh-instancing/mesh-instancing.utils';
 import type { InstanceBuffer } from '../utils/mesh-instancing/mesh-instancing.utils';
-import {
-  disposeCodeCityMesh,
-  disposeCodeCityMeshes,
-} from '../utils/resource-disposing/resource-disposing.utils';
+import { disposeMesh, disposeMeshes } from '../utils/resource-disposing/resource-disposing.utils';
 import type {
   CityNode,
   InstanceData,
@@ -55,9 +52,9 @@ export class GeometryBuilder {
         }
       }
 
-      disposeCodeCityMeshes(meshes);
-      if (edges) disposeCodeCityMesh(edges);
-      throw error;
+      disposeMeshes(meshes);
+      if (edges) disposeMesh(edges);
+      throw new Error('Failed to build city geometry', { cause: error });
     }
   }
 

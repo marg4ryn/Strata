@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { CodeCityComponent } from './code-city.component';
+import { PausePlayButtonComponent } from './pause-play-button.component';
 
-describe.skip('CodeCityComponent', () => {
-  let component: CodeCityComponent;
-  let fixture: ComponentFixture<CodeCityComponent>;
+describe('PausePlayButtonComponent', () => {
+  let component: PausePlayButtonComponent;
+  let fixture: ComponentFixture<PausePlayButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CodeCityComponent, getTranslocoModule()],
+      imports: [PausePlayButtonComponent, getTranslocoModule()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CodeCityComponent);
+    fixture = TestBed.createComponent(PausePlayButtonComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

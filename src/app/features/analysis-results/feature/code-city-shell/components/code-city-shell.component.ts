@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, effect, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -7,10 +7,17 @@ import { ResourcePageComponent } from '@app/features/analysis-results/ui/resourc
 import { pageResource } from '@app/features/analysis-results/utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../services/code-city-state.service';
 import { CodeCityComponent } from '@app/features/analysis-results/ui/code-city/components/code-city.component';
+import { PausePlayButtonComponent } from '@app/features/analysis-results/ui/pause-play-button/pause-play-button.component';
 
 @Component({
   selector: 'app-code-city-shell',
-  imports: [NgTemplateOutlet, RouterOutlet, ResourcePageComponent, CodeCityComponent],
+  imports: [
+    NgTemplateOutlet,
+    RouterOutlet,
+    ResourcePageComponent,
+    CodeCityComponent,
+    PausePlayButtonComponent,
+  ],
   providers: [CodeCityStateService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './code-city-shell.component.scss',
@@ -22,8 +29,19 @@ export class CodeCityShellComponent {
 
   id = input.required<string>();
 
+  autoRotate = signal<boolean>(false);
+
   resource = pageResource(
     () => this.facade.getCodeCityData(this.id()),
     () => this.id(),
   );
+
+  constructor() {
+    effect(() => {
+      const selectedNode = this.state.selectedNode();
+      if (selectedNode !== null) {
+        console.log(selectedNode);
+      }
+    });
+  }
 }

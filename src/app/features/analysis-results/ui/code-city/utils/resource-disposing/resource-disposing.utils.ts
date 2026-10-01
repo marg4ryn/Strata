@@ -2,7 +2,7 @@ import type { Mesh } from 'three';
 
 import { UNIT_CUBE } from '../../code-city.model';
 
-export function disposeCodeCityMesh(mesh: Mesh): void {
+export function disposeMesh(mesh: Mesh): void {
   if (mesh.geometry !== UNIT_CUBE) mesh.geometry.dispose();
 
   if (Array.isArray(mesh.material)) {
@@ -12,6 +12,6 @@ export function disposeCodeCityMesh(mesh: Mesh): void {
   }
 }
 
-export function disposeCodeCityMeshes(meshes: readonly Mesh[]): void {
-  meshes.forEach(disposeCodeCityMesh);
+export function disposeMeshes(meshes: readonly Mesh[]): void {
+  meshes.forEach(disposeMesh);
 }

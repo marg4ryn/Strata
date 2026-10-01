@@ -1,0 +1,17 @@
+<button
+  type="button"
+  class="play-pause-btn"
+  [attr.aria-label]="(play() ? 'common.pause' : 'common.play') | transloco"
+  (click)="toggle()"
+>
+  @if (play()) {
+    <svg viewBox="0 0 24 24" class="play-pause-btn__icon" aria-hidden="true">
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </svg>
+  } @else {
+    <svg viewBox="0 0 24 24" class="play-pause-btn__icon" aria-hidden="true">
+      <polygon points="8,5 19,12 8,19" />
+    </svg>
+  }
+</button>

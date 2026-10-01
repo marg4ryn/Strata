@@ -2,10 +2,7 @@ import * as THREE from 'three';
 
 import { COLORS, UNIT_CUBE } from '../../code-city.model';
 import type { CityNode, InstanceData, InstanceType } from '../../code-city.model';
-import {
-  disposeCodeCityMesh,
-  disposeCodeCityMeshes,
-} from '../resource-disposing/resource-disposing.utils';
+import { disposeMesh, disposeMeshes } from '../resource-disposing/resource-disposing.utils';
 
 export interface InstanceInfo {
   node: CityNode;
@@ -37,7 +34,7 @@ export function createAllInstancedMeshes(instanceBuffer: InstanceBuffer): {
 
     return { group, meshes, instanceEntries };
   } catch (error) {
-    disposeCodeCityMeshes(meshes);
+    disposeMeshes(meshes);
     throw error;
   }
 }
@@ -75,7 +72,7 @@ function createInstancedMeshForType(
     return mesh;
   } catch (error) {
     if (mesh) {
-      disposeCodeCityMesh(mesh);
+      disposeMesh(mesh);
     } else {
       material.dispose();
     }

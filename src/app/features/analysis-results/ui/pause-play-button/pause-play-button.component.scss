@@ -1,0 +1,30 @@
+.play-pause-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: black;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: var(--accent-primary);
+  }
+
+  &:focus-visible {
+    border-color: var(--accent-primary);
+    outline: none;
+  }
+
+  &__icon {
+    width: 2rem;
+    height: 2rem;
+    fill: white;
+    stroke: black;
+    stroke-width: 1;
+    stroke-linejoin: round;
+  }
+}

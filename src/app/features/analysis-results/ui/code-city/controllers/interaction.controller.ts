@@ -10,11 +10,11 @@ import type { CameraControls } from '../utils/camera-controlling/camera-controll
 import { findInstanceAtPointer } from '../utils/instance-finding/instance-finding.utils';
 import type { InstanceData, InstanceMap } from '../code-city.model';
 
-const HOVER_CHECK_INTERVAL = 2;
+const HOVER_CHECK_INTERVAL_MS = 33;
 const CLICK_DISTANCE_THRESHOLD = 15;
 const CLICK_TIME_THRESHOLD = 200;
 
-export interface CodeCityInteractionOptions {
+export interface InteractionOptions {
   canvas: HTMLCanvasElement;
   camera: THREE.PerspectiveCamera;
   scene: THREE.Scene;
@@ -24,28 +24,28 @@ export interface CodeCityInteractionOptions {
   instanceMap: InstanceMap;
   controls: CameraControls;
   initialZoom: () => number;
-  selectedObject: () => InstanceData | null;
-  hoveredObject: () => InstanceData | null;
+  selectedInstance: () => InstanceData | null;
+  hoveredInstance: () => InstanceData | null;
   onSelect: (instanceData: InstanceData | null) => void;
   onHover: (instanceData: InstanceData | null) => void;
 }
 
-export class CodeCityInteractionController {
+export class InteractionController {
   private isMouseOverCanvas = false;
-  private hoverCheckFrameCounter = 0;
+  private lastHoverCheckTime = 0;
   private mouseDownPosition = { x: 0, y: 0 };
   private mouseDownTime = 0;
-  private isHoverCheckScheduled = false;
-  private hoverAnimationId: number | null = null;
 
   private readonly handleMouseDown = (event: MouseEvent): void => {
+    if (event.button !== 0) return;
+
     const { controls } = this.options;
     beginCameraDrag(controls, event);
     this.mouseDownPosition = { x: event.clientX, y: event.clientY };
     this.mouseDownTime = Date.now();
 
-    const hoveredObject = this.options.hoveredObject();
-    if (hoveredObject && hoveredObject !== this.options.selectedObject()) {
+    const hoveredInstance = this.options.hoveredInstance();
+    if (hoveredInstance && hoveredInstance !== this.options.selectedInstance()) {
       this.options.onHover(null);
     }
   };
@@ -58,6 +58,8 @@ export class CodeCityInteractionController {
   };
 
   private readonly handleMouseUp = (event: MouseEvent): void => {
+    if (event.button !== 0) return;
+
     this.options.controls.isDragging = false;
     this.handleClick(event);
   };
@@ -73,11 +75,12 @@ export class CodeCityInteractionController {
 
   private readonly handleMouseLeave = (): void => {
     this.isMouseOverCanvas = false;
+    this.options.mouse.set(Infinity, Infinity);
     this.options.controls.isDragging = false;
     this.options.onHover(null);
   };
 
-  constructor(private readonly options: CodeCityInteractionOptions) {
+  constructor(private readonly options: InteractionOptions) {
     const { canvas } = options;
     canvas.addEventListener('mousedown', this.handleMouseDown);
     canvas.addEventListener('mousemove', this.handleMouseMove);
@@ -87,13 +90,25 @@ export class CodeCityInteractionController {
     canvas.addEventListener('mouseleave', this.handleMouseLeave);
   }
 
-  checkHover(): void {
+  checkHover(now: number = performance.now()): void {
     if (!this.isMouseOverCanvas) return;
-    this.hoverCheckFrameCounter++;
-    if (this.hoverCheckFrameCounter < HOVER_CHECK_INTERVAL) return;
+    if (now - this.lastHoverCheckTime < HOVER_CHECK_INTERVAL_MS) return;
+    this.lastHoverCheckTime = now;
 
-    this.hoverCheckFrameCounter = 0;
-    this.handleHover();
+    if (this.options.controls.isDragging) {
+      this.options.onHover(null);
+      return;
+    }
+
+    const hovered = findInstanceAtPointer(
+      this.options.camera,
+      this.options.raycaster,
+      this.options.mouse,
+      this.options.meshes,
+      this.options.instanceMap,
+      false,
+    );
+    if (hovered !== this.options.hoveredInstance()) this.options.onHover(hovered);
   }
 
   destroy(): void {
@@ -104,11 +119,6 @@ export class CodeCityInteractionController {
     canvas.removeEventListener('wheel', this.handleWheel);
     canvas.removeEventListener('mouseenter', this.handleMouseEnter);
     canvas.removeEventListener('mouseleave', this.handleMouseLeave);
-
-    if (this.hoverAnimationId !== null) {
-      cancelAnimationFrame(this.hoverAnimationId);
-      this.hoverAnimationId = null;
-    }
   }
 
   private handleClick(event: MouseEvent): void {
@@ -130,34 +140,8 @@ export class CodeCityInteractionController {
 
     if (!clickedInstanceData) {
       this.options.onSelect(null);
-    } else if (clickedInstanceData !== this.options.selectedObject()) {
+    } else if (clickedInstanceData !== this.options.selectedInstance()) {
       this.options.onSelect(clickedInstanceData);
     }
-  }
-
-  private handleHover(): void {
-    if (this.options.controls.isDragging) {
-      this.options.onHover(null);
-      return;
-    }
-    if (this.isHoverCheckScheduled) return;
-
-    this.isHoverCheckScheduled = true;
-    this.hoverAnimationId = requestAnimationFrame(() => {
-      this.hoverAnimationId = null;
-      const newHoveredData = findInstanceAtPointer(
-        this.options.camera,
-        this.options.raycaster,
-        this.options.mouse,
-        this.options.meshes,
-        this.options.instanceMap,
-        false,
-      );
-
-      if (newHoveredData !== this.options.hoveredObject()) {
-        this.options.onHover(newHoveredData);
-      }
-      this.isHoverCheckScheduled = false;
-    });
   }
 }

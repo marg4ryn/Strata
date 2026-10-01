@@ -21,6 +21,7 @@ export function findInstanceAtPointer(
   instanceMap: InstanceMap,
   recursive: boolean,
 ): InstanceData | null {
+  camera.updateMatrixWorld();
   raycaster.setFromCamera(mouse, camera);
 
   for (const intersect of raycaster.intersectObjects(objects, recursive)) {

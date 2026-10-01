@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { disposeCodeCityMesh } from '../resource-disposing/resource-disposing.utils';
+import { disposeMesh } from '../resource-disposing/resource-disposing.utils';
 import { COLORS, UNIT_CUBE } from '../../code-city.model';
 
 export interface EdgeInfo {
@@ -101,7 +101,7 @@ export function createEdgesMesh(entries: readonly EdgeInfo[]): THREE.InstancedMe
     return mesh;
   } catch (error) {
     if (mesh) {
-      disposeCodeCityMesh(mesh);
+      disposeMesh(mesh);
     } else {
       geometry.dispose();
       material?.dispose();

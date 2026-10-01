@@ -10,12 +10,20 @@
       </div>
 
       <div class="code-city-shell__code-city">
-        <app-code-city [data]="data?.cityNode"></app-code-city>
+        <app-code-city
+          [cityNode]="data?.cityNode"
+          [autoRotate]="autoRotate()"
+          [colorData]="this.state.colorData()"
+          [(selectedNode)]="this.state.selectedNode"
+          [(hoveredNode)]="this.state.hoveredNode"
+        ></app-code-city>
       </div>
 
       <div class="code-city-shell__searchbar"></div>
 
-      <div class="code-city-shell__pause-play-button"></div>
+      <div class="code-city-shell__pause-play-button">
+        <app-pause-play-button [(play)]="autoRotate" />
+      </div>
 
       <div class="code-city-shell__page-content">
         <router-outlet />

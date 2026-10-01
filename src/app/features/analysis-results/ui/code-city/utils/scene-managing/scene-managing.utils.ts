@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
-import { GeometryBuilder } from '../geometry-building/geometry-builder';
+import { GeometryBuilder } from '../../builders/geometry.builder';
 import { processNode } from '../layout-generating/layout-generating.utils';
-import { disposeCodeCityMesh } from '../resource-disposing/resource-disposing.utils';
+import { disposeMesh } from '../resource-disposing/resource-disposing.utils';
 import type { ProcessedNode, InstanceMap, CityNode } from '../../code-city.model';
 
-export interface ThreeSceneResources {
+export interface SceneResources {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
@@ -13,34 +13,51 @@ export interface ThreeSceneResources {
   mouse: THREE.Vector2;
 }
 
-export function populateThreeScene(
+const RAYCASTER_LINE_THRESHOLD = 0.1;
+const RAYCASTER_POINTS_THRESHOLD = 0.1;
+
+const CAMERA_FOV = 60;
+const CAMERA_NEAR = 0.1;
+const CAMERA_FAR = 10000;
+const MIN_CONTAINER_HEIGHT = 1;
+
+const LIGHT_COLOR = 0xffffff;
+const AMBIENT_LIGHT_INTENSITY = 1.2;
+const DIRECTIONAL_LIGHT_INTENSITY = 1.5;
+const DIRECTIONAL_LIGHT_POSITION = new THREE.Vector3(1000, 1000, 500);
+
+const getAspect = (container: HTMLDivElement): number =>
+  container.clientWidth / Math.max(container.clientHeight, MIN_CONTAINER_HEIGHT);
+
+export function populateScene(
   data: CityNode,
   scene: THREE.Scene,
   instanceMap: InstanceMap,
 ): { rootData: ProcessedNode; meshes: THREE.InstancedMesh[] } {
   const rootData = processNode(data);
-  const { group, meshes, edges } = new GeometryBuilder().build(data, rootData, instanceMap);
+  const built = new GeometryBuilder().build(data, rootData, instanceMap);
+  const { group, meshes, edges } = built;
   scene.add(group, edges);
   return { rootData, meshes };
 }
 
-export function createThreeScene(
+export function createScene(
   container: HTMLDivElement | null,
   initialZoom: number,
-): ThreeSceneResources | null {
+): SceneResources | null {
   if (!container) return null;
 
   const raycaster = new THREE.Raycaster();
-  raycaster.params.Line = { threshold: 0.1 };
-  raycaster.params.Points = { threshold: 0.1 };
+  raycaster.params.Line = { threshold: RAYCASTER_LINE_THRESHOLD };
+  raycaster.params.Points = { threshold: RAYCASTER_POINTS_THRESHOLD };
   const mouse = new THREE.Vector2();
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(
-    60,
-    container.clientWidth / Math.max(container.clientHeight, 1),
-    0.1,
-    10000,
+    CAMERA_FOV,
+    getAspect(container),
+    CAMERA_NEAR,
+    CAMERA_FAR,
   );
   camera.position.set(initialZoom, initialZoom, initialZoom);
 
@@ -49,16 +66,16 @@ export function createThreeScene(
   renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AmbientLight(0xd9d9d9, 0.5));
+  scene.add(new THREE.AmbientLight(LIGHT_COLOR, AMBIENT_LIGHT_INTENSITY));
 
-  const directionalLight = new THREE.DirectionalLight(0xd9d9d9, 0.5);
-  directionalLight.position.set(1000, 1000, 500);
+  const directionalLight = new THREE.DirectionalLight(LIGHT_COLOR, DIRECTIONAL_LIGHT_INTENSITY);
+  directionalLight.position.copy(DIRECTIONAL_LIGHT_POSITION);
   scene.add(directionalLight);
 
   return { scene, camera, renderer, raycaster, mouse };
 }
 
-export function disposeThreeScene(
+export function disposeScene(
   container: HTMLDivElement,
   scene: THREE.Scene | null,
   renderer: THREE.WebGLRenderer | null,
@@ -72,17 +89,16 @@ export function disposeThreeScene(
 
   scene?.traverse((object) => {
     if (!(object instanceof THREE.Mesh)) return;
-
-    disposeCodeCityMesh(object);
+    disposeMesh(object);
   });
 }
 
-export function resizeThreeScene(
+export function resizeScene(
   container: HTMLDivElement,
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer,
 ): void {
-  camera.aspect = container.clientWidth / Math.max(container.clientHeight, 1);
+  camera.aspect = getAspect(container);
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
 }

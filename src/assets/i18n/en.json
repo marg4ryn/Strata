@@ -4,6 +4,8 @@
     "cancel": "Cancel",
     "close": "Close",
     "loading": "Loading",
+    "pause": "Pause",
+    "play": "Play",
     "noData": "No data to display",
     "ariaLabel": {
       "moreInfo": "More information",

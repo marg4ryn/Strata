@@ -1,19 +1,19 @@
 import * as THREE from 'three';
 
 import { UNIT_CUBE } from '../../code-city.model';
-import { disposeCodeCityMesh, disposeCodeCityMeshes } from './resource-disposing.utils';
+import { disposeMesh, disposeMeshes } from './resource-disposing.utils';
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('disposeCodeCityMesh', () => {
+describe('disposeMesh', () => {
   it('preserves shared cube geometry and disposes its mesh material', () => {
     const material = new THREE.MeshBasicMaterial();
     const geometryDispose = vi.spyOn(UNIT_CUBE, 'dispose');
     const materialDispose = vi.spyOn(material, 'dispose');
 
-    disposeCodeCityMesh(new THREE.Mesh(UNIT_CUBE, material));
+    disposeMesh(new THREE.Mesh(UNIT_CUBE, material));
 
     expect(geometryDispose).not.toHaveBeenCalled();
     expect(materialDispose).toHaveBeenCalledOnce();
@@ -25,7 +25,7 @@ describe('disposeCodeCityMesh', () => {
     const geometryDispose = vi.spyOn(geometry, 'dispose');
     const materialDisposals = materials.map((material) => vi.spyOn(material, 'dispose'));
 
-    disposeCodeCityMeshes([new THREE.Mesh(geometry, materials)]);
+    disposeMeshes([new THREE.Mesh(geometry, materials)]);
 
     expect(geometryDispose).toHaveBeenCalledOnce();
     for (const dispose of materialDisposals) expect(dispose).toHaveBeenCalledOnce();
