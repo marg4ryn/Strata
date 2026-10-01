@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  inject,
   input,
   model,
+  NgZone,
   signal,
   untracked,
   viewChild,
@@ -42,6 +44,7 @@ import type { CityNode, InstanceData, InstanceMap, PathColorData } from '../code
 })
 export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private readonly logger = injectLogger('CodeCityComponent');
+  private readonly ngZone = inject(NgZone);
 
   cityNode = input<CityNode | null>(null);
   colorData = input<PathColorData[]>([]);
@@ -52,9 +55,17 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   hoveredNode = model<string | null>(null);
 
   protected readonly initializationFailed = signal(false);
+  protected readonly hoveredNodeName = signal<string | null>(null);
+  protected readonly pointerInside = signal(false);
+  protected readonly cursorPosition = signal({ x: 0, y: 0 });
 
   private readonly containerRef = viewChild.required<ElementRef<HTMLDivElement>>('container');
+  private readonly wrapperRef = viewChild.required<ElementRef<HTMLDivElement>>('wrapper');
   private readonly cityRenderer = new CodeCityRenderer();
+  private pointerTarget: HTMLDivElement | null = null;
+  private pointerFrameId: number | null = null;
+  private latestCursorPosition = { x: 0, y: 0 };
+  private isPointerInside = false;
   private viewInitialized = false;
   private activeCityNode: CityNode | null = null;
   private interactionController: InteractionController | null = null;
@@ -64,6 +75,9 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private readonly rotationCenter = new THREE.Vector3(0, 0, 0);
   private readonly controls: CameraControls = createCameraControls(this.initialZoom());
   private readonly keydownHandler = (event: KeyboardEvent): void => this.handleKeyPress(event);
+  private readonly pointerLeaveHandler = (): void => this.handlePointerLeave();
+  private readonly pointerMoveHandler = (event: PointerEvent): void =>
+    this.handlePointerMove(event);
 
   constructor() {
     effect(() => {
@@ -99,12 +113,14 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.startPointerTracking();
     this.viewInitialized = true;
     this.updateCity(this.cityNode());
     window.addEventListener('keydown', this.keydownHandler);
   }
 
   ngOnDestroy(): void {
+    this.stopPointerTracking();
     this.cleanup();
     window.removeEventListener('keydown', this.keydownHandler);
   }
@@ -140,6 +156,64 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       this.cleanup();
       this.initializationFailed.set(true);
     }
+  }
+
+  private startPointerTracking(): void {
+    this.pointerTarget = this.wrapperRef().nativeElement;
+    this.ngZone.runOutsideAngular(() => {
+      this.pointerTarget?.addEventListener('pointermove', this.pointerMoveHandler, {
+        passive: true,
+      });
+      this.pointerTarget?.addEventListener('pointerleave', this.pointerLeaveHandler);
+    });
+  }
+
+  private stopPointerTracking(): void {
+    this.pointerTarget?.removeEventListener('pointermove', this.pointerMoveHandler);
+    this.pointerTarget?.removeEventListener('pointerleave', this.pointerLeaveHandler);
+    this.pointerTarget = null;
+
+    if (this.pointerFrameId !== null) {
+      cancelAnimationFrame(this.pointerFrameId);
+      this.pointerFrameId = null;
+    }
+  }
+
+  private handlePointerMove(event: PointerEvent): void {
+    const bounds = this.pointerTarget?.getBoundingClientRect();
+    if (!bounds) return;
+
+    this.latestCursorPosition = {
+      x: event.clientX - bounds.left,
+      y: event.clientY - bounds.top,
+    };
+    this.isPointerInside = true;
+
+    if (this.hoveredNodeName()) this.scheduleCursorUpdate();
+  }
+
+  private handlePointerLeave(): void {
+    this.isPointerInside = false;
+    if (this.pointerFrameId !== null) {
+      cancelAnimationFrame(this.pointerFrameId);
+      this.pointerFrameId = null;
+    }
+
+    if (this.pointerInside()) {
+      this.ngZone.run(() => this.pointerInside.set(false));
+    }
+  }
+
+  private scheduleCursorUpdate(): void {
+    if (this.pointerFrameId !== null) return;
+
+    this.pointerFrameId = requestAnimationFrame(() => {
+      this.pointerFrameId = null;
+      if (!this.isPointerInside || !this.hoveredNodeName()) return;
+
+      const position = this.latestCursorPosition;
+      this.ngZone.run(() => this.cursorPosition.set(position));
+    });
   }
 
   private selectCityNode(instanceData: InstanceData, notify: boolean): void {
@@ -200,6 +274,11 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
 
   private setCityNodeHover(instanceData: InstanceData | null, notify: boolean): void {
     this.hoveredInstance = instanceData;
+    this.hoveredNodeName.set(instanceData?.node.name ?? null);
+    this.pointerInside.set(this.isPointerInside);
+    if (instanceData && this.isPointerInside) {
+      this.cursorPosition.set(this.latestCursorPosition);
+    }
 
     if (instanceData && instanceData !== this.selectedInstance) {
       applyInteractionColor(instanceData, COLORS.hover);
@@ -217,6 +296,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       restoreOriginalColor(previousHoveredObject);
     }
     this.hoveredInstance = null;
+    this.hoveredNodeName.set(null);
 
     if (notify) {
       this.hoveredNode.set(null);

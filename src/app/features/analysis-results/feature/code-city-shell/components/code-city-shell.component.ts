@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -35,13 +35,4 @@ export class CodeCityShellComponent {
     () => this.facade.getCodeCityData(this.id()),
     () => this.id(),
   );
-
-  constructor() {
-    effect(() => {
-      const selectedNode = this.state.selectedNode();
-      if (selectedNode !== null) {
-        console.log(selectedNode);
-      }
-    });
-  }
 }
