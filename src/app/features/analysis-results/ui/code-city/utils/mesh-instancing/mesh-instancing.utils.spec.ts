@@ -1,12 +1,9 @@
 import * as THREE from 'three';
 
-import {
-  clearCollectedGeometry,
-  createAllInstancedMeshes,
-  createGeometry,
-  instanceMapKey,
-} from './mesh-instancing.utils';
-import type { CityNode, InstanceMap, ProcessedNode } from '../../code-city.model';
+import { createAllInstancedMeshes, instanceMapKey } from './mesh-instancing.utils';
+import type { InstanceBuffer, InstanceInfo } from './mesh-instancing.utils';
+import { UNIT_CUBE } from '../../code-city.model';
+import type { CityNode } from '../../code-city.model';
 
 function makeCityNode(overrides: Partial<CityNode>): CityNode {
   return {
@@ -17,30 +14,11 @@ function makeCityNode(overrides: Partial<CityNode>): CityNode {
   };
 }
 
-function makeProcessedNode(overrides: Partial<ProcessedNode> = {}): ProcessedNode {
-  return {
-    width: 2,
-    height: 4,
-    depth: 6,
-    children: [],
-    positions: [],
-    ...overrides,
-  };
-}
-
 function getInstanceCenter(mesh: THREE.InstancedMesh, index = 0): THREE.Vector3 {
   const matrix = new THREE.Matrix4();
   mesh.getMatrixAt(index, matrix);
   return new THREE.Vector3().setFromMatrixPosition(matrix);
 }
-
-beforeEach(() => {
-  clearCollectedGeometry();
-});
-
-afterEach(() => {
-  clearCollectedGeometry();
-});
 
 describe('instanceMapKey', () => {
   it('combines the instance type and index', () => {
@@ -49,13 +27,24 @@ describe('instanceMapKey', () => {
   });
 });
 
-describe('createGeometry and createAllInstancedMeshes', () => {
+describe('createAllInstancedMeshes', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('creates a building mesh with the expected transform and instance data', () => {
     const node = makeCityNode({ width: 10, height: 20 });
-    const instanceMap: InstanceMap = new Map();
+    const instanceBuffer: InstanceBuffer = {
+      building: [
+        {
+          node,
+          matrix: new THREE.Matrix4().makeScale(2, 4, 6).setPosition(5, 4, 7),
+        },
+      ],
+      platform: [],
+    };
 
-    createGeometry(node, makeProcessedNode(), { x: 5, y: 2, z: 7 });
-    const result = createAllInstancedMeshes(instanceMap);
+    const result = createAllInstancedMeshes(instanceBuffer);
 
     expect(result.group.children).toHaveLength(1);
     expect(result.meshes).toHaveLength(1);
@@ -65,64 +54,70 @@ describe('createGeometry and createAllInstancedMeshes', () => {
     expect(mesh.count).toBe(1);
     expect(mesh.userData).toEqual({ type: 'building', isInstanced: true });
     expect(getInstanceCenter(mesh)).toEqual(new THREE.Vector3(5, 4, 7));
-    expect(instanceMap.get('building_0')).toMatchObject({
-      node,
-      mesh,
-      instanceIndex: 0,
-      type: 'building',
-    });
-  });
-
-  it('collects a directory platform and its children at translated positions', () => {
-    const child = makeCityNode({ width: 3, height: 5 });
-    const root = makeCityNode({ type: 'dir', children: [child] });
-    const rootData = makeProcessedNode({
-      width: 10,
-      height: 2,
-      depth: 8,
-      children: [makeProcessedNode({ width: 3, height: 5, depth: 3 })],
-      positions: [{ centerX: 3, centerZ: 4 }],
-    });
-    const instanceMap: InstanceMap = new Map();
-
-    createGeometry(root, rootData, { x: 1, y: 2, z: 3 });
-    const { meshes } = createAllInstancedMeshes(instanceMap);
-
-    expect(meshes).toHaveLength(2);
-    expect(meshes[0].userData['type']).toBe('building');
-    expect(meshes[1].userData['type']).toBe('platform');
-    expect(getInstanceCenter(meshes[1])).toEqual(new THREE.Vector3(1, 3, 3));
-    expect(getInstanceCenter(meshes[0])).toEqual(new THREE.Vector3(-1, 6.5, 3));
-    expect(instanceMap.get('building_0')?.node).toBe(child);
-    expect(instanceMap.get('platform_0')?.node).toBe(root);
+    expect(result.instanceEntries).toEqual([
+      ['building_0', { node, mesh, instanceIndex: 0, type: 'building' }],
+    ]);
   });
 
   it('returns no meshes when no geometry was collected', () => {
-    const instanceMap: InstanceMap = new Map();
+    const instanceBuffer: InstanceBuffer = { building: [], platform: [] };
 
-    const result = createAllInstancedMeshes(instanceMap);
+    const result = createAllInstancedMeshes(instanceBuffer);
 
     expect(result.group.children).toEqual([]);
     expect(result.meshes).toEqual([]);
-    expect(instanceMap).toHaveLength(0);
+    expect(result.instanceEntries).toEqual([]);
   });
 
-  it('clears collected instances after creating meshes', () => {
+  it('uses only the explicitly supplied instance buffer', () => {
     const node = makeCityNode({ width: 1, height: 1 });
-    createGeometry(node, makeProcessedNode(), { x: 0, y: 0, z: 0 });
+    const populatedBuffer: InstanceBuffer = {
+      building: [{ node, matrix: new THREE.Matrix4() }],
+      platform: [],
+    };
+    const emptyBuffer: InstanceBuffer = { building: [], platform: [] };
 
-    createAllInstancedMeshes(new Map());
-    const result = createAllInstancedMeshes(new Map());
-
-    expect(result.meshes).toEqual([]);
+    expect(createAllInstancedMeshes(populatedBuffer).meshes[0].count).toBe(1);
+    expect(createAllInstancedMeshes(emptyBuffer).meshes).toEqual([]);
+    expect(populatedBuffer.building).toHaveLength(1);
   });
 
-  it('clears collected instances explicitly', () => {
+  it('disposes an allocated mesh but preserves its shared geometry when population fails', () => {
     const node = makeCityNode({ width: 1, height: 1 });
-    createGeometry(node, makeProcessedNode(), { x: 0, y: 0, z: 0 });
+    const instanceBuffer: InstanceBuffer = {
+      building: [{ node, matrix: new THREE.Matrix4() }],
+      platform: [],
+    };
+    const geometryDispose = vi.spyOn(UNIT_CUBE, 'dispose');
+    const materialDispose = vi.spyOn(THREE.MeshPhongMaterial.prototype, 'dispose');
+    vi.spyOn(THREE.InstancedMesh.prototype, 'setColorAt').mockImplementation(() => {
+      throw new Error('Unable to populate instance mesh.');
+    });
 
-    clearCollectedGeometry();
+    expect(() => createAllInstancedMeshes(instanceBuffer)).toThrow(
+      'Unable to populate instance mesh.',
+    );
+    expect(geometryDispose).not.toHaveBeenCalled();
+    expect(materialDispose).toHaveBeenCalledOnce();
+  });
 
-    expect(createAllInstancedMeshes(new Map()).meshes).toEqual([]);
+  it('disposes the material when mesh construction fails before assignment', () => {
+    const node = makeCityNode({ width: 1, height: 1 });
+    let lengthReads = 0;
+    const buildingBuffer = new Proxy([{ node, matrix: new THREE.Matrix4() }], {
+      get(target, property, receiver) {
+        if (property === 'length') {
+          lengthReads++;
+          return lengthReads === 1 ? 1 : -1;
+        }
+        return Reflect.get(target, property, receiver);
+      },
+    }) as unknown as InstanceInfo[];
+    const instanceBuffer: InstanceBuffer = { building: buildingBuffer, platform: [] };
+    const materialDispose = vi.spyOn(THREE.MeshPhongMaterial.prototype, 'dispose');
+
+    expect(() => createAllInstancedMeshes(instanceBuffer)).toThrow();
+
+    expect(materialDispose).toHaveBeenCalledOnce();
   });
 });

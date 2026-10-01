@@ -6,7 +6,7 @@ import { AnalysisResultsFacade } from '@app/features/analysis-results/analysis-r
 import { ResourcePageComponent } from '@app/features/analysis-results/ui/resource/resource-page/resource-page.component';
 import { pageResource } from '@app/features/analysis-results/utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../services/code-city-state.service';
-import { CodeCityComponent } from '@app/features/analysis-results/ui/code-city/code-city.component';
+import { CodeCityComponent } from '@app/features/analysis-results/ui/code-city/components/code-city.component';
 
 @Component({
   selector: 'app-code-city-shell',

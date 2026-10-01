@@ -2,28 +2,27 @@ import * as THREE from 'three';
 
 import {
   addBoxEdgesToMerge,
-  clearEdgeBuffer,
-  createMergedEdges,
+  createEdgesMesh,
   UNIT_CUBE_EDGES,
   VERTEX_STRIDE,
   EDGE_STRIDE,
 } from './edge-generating.utils';
+import type { EdgeInfo } from './edge-generating.utils';
 
 let createdMeshes: THREE.InstancedMesh[];
 
-function createAndTrackMergedEdges(): THREE.InstancedMesh {
-  const mesh = createMergedEdges();
+function createAndTrackEdgesMesh(entries: readonly EdgeInfo[]): THREE.InstancedMesh {
+  const mesh = createEdgesMesh(entries);
   createdMeshes.push(mesh);
   return mesh;
 }
 
 beforeEach(() => {
   createdMeshes = [];
-  clearEdgeBuffer();
 });
 
 afterEach(() => {
-  clearEdgeBuffer();
+  vi.restoreAllMocks();
   createdMeshes.forEach((mesh) => {
     mesh.geometry.dispose();
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
@@ -51,9 +50,10 @@ describe('addBoxEdgesToMerge', () => {
       new THREE.Quaternion(),
       new THREE.Vector3(2, 3, 4),
     );
-    addBoxEdgesToMerge(matrix);
+    const entries: EdgeInfo[] = [];
+    addBoxEdgesToMerge(entries, matrix);
 
-    const mesh = createAndTrackMergedEdges();
+    const mesh = createAndTrackEdgesMesh(entries);
     const actualCenters: THREE.Vector3[] = [];
     const instanceMatrix = new THREE.Matrix4();
 
@@ -80,23 +80,65 @@ describe('addBoxEdgesToMerge', () => {
   });
 });
 
-describe('createMergedEdges', () => {
-  it('clears queued edges after creating the merged mesh', () => {
-    addBoxEdgesToMerge(new THREE.Matrix4());
+describe('createEdgesMesh', () => {
+  it('creates meshes from only the supplied edge buffer', () => {
+    const entries: EdgeInfo[] = [];
+    addBoxEdgesToMerge(entries, new THREE.Matrix4());
 
-    expect(createAndTrackMergedEdges().count).toBe(8);
-    expect(createAndTrackMergedEdges().count).toBe(0);
+    expect(createAndTrackEdgesMesh(entries).count).toBe(8);
+    expect(createAndTrackEdgesMesh(entries).count).toBe(8);
 
-    addBoxEdgesToMerge(new THREE.Matrix4());
-    expect(createAndTrackMergedEdges().count).toBe(8);
+    expect(createAndTrackEdgesMesh([]).count).toBe(0);
+  });
+
+  it('disposes allocated geometry and material when mesh population fails', () => {
+    const geometryDispose = vi.spyOn(THREE.BufferGeometry.prototype, 'dispose');
+    const materialDispose = vi.spyOn(THREE.Material.prototype, 'dispose');
+    vi.spyOn(THREE.InstancedMesh.prototype, 'setMatrixAt').mockImplementation(() => {
+      throw new Error('Unable to populate edge mesh.');
+    });
+
+    expect(() =>
+      createEdgesMesh([{ positions: UNIT_CUBE_EDGES, matrix: new THREE.Matrix4() }]),
+    ).toThrow('Unable to populate edge mesh.');
+    expect(geometryDispose).toHaveBeenCalledOnce();
+    expect(materialDispose).toHaveBeenCalledOnce();
+  });
+
+  it('disposes geometry and material when mesh construction fails before assignment', () => {
+    const geometryDispose = vi.spyOn(THREE.BufferGeometry.prototype, 'dispose');
+    const materialDispose = vi.spyOn(THREE.MeshBasicMaterial.prototype, 'dispose');
+    const malformedEntries: EdgeInfo[] = [
+      { positions: null as unknown as Float32Array, matrix: new THREE.Matrix4() },
+    ];
+
+    expect(() => createEdgesMesh(malformedEntries)).toThrow();
+
+    expect(geometryDispose).toHaveBeenCalledOnce();
+    expect(materialDispose).toHaveBeenCalledOnce();
+  });
+
+  it('disposes the assigned edge mesh when transforming an entry fails', () => {
+    const geometryDispose = vi.spyOn(THREE.CylinderGeometry.prototype, 'dispose');
+    const materialDispose = vi.spyOn(THREE.MeshBasicMaterial.prototype, 'dispose');
+    const entries: EdgeInfo[] = [
+      { positions: UNIT_CUBE_EDGES, matrix: null as unknown as THREE.Matrix4 },
+    ];
+
+    expect(() => createEdgesMesh(entries)).toThrow();
+
+    expect(geometryDispose).toHaveBeenCalledOnce();
+    expect(materialDispose).toHaveBeenCalledOnce();
   });
 });
 
-describe('clearEdgeBuffer', () => {
-  it('removes queued edges', () => {
-    addBoxEdgesToMerge(new THREE.Matrix4());
-    clearEdgeBuffer();
+describe('addBoxEdgesToMerge', () => {
+  it('appends entries only to the supplied buffer', () => {
+    const firstBuffer: EdgeInfo[] = [];
+    const secondBuffer: EdgeInfo[] = [];
+    addBoxEdgesToMerge(firstBuffer, new THREE.Matrix4());
 
-    expect(createAndTrackMergedEdges().count).toBe(0);
+    expect(createAndTrackEdgesMesh(firstBuffer).count).toBe(8);
+    expect(createAndTrackEdgesMesh(secondBuffer).count).toBe(0);
   });
 });

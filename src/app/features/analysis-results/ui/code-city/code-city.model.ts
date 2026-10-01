@@ -28,6 +28,15 @@ export interface NodePosition {
   centerZ: number;
 }
 
+export interface ColorData {
+  color: number;
+  intensity: number;
+}
+
+export interface PathColorData extends ColorData {
+  path: string;
+}
+
 export const COLORS = {
   building: 0xffffff,
   platform: 0xffffff,

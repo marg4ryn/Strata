@@ -1,16 +1,7 @@
 import * as THREE from 'three';
 
 import { COLORS } from '../../code-city.model';
-import type { InstanceData, InstanceMap } from '../../code-city.model';
-
-interface ColorData {
-  color: number;
-  intensity: number;
-}
-
-export interface PathColorData extends ColorData {
-  path: string;
-}
+import type { InstanceData, InstanceMap, ColorData, PathColorData } from '../../code-city.model';
 
 const COLOR_INTENSITY_MULTIPLIER = 3;
 const BASE_COLOR = new THREE.Color(COLORS.building);
