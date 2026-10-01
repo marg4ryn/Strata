@@ -38,11 +38,17 @@ export class CodeCityRenderer {
 
     this.container = container;
     this.resources = resources;
-    resources.mouse.set(Infinity, Infinity);
 
-    const { rootData, meshes } = populateScene(data, resources.scene, instanceMap);
-    this.instancedMeshes = meshes;
-    return rootData;
+    try {
+      resources.mouse.set(Infinity, Infinity);
+
+      const { rootData, meshes } = populateScene(data, resources.scene, instanceMap);
+      this.instancedMeshes = meshes;
+      return rootData;
+    } catch (error) {
+      this.destroy();
+      throw error;
+    }
   }
 
   start(controls: CameraControls, autoRotate: () => boolean, onFrame: () => void): void {

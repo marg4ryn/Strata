@@ -1,7 +1,9 @@
 <button
   type="button"
   class="play-pause-btn"
-  [attr.aria-label]="(play() ? 'common.pause' : 'common.play') | transloco"
+  [attr.aria-label]="
+    (play() ? 'analysisResults.codeCity.pause' : 'analysisResults.codeCity.play') | transloco
+  "
   (click)="toggle()"
 >
   @if (play()) {

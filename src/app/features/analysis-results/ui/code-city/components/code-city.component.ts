@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, viewChild, effect, input, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  model,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import * as THREE from 'three';
 
+import { injectLogger } from '@app/core/logging';
 import { InteractionController } from '../controllers/interaction.controller';
 import { CodeCityRenderer } from '../renderers/code-city.renderer';
 import {
@@ -31,6 +41,8 @@ import type { CityNode, InstanceData, InstanceMap, PathColorData } from '../code
   templateUrl: './code-city.component.html',
 })
 export class CodeCityComponent implements AfterViewInit, OnDestroy {
+  private readonly logger = injectLogger('CodeCityComponent');
+
   cityNode = input<CityNode | null>(null);
   colorData = input<PathColorData[]>([]);
   autoRotate = input<boolean>(false);
@@ -39,8 +51,12 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   selectedNode = model<string | null>(null);
   hoveredNode = model<string | null>(null);
 
+  protected readonly initializationFailed = signal(false);
+
   private readonly containerRef = viewChild.required<ElementRef<HTMLDivElement>>('container');
   private readonly cityRenderer = new CodeCityRenderer();
+  private viewInitialized = false;
+  private activeCityNode: CityNode | null = null;
   private interactionController: InteractionController | null = null;
   private hoveredInstance: InstanceData | null = null;
   private selectedInstance: InstanceData | null = null;
@@ -50,6 +66,15 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private readonly keydownHandler = (event: KeyboardEvent): void => this.handleKeyPress(event);
 
   constructor() {
+    effect(() => {
+      const cityNode = this.cityNode();
+      untracked(() => {
+        if (this.viewInitialized && cityNode !== this.activeCityNode) {
+          this.updateCity(cityNode);
+        }
+      });
+    });
+
     effect(() => {
       this.selectCityNodeByPath(this.selectedNode());
     });
@@ -74,7 +99,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.initThreeJS();
+    this.viewInitialized = true;
+    this.updateCity(this.cityNode());
     window.addEventListener('keydown', this.keydownHandler);
   }
 
@@ -86,6 +112,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private cleanup(): void {
     this.interactionController?.destroy();
     this.interactionController = null;
+    this.resetCityNodeHover(false);
+    this.deselectCityNode(false);
     this.cityRenderer.destroy();
     this.clearSelection();
   }
@@ -93,8 +121,25 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private clearSelection(): void {
     this.hoveredInstance = null;
     this.selectedInstance = null;
-    this.rotationCenter.set(0, 0, 0);
+    this.rotationCenter.copy(this.controls.targetCenter);
     this.instanceMap.clear();
+  }
+
+  private updateCity(cityNode: CityNode | null): void {
+    if (cityNode === this.activeCityNode) return;
+
+    this.cleanup();
+    this.activeCityNode = cityNode;
+    this.initializationFailed.set(false);
+    if (!cityNode) return;
+
+    try {
+      this.initThreeJS(cityNode);
+    } catch (error) {
+      this.logger.error('City initialization failed', { error });
+      this.cleanup();
+      this.initializationFailed.set(true);
+    }
   }
 
   private selectCityNode(instanceData: InstanceData, notify: boolean): void {
@@ -193,10 +238,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     return true;
   }
 
-  private initThreeJS(): void {
-    const data = this.cityNode();
-    if (!data) return;
-
+  private initThreeJS(data: CityNode): void {
     const rootData = this.cityRenderer.initialize(
       this.containerRef().nativeElement,
       data,

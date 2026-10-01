@@ -1,5 +1,9 @@
 <div class="code-city-wrapper">
-  @if (!cityNode()) {
+  @if (initializationFailed()) {
+    <div class="code-city-error" role="alert">
+      <p>{{ 'analysisResults.codeCity.renderError' | transloco }}</p>
+    </div>
+  } @else if (!cityNode()) {
     <div class="code-city-placeholder">
       <p>{{ 'common.noData' | transloco }}</p>
     </div>

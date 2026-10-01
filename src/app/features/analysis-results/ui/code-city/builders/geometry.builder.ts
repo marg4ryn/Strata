@@ -41,7 +41,6 @@ export class GeometryBuilder {
         mapChanges.push({ key, previous: instanceMap.get(key) });
         instanceMap.set(key, value);
       }
-
       return { group: generated.group, meshes, edges };
     } catch (error) {
       for (const { key, previous } of mapChanges.reverse()) {
@@ -54,7 +53,8 @@ export class GeometryBuilder {
 
       disposeMeshes(meshes);
       if (edges) disposeMesh(edges);
-      throw new Error('Failed to build city geometry', { cause: error });
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to build city geometry: ${message}`, { cause: error });
     }
   }
 

@@ -4,8 +4,6 @@
     "cancel": "Anuluj",
     "close": "Zamknij",
     "loading": "Ładowanie",
-    "pause": "Pauza",
-    "play": "Odtwórz",
     "noData": "Brak danych do wyświetlenia",
     "ariaLabel": {
       "moreInfo": "Więcej informacji",
@@ -172,6 +170,12 @@
     "resource": {
       "error": "Błąd",
       "notFound": "Analiza, której szukasz, nie istnieje."
+    },
+
+    "codeCity": {
+      "renderError": "Nie udało się wyświetlić miasta kodu.",
+      "pause": "Pauza",
+      "play": "Odtwórz"
     },
 
     "navbar": {
