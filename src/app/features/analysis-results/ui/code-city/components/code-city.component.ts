@@ -55,6 +55,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
 
   selectedNode = model<string | null>(null);
   hoveredNode = model<string | null>(null);
+  keyboardNavigationActive = model(false);
 
   protected readonly initializationFailed = signal(false);
   protected readonly hoveredNodeName = signal<string | null>(null);
@@ -358,6 +359,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       initialZoom: () => this.initialZoom(),
       selectedInstance: () => this.selectedInstance,
       hoveredInstance: () => this.hoveredInstance,
+      isHoverSuspended: () => this.keyboardNavigationActive(),
+      onPointerActivity: () => this.keyboardNavigationActive.set(false),
       onSelect: (instanceData) => {
         if (!instanceData) {
           this.deselectCityNode(true);

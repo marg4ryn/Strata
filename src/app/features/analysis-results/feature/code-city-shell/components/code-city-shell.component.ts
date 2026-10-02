@@ -8,6 +8,7 @@ import { pageResource } from '@app/features/analysis-results/utils/page-resource
 import { CodeCityStateService } from '../services/code-city-state.service';
 import { CodeCityComponent } from '@app/features/analysis-results/ui/code-city/components/code-city.component';
 import { PausePlayButtonComponent } from '@app/features/analysis-results/ui/pause-play-button/pause-play-button.component';
+import { SearchBarComponent } from '@app/features/analysis-results/ui/search-bar/search-bar.component';
 
 @Component({
   selector: 'app-code-city-shell',
@@ -17,6 +18,7 @@ import { PausePlayButtonComponent } from '@app/features/analysis-results/ui/paus
     ResourcePageComponent,
     CodeCityComponent,
     PausePlayButtonComponent,
+    SearchBarComponent,
   ],
   providers: [CodeCityStateService],
   changeDetection: ChangeDetectionStrategy.OnPush,

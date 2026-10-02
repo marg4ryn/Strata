@@ -179,6 +179,13 @@
       "play": "Play"
     },
 
+    "search": {
+      "placeholder": "Search in the repository",
+      "clear": "Clear search",
+      "more": "more",
+      "noResults": "No results"
+    },
+
     "navbar": {
       "repository": "Repository",
       "summary": "Summary",

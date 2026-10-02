@@ -26,6 +26,8 @@ export interface InteractionOptions {
   initialZoom: () => number;
   selectedInstance: () => InstanceData | null;
   hoveredInstance: () => InstanceData | null;
+  isHoverSuspended: () => boolean;
+  onPointerActivity: () => void;
   onSelect: (instanceData: InstanceData | null) => void;
   onHover: (instanceData: InstanceData | null) => void;
 }
@@ -39,6 +41,7 @@ export class InteractionController {
   private readonly handleMouseDown = (event: MouseEvent): void => {
     if (event.button !== 0) return;
 
+    this.options.onPointerActivity();
     const { controls } = this.options;
     beginCameraDrag(controls, event);
     this.mouseDownPosition = { x: event.clientX, y: event.clientY };
@@ -51,6 +54,7 @@ export class InteractionController {
   };
 
   private readonly handleMouseMove = (event: MouseEvent): void => {
+    this.options.onPointerActivity();
     updateMousePosition(this.options.mouse, event, this.options.canvas.getBoundingClientRect());
     if (this.options.controls.isDragging) {
       rotateCameraFromPointer(this.options.controls, event);
@@ -77,7 +81,7 @@ export class InteractionController {
     this.isMouseOverCanvas = false;
     this.options.mouse.set(Infinity, Infinity);
     this.options.controls.isDragging = false;
-    this.options.onHover(null);
+    if (!this.options.isHoverSuspended()) this.options.onHover(null);
   };
 
   constructor(private readonly options: InteractionOptions) {
@@ -91,6 +95,7 @@ export class InteractionController {
   }
 
   checkHover(now: number = performance.now()): void {
+    if (this.options.isHoverSuspended()) return;
     if (!this.isMouseOverCanvas) return;
     if (now - this.lastHoverCheckTime < HOVER_CHECK_INTERVAL_MS) return;
     this.lastHoverCheckTime = now;

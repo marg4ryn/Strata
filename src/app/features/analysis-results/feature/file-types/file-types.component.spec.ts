@@ -16,7 +16,7 @@ describe.skip('FileTypesComponent', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it('creates', () => {
     expect(component).toBeTruthy();
   });
 });

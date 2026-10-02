@@ -2,12 +2,10 @@
   <ng-template #content let-data>
     <div class="code-city-shell">
       <div class="code-city-shell__column code-city-shell__column--left">
-        <ng-container [ngTemplateOutlet]="state.leftColumn()" />
+        <ng-container [ngTemplateOutlet]="state.column()" />
       </div>
 
-      <div class="code-city-shell__column code-city-shell__column--right">
-        <ng-container [ngTemplateOutlet]="state.rightColumn()" />
-      </div>
+      <div class="code-city-shell__column code-city-shell__column--right"></div>
 
       <div class="code-city-shell__code-city">
         <app-code-city
@@ -16,10 +14,18 @@
           [colorData]="this.state.colorData()"
           [(selectedNode)]="this.state.selectedNode"
           [(hoveredNode)]="this.state.hoveredNode"
+          [(keyboardNavigationActive)]="this.state.keyboardNavigationActive"
         ></app-code-city>
       </div>
 
-      <div class="code-city-shell__searchbar"></div>
+      <div class="code-city-shell__searchbar">
+        <app-search-bar
+          [items]="data?.cityItems"
+          [(selectedNode)]="this.state.selectedNode"
+          [(hoveredNode)]="this.state.hoveredNode"
+          [(keyboardNavigationActive)]="this.state.keyboardNavigationActive"
+        />
+      </div>
 
       <div class="code-city-shell__pause-play-button">
         <app-pause-play-button [(play)]="autoRotate" />

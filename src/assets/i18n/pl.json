@@ -178,6 +178,13 @@
       "play": "Odtwórz"
     },
 
+    "search": {
+      "placeholder": "Szukaj w repozytorium",
+      "clear": "Wyczyść wyszukiwanie",
+      "more": "więcej",
+      "noResults": "Brak wyników"
+    },
+
     "navbar": {
       "repository": "Repozytorium",
       "summary": "Podsumowanie",

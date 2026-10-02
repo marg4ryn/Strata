@@ -1,0 +1,92 @@
+<div
+  class="search-bar"
+  [class.search-bar--open]="showDropdown()"
+  (focusin)="isFocused.set(true)"
+  (focusout)="handleFocusOut($event)"
+  (keydown)="handleKeydown($event)"
+  (pointerdown)="keyboardNavigationActive.set(false)"
+>
+  <div
+    class="search-bar__field"
+    [class.search-bar__field--open]="showDropdown()"
+    (click)="searchInput.focus()"
+  >
+    <input
+      #searchInput
+      type="search"
+      name="search"
+      class="search-bar__input"
+      [placeholder]="'analysisResults.search.placeholder' | transloco"
+      [attr.aria-label]="'analysisResults.search.placeholder' | transloco"
+      [ngModel]="query()"
+      (ngModelChange)="query.set($event)"
+    />
+    @if (showDropdown()) {
+      <button
+        class="search-bar__clear"
+        type="button"
+        [attr.aria-label]="'analysisResults.search.clear' | transloco"
+        (click)="query.set('')"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    } @else {
+      <span class="search-bar__icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" />
+          <path
+            d="M12.5 12.5L17 17"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </span>
+    }
+  </div>
+
+  @if (showDropdown()) {
+    <div class="search-bar__dropdown">
+      @if (filteredItems().length > 0) {
+        @for (item of visibleItems(); track item.path) {
+          <button
+            type="button"
+            class="search-bar__result"
+            [class.search-bar__result--active]="
+              selectedNode() === item.path || hoveredNode() === item.path
+            "
+            (click)="selectCityNode(item)"
+            (mouseenter)="setCityNodePointerHover(item)"
+            (mouseleave)="resetCityNodeHover()"
+            (focusin)="setCityNodeHover(item)"
+            (focusout)="resetCityNodeHover()"
+          >
+            <span>{{ item.name }}</span>
+            <small>{{ item.path }}</small>
+          </button>
+        }
+        @if (filteredItems().length > maxResults()) {
+          <p class="search-bar__more">
+            +{{ filteredItems().length - maxResults() }}
+            {{ 'analysisResults.search.more' | transloco }}
+          </p>
+        }
+      } @else {
+        <p class="search-bar__empty">{{ 'analysisResults.search.noResults' | transloco }}</p>
+      }
+    </div>
+  }
+</div>
