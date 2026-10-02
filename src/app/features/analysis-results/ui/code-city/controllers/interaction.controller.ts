@@ -111,6 +111,29 @@ export class InteractionController {
     if (hovered !== this.options.hoveredInstance()) this.options.onHover(hovered);
   }
 
+  restorePointerPosition(clientX: number, clientY: number): void {
+    const rect = this.options.canvas.getBoundingClientRect();
+    if (
+      clientX < rect.left ||
+      clientX > rect.right ||
+      clientY < rect.top ||
+      clientY > rect.bottom
+    ) {
+      this.isMouseOverCanvas = false;
+      return;
+    }
+
+    this.isMouseOverCanvas = true;
+    updateMousePosition(
+      this.options.mouse,
+      new MouseEvent('mousemove', { clientX, clientY }),
+      rect,
+    );
+    const now = performance.now();
+    this.lastHoverCheckTime = now - HOVER_CHECK_INTERVAL_MS;
+    this.checkHover(now);
+  }
+
   destroy(): void {
     const { canvas } = this.options;
     canvas.removeEventListener('mousedown', this.handleMouseDown);

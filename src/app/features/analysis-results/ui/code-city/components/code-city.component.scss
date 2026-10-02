@@ -30,18 +30,18 @@
 }
 
 .code-city-error {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  height: 100%;
   padding: 2rem;
   color: var(--danger-primary);
-  text-align: center;
+  font-size: 1.1rem;
 }
 
-.code-city-toolbar {
+.code-city-tooltip {
   position: absolute;
   top: 0;
   left: 0;
@@ -49,7 +49,7 @@
   max-width: calc(100% - 2rem);
   padding: 0.5rem 0.75rem;
   border-radius: 4px;
-  background: rgb(18 24 26 / 88%);
+  background: rgba(18, 24, 26, 0.88);
   color: white;
   font-size: 0.875rem;
   font-weight: 600;

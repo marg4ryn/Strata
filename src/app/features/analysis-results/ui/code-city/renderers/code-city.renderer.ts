@@ -16,6 +16,7 @@ export class CodeCityRenderer {
   private container: HTMLDivElement | null = null;
   private timer: THREE.Timer | null = null;
   private animationId: number | null = null;
+  private canvasObserver: MutationObserver | null = null;
   private instancedMeshes: THREE.InstancedMesh[] = [];
   private resizeHandler: (() => void) | null = null;
 
@@ -32,12 +33,15 @@ export class CodeCityRenderer {
     data: CityNode,
     initialZoom: number,
     instanceMap: InstanceMap,
+    hostElement: HTMLElement,
+    onCanvasRestored: () => void,
   ): ProcessedNode | null {
     const resources = createScene(container, initialZoom);
     if (!resources) return null;
 
     this.container = container;
     this.resources = resources;
+    this.observeCanvasContainer(hostElement, onCanvasRestored);
 
     try {
       resources.mouse.set(Infinity, Infinity);
@@ -76,6 +80,9 @@ export class CodeCityRenderer {
   }
 
   destroy(): void {
+    this.canvasObserver?.disconnect();
+    this.canvasObserver = null;
+
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = null;
@@ -94,5 +101,24 @@ export class CodeCityRenderer {
     this.resources = null;
     this.container = null;
     this.instancedMeshes = [];
+  }
+
+  private observeCanvasContainer(hostElement: HTMLElement, onCanvasRestored: () => void): void {
+    this.canvasObserver = new MutationObserver(() => {
+      const resources = this.resources;
+      const container = hostElement.querySelector<HTMLDivElement>('.code-city-container');
+      if (!resources || !container) return;
+
+      const canvas = resources.renderer.domElement;
+      const containerChanged = this.container !== container;
+      const canvasWasDetached = !container.contains(canvas);
+      if (canvasWasDetached) container.appendChild(canvas);
+      this.container = container;
+      if (containerChanged || canvasWasDetached) {
+        resizeScene(container, resources.camera, resources.renderer);
+        onCanvasRestored();
+      }
+    });
+    this.canvasObserver.observe(hostElement, { childList: true, subtree: true });
   }
 }

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   effect,
   inject,
   input,
@@ -10,7 +11,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import type { AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
+import type { AfterViewInit, OnDestroy } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import * as THREE from 'three';
 
@@ -45,6 +46,7 @@ import type { CityNode, InstanceData, InstanceMap, PathColorData } from '../code
 export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private readonly logger = injectLogger('CodeCityComponent');
   private readonly ngZone = inject(NgZone);
+  private readonly hostElement: HTMLElement = inject(ElementRef<HTMLElement>).nativeElement;
 
   cityNode = input<CityNode | null>(null);
   colorData = input<PathColorData[]>([]);
@@ -60,11 +62,11 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   protected readonly cursorPosition = signal({ x: 0, y: 0 });
 
   private readonly containerRef = viewChild.required<ElementRef<HTMLDivElement>>('container');
-  private readonly wrapperRef = viewChild.required<ElementRef<HTMLDivElement>>('wrapper');
   private readonly cityRenderer = new CodeCityRenderer();
-  private pointerTarget: HTMLDivElement | null = null;
+  private pointerTarget: HTMLElement | null = null;
   private pointerFrameId: number | null = null;
   private latestCursorPosition = { x: 0, y: 0 };
+  private latestClientPosition = { x: 0, y: 0 };
   private isPointerInside = false;
   private viewInitialized = false;
   private activeCityNode: CityNode | null = null;
@@ -159,7 +161,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   }
 
   private startPointerTracking(): void {
-    this.pointerTarget = this.wrapperRef().nativeElement;
+    this.pointerTarget = this.hostElement;
     this.ngZone.runOutsideAngular(() => {
       this.pointerTarget?.addEventListener('pointermove', this.pointerMoveHandler, {
         passive: true,
@@ -180,9 +182,11 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   }
 
   private handlePointerMove(event: PointerEvent): void {
-    const bounds = this.pointerTarget?.getBoundingClientRect();
+    const wrapper = this.hostElement.querySelector<HTMLDivElement>('.code-city-wrapper');
+    const bounds = wrapper?.getBoundingClientRect();
     if (!bounds) return;
 
+    this.latestClientPosition = { x: event.clientX, y: event.clientY };
     this.latestCursorPosition = {
       x: event.clientX - bounds.left,
       y: event.clientY - bounds.top,
@@ -324,6 +328,15 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       data,
       this.initialZoom(),
       this.instanceMap,
+      this.hostElement,
+      () => {
+        if (this.isPointerInside) {
+          this.interactionController?.restorePointerPosition(
+            this.latestClientPosition.x,
+            this.latestClientPosition.y,
+          );
+        }
+      },
     );
     const resources = this.cityRenderer.sceneResources;
     if (!rootData || !resources) return;

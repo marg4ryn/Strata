@@ -3,10 +3,14 @@
     <div class="code-city-error" role="alert">
       <p>{{ 'analysisResults.codeCity.renderError' | transloco }}</p>
     </div>
+  } @else if (!cityNode()) {
+    <div class="code-city-placeholder">
+      <p>{{ 'common.noData' | transloco }}</p>
+    </div>
   } @else if (hoveredNodeName(); as name) {
     @if (pointerInside()) {
       <div
-        class="code-city-toolbar"
+        class="code-city-tooltip"
         role="status"
         [style.transform]="
           'translate3d(' +
@@ -19,10 +23,6 @@
         {{ name }}
       </div>
     }
-  } @else if (!cityNode()) {
-    <div class="code-city-placeholder">
-      <p>{{ 'common.noData' | transloco }}</p>
-    </div>
   }
   <div #container class="code-city-container"></div>
 </div>
