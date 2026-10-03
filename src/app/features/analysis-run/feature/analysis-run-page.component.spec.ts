@@ -68,6 +68,7 @@ describe('AnalysisRunPageComponent', () => {
 
   afterEach(() => {
     overlayContainer.ngOnDestroy();
+    vi.useRealTimers();
   });
 
   function query<T = HTMLElement>(selector: string): T | null {
@@ -86,6 +87,24 @@ describe('AnalysisRunPageComponent', () => {
       expect(query('app-analysis-target-form')).toBeNull();
     });
 
+    it('shows the spinner immediately when retrying from an error', () => {
+      facade.error.set('Connection error');
+      facade.errorType.set('connection');
+      facade.isBusy.set(true);
+      fixture.detectChanges();
+
+      const retryButton = query<HTMLElement>(
+        'app-analysis-error-modal button:nth-child(2)',
+      ) as HTMLButtonElement;
+      retryButton.click();
+      fixture.detectChanges();
+
+      expect(facade.retryAnalysis).toHaveBeenCalledOnce();
+      expect(query('app-analysis-progress-spinner')).toBeTruthy();
+      expect(query('app-analysis-error-modal')).toBeNull();
+      expect(query('app-analysis-target-form')).toBeNull();
+    });
+
     it('prioritizes error modal over unfinished modal', () => {
       facade.showModal.set(true);
       facade.error.set('Server error');
@@ -96,15 +115,45 @@ describe('AnalysisRunPageComponent', () => {
       expect(query('app-analysis-unfinished-modal')).toBeNull();
     });
 
-    it('shows spinner when isBusy is true and no error', () => {
+    it('shows spinner only after isBusy remains true for the delay', () => {
+      vi.useFakeTimers();
       facade.isBusy.set(true);
       facade.isAborting.set(false);
+      fixture.detectChanges();
+
+      expect(query('app-analysis-progress-spinner')).toBeNull();
+      vi.advanceTimersByTime(component.delay - 1);
+      fixture.detectChanges();
+      expect(query('app-analysis-progress-spinner')).toBeNull();
+
+      vi.advanceTimersByTime(1);
       fixture.detectChanges();
 
       expect(query('app-analysis-error-modal')).toBeNull();
       expect(query('app-analysis-progress-spinner')).toBeTruthy();
       expect(query('app-analysis-unfinished-modal')).toBeNull();
       expect(query('app-analysis-target-form')).toBeNull();
+    });
+
+    it('shows an error immediately without showing the spinner when loading ends before the delay', () => {
+      vi.useFakeTimers();
+      facade.isBusy.set(true);
+      fixture.detectChanges();
+
+      vi.advanceTimersByTime(component.delay / 2);
+      facade.error.set('Server error');
+      facade.errorType.set('server');
+      facade.isBusy.set(false);
+      fixture.detectChanges();
+
+      expect(query('app-analysis-error-modal')).toBeTruthy();
+      expect(query('app-analysis-progress-spinner')).toBeNull();
+
+      vi.advanceTimersByTime(component.delay);
+      fixture.detectChanges();
+
+      expect(query('app-analysis-error-modal')).toBeTruthy();
+      expect(query('app-analysis-progress-spinner')).toBeNull();
     });
 
     it('shows unfinished modal when showModal is true', () => {

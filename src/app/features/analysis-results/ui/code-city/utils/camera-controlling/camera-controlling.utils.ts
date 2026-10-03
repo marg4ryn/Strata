@@ -22,7 +22,7 @@ const CAMERA_DAMPING = 0.1; // Fraction of remaining distance per frame
 const CENTER_TRANSITION_SPEED = 0.05; // Same, for orbit center shift
 const AUTO_ROTATE_SPEED = 0.05; // rad/s
 const BUILDING_ZOOM = 100; // World units
-const PLATFORM_ZOOM_MULT = 4; // Scales fit-to-frame distance
+const PLATFORM_ZOOM_MULT = 1.5; // Scales fit-to-frame distance
 const MIN_CAMERA_ROTATION_X = 0; // Pitch, rad (horizon)
 const MAX_CAMERA_ROTATION_X = Math.PI / 2; // Pitch, rad (top-down)
 const REFERENCE_FPS = 60; // Frame rate that per-frame constants are tuned for
@@ -68,8 +68,7 @@ export function calculateOptimalZoom(
 ): number {
   if (instanceData.type !== 'platform') return BUILDING_ZOOM;
 
-  const geometry = instanceData.mesh.geometry as THREE.BoxGeometry;
-  const maxDimension = Math.max(geometry.parameters.width, geometry.parameters.depth);
+  const maxDimension = Math.max(instanceData.width, instanceData.depth);
   const fov = camera.fov * (Math.PI / 180);
   const distance = maxDimension / 2 / Math.tan(fov / 2);
   return Math.max(distance * PLATFORM_ZOOM_MULT, BUILDING_ZOOM);

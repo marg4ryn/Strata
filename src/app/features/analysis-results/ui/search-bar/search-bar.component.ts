@@ -15,8 +15,8 @@ export class SearchBarComponent {
   items = input<readonly CityItem[]>([]);
   maxResults = input(10);
 
-  selectedNode = model<string | null>(null);
-  hoveredNode = model<string | null>(null);
+  selectedNodePath = model<string | null>(null);
+  hoveredNodePath = model<string | null>(null);
   keyboardNavigationActive = model(false);
 
   query = signal('');
@@ -89,14 +89,14 @@ export class SearchBarComponent {
   }
 
   selectCityNode(item: CityItem): void {
-    this.selectedNode.set(item.path);
+    this.selectedNodePath.set(item.path);
     this.query.set('');
     this.isFocused.set(false);
     this.keyboardNavigationActive.set(false);
   }
 
   setCityNodeHover(item: CityItem): void {
-    this.hoveredNode.set(item.path);
+    this.hoveredNodePath.set(item.path);
   }
 
   setCityNodePointerHover(item: CityItem): void {
@@ -105,6 +105,6 @@ export class SearchBarComponent {
   }
 
   resetCityNodeHover(): void {
-    this.hoveredNode.set(null);
+    this.hoveredNodePath.set(null);
   }
 }

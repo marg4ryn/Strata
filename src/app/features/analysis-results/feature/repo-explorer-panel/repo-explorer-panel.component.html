@@ -1,0 +1,139 @@
+<aside class="right-panel">
+  @if (selectedNode(); as node) {
+    <div class="panel-header">
+      @if (node.path !== '/') {
+        <button type="button" class="back-button" (click)="navigateUp()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M12 4L6 10L12 16"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      }
+
+      <div class="file-icon">
+        @if (node.type === 'dir') {
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2 3H9L11 6H18V17H2V3Z" />
+          </svg>
+        } @else {
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M4 2H12L16 6V18H4V2Z" />
+            <path d="M12 2V6H16" stroke="currentColor" stroke-width="1.5" fill="none" />
+          </svg>
+        }
+      </div>
+
+      <span class="file-title">
+        {{ node.name || 'rightPanel.selectFile' }}
+      </span>
+    </div>
+
+    @if (node.type === 'file') {
+      <!-- <div class="file-details">
+        @if (isDataLoading()) {
+          <div class="metrics-loading">
+            <span>
+              <app-loading-bar
+                [show]="isFileDetailsLoading()"
+                [blur]="false"
+                [label]="'common.loading'"
+                [showCancelButton]="false"
+              />
+            </span>
+          </div>
+        } @else if (metricsError()) {
+          <div class="metrics-error">
+            <span>{{ metricsError() }}</span>
+          </div>
+        } @else if (displayMetrics().length) {
+          <div class="file-details">
+            <h3>{{ 'rightPanel.fileMetrics' | translate }}</h3>
+            <div class="metrics-container">
+              @for (metric of displayMetrics(); track $index) {
+                <div class="metric-item">
+                  <span class="metric-label">
+                    @if (metric.description) {
+                      <app-info-tooltip [text]="metric.description | translate" position="right" />
+                    }
+                    {{ metric.label | translate }}:
+                  </span>
+                  <span
+                    class="metric-value"
+                    [class.metric-unavailable]="isMetricUnavailable(metric)"
+                    [style]="getMetricStyle(metric)"
+                  >
+                    {{ getMetricDisplayValue(metric) }}
+                  </span>
+                </div>
+              }
+            </div>
+
+            <div class="action-buttons">
+              <app-button
+                [isLoading]="isXRayDetailsLoading()"
+                [label]="'rightPanel.xray' | translate"
+                variant="primary"
+                (clicked)="onXRay()"
+              />
+              <app-source-code-button (clicked)="onSourceCode()" />
+            </div>
+          </div>
+        }
+      </div> -->
+    } @else if (node.type === 'dir') {
+      <div class="directory-children">
+        <h3>{{ 'rightPanel.directoryContents' }}</h3>
+        <div class="children-list">
+          @for (child of sortedChildren(); track child.path) {
+            <div
+              class="child-item"
+              [class.custom-hover]="hoveredNodePath() === child.path"
+              (click)="selectedNodePath.set(child.path)"
+              (mouseenter)="hoveredNodePath.set(child.path)"
+              (mouseleave)="hoveredNodePath.set(null)"
+            >
+              @if (child.type === 'dir') {
+                <svg
+                  class="child-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                >
+                  <path d="M2 3H7L8 5H14V13H2V3Z" />
+                </svg>
+              } @else {
+                <svg
+                  class="child-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                >
+                  <path d="M3 1H9L13 5V15H3V1Z" />
+                  <path d="M9 1V5H13" stroke="currentColor" stroke-width="1.5" fill="none" />
+                </svg>
+              }
+
+              <span class="child-name">{{ child.name }}</span>
+              @if (child.type === 'dir') {
+                <span class="child-type">
+                  {{ getChildrenCount(child) }} {{ 'rightPanel.items' }}
+                </span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="no-selection">
+      <p>{{ 'rightPanel.noSelection' }}</p>
+    </div>
+  }
+</aside>

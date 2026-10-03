@@ -38,6 +38,8 @@ describe('createAllInstancedMeshes', () => {
       building: [
         {
           node,
+          width: 2,
+          depth: 6,
           matrix: new THREE.Matrix4().makeScale(2, 4, 6).setPosition(5, 4, 7),
         },
       ],
@@ -55,7 +57,17 @@ describe('createAllInstancedMeshes', () => {
     expect(mesh.userData).toEqual({ type: 'building', isInstanced: true });
     expect(getInstanceCenter(mesh)).toEqual(new THREE.Vector3(5, 4, 7));
     expect(result.instanceEntries).toEqual([
-      ['building_0', { node, mesh, instanceIndex: 0, type: 'building' }],
+      [
+        'building_0',
+        {
+          node,
+          width: 2,
+          depth: 6,
+          mesh,
+          instanceIndex: 0,
+          type: 'building',
+        },
+      ],
     ]);
   });
 
@@ -72,7 +84,7 @@ describe('createAllInstancedMeshes', () => {
   it('uses only the explicitly supplied instance buffer', () => {
     const node = makeCityNode({ width: 1, height: 1 });
     const populatedBuffer: InstanceBuffer = {
-      building: [{ node, matrix: new THREE.Matrix4() }],
+      building: [{ node, width: 1, depth: 1, matrix: new THREE.Matrix4() }],
       platform: [],
     };
     const emptyBuffer: InstanceBuffer = { building: [], platform: [] };
@@ -85,7 +97,7 @@ describe('createAllInstancedMeshes', () => {
   it('disposes an allocated mesh but preserves its shared geometry when population fails', () => {
     const node = makeCityNode({ width: 1, height: 1 });
     const instanceBuffer: InstanceBuffer = {
-      building: [{ node, matrix: new THREE.Matrix4() }],
+      building: [{ node, width: 1, depth: 1, matrix: new THREE.Matrix4() }],
       platform: [],
     };
     const geometryDispose = vi.spyOn(UNIT_CUBE, 'dispose');
@@ -104,15 +116,25 @@ describe('createAllInstancedMeshes', () => {
   it('disposes the material when mesh construction fails before assignment', () => {
     const node = makeCityNode({ width: 1, height: 1 });
     let lengthReads = 0;
-    const buildingBuffer = new Proxy([{ node, matrix: new THREE.Matrix4() }], {
-      get(target, property, receiver) {
-        if (property === 'length') {
-          lengthReads++;
-          return lengthReads === 1 ? 1 : -1;
-        }
-        return Reflect.get(target, property, receiver);
+    const buildingBuffer = new Proxy(
+      [
+        {
+          node,
+          width: 1,
+          depth: 1,
+          matrix: new THREE.Matrix4(),
+        },
+      ],
+      {
+        get(target, property, receiver) {
+          if (property === 'length') {
+            lengthReads++;
+            return lengthReads === 1 ? 1 : -1;
+          }
+          return Reflect.get(target, property, receiver);
+        },
       },
-    }) as unknown as InstanceInfo[];
+    ) as unknown as InstanceInfo[];
     const instanceBuffer: InstanceBuffer = { building: buildingBuffer, platform: [] };
     const materialDispose = vi.spyOn(THREE.MeshPhongMaterial.prototype, 'dispose');
 

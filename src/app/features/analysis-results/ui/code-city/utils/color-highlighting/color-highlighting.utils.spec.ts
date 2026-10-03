@@ -23,6 +23,8 @@ function createBuildingData(path: string, instanceIndex = 0): InstanceData {
       path,
       type: 'file',
     },
+    width: 1,
+    depth: 1,
     type: 'building',
     instanceIndex,
     mesh,

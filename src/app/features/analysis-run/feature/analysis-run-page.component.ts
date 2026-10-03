@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, computed, debounced } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  computed,
+  debounced,
+  signal,
+  effect,
+  untracked,
+} from '@angular/core';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { AnalysisTargetFormComponent } from '../ui/analysis-target-form/analysis-target-form.component';
@@ -22,6 +31,45 @@ import { AnalysisRunFacade } from '../analysis-run.facade';
 })
 export class AnalysisRunPageComponent {
   protected readonly facade = inject(AnalysisRunFacade);
+
+  private loadingShownAt: number | null = null;
+  readonly delay = 300;
+  readonly minDisplay = 1000;
+  showLoading = signal<boolean>(false);
+
+  retryAnalysis(): void {
+    this.loadingShownAt = Date.now();
+    this.showLoading.set(true);
+    this.facade.retryAnalysis();
+  }
+
+  constructor() {
+    effect((onCleanup) => {
+      const isLoading = this.facade.isBusy();
+
+      if (isLoading) {
+        if (!untracked(() => this.showLoading())) {
+          const id = setTimeout(() => {
+            this.showLoading.set(true);
+            this.loadingShownAt = Date.now();
+          }, this.delay);
+          onCleanup(() => clearTimeout(id));
+        }
+      } else {
+        if (this.showLoading() && this.loadingShownAt !== null) {
+          const elapsed = Date.now() - this.loadingShownAt;
+          const remaining = Math.max(this.minDisplay - elapsed, 0);
+          const id = setTimeout(() => {
+            this.showLoading.set(false);
+            this.loadingShownAt = null;
+          }, remaining);
+          onCleanup(() => clearTimeout(id));
+        } else {
+          this.showLoading.set(false);
+        }
+      }
+    });
+  }
 
   readonly labelKey = computed(() => {
     const progress = this.facade.progress();

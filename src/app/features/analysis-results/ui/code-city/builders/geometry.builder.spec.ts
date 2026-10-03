@@ -56,7 +56,9 @@ describe('GeometryBuilder', () => {
     expect(getInstanceCenter(result.meshes[0])).toEqual(new THREE.Vector3(-2, 4.5, 0));
     expect(result.edges.count).toBe(16);
     expect(instanceMap.get('building_0')?.node).toBe(child);
+    expect(instanceMap.get('building_0')).toMatchObject({ width: 3, depth: 3 });
     expect(instanceMap.get('platform_0')?.node).toBe(root);
+    expect(instanceMap.get('platform_0')).toMatchObject({ width: 10, depth: 8 });
   });
 
   it('keeps buffers isolated across repeated builds', () => {
@@ -104,6 +106,8 @@ describe('GeometryBuilder', () => {
     const instanceMap: InstanceMap = new FailingInstanceMap();
     const previousEntry: InstanceData = {
       node: makeCityNode({ width: 2, height: 2 }),
+      width: 2,
+      depth: 2,
       type: 'building',
       instanceIndex: 0,
       mesh: new THREE.InstancedMesh(UNIT_CUBE, new THREE.MeshBasicMaterial(), 1),

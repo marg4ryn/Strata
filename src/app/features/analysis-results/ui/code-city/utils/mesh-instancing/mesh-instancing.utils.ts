@@ -1,11 +1,17 @@
 import * as THREE from 'three';
 
 import { COLORS, UNIT_CUBE } from '../../code-city.model';
-import type { CityNode, InstanceData, InstanceType } from '../../code-city.model';
+import type {
+  CityNode,
+  InstanceData,
+  InstanceType,
+} from '../../code-city.model';
 import { disposeMesh, disposeMeshes } from '../resource-disposing/resource-disposing.utils';
 
 export interface InstanceInfo {
   node: CityNode;
+  width: number;
+  depth: number;
   matrix: THREE.Matrix4;
 }
 
@@ -57,12 +63,12 @@ function createInstancedMeshForType(
     mesh.receiveShadow = true;
     mesh.userData = { type, isInstanced: true };
 
-    list.forEach(({ node, matrix }, instanceIndex) => {
+    list.forEach(({ node, width, depth, matrix }, instanceIndex) => {
       mesh!.setMatrixAt(instanceIndex, matrix);
       mesh!.setColorAt(instanceIndex, color);
       instanceEntries.push([
         instanceMapKey(type, instanceIndex),
-        { node, mesh: mesh!, instanceIndex, type },
+        { node, width, depth, mesh: mesh!, instanceIndex, type },
       ]);
     });
 

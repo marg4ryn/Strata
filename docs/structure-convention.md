@@ -9,7 +9,7 @@ The application architecture is inspired by the feature-oriented approach common
 * [`app/layout/`](#core-and-layout-directories-structure) — components responsible for the page layout, such as the header and footer.
 * [`app/shared/`](#shared-directory-structure) — reusable directives, components, and pipes that are not related to a specific domain.
 
-Each subdirectory within the directories listed above is treated as an module. To expose elements outside its own scope, it must provide a public API through an `index.ts` file. Direct access to module's internal files is not allowed. This rule is enforced by the linter.
+Each subdirectory within the directories listed above is treated as a module. To expose elements outside its own scope, it must provide a public API through an `index.ts` file. Direct access to module's internal files is not allowed. This rule is enforced by the linter.
 
 The following dependencies are allowed:
 
@@ -36,7 +36,7 @@ There is a possibility of creating a subfeature when the extracted part has its 
 
 ## Core and Layout Directories Structure
 
-`app/core/` and `app/layout/` consist of named modules that internally follows the [Application Artifact Organization](#application-artifact-organization) rules.
+`app/core/` and `app/layout/` consist of named modules that internally follow the [Application Artifact Organization](#application-artifact-organization) rules.
 
 Most modules contain a single artifact and therefore collapse under [Exception 3](#exception-3--single-artifact-in-a-group): no role directory is created, since it would hold only one kind of artifact.
 
@@ -98,6 +98,7 @@ shared/
         └── confirm-operation.service.spec.ts
 ```
 
+Such mini-modules can also appear in the `feature/` and `ui/` directories of a given feature when a component requires a more complex structure to function.
 
 # Application Artifact Organization
 

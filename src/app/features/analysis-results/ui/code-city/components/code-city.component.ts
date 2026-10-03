@@ -32,9 +32,18 @@ import {
   applyInteractionColor,
   restoreOriginalColor,
 } from '../utils/color-highlighting/color-highlighting.utils';
-import { findInstanceByPath } from '../utils/instance-finding/instance-finding.utils';
+import {
+  createInstancePathMap,
+  findInstanceByPath,
+} from '../utils/instance-finding/instance-finding.utils';
 import { COLORS } from '../code-city.model';
-import type { CityNode, InstanceData, InstanceMap, PathColorData } from '../code-city.model';
+import type {
+  CityNode,
+  InstanceData,
+  InstanceMap,
+  InstancePathMap,
+  PathColorData,
+} from '../code-city.model';
 
 @Component({
   selector: 'app-code-city',
@@ -53,8 +62,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   autoRotate = input<boolean>(false);
   initialZoom = input<number>(250);
 
-  selectedNode = model<string | null>(null);
-  hoveredNode = model<string | null>(null);
+  selectedNodePath = model<string | null>(null);
+  hoveredNodePath = model<string | null>(null);
   keyboardNavigationActive = model(false);
 
   protected readonly initializationFailed = signal(false);
@@ -74,6 +83,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private interactionController: InteractionController | null = null;
   private hoveredInstance: InstanceData | null = null;
   private selectedInstance: InstanceData | null = null;
+  private instancePathMap: InstancePathMap = new Map();
   private readonly instanceMap: InstanceMap = new Map();
   private readonly rotationCenter = new THREE.Vector3(0, 0, 0);
   private readonly controls: CameraControls = createCameraControls(this.initialZoom());
@@ -93,11 +103,11 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     });
 
     effect(() => {
-      this.selectCityNodeByPath(this.selectedNode());
+      this.selectCityNodeByPath(this.selectedNodePath());
     });
 
     effect(() => {
-      this.setCityNodeHoverByPath(this.hoveredNode());
+      this.setCityNodeHoverByPath(this.hoveredNodePath());
     });
 
     effect(() => {
@@ -142,6 +152,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     this.selectedInstance = null;
     this.rotationCenter.copy(this.controls.targetCenter);
     this.instanceMap.clear();
+    this.instancePathMap.clear();
   }
 
   private updateCity(cityNode: CityNode | null): void {
@@ -243,8 +254,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     this.controls.lastInteractionTime = Date.now();
 
     if (notify) {
-      this.selectedNode.set(instanceData.node.path);
-      this.selectedNode.set(instanceData.node.path);
+      this.selectedNodePath.set(instanceData.node.path);
+      this.selectedNodePath.set(instanceData.node.path);
     }
   }
 
@@ -259,8 +270,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     this.controls.targetZoom = this.initialZoom();
 
     if (notify) {
-      this.selectedNode.set(null);
-      this.selectedNode.set(null);
+      this.selectedNodePath.set(null);
+      this.selectedNodePath.set(null);
     }
   }
 
@@ -270,7 +281,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       return true;
     }
 
-    const targetData = findInstanceByPath(this.instanceMap, path);
+    const targetData = findInstanceByPath(this.instancePathMap, path);
     if (!targetData) return false;
 
     this.selectCityNode(targetData, false);
@@ -289,8 +300,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       applyInteractionColor(instanceData, COLORS.hover);
 
       if (notify) {
-        this.hoveredNode.set(instanceData.node.path);
-        this.hoveredNode.set(instanceData.node.path);
+        this.hoveredNodePath.set(instanceData.node.path);
+        this.hoveredNodePath.set(instanceData.node.path);
       }
     }
   }
@@ -304,8 +315,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     this.hoveredNodeName.set(null);
 
     if (notify) {
-      this.hoveredNode.set(null);
-      this.hoveredNode.set(null);
+      this.hoveredNodePath.set(null);
+      this.hoveredNodePath.set(null);
     }
   }
 
@@ -315,7 +326,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       return true;
     }
 
-    const targetData = findInstanceByPath(this.instanceMap, path);
+    const targetData = findInstanceByPath(this.instancePathMap, path);
     if (!targetData) return false;
 
     this.resetCityNodeHover(false);
@@ -342,6 +353,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
     const resources = this.cityRenderer.sceneResources;
     if (!rootData || !resources) return;
 
+    this.instancePathMap = createInstancePathMap(this.instanceMap);
+
     const optimalZoom = calculateInitialZoom(rootData, resources.camera);
     this.controls.zoom = optimalZoom;
     this.controls.targetZoom = optimalZoom;
@@ -362,9 +375,9 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       isHoverSuspended: () => this.keyboardNavigationActive(),
       onPointerActivity: () => this.keyboardNavigationActive.set(false),
       onSelect: (instanceData) => {
-        if (!instanceData) {
+        if (!instanceData || instanceData === this.selectedInstance) {
           this.deselectCityNode(true);
-        } else if (instanceData !== this.selectedInstance) {
+        } else {
           this.selectCityNode(instanceData, true);
         }
       },
@@ -374,8 +387,8 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       },
     });
 
-    this.selectCityNodeByPath(this.selectedNode());
-    this.setCityNodeHoverByPath(this.hoveredNode());
+    this.selectCityNodeByPath(this.selectedNodePath());
+    this.setCityNodeHoverByPath(this.hoveredNodePath());
 
     this.cityRenderer.start(
       this.controls,

@@ -1,17 +1,17 @@
-@if (facade.error()) {
-  <app-analysis-error-modal
-    [error]="facade.error()"
-    [errorType]="facade.errorType()"
-    [pendingAnalysis]="facade.pendingAnalysis()"
-    (retryEvent)="facade.retryAnalysis()"
-    (cancelEvent)="facade.cancelAnalysis()"
-  />
-} @else if (facade.isBusy()) {
+@if (showLoading()) {
   <app-analysis-progress-spinner
     [labelKey]="debouncedLabelKey.value()"
     [isAborting]="facade.isAborting()"
     [pendingAnalysis]="facade.pendingAnalysis()"
     (abortEvent)="facade.abortAnalysis()"
+  />
+} @else if (facade.error()) {
+  <app-analysis-error-modal
+    [error]="facade.error()"
+    [errorType]="facade.errorType()"
+    [pendingAnalysis]="facade.pendingAnalysis()"
+    (retryEvent)="retryAnalysis()"
+    (cancelEvent)="facade.cancelAnalysis()"
   />
 } @else if (facade.showModal()) {
   <app-analysis-unfinished-modal

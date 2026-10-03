@@ -1,29 +1,35 @@
 <app-resource-page [data]="resource">
   <ng-template #content let-data>
     <div class="code-city-shell">
-      <div class="code-city-shell__column code-city-shell__column--left">
-        <ng-container [ngTemplateOutlet]="state.column()" />
+      <div class="code-city-shell__panel code-city-shell__panel--template">
+        <ng-container [ngTemplateOutlet]="state.template()" />
       </div>
 
-      <div class="code-city-shell__column code-city-shell__column--right"></div>
+      <div class="code-city-shell__panel code-city-shell__panel--explorer">
+        <app-repo-explorer-panel
+          [cityNode]="data?.cityNode"
+          [(selectedNodePath)]="this.state.selectedNodePath"
+          [(hoveredNodePath)]="this.state.hoveredNodePath"
+        />
+      </div>
 
       <div class="code-city-shell__code-city">
         <app-code-city
           [cityNode]="data?.cityNode"
           [autoRotate]="autoRotate()"
           [colorData]="this.state.colorData()"
-          [(selectedNode)]="this.state.selectedNode"
-          [(hoveredNode)]="this.state.hoveredNode"
-          [(keyboardNavigationActive)]="this.state.keyboardNavigationActive"
+          [(selectedNodePath)]="this.state.selectedNodePath"
+          [(hoveredNodePath)]="this.state.hoveredNodePath"
+          [(keyboardNavigationActive)]="keyboardNavigationActive"
         ></app-code-city>
       </div>
 
       <div class="code-city-shell__searchbar">
         <app-search-bar
           [items]="data?.cityItems"
-          [(selectedNode)]="this.state.selectedNode"
-          [(hoveredNode)]="this.state.hoveredNode"
-          [(keyboardNavigationActive)]="this.state.keyboardNavigationActive"
+          [(selectedNodePath)]="this.state.selectedNodePath"
+          [(hoveredNodePath)]="this.state.hoveredNodePath"
+          [(keyboardNavigationActive)]="keyboardNavigationActive"
         />
       </div>
 

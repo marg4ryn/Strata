@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, effect } f
 
 import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../code-city-shell/services/code-city-state.service';
-import { CodeCityShellColumnDirective } from '../code-city-shell/directives/code-city-shell-column.directive';
+import { CodeCityTemplateDirective } from '../code-city-shell/directives/code-city-template.directive';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
 
 @Component({
   selector: 'app-file-types',
-  imports: [CodeCityShellColumnDirective],
+  imports: [CodeCityTemplateDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './file-types.component.scss',
   templateUrl: './file-types.component.html',

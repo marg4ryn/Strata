@@ -6,10 +6,13 @@ import type { CityNode } from '@app/features/analysis-results/analysis-results.m
 export type { CityNode } from '@app/features/analysis-results/analysis-results.model';
 
 export type InstanceMap = Map<string, InstanceData>;
+export type InstancePathMap = Map<string, InstanceData>;
 export type InstanceType = 'building' | 'platform';
 
 export interface InstanceData {
   node: CityNode;
+  width: number;
+  depth: number;
   type: InstanceType;
   instanceIndex: number;
   mesh: InstancedMesh;

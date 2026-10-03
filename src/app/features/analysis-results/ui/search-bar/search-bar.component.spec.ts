@@ -50,7 +50,7 @@ describe('SearchBarComponent', () => {
     expect(document.activeElement).toBe(results[1]);
 
     results[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    expect(component.selectedNode()).toBe(secondItem.path);
+    expect(component.selectedNodePath()).toBe(secondItem.path);
   });
 
   it('closes the search bar on Escape', () => {

@@ -26,7 +26,7 @@
   &__searchbar {
     position: absolute;
     top: 2rem;
-    right: 2rem;
+    right: calc(4rem + 280px);
   }
 
   &__pause-play-button {
@@ -35,19 +35,20 @@
     right: 2rem;
   }
 
-  &__column {
+  &__panel {
     position: absolute;
+    z-index: 1;
     top: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     width: 280px;
 
-    &--left {
+    &--template {
       left: 2rem;
     }
 
-    &--right {
+    &--explorer {
       right: 2rem;
     }
   }

@@ -9,6 +9,7 @@ import { CodeCityStateService } from '../services/code-city-state.service';
 import { CodeCityComponent } from '@app/features/analysis-results/ui/code-city/components/code-city.component';
 import { PausePlayButtonComponent } from '@app/features/analysis-results/ui/pause-play-button/pause-play-button.component';
 import { SearchBarComponent } from '@app/features/analysis-results/ui/search-bar/search-bar.component';
+import { RepoExplorerPanelComponent } from '../../repo-explorer-panel/repo-explorer-panel.component';
 
 @Component({
   selector: 'app-code-city-shell',
@@ -17,8 +18,9 @@ import { SearchBarComponent } from '@app/features/analysis-results/ui/search-bar
     RouterOutlet,
     ResourcePageComponent,
     CodeCityComponent,
-    PausePlayButtonComponent,
     SearchBarComponent,
+    PausePlayButtonComponent,
+    RepoExplorerPanelComponent,
   ],
   providers: [CodeCityStateService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +34,7 @@ export class CodeCityShellComponent {
   id = input.required<string>();
 
   autoRotate = signal<boolean>(false);
+  keyboardNavigationActive = signal<boolean>(false);
 
   resource = pageResource(
     () => this.facade.getCodeCityData(this.id()),

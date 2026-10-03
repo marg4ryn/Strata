@@ -168,7 +168,7 @@ export class InteractionController {
 
     if (!clickedInstanceData) {
       this.options.onSelect(null);
-    } else if (clickedInstanceData !== this.options.selectedInstance()) {
+    } else {
       this.options.onSelect(clickedInstanceData);
     }
   }

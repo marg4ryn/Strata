@@ -1,16 +1,28 @@
 import type * as THREE from 'three';
 
 import { instanceMapKey } from '../mesh-instancing/mesh-instancing.utils';
-import type { InstanceData, InstanceMap, InstanceType } from '../../code-city.model';
+import type {
+  InstanceData,
+  InstanceMap,
+  InstancePathMap,
+  InstanceType,
+} from '../../code-city.model';
+
+export function createInstancePathMap(instanceMap: InstanceMap): InstancePathMap {
+  const instancePathMap: InstancePathMap = new Map();
+  for (const data of instanceMap.values()) {
+    if (!instancePathMap.has(data.node.path)) {
+      instancePathMap.set(data.node.path, data);
+    }
+  }
+  return instancePathMap;
+}
 
 export function findInstanceByPath(
-  instanceMap: InstanceMap,
+  instancePathMap: InstancePathMap,
   path: string,
 ): InstanceData | undefined {
-  for (const data of instanceMap.values()) {
-    if (data.node.path === path) return data;
-  }
-  return undefined;
+  return instancePathMap.get(path);
 }
 
 export function findInstanceAtPointer(

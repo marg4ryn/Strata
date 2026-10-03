@@ -71,7 +71,12 @@ export class GeometryBuilder {
       .makeScale(nodeData.width, nodeData.height, nodeData.depth)
       .setPosition(baseCenter.x, baseCenter.y + nodeData.height / 2, baseCenter.z);
 
-    instanceBuffer[type].push({ node, matrix });
+    instanceBuffer[type].push({
+      node,
+      width: nodeData.width,
+      depth: nodeData.depth,
+      matrix,
+    });
     addBoxEdgesToMerge(edgeBuffer, matrix);
 
     if (type === 'building') return;
