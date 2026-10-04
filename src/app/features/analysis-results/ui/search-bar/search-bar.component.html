@@ -16,8 +16,8 @@
       type="search"
       name="search"
       class="search-bar__input"
-      [placeholder]="'analysisResults.search.placeholder' | transloco"
-      [attr.aria-label]="'analysisResults.search.placeholder' | transloco"
+      [placeholder]="'analysisResults.codeCity.search.placeholder' | transloco"
+      [attr.aria-label]="'analysisResults.codeCity.search.placeholder' | transloco"
       [ngModel]="query()"
       (ngModelChange)="query.set($event)"
     />
@@ -25,7 +25,8 @@
       <button
         class="search-bar__clear"
         type="button"
-        [attr.aria-label]="'analysisResults.search.clear' | transloco"
+        [title]="'analysisResults.codeCity.search.clear' | transloco"
+        [attr.aria-label]="'analysisResults.codeCity.search.clear' | transloco"
         (click)="query.set('')"
       >
         <svg
@@ -46,10 +47,10 @@
     } @else {
       <span
         class="search-bar__icon"
-        [title]="'analysisResults.search.placeholder' | transloco"
-        aria-hidden="true"
+        [title]="'analysisResults.codeCity.search.placeholder' | transloco"
+        [attr.aria-label]="'analysisResults.codeCity.search.placeholder' | transloco"
       >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" />
           <path
             d="M12.5 12.5L17 17"
@@ -85,11 +86,13 @@
         @if (filteredItems().length > maxResults()) {
           <p class="search-bar__more">
             +{{ filteredItems().length - maxResults() }}
-            {{ 'analysisResults.search.more' | transloco }}
+            {{ 'analysisResults.codeCity.search.more' | transloco }}
           </p>
         }
       } @else {
-        <p class="search-bar__empty">{{ 'analysisResults.search.noResults' | transloco }}</p>
+        <p class="search-bar__empty">
+          {{ 'analysisResults.codeCity.search.noResults' | transloco }}
+        </p>
       }
     </div>
   }

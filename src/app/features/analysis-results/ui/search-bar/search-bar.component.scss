@@ -85,19 +85,20 @@
     padding: 0;
     border: 0;
     background: transparent;
+    color: var(--text-disabled);
     transition: all 0.1s ease;
     cursor: pointer;
 
     &:hover {
       transform: scale(1.1);
-      color: var(--text-secondary);
+      color: var(--text-primary);
     }
 
     &:focus-visible {
       outline: 2px solid var(--text-primary);
       outline-offset: -4px;
       transform: scale(1.1);
-      color: var(--text-secondary);
+      color: var(--text-primary);
     }
 
     &:active {
