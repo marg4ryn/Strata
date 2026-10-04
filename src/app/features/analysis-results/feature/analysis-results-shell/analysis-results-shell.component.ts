@@ -80,7 +80,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.codeAge'),
-          path: 'developer-relationships',
+          path: 'code-city/code-age',
         },
         {
           labelKey: marker('analysisResults.navbar.changeCoupling'),

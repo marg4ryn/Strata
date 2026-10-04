@@ -6,6 +6,7 @@ import type {
   RepositorySummary,
   HotspotsDetails,
   AuthorCoupling,
+  CodeAgeDetails,
   FileExtension,
   CodeCityData,
   FileDetails,
@@ -42,5 +43,9 @@ export class AnalysisResultsFacade {
 
   getHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
     return this.service.getHotspotsDetails(analysisId);
+  }
+
+  getCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {
+    return this.service.getCodeAgeDetails(analysisId);
   }
 }

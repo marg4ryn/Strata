@@ -1,0 +1,32 @@
+<ng-template shellTemplate>
+  <aside class="code-age">
+    <h3 class="code-age__heading">{{ 'analysisResults.codeAge.title' | transloco }}</h3>
+    <ul class="code-age__list">
+      @for (item of codeAgeItems(); track item.path) {
+        <li>
+          <button
+            type="button"
+            class="code-age__item"
+            [class.code-age__item--active]="
+              state.selectedNodePath() === item.path || state.hoveredNodePath() === item.path
+            "
+            [attr.aria-pressed]="state.selectedNodePath() === item.path"
+            (click)="state.selectedNodePath.set(item.path)"
+            (mouseenter)="state.hoveredNodePath.set(item.path)"
+            (mouseleave)="state.hoveredNodePath.set(null)"
+            (focus)="state.hoveredNodePath.set(item.path)"
+            (blur)="state.hoveredNodePath.set(null)"
+          >
+            <span class="code-age__name">{{ item.name }}</span>
+            <span class="code-age__value">{{ item.codeAgeDays | localizedNumber: '1.0-2' }}</span>
+            <span
+              class="code-age__color"
+              [style.opacity]="item.colorIntensity"
+              aria-hidden="true"
+            ></span>
+          </button>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

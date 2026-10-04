@@ -180,6 +180,10 @@
       "title": "Hotspoty"
     },
 
+    "codeAge": {
+      "title": "Wiek kodu"
+    },
+
     "codeCity": {
       "renderError": "Nie udało się wyświetlić miasta kodu.",
       "mobileUnavailable": "Wizualizacja miasta kodu nie jest dostępna na urządzeniach mobilnych.",

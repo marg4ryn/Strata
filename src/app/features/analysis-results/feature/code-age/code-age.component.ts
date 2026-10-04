@@ -8,27 +8,27 @@ import { CodeCityTemplateDirective } from '../code-city-shell/directives/code-ci
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
 
-const MAX_HOTSPOTS = 50;
+const MAX_ITEMS = 50;
 
 @Component({
-  selector: 'app-hotspots',
+  selector: 'app-code-age',
   imports: [CodeCityTemplateDirective, LocalizedNumberPipe, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './hotspots.component.scss',
-  templateUrl: './hotspots.component.html',
+  styleUrl: './code-age.component.scss',
+  templateUrl: './code-age.component.html',
 })
-export class HotspotsComponent {
+export class CodeAgeComponent {
   private readonly facade = inject(AnalysisResultsFacade);
   readonly state = inject(CodeCityStateService);
 
   id = input.required<string>();
 
   resource = pageResource(
-    () => this.facade.getHotspotsDetails(this.id()),
+    () => this.facade.getCodeAgeDetails(this.id()),
     () => this.id(),
   );
 
-  hotspotItems = computed(() => {
+  codeAgeItems = computed(() => {
     if (!this.resource.hasValue()) return [];
 
     return this.resource
@@ -38,8 +38,8 @@ export class HotspotsComponent {
         name: item.path.split(/[\\/]/).pop() ?? item.path,
         colorIntensity: Math.min(Math.max(item.normalizedValue, 0), 1),
       }))
-      .sort((a, b) => b.normalizedValue - a.normalizedValue)
-      .slice(0, MAX_HOTSPOTS);
+      .sort((a, b) => a.codeAgeDays - b.codeAgeDays)
+      .slice(0, MAX_ITEMS);
   });
 
   colorData = computed<PathColorData[]>(() => {
@@ -47,7 +47,7 @@ export class HotspotsComponent {
 
     return this.resource.value().map((item) => ({
       path: item.path,
-      color: 0xbf1b1b,
+      color: 0x1e90ff,
       intensity: Math.min(Math.max(item.normalizedValue, 0), 1),
     }));
   });

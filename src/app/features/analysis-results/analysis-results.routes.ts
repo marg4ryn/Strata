@@ -32,6 +32,11 @@ export const analysisResultsRoutes: Routes = [
         loadComponent: () =>
           import('./feature/hotspots/hotspots.component').then((m) => m.HotspotsComponent),
       },
+      {
+        path: 'code-age',
+        loadComponent: () =>
+          import('./feature/code-age/code-age.component').then((m) => m.CodeAgeComponent),
+      },
     ],
   },
 ];

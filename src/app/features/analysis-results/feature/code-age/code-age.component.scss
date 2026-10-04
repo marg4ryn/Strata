@@ -1,0 +1,104 @@
+:host {
+  display: block;
+  height: var(--code-city-panel-height, auto);
+  min-height: 0;
+}
+
+.code-age {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: var(--code-city-panel-height, auto);
+  min-height: var(--code-city-panel-min-height, 300px);
+  max-height: var(--code-city-panel-max-height, 600px);
+  flex: 1;
+  padding: 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+
+  &__heading {
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    padding-right: 6px;
+    overflow-y: auto;
+    list-style: none;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+
+      &:hover {
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+
+  &__item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 0.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0;
+    color: inherit;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover,
+    &--active {
+      background: var(--bg-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--text-primary);
+      outline-offset: -2px;
+    }
+  }
+
+  &__name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-primary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__value {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__color {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #1e90ff;
+    border-radius: 50%;
+  }
+}

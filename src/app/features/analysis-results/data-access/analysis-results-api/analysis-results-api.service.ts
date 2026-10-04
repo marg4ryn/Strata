@@ -6,6 +6,7 @@ import type {
   RepositoryTrends,
   AuthorStatistics,
   HotspotsDetails,
+  CodeAgeDetails,
   AuthorCoupling,
   FileExtension,
   FileDetails,
@@ -52,6 +53,10 @@ export class AnalysisResultsApiService {
 
   fetchHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
     return this.http.get<HotspotsDetails[]>(`/analysis/${analysisId}/files/hotspots`);
+  }
+
+  fetchCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {
+    return this.http.get<CodeAgeDetails[]>(`/analysis/${analysisId}/files/code-age`);
   }
 
   private buildQueryString(params: Record<string, string | number | boolean>): string {

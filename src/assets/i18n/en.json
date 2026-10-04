@@ -181,6 +181,10 @@
       "title": "Hotspots"
     },
 
+    "codeAge": {
+      "title": "Code age"
+    },
+
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "mobileUnavailable": "The code city visualization is not available on mobile devices.",

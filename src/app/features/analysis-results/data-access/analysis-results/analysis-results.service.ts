@@ -9,6 +9,7 @@ import type {
   RepositoryTrends,
   AuthorStatistics,
   HotspotsDetails,
+  CodeAgeDetails,
   AuthorCoupling,
   FileExtension,
   FileDetails,
@@ -115,5 +116,19 @@ export class AnalysisResultsService {
     );
 
     return hotspotsDetails;
+  }
+
+  async getCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {
+    this.logger.info('Fetching code age data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const codeAgeDetails = await this.cachedFetcher.getOrFetch<CodeAgeDetails[]>(
+      cacheName,
+      '/code-age-details',
+      () => this.api.fetchCodeAgeDetails(analysisId),
+    );
+
+    return codeAgeDetails;
   }
 }

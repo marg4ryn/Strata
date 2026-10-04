@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 
-import { HotspotsComponent } from './hotspots.component';
+import { CodeAgeComponent } from './code-age.component';
 
-describe('HotspotsComponent', () => {
-  let component: HotspotsComponent;
-  let fixture: ComponentFixture<HotspotsComponent>;
+describe('CodeAgeComponent', () => {
+  let component: CodeAgeComponent;
+  let fixture: ComponentFixture<CodeAgeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HotspotsComponent],
+      imports: [CodeAgeComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HotspotsComponent);
+    fixture = TestBed.createComponent(CodeAgeComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
