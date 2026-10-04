@@ -23,6 +23,9 @@ const CENTER_TRANSITION_SPEED = 0.05; // Same, for orbit center shift
 const AUTO_ROTATE_SPEED = 0.05; // rad/s
 const BUILDING_ZOOM = 100; // World units
 const PLATFORM_ZOOM_MULT = 1.5; // Scales fit-to-frame distance
+const MIN_ZOOM_DISTANCE = 40; // Minimum camera distance from the scene; prevents over-zooming in
+const MAX_ZOOM_OUT_MULTIPLIER = 1.25; // Maximum zoom-out multiplier relative to the initial zoom
+const WHEEL_ZOOM_FACTOR = 0.0007; // Mouse wheel sensitivity for camera zooming; smaller values make zooming smoother
 const MIN_CAMERA_ROTATION_X = 0; // Pitch, rad (horizon)
 const MAX_CAMERA_ROTATION_X = Math.PI / 2; // Pitch, rad (top-down)
 const REFERENCE_FPS = 60; // Frame rate that per-frame constants are tuned for
@@ -119,8 +122,11 @@ export function zoomCameraFromWheel(
   deltaY: number,
   initialZoom: number,
 ): void {
-  controls.targetZoom += deltaY * 0.0007 * controls.targetZoom;
-  controls.targetZoom = Math.max(40, Math.min(initialZoom * 1.5, controls.targetZoom));
+  controls.targetZoom += deltaY * WHEEL_ZOOM_FACTOR * controls.targetZoom;
+  controls.targetZoom = Math.max(
+    MIN_ZOOM_DISTANCE,
+    Math.min(initialZoom * MAX_ZOOM_OUT_MULTIPLIER, controls.targetZoom),
+  );
 }
 
 export function updateCamera(
