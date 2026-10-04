@@ -7,6 +7,7 @@ import type {
   AuthorCoupling,
   CodeCityData,
   FileExtension,
+  FileDetails,
 } from './analysis-results.model';
 
 @Service()
@@ -32,5 +33,9 @@ export class AnalysisResultsFacade {
 
   getFileExtensions(analysisId: string): Promise<FileExtension[]> {
     return this.service.getFileExtensions(analysisId);
+  }
+
+  getFileDetails(analysisId: string, filePath: string): Promise<FileDetails> {
+    return this.service.getFileDetails(analysisId, filePath);
   }
 }

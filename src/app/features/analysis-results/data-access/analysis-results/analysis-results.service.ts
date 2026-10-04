@@ -10,6 +10,7 @@ import type {
   AuthorStatistics,
   AuthorCoupling,
   FileExtension,
+  FileDetails,
   CityNode,
   CityItem,
   CodeCityData,
@@ -86,5 +87,20 @@ export class AnalysisResultsService {
     );
 
     return fileExtensions;
+  }
+
+  async getFileDetails(analysisId: string, filePath: string): Promise<FileDetails> {
+    this.logger.info('Fetching file details data', { analysisId, filePath });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+    const cacheKey = `/file-details/${encodeURIComponent(filePath)}`;
+
+    const fileDetails = await this.cachedFetcher.getOrFetch<FileDetails>(
+      cacheName,
+      cacheKey,
+      () => this.api.fetchFileDetails(analysisId, filePath),
+    );
+
+    return fileDetails;
   }
 }

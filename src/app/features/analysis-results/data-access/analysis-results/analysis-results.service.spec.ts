@@ -24,6 +24,7 @@ describe('AnalysisResultsService', () => {
     fetchCityNode: Mock;
     fetchCityItems: Mock;
     fetchFileExtensions: Mock;
+    fetchFileDetails: Mock;
   };
 
   beforeEach(() => {
@@ -42,6 +43,7 @@ describe('AnalysisResultsService', () => {
       fetchCityNode: vi.fn(),
       fetchCityItems: vi.fn(),
       fetchFileExtensions: vi.fn(),
+      fetchFileDetails: vi.fn(),
     };
 
     const loggerService = MockService(LoggerService, {
@@ -165,6 +167,31 @@ describe('AnalysisResultsService', () => {
       api[sources[0].apiMock].mockRejectedValue(new Error('Network error'));
 
       await expect(service[method](analysisId)).rejects.toThrow('Network error');
+    });
+  });
+
+  describe('getFileDetails', () => {
+    const filePath = 'src/app/file name.ts';
+    const fileDetails = { path: filePath };
+
+    it('fetches file details through the cache using the encoded path as cache key', async () => {
+      api.fetchFileDetails.mockResolvedValue(fileDetails);
+
+      const result = await service.getFileDetails(analysisId, filePath);
+
+      expect(cachedFetcher.getOrFetch).toHaveBeenCalledWith(
+        `analysis:${analysisId}:v1`,
+        `/file-details/${encodeURIComponent(filePath)}`,
+        expect.any(Function),
+      );
+      expect(api.fetchFileDetails).toHaveBeenCalledWith(analysisId, filePath);
+      expect(result).toEqual(fileDetails);
+    });
+
+    it('propagates an error when fetching file details fails', async () => {
+      api.fetchFileDetails.mockRejectedValue(new Error('Network error'));
+
+      await expect(service.getFileDetails(analysisId, filePath)).rejects.toThrow('Network error');
     });
   });
 });

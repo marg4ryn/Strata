@@ -58,4 +58,12 @@ describe('AnalysisResultsApiService', () => {
     service.fetchFileExtensions(analysisId);
     expect(http.get).toHaveBeenCalledWith(`/analysis/${analysisId}/files/types`);
   });
+
+  it('fetches file details with the file path encoded as a query parameter', () => {
+    const filePath = 'src/app/file name.ts';
+    service.fetchFileDetails(analysisId, filePath);
+    expect(http.get).toHaveBeenCalledWith(
+      `/analysis/${analysisId}/files?path=src%2Fapp%2Ffile+name.ts`,
+    );
+  });
 });

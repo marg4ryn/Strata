@@ -7,6 +7,7 @@ import type {
   AuthorStatistics,
   AuthorCoupling,
   FileExtension,
+  FileDetails,
   CityNode,
   CityItem,
 } from '../../analysis-results.model';
@@ -41,5 +42,18 @@ export class AnalysisResultsApiService {
 
   fetchFileExtensions(analysisId: string): Promise<FileExtension[]> {
     return this.http.get<FileExtension[]>(`/analysis/${analysisId}/files/types`);
+  }
+
+  fetchFileDetails(analysisId: string, filePath: string): Promise<FileDetails> {
+    const queryString = this.buildQueryString({ path: filePath });
+    return this.http.get<FileDetails>(`/analysis/${analysisId}/files?${queryString}`);
+  }
+
+  private buildQueryString(params: Record<string, string | number | boolean>): string {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      searchParams.append(key, String(value));
+    });
+    return searchParams.toString();
   }
 }
