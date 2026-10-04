@@ -175,14 +175,109 @@
     "codeCity": {
       "renderError": "Nie udało się wyświetlić miasta kodu.",
       "pause": "Pauza",
-      "play": "Odtwórz"
-    },
+      "play": "Odtwórz",
 
-    "search": {
-      "placeholder": "Szukaj w repozytorium",
-      "clear": "Wyczyść wyszukiwanie",
-      "more": "więcej",
-      "noResults": "Brak wyników"
+      "search": {
+        "placeholder": "Szukaj w repozytorium",
+        "clear": "Wyczyść wyszukiwanie",
+        "more": "więcej",
+        "noResults": "Brak wyników"
+      },
+
+      "explorer": {
+        "selectNode": "Wybierz plik lub katalog, aby zobaczyć szczegóły",
+        "navigateUp": "Przejdź w górę",
+        "directoryContent": "Zawartość katalogu",
+        "directoryItems": "elementów",
+        "loading": "Wczytywanie metryk pliku…",
+        "loadError": "Nie udało się wczytać metryk pliku.",
+        "sections": {
+          "file": "Plik",
+          "knowledge": "Własność kodu",
+          "staticAnalysis": "Analiza statyczna",
+          "contributions": "Wkład autorów"
+        },
+        "metrics": {
+          "path": { "label": "Ścieżka" },
+          "name": { "label": "Nazwa" },
+          "type": { "label": "Typ" },
+          "size": { "label": "Rozmiar" },
+          "totalLines": { "label": "Łączna liczba linii" },
+          "codeLines": { "label": "Linie kodu" },
+          "commentLines": { "label": "Linie komentarzy" },
+          "blankLines": { "label": "Linie puste" },
+          "totalCommits": { "label": "Łączna liczba commitów" },
+          "commitsLastMonth": { "label": "Commity w ostatnim miesiącu" },
+          "commitsLastYear": { "label": "Commity w ostatnim roku" },
+          "firstCommitDate": { "label": "Data pierwszego commitu" },
+          "lastCommitDate": { "label": "Data ostatniego commitu" },
+          "codeAgeDays": {
+            "label": "Wiek kodu (dni)",
+            "info": "Liczba dni, która upłynęła od ostatniej modyfikacji pliku do dnia końca analizy."
+          },
+          "totalLinesAdded": {
+            "label": "Łącznie dodanych linii",
+            "info": "Łączna liczba linii dodanych do pliku w całej jego historii."
+          },
+          "leadAuthor": {
+            "label": "Główny autor",
+            "info": "Autor z największym udziałem autorskich linii kodu w pliku."
+          },
+          "leadAuthorPercentage": {
+            "label": "Udział głównego autora",
+            "info": "Procent autorskich linii kodu w pliku napisany przez głównego autora."
+          },
+          "authors": {
+            "label": "Unikalni autorzy",
+            "info": "Liczba autorów, którzy wprowadzali zmiany w tym pliku."
+          },
+          "activeAuthors": {
+            "label": "Aktywni autorzy",
+            "info": "Liczba autorów pliku, którzy dodali co najmniej jeden commit do repozytorium w ciągu 6 miesięcy poprzedzających koniec analizy."
+          },
+          "knowledgeLoss": {
+            "label": "Utrata wiedzy",
+            "info": "Procent autorskich linii kodu w pliku napisanych przez autorów, którzy nie dodali żadnego commitu do repozytorium w ciągu 6 miesięcy poprzedzających koniec analizy."
+          },
+          "knowledgeRisk": {
+            "label": "Model własności kodu",
+            "info": "Określa, jak rozkłada się odpowiedzialność za plik między deweloperów, na podstawie udziału autorskich linii kodu.",
+            "values": {
+              "abandoned": "Porzucony",
+              "singleOwner": "Jeden właściciel",
+              "balanced": "Zbalansowany",
+              "diffused": "Brak właściciela",
+              "unknown": "Nieznany"
+            }
+          },
+          "bugs": {
+            "label": "Błędy",
+            "info": "Liczba błędów, które mogą powodować nieprawidłowe działanie aplikacji. Wyższa wartość oznacza większe ryzyko awarii."
+          },
+          "vulnerabilities": {
+            "label": "Podatności",
+            "info": "Liczba podatności związanych z bezpieczeństwem, takich jak SQL injection, hasła zapisane w kodzie lub słabe algorytmy kryptograficzne."
+          },
+          "codeSmells": {
+            "label": "Zapachy kodu",
+            "info": "Tzw. Code Smells – problemy wpływające na czytelność i łatwość utrzymania kodu, takie jak zbyt długie metody, duplikacja kodu lub nieczytelne nazewnictwo. Wyższa wartość oznacza większy dług techniczny."
+          },
+          "complexity": {
+            "label": "Złożoność",
+            "info": "Złożoność cyklomatyczna, czyli liczba niezależnych ścieżek wykonania w kodzie. Wyższa wartość oznacza kod trudniejszy do zrozumienia i testowania."
+          },
+          "duplicatedLinesDensity": {
+            "label": "Gęstość duplikacji linii",
+            "info": "Procent zduplikowanych linii w pliku. Wyższa wartość może oznaczać trudniejsze utrzymanie kodu."
+          },
+          "contributionPercentage": {
+            "label": "Udział",
+            "info": "Procent autorskich linii kodu w pliku napisany przez danego autora."
+          },
+          "contributionLinesAdded": { "label": "Dodane linie" },
+          "contributionCommits": { "label": "Commity" }
+        }
+      }
     },
 
     "navbar": {
@@ -218,7 +313,7 @@
         },
         "activeAuthors": {
           "label": "Aktywni autorzy",
-          "info": "Liczba autorów, którzy dodali co najmniej jeden commit w ciągu ostatnich 6 miesięcy."
+          "info": "Liczba autorów, którzy dodali co najmniej jeden commit do repozytorium w ciągu 6 miesięcy poprzedzających koniec analizy."
         },
         "commits": {
           "label": "Commity",
@@ -300,7 +395,7 @@
       },
       "authors": {
         "title": "Autorzy",
-        "info": "Autorzy: Liczba unikalnych i aktywnych autorów w czasie. Unikalni autorzy to osoby, które kiedykolwiek dodały commit, a aktywni autorzy to osoby, które dodały co najmniej jeden commit w ciągu ostatnich 6 miesięcy.",
+        "info": "Autorzy: Liczba unikalnych i aktywnych autorów w czasie. Unikalni autorzy to osoby, które kiedykolwiek dodały commit do repozytorium, a aktywni autorzy to osoby, które dodały co najmniej jeden commit w ciągu 6 miesięcy poprzedzających koniec analizy.",
         "unique": { "legend": "Unikalni", "tooltip": "Unikalni autorzy" },
         "active": { "legend": "Aktywni", "tooltip": "Aktywni autorzy" }
       },

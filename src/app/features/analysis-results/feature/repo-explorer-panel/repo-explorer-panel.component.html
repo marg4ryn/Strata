@@ -1,9 +1,15 @@
-<aside class="right-panel">
+<aside class="repo-explorer-panel">
   @if (selectedNode(); as node) {
-    <div class="panel-header">
+    <div class="repo-explorer-panel__header">
       @if (node.path !== '/') {
-        <button type="button" class="back-button" (click)="navigateUp()">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <button
+          type="button"
+          class="repo-explorer-panel__back-button"
+          (click)="navigateUp()"
+          [title]="'analysisResults.codeCity.explorer.navigateUp' | transloco"
+          [attr.aria-label]="'analysisResults.codeCity.explorer.navigateUp' | transloco"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path
               d="M12 4L6 10L12 16"
               stroke="currentColor"
@@ -15,7 +21,7 @@
         </button>
       }
 
-      <div class="file-icon">
+      <div class="repo-explorer-panel__icon" aria-hidden="true">
         @if (node.type === 'dir') {
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             <path d="M2 3H9L11 6H18V17H2V3Z" />
@@ -28,112 +34,440 @@
         }
       </div>
 
-      <span class="file-title">
-        {{ node.name || 'rightPanel.selectFile' }}
-      </span>
+      <span class="repo-explorer-panel__title">{{ node.name }}</span>
     </div>
 
-    @if (node.type === 'file') {
-      <!-- <div class="file-details">
-        @if (isDataLoading()) {
-          <div class="metrics-loading">
-            <span>
-              <app-loading-bar
-                [show]="isFileDetailsLoading()"
-                [blur]="false"
-                [label]="'common.loading'"
-                [showCancelButton]="false"
-              />
-            </span>
-          </div>
-        } @else if (metricsError()) {
-          <div class="metrics-error">
-            <span>{{ metricsError() }}</span>
-          </div>
-        } @else if (displayMetrics().length) {
-          <div class="file-details">
-            <h3>{{ 'rightPanel.fileMetrics' | translate }}</h3>
-            <div class="metrics-container">
-              @for (metric of displayMetrics(); track $index) {
-                <div class="metric-item">
-                  <span class="metric-label">
-                    @if (metric.description) {
-                      <app-info-tooltip [text]="metric.description | translate" position="right" />
-                    }
-                    {{ metric.label | translate }}:
-                  </span>
-                  <span
-                    class="metric-value"
-                    [class.metric-unavailable]="isMetricUnavailable(metric)"
-                    [style]="getMetricStyle(metric)"
-                  >
-                    {{ getMetricDisplayValue(metric) }}
-                  </span>
-                </div>
-              }
-            </div>
-
-            <div class="action-buttons">
-              <app-button
-                [isLoading]="isXRayDetailsLoading()"
-                [label]="'rightPanel.xray' | translate"
-                variant="primary"
-                (clicked)="onXRay()"
-              />
-              <app-source-code-button (clicked)="onSourceCode()" />
-            </div>
-          </div>
-        }
-      </div> -->
-    } @else if (node.type === 'dir') {
-      <div class="directory-children">
-        <h3>{{ 'rightPanel.directoryContents' }}</h3>
-        <div class="children-list">
+    @if (node.type === 'dir') {
+      <div class="repo-explorer-panel__content">
+        <h3 class="repo-explorer-panel__section-title">
+          {{ 'analysisResults.codeCity.explorer.directoryContent' | transloco }}
+        </h3>
+        <div class="repo-explorer-panel__list">
           @for (child of sortedChildren(); track child.path) {
-            <div
-              class="child-item"
-              [class.custom-hover]="hoveredNodePath() === child.path"
-              (click)="selectedNodePath.set(child.path)"
+            <button
+              type="button"
+              class="repo-explorer-panel__item"
+              [class.repo-explorer-panel__item--hovered]="hoveredNodePath() === child.path"
+              (click)="selectChildNode(child)"
+              (focus)="hoveredNodePath.set(child.path)"
+              (blur)="hoveredNodePath.set(null)"
               (mouseenter)="hoveredNodePath.set(child.path)"
               (mouseleave)="hoveredNodePath.set(null)"
+              (keydown)="handleChildKeydown($event, child)"
+              [attr.aria-label]="child.name"
             >
               @if (child.type === 'dir') {
                 <svg
-                  class="child-icon"
+                  class="repo-explorer-panel__item-icon"
                   width="16"
                   height="16"
                   viewBox="0 0 16 16"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path d="M2 3H7L8 5H14V13H2V3Z" />
                 </svg>
               } @else {
                 <svg
-                  class="child-icon"
+                  class="repo-explorer-panel__item-icon"
                   width="16"
                   height="16"
                   viewBox="0 0 16 16"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path d="M3 1H9L13 5V15H3V1Z" />
                   <path d="M9 1V5H13" stroke="currentColor" stroke-width="1.5" fill="none" />
                 </svg>
               }
 
-              <span class="child-name">{{ child.name }}</span>
+              <span class="repo-explorer-panel__item-name">{{ child.name }}</span>
               @if (child.type === 'dir') {
-                <span class="child-type">
-                  {{ getChildrenCount(child) }} {{ 'rightPanel.items' }}
+                <span class="repo-explorer-panel__item-meta">
+                  {{ getChildrenCount(child) }}
+                  {{ 'analysisResults.codeCity.explorer.directoryItems' | transloco }}
                 </span>
               }
-            </div>
+            </button>
           }
         </div>
       </div>
+    } @else {
+      <div class="file-details" aria-live="polite" [attr.aria-busy]="fileDetails.isLoading()">
+        @if (fileDetails.error()) {
+          <div class="metrics-state metrics-state--error" role="alert">
+            <span>{{ 'analysisResults.codeCity.explorer.loadError' | transloco }}</span>
+            <span>{{ fileDetails.error()?.message }}</span>
+          </div>
+        } @else if (showLoading()) {
+          <div class="metrics-state metrics-state--loading" role="status">
+            <app-loading-spinner />
+            <span>{{ 'analysisResults.codeCity.explorer.loading' | transloco }}</span>
+          </div>
+        } @else {
+          <div class="file-details__content">
+            @if (details(); as d) {
+              <div class="file-details__sections">
+                <section class="file-details__section">
+                  <h4>{{ 'analysisResults.codeCity.explorer.sections.file' | transloco }}</h4>
+                  <dl class="file-details__metrics">
+                    <div class="file-details__metric">
+                      <dt>
+                        {{ 'analysisResults.codeCity.explorer.metrics.path.label' | transloco }}
+                      </dt>
+                      <dd>{{ d.info.path }}</dd>
+                    </div>
+                    <div class="file-details__metric">
+                      <dt>
+                        {{ 'analysisResults.codeCity.explorer.metrics.name.label' | transloco }}
+                      </dt>
+                      <dd>{{ d.info.name }}</dd>
+                    </div>
+                    @if (d.info.type !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{ 'analysisResults.codeCity.explorer.metrics.type.label' | transloco }}
+                        </dt>
+                        <dd>{{ d.info.type }}</dd>
+                      </div>
+                    }
+                    <div class="file-details__metric">
+                      <dt>
+                        {{ 'analysisResults.codeCity.explorer.metrics.size.label' | transloco }}
+                      </dt>
+                      <dd>{{ d.info.size }}</dd>
+                    </div>
+                    @if (d.info.totalLines !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.totalLines.label' | transloco
+                          }}
+                        </dt>
+                        <dd>{{ d.info.totalLines | localizedNumber }}</dd>
+                      </div>
+                    }
+                    @if (d.info.codeLines !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.codeLines.label' | transloco
+                          }}
+                        </dt>
+                        <dd>{{ d.info.codeLines | localizedNumber }}</dd>
+                      </div>
+                    }
+                    @if (d.info.commentLines !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.commentLines.label'
+                              | transloco
+                          }}
+                        </dt>
+                        <dd>{{ d.info.commentLines | localizedNumber }}</dd>
+                      </div>
+                    }
+                    @if (d.info.blankLines !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.blankLines.label' | transloco
+                          }}
+                        </dt>
+                        <dd>{{ d.info.blankLines | localizedNumber }}</dd>
+                      </div>
+                    }
+                    @if (d.info.totalCommits !== null) {
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.totalCommits.label'
+                              | transloco
+                          }}
+                        </dt>
+                        <dd>{{ d.info.totalCommits | localizedNumber }}</dd>
+                      </div>
+                    }
+                    <div class="file-details__metric">
+                      <dt>
+                        {{
+                          'analysisResults.codeCity.explorer.metrics.commitsLastMonth.label'
+                            | transloco
+                        }}
+                      </dt>
+                      <dd>{{ d.info.commitsLastMonth | localizedNumber }}</dd>
+                    </div>
+                    <div class="file-details__metric">
+                      <dt>
+                        {{
+                          'analysisResults.codeCity.explorer.metrics.commitsLastYear.label'
+                            | transloco
+                        }}
+                      </dt>
+                      <dd>{{ d.info.commitsLastYear | localizedNumber }}</dd>
+                    </div>
+                    <div class="file-details__metric">
+                      <dt>
+                        {{
+                          'analysisResults.codeCity.explorer.metrics.firstCommitDate.label'
+                            | transloco
+                        }}
+                      </dt>
+                      <dd>{{ d.info.firstCommitDate | localizedDate }}</dd>
+                    </div>
+                    <div class="file-details__metric">
+                      <dt>
+                        {{
+                          'analysisResults.codeCity.explorer.metrics.lastCommitDate.label'
+                            | transloco
+                        }}
+                      </dt>
+                      <dd>{{ d.info.lastCommitDate | localizedDate }}</dd>
+                    </div>
+                    <div class="file-details__metric">
+                      <dt>
+                        {{
+                          'analysisResults.codeCity.explorer.metrics.codeAgeDays.label' | transloco
+                        }}
+                        <app-info-tooltip
+                          textKey="analysisResults.codeCity.explorer.metrics.codeAgeDays.info"
+                          [iconSize]="14"
+                        />
+                      </dt>
+                      <dd>{{ d.info.codeAgeDays | localizedNumber }}</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                @if (d.staticAnalysis; as s) {
+                  <section class="file-details__section">
+                    <h4>
+                      {{ 'analysisResults.codeCity.explorer.sections.staticAnalysis' | transloco }}
+                    </h4>
+                    <dl class="file-details__metrics">
+                      <div class="file-details__metric">
+                        <dt>
+                          {{ 'analysisResults.codeCity.explorer.metrics.bugs.label' | transloco }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.bugs.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ s.bugs | localizedNumber }}</dd>
+                      </div>
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.vulnerabilities.label'
+                              | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.vulnerabilities.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ s.vulnerabilities | localizedNumber }}</dd>
+                      </div>
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.codeSmells.label' | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.codeSmells.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ s.codeSmells | localizedNumber }}</dd>
+                      </div>
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.complexity.label' | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.complexity.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ s.complexity | localizedNumber }}</dd>
+                      </div>
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.duplicatedLinesDensity.label'
+                              | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.duplicatedLinesDensity.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>
+                          {{ s.duplicatedLinesDensity | localizedNumber: '1.0-2' : 'percent' }}
+                        </dd>
+                      </div>
+                    </dl>
+                  </section>
+                }
+
+                @if (d.knowledge; as k) {
+                  <section class="file-details__section">
+                    <h4>
+                      {{ 'analysisResults.codeCity.explorer.sections.knowledge' | transloco }}
+                    </h4>
+                    <dl class="file-details__metrics">
+                      @if (k.totalLinesAdded !== null) {
+                        <div class="file-details__metric">
+                          <dt>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.totalLinesAdded.label'
+                                | transloco
+                            }}
+                            <app-info-tooltip
+                              textKey="analysisResults.codeCity.explorer.metrics.totalLinesAdded.info"
+                              [iconSize]="14"
+                            />
+                          </dt>
+                          <dd>{{ k.totalLinesAdded | localizedNumber }}</dd>
+                        </div>
+                      }
+                      @if (k.leadAuthor !== null) {
+                        <div class="file-details__metric">
+                          <dt>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.leadAuthor.label'
+                                | transloco
+                            }}
+                            <app-info-tooltip
+                              textKey="analysisResults.codeCity.explorer.metrics.leadAuthor.info"
+                              [iconSize]="14"
+                            />
+                          </dt>
+                          <dd>{{ k.leadAuthor }}</dd>
+                        </div>
+                      }
+                      @if (k.leadAuthorPercentage !== null) {
+                        <div class="file-details__metric">
+                          <dt>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.leadAuthorPercentage.label'
+                                | transloco
+                            }}
+                            <app-info-tooltip
+                              textKey="analysisResults.codeCity.explorer.metrics.leadAuthorPercentage.info"
+                              [iconSize]="14"
+                            />
+                          </dt>
+                          <dd>
+                            {{ k.leadAuthorPercentage | localizedNumber: '1.0-2' : 'percent' }}
+                          </dd>
+                        </div>
+                      }
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.authors.label' | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.authors.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ k.authors | localizedNumber }}</dd>
+                      </div>
+                      @if (k.activeAuthors !== null) {
+                        <div class="file-details__metric">
+                          <dt>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.activeAuthors.label'
+                                | transloco
+                            }}
+                            <app-info-tooltip
+                              textKey="analysisResults.codeCity.explorer.metrics.activeAuthors.info"
+                              [iconSize]="14"
+                            />
+                          </dt>
+                          <dd>{{ k.activeAuthors | localizedNumber }}</dd>
+                        </div>
+                      }
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.knowledgeLoss.label'
+                              | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.knowledgeLoss.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ k.knowledgeLoss | localizedNumber: '1.0-2' : 'percent' }}</dd>
+                      </div>
+                      <div class="file-details__metric">
+                        <dt>
+                          {{
+                            'analysisResults.codeCity.explorer.metrics.knowledgeRisk.label'
+                              | transloco
+                          }}
+                          <app-info-tooltip
+                            textKey="analysisResults.codeCity.explorer.metrics.knowledgeRisk.info"
+                            [iconSize]="14"
+                          />
+                        </dt>
+                        <dd>{{ getKnowledgeRiskKey(k.knowledgeRisk) | transloco }}</dd>
+                      </div>
+                    </dl>
+                  </section>
+
+                  <section class="file-details__section">
+                    <h4>
+                      {{ 'analysisResults.codeCity.explorer.sections.contributions' | transloco }}
+                    </h4>
+                    <ul class="file-details__contributions">
+                      @for (contribution of k.contributions; track contribution.name) {
+                        <li class="file-details__contribution">
+                          <strong>{{ contribution.name }}</strong>
+                          <span>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.contributionPercentage.label'
+                                | transloco
+                            }}:
+                            {{ contribution.percentage | localizedNumber: '1.0-2' : 'percent' }}
+                            <app-info-tooltip
+                              textKey="analysisResults.codeCity.explorer.metrics.contributionPercentage.info"
+                              [iconSize]="14"
+                            />
+                          </span>
+                          <span>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.contributionLinesAdded.label'
+                                | transloco
+                            }}:
+                            {{ contribution.linesAdded | localizedNumber }}
+                          </span>
+                          <span>
+                            {{
+                              'analysisResults.codeCity.explorer.metrics.contributionCommits.label'
+                                | transloco
+                            }}:
+                            {{ contribution.commits | localizedNumber }}
+                          </span>
+                        </li>
+                      }
+                    </ul>
+                  </section>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
     }
   } @else {
-    <div class="no-selection">
-      <p>{{ 'rightPanel.noSelection' }}</p>
-    </div>
+    <p class="repo-explorer-panel__empty">
+      {{ 'analysisResults.codeCity.explorer.selectNode' | transloco }}
+    </p>
   }
 </aside>

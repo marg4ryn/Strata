@@ -176,14 +176,109 @@
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "pause": "Pause",
-      "play": "Play"
-    },
+      "play": "Play",
 
-    "search": {
-      "placeholder": "Search in the repository",
-      "clear": "Clear search",
-      "more": "more",
-      "noResults": "No results"
+      "search": {
+        "placeholder": "Search in the repository",
+        "clear": "Clear search",
+        "more": "more",
+        "noResults": "No results"
+      },
+
+      "explorer": {
+        "selectNode": "Select a file or directory to view details",
+        "navigateUp": "Navigate up",
+        "directoryContent": "Directory contents",
+        "directoryItems": "items",
+        "loading": "Loading file metrics…",
+        "loadError": "Could not load file metrics.",
+        "sections": {
+          "file": "File",
+          "knowledge": "Code ownership",
+          "staticAnalysis": "Static analysis",
+          "contributions": "Author contributions"
+        },
+        "metrics": {
+          "path": { "label": "Path" },
+          "name": { "label": "Name" },
+          "type": { "label": "Type" },
+          "size": { "label": "Size" },
+          "totalLines": { "label": "Total Lines" },
+          "codeLines": { "label": "Code Lines" },
+          "commentLines": { "label": "Comment Lines" },
+          "blankLines": { "label": "Blank Lines" },
+          "totalCommits": { "label": "Total Commits" },
+          "commitsLastMonth": { "label": "Commits in the Last Month" },
+          "commitsLastYear": { "label": "Commits in the Last Year" },
+          "firstCommitDate": { "label": "First Commit Date" },
+          "lastCommitDate": { "label": "Last Commit Date" },
+          "codeAgeDays": {
+            "label": "Code Age (Days)",
+            "info": "The number of days that have elapsed since the file was last modified up to the end date of the analysis."
+          },
+          "totalLinesAdded": {
+            "label": "Total Lines Added",
+            "info": "The total number of lines added to the file throughout its entire history."
+          },
+          "leadAuthor": {
+            "label": "Lead Author",
+            "info": "The author with the largest share of authored lines of code in the file."
+          },
+          "leadAuthorPercentage": {
+            "label": "Lead Author Share",
+            "info": "The percentage of authored lines of code in the file written by the lead author."
+          },
+          "authors": {
+            "label": "Unique Authors",
+            "info": "The number of authors who have made changes to this file."
+          },
+          "activeAuthors": {
+            "label": "Active Authors",
+            "info": "The number of file authors who made at least one commit to the repository within the 6 months preceding the end of the analysis."
+          },
+          "knowledgeLoss": {
+            "label": "Knowledge Loss",
+            "info": "The percentage of authored lines of code in the file written by authors who made no commits to the repository within the 6 months preceding the end of the analysis."
+          },
+          "knowledgeRisk": {
+            "label": "Code Ownership Model",
+            "info": "Determines how responsibility for the file is distributed among developers based on their share of authored lines of code.",
+            "values": {
+              "abandoned": "Abandoned",
+              "singleOwner": "Single owner",
+              "balanced": "Balanced",
+              "diffused": "No clear owner",
+              "unknown": "Unknown"
+            }
+          },
+          "bugs": {
+            "label": "Bugs",
+            "info": "Number of bugs that may cause incorrect runtime behavior. A higher value indicates a greater risk of failures."
+          },
+          "vulnerabilities": {
+            "label": "Vulnerabilities",
+            "info": "Number of security vulnerabilities, such as SQL injection, hardcoded passwords, or weak cryptography."
+          },
+          "codeSmells": {
+            "label": "Code Smells",
+            "info": "Number of issues affecting code readability and maintainability, such as long methods, duplication, or poor naming. A higher value indicates greater technical debt."
+          },
+          "complexity": {
+            "label": "Complexity",
+            "info": "Cyclomatic complexity, measuring the number of independent execution paths in the code. A higher value indicates code that is harder to understand and test."
+          },
+          "duplicatedLinesDensity": {
+            "label": "Duplicated Lines Density",
+            "info": "The percentage of duplicated lines in the file. A higher value may indicate code that is more difficult to maintain."
+          },
+          "contributionPercentage": {
+            "label": "Contribution",
+            "info": "The percentage of authored lines of code in the file written by a given author."
+          },
+          "contributionLinesAdded": { "label": "Lines Added" },
+          "contributionCommits": { "label": "Commits" }
+        }
+      }
     },
 
     "navbar": {
@@ -219,7 +314,7 @@
         },
         "activeAuthors": {
           "label": "Active authors",
-          "info": "Number of authors who have added at least one commit within the last 6 months."
+          "info": "Number of authors who have added at least one commit within the 6 months preceding the end of the analysis."
         },
         "commits": {
           "label": "Commits",
@@ -301,7 +396,7 @@
       },
       "authors": {
         "title": "Authors",
-        "info": "Authors: Number of unique and active authors over time. Unique authors have ever added a commit, while active authors have added at least one commit within the last 6 months.",
+        "info": "Authors: Number of unique and active authors over time. Unique authors have ever added a commit, while active authors have added at least one commit within the 6 months preceding the end of the analysis.",
         "unique": { "legend": "Unique", "tooltip": "Unique authors" },
         "active": { "legend": "Active", "tooltip": "Active authors" }
       },

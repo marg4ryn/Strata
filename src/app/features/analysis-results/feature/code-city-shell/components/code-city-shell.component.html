@@ -7,6 +7,7 @@
 
       <div class="code-city-shell__panel code-city-shell__panel--explorer">
         <app-repo-explorer-panel
+          [id]="id()"
           [cityNode]="data?.cityNode"
           [(selectedNodePath)]="this.state.selectedNodePath"
           [(hoveredNodePath)]="this.state.hoveredNodePath"
