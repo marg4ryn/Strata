@@ -59,6 +59,7 @@ export class RepoExplorerPanelComponent {
 
   selectedNode = signal<CityNode | null>(null);
   showLoading = signal(false);
+
   private loadingShownAt: number | null = null;
 
   private nodePathMap: NodePathMap = new Map();

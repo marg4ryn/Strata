@@ -1,1 +1,18 @@
-<ng-template shellTemplate></ng-template>
+<ng-template shellTemplate>
+  <aside class="file-types">
+    <h3 class="file-types__heading">{{ 'analysisResults.fileTypes.title' | transloco }}</h3>
+    <ul class="file-types__list">
+      @for (item of fileTypeItems(); track item.name) {
+        <li class="file-types__item">
+          <span class="file-types__name">{{ item.name }}</span>
+          <span class="file-types__count">{{ item.count | localizedNumber }}</span>
+          <span
+            class="file-types__color"
+            [style.backgroundColor]="item.color"
+            aria-hidden="true"
+          ></span>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

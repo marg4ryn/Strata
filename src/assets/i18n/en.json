@@ -173,6 +173,10 @@
       "notFound": "The analysis you are looking for does not exist."
     },
 
+    "fileTypes": {
+      "title": "File types"
+    },
+
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "pause": "Pause",

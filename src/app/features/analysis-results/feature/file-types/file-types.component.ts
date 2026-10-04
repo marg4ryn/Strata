@@ -1,20 +1,30 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 
+import { LocalizedNumberPipe } from '@app/shared/pipes';
 import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../code-city-shell/services/code-city-state.service';
 import { CodeCityTemplateDirective } from '../code-city-shell/directives/code-city-template.directive';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
 
+interface FileTypeItem {
+  name: string;
+  count: number;
+  color: string;
+}
+
 @Component({
   selector: 'app-file-types',
-  imports: [CodeCityTemplateDirective],
+  imports: [CodeCityTemplateDirective, LocalizedNumberPipe, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './file-types.component.scss',
   templateUrl: './file-types.component.html',
 })
 export class FileTypesComponent {
   private readonly facade = inject(AnalysisResultsFacade);
+  private readonly transloco = inject(TranslocoService);
   readonly state = inject(CodeCityStateService);
 
   id = input.required<string>();
@@ -24,6 +34,10 @@ export class FileTypesComponent {
     () => this.id(),
   );
 
+  private readonly activeLang = toSignal(this.transloco.langChanges$, {
+    initialValue: this.transloco.getActiveLang(),
+  });
+
   colorData = computed<PathColorData[]>(() => {
     if (!this.resource.hasValue()) return [];
 
@@ -32,6 +46,26 @@ export class FileTypesComponent {
       color: TYPE_COLORS[item.type] ?? FALLBACK_COLOR,
       intensity: 1,
     }));
+  });
+
+  fileTypeItems = computed<FileTypeItem[]>(() => {
+    if (!this.resource.hasValue()) return [];
+
+    const counts = new Map<string, number>();
+
+    for (const item of this.resource.value()) {
+      counts.set(item.type, (counts.get(item.type) ?? 0) + 1);
+    }
+
+    return Array.from(counts, ([name, count]) => {
+      const color = TYPE_COLORS[name] ?? FALLBACK_COLOR;
+
+      return {
+        name,
+        count,
+        color: `#${color.toString(16).padStart(6, '0')}`,
+      };
+    }).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, this.activeLang()));
   });
 
   constructor() {

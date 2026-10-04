@@ -172,6 +172,10 @@
       "notFound": "Analiza, której szukasz, nie istnieje."
     },
 
+    "fileTypes": {
+      "title": "Typy plików"
+    },
+
     "codeCity": {
       "renderError": "Nie udało się wyświetlić miasta kodu.",
       "pause": "Pauza",
