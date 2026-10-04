@@ -1,4 +1,8 @@
-<div #wrapper class="code-city-wrapper">
+<div
+  #wrapper
+  class="code-city-wrapper"
+  [class.code-city-wrapper--interactive]="hoveredNodeName() !== null"
+>
   @if (initializationFailed()) {
     <div class="code-city-error" role="alert">
       <p>{{ 'analysisResults.codeCity.renderError' | transloco }}</p>
