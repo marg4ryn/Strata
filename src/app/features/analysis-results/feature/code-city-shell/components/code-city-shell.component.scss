@@ -13,6 +13,22 @@
   min-height: 0;
   overflow: hidden;
 
+  &__mobile-notice {
+    display: none;
+  }
+
+  &__sidebar {
+    position: absolute;
+    z-index: 1;
+    inset: 2rem 1rem 1rem 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 280px));
+    grid-template-rows: minmax(0, 1fr);
+    justify-content: space-between;
+    gap: 1rem;
+    pointer-events: none;
+  }
+
   &__code-city {
     position: absolute;
     inset: 0;
@@ -26,30 +42,102 @@
   &__searchbar {
     position: absolute;
     top: 2rem;
-    right: calc(4rem + 280px);
+    right: calc(1.5rem + 280px);
   }
 
   &__pause-play-button {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 1rem;
+    right: calc(1.5rem + 280px);
   }
 
   &__panel {
-    position: absolute;
-    z-index: 1;
-    top: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    width: 280px;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    pointer-events: auto;
+    height: 100%;
+    --code-city-panel-height: 100%;
+    --code-city-panel-min-height: 0;
+    --code-city-panel-max-height: none;
+  }
+}
 
-    &--template {
-      left: 2rem;
+@media (min-width: 601px) and (min-height: 800px) {
+  .code-city-shell {
+    &__sidebar {
+      inset: 0 auto 0 0;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      width: 300px;
+      padding: 1rem;
+      border-right: 1px solid var(--border-subtle);
+      background: var(--bg-primary);
+      pointer-events: auto;
     }
 
-    &--explorer {
-      right: 2rem;
+    &__code-city {
+      inset-inline-start: 300px;
+    }
+
+    &__panel {
+      height: 100%;
+      --code-city-panel-height: 100%;
+      --code-city-panel-min-height: 0;
+      --code-city-panel-max-height: none;
+    }
+
+    &__searchbar {
+      right: 1rem;
+    }
+
+    &__pause-play-button {
+      right: 1rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .code-city-shell {
+    min-height: 100%;
+    overflow-y: auto;
+
+    &__mobile-notice {
+      display: block;
+      margin: 2rem 2rem 0;
+      padding: 1rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    &__sidebar {
+      position: relative;
+      inset: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem 2rem 2rem 2rem;
+    }
+
+    &__panel {
+      height: auto;
+      flex: none;
+      --code-city-panel-height: auto;
+      --code-city-panel-min-height: 300px;
+      --code-city-panel-max-height: 600px;
+    }
+
+    &__code-city,
+    &__searchbar,
+    &__pause-play-button {
+      display: none;
     }
   }
 }

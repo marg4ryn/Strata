@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { LocalizedNumberPipe, LocalizedDatePipe } from '@app/shared/pipes';
 import { InfoTooltipComponent, LoadingSpinnerComponent } from '@app/shared/components';
@@ -25,11 +26,13 @@ import { AnalysisResultsFacade } from '../../analysis-results.facade';
 type NodePathMap = Map<string, CityNode>;
 
 const KNOWLEDGE_RISK_KEYS: Record<KnowledgeRisk, string> = {
-  ABANDONED: 'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.abandoned',
-  SINGLE_OWNER: 'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.singleOwner',
-  BALANCED: 'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.balanced',
-  DIFFUSED: 'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.diffused',
-  UNKNOWN: 'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.unknown',
+  ABANDONED: marker('analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.abandoned'),
+  SINGLE_OWNER: marker(
+    'analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.singleOwner',
+  ),
+  BALANCED: marker('analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.balanced'),
+  DIFFUSED: marker('analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.diffused'),
+  UNKNOWN: marker('analysisResults.codeCity.explorer.metrics.knowledgeRisk.values.unknown'),
 };
 
 @Component({

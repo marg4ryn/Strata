@@ -230,6 +230,7 @@
                         {{
                           'analysisResults.codeCity.explorer.metrics.codeAgeDays.label' | transloco
                         }}
+                        <!--  t(analysisResults.codeCity.explorer.metrics.codeAgeDays.info) -->
                         <app-info-tooltip
                           textKey="analysisResults.codeCity.explorer.metrics.codeAgeDays.info"
                           [iconSize]="14"
@@ -240,6 +241,7 @@
                   </dl>
                 </section>
 
+                <!--  t(analysisResults.codeCity.explorer.metrics.bugs.info, analysisResults.codeCity.explorer.metrics.vulnerabilities.info, analysisResults.codeCity.explorer.metrics.codeSmells.info, analysisResults.codeCity.explorer.metrics.complexity.info, analysisResults.codeCity.explorer.metrics.duplicatedLinesDensity.info) -->
                 @if (d.staticAnalysis; as s) {
                   <section class="file-details__section">
                     <h4>
@@ -312,6 +314,7 @@
                   </section>
                 }
 
+                <!--  t(analysisResults.codeCity.explorer.metrics.totalLinesAdded.info, analysisResults.codeCity.explorer.metrics.leadAuthor.info, analysisResults.codeCity.explorer.metrics.leadAuthorPercentage.info,analysisResults.codeCity.explorer.metrics.authors.info, analysisResults.codeCity.explorer.metrics.activeAuthors.info, analysisResults.codeCity.explorer.metrics.knowledgeLoss.info, analysisResults.codeCity.explorer.metrics.knowledgeRisk.info, analysisResults.codeCity.explorer.metrics.contributionPercentage.info) -->
                 @if (d.knowledge; as k) {
                   <section class="file-details__section">
                     <h4>

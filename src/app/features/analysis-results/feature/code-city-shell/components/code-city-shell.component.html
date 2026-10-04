@@ -1,28 +1,36 @@
 <app-resource-page [data]="resource">
   <ng-template #content let-data>
     <div class="code-city-shell">
-      <div class="code-city-shell__panel code-city-shell__panel--template">
-        <ng-container [ngTemplateOutlet]="state.template()" />
-      </div>
+      <p class="code-city-shell__mobile-notice">
+        {{ 'analysisResults.codeCity.mobileUnavailable' | transloco }}
+      </p>
 
-      <div class="code-city-shell__panel code-city-shell__panel--explorer">
-        <app-repo-explorer-panel
-          [id]="id()"
-          [cityNode]="data?.cityNode"
-          [(selectedNodePath)]="this.state.selectedNodePath"
-          [(hoveredNodePath)]="this.state.hoveredNodePath"
-        />
+      <div class="code-city-shell__sidebar">
+        <div class="code-city-shell__panel code-city-shell__panel--template">
+          <ng-container [ngTemplateOutlet]="state.template()" />
+        </div>
+
+        <div class="code-city-shell__panel code-city-shell__panel--explorer">
+          <app-repo-explorer-panel
+            [id]="id()"
+            [cityNode]="data?.cityNode"
+            [(selectedNodePath)]="this.state.selectedNodePath"
+            [(hoveredNodePath)]="this.state.hoveredNodePath"
+          />
+        </div>
       </div>
 
       <div class="code-city-shell__code-city">
-        <app-code-city
-          [cityNode]="data?.cityNode"
-          [autoRotate]="autoRotate()"
-          [colorData]="this.state.colorData()"
-          [(selectedNodePath)]="this.state.selectedNodePath"
-          [(hoveredNodePath)]="this.state.hoveredNodePath"
-          [(keyboardNavigationActive)]="keyboardNavigationActive"
-        ></app-code-city>
+        @defer (when !isMobile()) {
+          <app-code-city
+            [cityNode]="data?.cityNode"
+            [autoRotate]="autoRotate()"
+            [colorData]="this.state.colorData()"
+            [(selectedNodePath)]="this.state.selectedNodePath"
+            [(hoveredNodePath)]="this.state.hoveredNodePath"
+            [(keyboardNavigationActive)]="keyboardNavigationActive"
+          />
+        }
       </div>
 
       <div class="code-city-shell__searchbar">
