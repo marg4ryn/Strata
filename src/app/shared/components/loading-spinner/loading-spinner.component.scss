@@ -1,13 +1,9 @@
 .loading-spinner {
-  --size: clamp(6.8rem, 14vw, 12rem);
+  --size: var(--loading-spinner-size, clamp(6.8rem, 14vw, 12rem));
 
   position: relative;
   width: var(--size);
   height: var(--size);
-
-  @media (min-width: 767px) and (min-height: 800px) {
-    margin: 6rem;
-  }
 
   &__ring {
     position: absolute;
