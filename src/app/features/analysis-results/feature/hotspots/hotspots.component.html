@@ -1,0 +1,34 @@
+<ng-template shellTemplate>
+  <aside class="hotspots">
+    <h3 class="hotspots__heading">{{ 'analysisResults.hotspots.title' | transloco }}</h3>
+    <ul class="hotspots__list">
+      @for (item of hotspotItems(); track item.path) {
+        <li>
+          <button
+            type="button"
+            class="hotspots__item"
+            [class.hotspots__item--active]="
+              state.selectedNodePath() === item.path || state.hoveredNodePath() === item.path
+            "
+            [attr.aria-pressed]="state.selectedNodePath() === item.path"
+            (click)="state.selectedNodePath.set(item.path)"
+            (mouseenter)="state.hoveredNodePath.set(item.path)"
+            (mouseleave)="state.hoveredNodePath.set(null)"
+            (focus)="state.hoveredNodePath.set(item.path)"
+            (blur)="state.hoveredNodePath.set(null)"
+          >
+            <span class="hotspots__name">{{ item.name }}</span>
+            <span class="hotspots__value">{{
+              item.normalizedValue * 100 | localizedNumber: '1.0-2' : 'percent'
+            }}</span>
+            <span
+              class="hotspots__color"
+              [style.opacity]="item.colorIntensity"
+              aria-hidden="true"
+            ></span>
+          </button>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

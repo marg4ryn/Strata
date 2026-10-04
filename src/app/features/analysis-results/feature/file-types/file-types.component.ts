@@ -54,7 +54,7 @@ export class FileTypesComponent {
     const counts = new Map<string, number>();
 
     for (const item of this.resource.value()) {
-      counts.set(item.type, (counts.get(item.type) ?? 0) + 1);
+      counts.set(item.type ?? '-', (counts.get(item.type ?? '-') ?? 0) + 1);
     }
 
     return Array.from(counts, ([name, count]) => {

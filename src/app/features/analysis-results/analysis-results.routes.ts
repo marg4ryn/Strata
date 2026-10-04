@@ -27,6 +27,11 @@ export const analysisResultsRoutes: Routes = [
         loadComponent: () =>
           import('./feature/file-types/file-types.component').then((m) => m.FileTypesComponent),
       },
+      {
+        path: 'hotspots',
+        loadComponent: () =>
+          import('./feature/hotspots/hotspots.component').then((m) => m.HotspotsComponent),
+      },
     ],
   },
 ];

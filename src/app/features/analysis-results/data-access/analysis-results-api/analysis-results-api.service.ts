@@ -5,6 +5,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
+  HotspotsDetails,
   AuthorCoupling,
   FileExtension,
   FileDetails,
@@ -47,6 +48,10 @@ export class AnalysisResultsApiService {
   fetchFileDetails(analysisId: string, filePath: string): Promise<FileDetails> {
     const queryString = this.buildQueryString({ path: filePath });
     return this.http.get<FileDetails>(`/analysis/${analysisId}/files?${queryString}`);
+  }
+
+  fetchHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
+    return this.http.get<HotspotsDetails[]>(`/analysis/${analysisId}/files/hotspots`);
   }
 
   private buildQueryString(params: Record<string, string | number | boolean>): string {

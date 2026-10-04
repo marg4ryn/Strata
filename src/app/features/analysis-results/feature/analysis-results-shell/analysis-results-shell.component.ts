@@ -76,7 +76,7 @@ export class AnalysisResultsShellComponent {
       links: [
         {
           labelKey: marker('analysisResults.navbar.hotspots'),
-          path: 'developer-relationships',
+          path: 'code-city/hotspots',
         },
         {
           labelKey: marker('analysisResults.navbar.codeAge'),

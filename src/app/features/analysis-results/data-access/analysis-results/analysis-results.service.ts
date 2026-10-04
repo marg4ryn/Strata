@@ -8,6 +8,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
+  HotspotsDetails,
   AuthorCoupling,
   FileExtension,
   FileDetails,
@@ -95,12 +96,24 @@ export class AnalysisResultsService {
     const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
     const cacheKey = `/file-details/${encodeURIComponent(filePath)}`;
 
-    const fileDetails = await this.cachedFetcher.getOrFetch<FileDetails>(
-      cacheName,
-      cacheKey,
-      () => this.api.fetchFileDetails(analysisId, filePath),
+    const fileDetails = await this.cachedFetcher.getOrFetch<FileDetails>(cacheName, cacheKey, () =>
+      this.api.fetchFileDetails(analysisId, filePath),
     );
 
     return fileDetails;
+  }
+
+  async getHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
+    this.logger.info('Fetching hotspots data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const hotspotsDetails = await this.cachedFetcher.getOrFetch<HotspotsDetails[]>(
+      cacheName,
+      '/hotspots-details',
+      () => this.api.fetchHotspotsDetails(analysisId),
+    );
+
+    return hotspotsDetails;
   }
 }

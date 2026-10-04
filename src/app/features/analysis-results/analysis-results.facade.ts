@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
 import type {
   RepositorySummary,
+  HotspotsDetails,
   AuthorCoupling,
-  CodeCityData,
   FileExtension,
+  CodeCityData,
   FileDetails,
 } from './analysis-results.model';
 
@@ -37,5 +38,9 @@ export class AnalysisResultsFacade {
 
   getFileDetails(analysisId: string, filePath: string): Promise<FileDetails> {
     return this.service.getFileDetails(analysisId, filePath);
+  }
+
+  getHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
+    return this.service.getHotspotsDetails(analysisId);
   }
 }

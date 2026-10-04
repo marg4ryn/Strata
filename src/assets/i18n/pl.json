@@ -176,6 +176,10 @@
       "title": "Typy plików"
     },
 
+    "hotspots": {
+      "title": "Hotspoty"
+    },
+
     "codeCity": {
       "renderError": "Nie udało się wyświetlić miasta kodu.",
       "mobileUnavailable": "Wizualizacja miasta kodu nie jest dostępna na urządzeniach mobilnych.",

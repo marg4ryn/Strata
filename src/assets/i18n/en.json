@@ -177,6 +177,10 @@
       "title": "File types"
     },
 
+    "hotspots": {
+      "title": "Hotspots"
+    },
+
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "mobileUnavailable": "The code city visualization is not available on mobile devices.",
