@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
+
 import { FileTypesComponent } from './file-types.component';
 
 describe.skip('FileTypesComponent', () => {

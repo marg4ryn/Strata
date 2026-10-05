@@ -4,6 +4,7 @@ import { injectLogger } from '@app/core/logging';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
 import type {
+  KnowledgeRisksDetails,
   RepositorySummary,
   RepositoryDetails,
   RepositoryTrends,
@@ -130,5 +131,19 @@ export class AnalysisResultsService {
     );
 
     return codeAgeDetails;
+  }
+
+  async getKnowledgeRisksDetails(analysisId: string): Promise<KnowledgeRisksDetails[]> {
+    this.logger.info('Fetching code age data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const knowledgeRisksDetails = await this.cachedFetcher.getOrFetch<KnowledgeRisksDetails[]>(
+      cacheName,
+      '/knowledge-risks-details',
+      () => this.api.fetchKnowledgeRisksDetails(analysisId),
+    );
+
+    return knowledgeRisksDetails;
   }
 }

@@ -37,6 +37,13 @@ export const analysisResultsRoutes: Routes = [
         loadComponent: () =>
           import('./feature/code-age/code-age.component').then((m) => m.CodeAgeComponent),
       },
+      {
+        path: 'knowledge-risks',
+        loadComponent: () =>
+          import('./feature/knowledge-risks/knowledge-risks.component').then(
+            (m) => m.KnowledgeRisksComponent,
+          ),
+      },
     ],
   },
 ];

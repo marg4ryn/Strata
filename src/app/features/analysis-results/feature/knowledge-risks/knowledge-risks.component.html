@@ -1,0 +1,22 @@
+<ng-template shellTemplate>
+  <aside class="knowledge-risks">
+    <h3 class="knowledge-risks__heading">
+      {{ 'analysisResults.knowledgeRisks.title' | transloco }}
+    </h3>
+    <ul class="knowledge-risks__list">
+      @for (item of knowledgeRiskItems(); track item.name) {
+        <li class="knowledge-risks__item">
+          <span class="knowledge-risks__name">{{
+            getKnowledgeRiskKey(item.name) | transloco
+          }}</span>
+          <span class="knowledge-risks__count">{{ item.count | localizedNumber }}</span>
+          <span
+            class="knowledge-risks__color"
+            [style.backgroundColor]="item.color"
+            aria-hidden="true"
+          ></span>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

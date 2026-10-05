@@ -2,6 +2,7 @@ import { Service, inject } from '@angular/core';
 
 import { HttpService } from '@app/core/http';
 import type {
+  KnowledgeRisksDetails,
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
@@ -57,6 +58,12 @@ export class AnalysisResultsApiService {
 
   fetchCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {
     return this.http.get<CodeAgeDetails[]>(`/analysis/${analysisId}/files/code-age`);
+  }
+
+  fetchKnowledgeRisksDetails(analysisId: string): Promise<KnowledgeRisksDetails[]> {
+    return this.http.get<KnowledgeRisksDetails[]>(
+      `/analysis/${analysisId}/files/knowledge-loss-risk`,
+    );
   }
 
   private buildQueryString(params: Record<string, string | number | boolean>): string {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
 import type {
+  KnowledgeRisksDetails,
   RepositorySummary,
   HotspotsDetails,
   AuthorCoupling,
@@ -47,5 +48,9 @@ export class AnalysisResultsFacade {
 
   getCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {
     return this.service.getCodeAgeDetails(analysisId);
+  }
+
+  getKnowledgeRisksDetails(analysisId: string): Promise<KnowledgeRisksDetails[]> {
+    return this.service.getKnowledgeRisksDetails(analysisId);
   }
 }

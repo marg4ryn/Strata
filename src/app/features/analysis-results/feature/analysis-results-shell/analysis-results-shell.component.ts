@@ -102,7 +102,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.ownershipRisks'),
-          path: 'developer-relationships',
+          path: 'code-city/knowledge-risks',
         },
         {
           labelKey: marker('analysisResults.navbar.abandonedCode'),
