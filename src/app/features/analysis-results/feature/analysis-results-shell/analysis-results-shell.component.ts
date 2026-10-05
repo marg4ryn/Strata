@@ -106,7 +106,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.abandonedCode'),
-          path: 'developer-relationships',
+          path: 'code-city/abandoned-code',
         },
       ],
     },

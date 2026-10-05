@@ -1,0 +1,22 @@
+<ng-template shellTemplate>
+  <aside class="abandoned-code">
+    <h3 class="abandoned-code__heading">
+      {{ 'analysisResults.abandonedCode.title' | transloco }}
+    </h3>
+    <ul class="abandoned-code__list">
+      @for (item of abandonedCodeItems(); track item.path) {
+        <li class="abandoned-code__item">
+          <span class="abandoned-code__name">{{ item.name }}</span>
+          <span class="abandoned-code__value">{{
+            item.normalizedValue * 100 | localizedNumber: '1.0-2' : 'percent'
+          }}</span>
+          <span
+            class="abandoned-code__color"
+            [style.opacity]="item.colorIntensity"
+            aria-hidden="true"
+          ></span>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

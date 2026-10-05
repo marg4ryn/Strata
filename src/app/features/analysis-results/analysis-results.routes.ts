@@ -44,6 +44,13 @@ export const analysisResultsRoutes: Routes = [
             (m) => m.KnowledgeRisksComponent,
           ),
       },
+      {
+        path: 'abandoned-code',
+        loadComponent: () =>
+          import('./feature/abandoned-code/abandoned-code.component').then(
+            (m) => m.AbandonedCodeComponent,
+          ),
+      },
     ],
   },
 ];

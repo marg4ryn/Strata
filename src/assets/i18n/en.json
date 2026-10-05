@@ -189,6 +189,10 @@
       "title": "Ownership risks"
     },
 
+    "abandonedCode": {
+      "title": "Abandoned code"
+    },
+
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "mobileUnavailable": "The code city visualization is not available on mobile devices.",
