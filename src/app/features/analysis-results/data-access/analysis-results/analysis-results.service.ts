@@ -5,6 +5,7 @@ import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
 import type {
   KnowledgeRisksDetails,
+  LeadAuthorsDetails,
   RepositorySummary,
   RepositoryDetails,
   RepositoryTrends,
@@ -145,5 +146,19 @@ export class AnalysisResultsService {
     );
 
     return knowledgeRisksDetails;
+  }
+
+  async getLeadAuthorsDetails(analysisId: string): Promise<LeadAuthorsDetails[]> {
+    this.logger.info('Fetching lead authors data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const leadAuthorsDetails = await this.cachedFetcher.getOrFetch<LeadAuthorsDetails[]>(
+      cacheName,
+      '/lead-authors-details',
+      () => this.api.fetchLeadAuthorsDetails(analysisId),
+    );
+
+    return leadAuthorsDetails;
   }
 }

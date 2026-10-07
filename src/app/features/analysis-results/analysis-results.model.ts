@@ -7,3 +7,4 @@ export * from './models/file-details.model';
 export * from './models/hotspots.model';
 export * from './models/code-age.model';
 export * from './models/knowledge-risks.model';
+export * from './models/lead-authors.model';

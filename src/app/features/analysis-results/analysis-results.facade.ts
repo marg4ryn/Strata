@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AnalysisResultsService } from './data-access/analysis-results/analysis-results.service';
 import type {
   KnowledgeRisksDetails,
+  LeadAuthorsDetails,
   RepositorySummary,
   HotspotsDetails,
   AuthorCoupling,
@@ -52,5 +53,9 @@ export class AnalysisResultsFacade {
 
   getKnowledgeRisksDetails(analysisId: string): Promise<KnowledgeRisksDetails[]> {
     return this.service.getKnowledgeRisksDetails(analysisId);
+  }
+
+  getLeadAuthorsDetails(analysisId: string): Promise<LeadAuthorsDetails[]> {
+    return this.service.getLeadAuthorsDetails(analysisId);
   }
 }

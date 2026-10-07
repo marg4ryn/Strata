@@ -98,7 +98,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.codeOwners'),
-          path: 'developer-relationships',
+          path: 'code-city/lead-authors',
         },
         {
           labelKey: marker('analysisResults.navbar.ownershipRisks'),

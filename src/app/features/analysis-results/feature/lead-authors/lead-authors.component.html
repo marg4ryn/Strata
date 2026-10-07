@@ -1,0 +1,18 @@
+<ng-template shellTemplate>
+  <aside class="lead-authors">
+    <h3 class="lead-authors__heading">{{ 'analysisResults.leadAuthors.title' | transloco }}</h3>
+    <ul class="lead-authors__list">
+      @for (item of leadAuthorItems(); track item.name) {
+        <li class="lead-authors__item">
+          <span class="lead-authors__name">{{ item.name }}</span>
+          <span class="lead-authors__count">{{ item.count | localizedNumber }}</span>
+          <span
+            class="lead-authors__color"
+            [style.backgroundColor]="item.color"
+            aria-hidden="true"
+          ></span>
+        </li>
+      }
+    </ul>
+  </aside>
+</ng-template>

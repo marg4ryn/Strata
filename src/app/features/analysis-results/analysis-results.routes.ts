@@ -51,6 +51,13 @@ export const analysisResultsRoutes: Routes = [
             (m) => m.AbandonedCodeComponent,
           ),
       },
+      {
+        path: 'lead-authors',
+        loadComponent: () =>
+          import('./feature/lead-authors/lead-authors.component').then(
+            (m) => m.LeadAuthorsComponent,
+          ),
+      },
     ],
   },
 ];

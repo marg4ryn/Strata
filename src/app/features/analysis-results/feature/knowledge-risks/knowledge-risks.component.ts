@@ -28,11 +28,11 @@ const KNOWLEDGE_RISK_KEYS: Record<KnowledgeRisk, string> = {
 };
 
 const KNOWLEDGE_RISK_COLORS: Record<KnowledgeRisk, number> = {
-  BALANCED: 0x2e9e5b,
-  SINGLE_OWNER: 0xe8a317,
-  DIFFUSED: 0xd0372d,
-  ABANDONED: 0x4a4a52,
-  UNKNOWN: 0xffffff,
+  BALANCED: 0x4cd137, // Grass green
+  SINGLE_OWNER: 0xfbc531, // Sunny yellow
+  DIFFUSED: 0xe84393, // Magenta
+  ABANDONED: 0x7f8fa6, // Slate gray
+  UNKNOWN: 0x808080, // Light gray
 };
 
 @Component({

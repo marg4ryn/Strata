@@ -3,6 +3,7 @@ import { Service, inject } from '@angular/core';
 import { HttpService } from '@app/core/http';
 import type {
   KnowledgeRisksDetails,
+  LeadAuthorsDetails,
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
@@ -64,6 +65,10 @@ export class AnalysisResultsApiService {
     return this.http.get<KnowledgeRisksDetails[]>(
       `/analysis/${analysisId}/files/knowledge-loss-risk`,
     );
+  }
+
+  fetchLeadAuthorsDetails(analysisId: string): Promise<LeadAuthorsDetails[]> {
+    return this.http.get<LeadAuthorsDetails[]>(`/analysis/${analysisId}/files/lead-authors`);
   }
 
   private buildQueryString(params: Record<string, string | number | boolean>): string {
