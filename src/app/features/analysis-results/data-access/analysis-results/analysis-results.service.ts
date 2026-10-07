@@ -10,7 +10,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
-  HotspotsDetails,
+  Hotspot,
   CodeAgeDetails,
   AuthorCoupling,
   FileExtension,
@@ -107,18 +107,16 @@ export class AnalysisResultsService {
     return fileDetails;
   }
 
-  async getHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
+  async getHotspots(analysisId: string): Promise<Hotspot[]> {
     this.logger.info('Fetching hotspots data', { analysisId });
 
     const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
 
-    const hotspotsDetails = await this.cachedFetcher.getOrFetch<HotspotsDetails[]>(
-      cacheName,
-      '/hotspots-details',
-      () => this.api.fetchHotspotsDetails(analysisId),
+    const hotspots = await this.cachedFetcher.getOrFetch<Hotspot[]>(cacheName, '/hotspots', () =>
+      this.api.fetchHotspots(analysisId),
     );
 
-    return hotspotsDetails;
+    return hotspots;
   }
 
   async getCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {

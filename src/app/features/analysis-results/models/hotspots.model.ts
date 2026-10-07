@@ -1,4 +1,4 @@
-export interface HotspotsDetails {
+export interface Hotspot {
   path: string;
   normalizedValue: number;
 }

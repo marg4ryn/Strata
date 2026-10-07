@@ -177,7 +177,8 @@
     },
 
     "hotspots": {
-      "title": "Hotspoty"
+      "title": "Hotspoty",
+      "info": "Hotspoty to złożone obszary kodu, które w krótkim czasie były często modyfikowane. Stanowią one niewielką część systemu, ale koncentrują znaczną część defektów. Ich identyfikacja pomaga wskazać miejsca wymagające szczególnej uwagi, np. refaktoryzacji, dodatkowych testów lub dokładniejszego code review. Wartość procentowa wskazuje na względne prawdopodobieństwo, że dany plik jest hotspotem na tle wszystkich plików w repozytorium."
     },
 
     "codeAge": {
@@ -199,7 +200,6 @@
     "changeCoupling": {
       "filesWithCoupling": "Pliki z powiązaniami",
       "coupledFiles": "Powiązane pliki",
-      "sharedCommits": "wspólnych commitów",
       "noCoupledFiles": "Brak powiązanych plików",
       "selectFile": "Wybierz plik z pierwszej listy, aby zobaczyć powiązania"
     },

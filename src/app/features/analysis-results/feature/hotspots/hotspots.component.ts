@@ -1,34 +1,47 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 
 import { LocalizedNumberPipe } from '@app/shared/pipes';
+import { InfoTooltipComponent } from '@app/shared/components';
 import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../code-city-shell/services/code-city-state.service';
 import { CodeCityTemplateDirective } from '../code-city-shell/directives/code-city-template.directive';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
+import type { Hotspot } from '../../analysis-results.model';
 
-const MAX_HOTSPOTS = 50;
+interface HotspotsItem extends Hotspot {
+  name: string;
+  colorIntensity: number;
+}
+
+const MAX_ITEMS = 30;
 
 @Component({
   selector: 'app-hotspots',
-  imports: [CodeCityTemplateDirective, LocalizedNumberPipe, TranslocoPipe],
+  imports: [CodeCityTemplateDirective, LocalizedNumberPipe, TranslocoPipe, InfoTooltipComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './hotspots.component.scss',
   templateUrl: './hotspots.component.html',
 })
 export class HotspotsComponent {
   private readonly facade = inject(AnalysisResultsFacade);
+  private readonly transloco = inject(TranslocoService);
   readonly state = inject(CodeCityStateService);
 
   id = input.required<string>();
 
-  resource = pageResource(
-    () => this.facade.getHotspotsDetails(this.id()),
+  private readonly activeLang = toSignal(this.transloco.langChanges$, {
+    initialValue: this.transloco.getActiveLang(),
+  });
+
+  resource = pageResource<Hotspot[]>(
+    () => this.facade.getHotspots(this.id()),
     () => this.id(),
   );
 
-  hotspotItems = computed(() => {
+  hotspotItems = computed<HotspotsItem[]>(() => {
     if (!this.resource.hasValue()) return [];
 
     return this.resource
@@ -38,8 +51,11 @@ export class HotspotsComponent {
         name: item.path.split(/[\\/]/).pop() ?? item.path,
         colorIntensity: Math.min(Math.max(item.normalizedValue, 0), 1),
       }))
-      .sort((a, b) => b.normalizedValue - a.normalizedValue)
-      .slice(0, MAX_HOTSPOTS);
+      .sort(
+        (a, b) =>
+          b.normalizedValue - a.normalizedValue || a.path.localeCompare(b.path, this.activeLang()),
+      )
+      .slice(0, MAX_ITEMS);
   });
 
   colorData = computed<PathColorData[]>(() => {

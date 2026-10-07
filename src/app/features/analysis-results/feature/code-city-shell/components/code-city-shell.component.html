@@ -28,7 +28,7 @@
             [colorData]="this.state.colorData()"
             [(selectedNodePath)]="this.state.selectedNodePath"
             [(hoveredNodePath)]="this.state.hoveredNodePath"
-            [(keyboardNavigationActive)]="keyboardNavigationActive"
+            [(keyboardNavigationActive)]="state.keyboardNavigationActive"
           />
         }
       </div>
@@ -38,7 +38,7 @@
           [items]="data?.cityItems"
           [(selectedNodePath)]="this.state.selectedNodePath"
           [(hoveredNodePath)]="this.state.hoveredNodePath"
-          [(keyboardNavigationActive)]="keyboardNavigationActive"
+          [(keyboardNavigationActive)]="state.keyboardNavigationActive"
         />
       </div>
 

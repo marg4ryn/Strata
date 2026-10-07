@@ -38,6 +38,20 @@ export const analysisResultsRoutes: Routes = [
           import('./feature/code-age/code-age.component').then((m) => m.CodeAgeComponent),
       },
       {
+        path: 'change-coupling',
+        loadComponent: () =>
+          import('./feature/change-coupling/change-coupling.component').then(
+            (m) => m.ChangeCouplingComponent,
+          ),
+      },
+      {
+        path: 'lead-authors',
+        loadComponent: () =>
+          import('./feature/lead-authors/lead-authors.component').then(
+            (m) => m.LeadAuthorsComponent,
+          ),
+      },
+      {
         path: 'knowledge-risks',
         loadComponent: () =>
           import('./feature/knowledge-risks/knowledge-risks.component').then(
@@ -49,20 +63,6 @@ export const analysisResultsRoutes: Routes = [
         loadComponent: () =>
           import('./feature/abandoned-code/abandoned-code.component').then(
             (m) => m.AbandonedCodeComponent,
-          ),
-      },
-      {
-        path: 'lead-authors',
-        loadComponent: () =>
-          import('./feature/lead-authors/lead-authors.component').then(
-            (m) => m.LeadAuthorsComponent,
-          ),
-      },
-      {
-        path: 'change-coupling',
-        loadComponent: () =>
-          import('./feature/change-coupling/change-coupling.component').then(
-            (m) => m.ChangeCouplingComponent,
           ),
       },
     ],

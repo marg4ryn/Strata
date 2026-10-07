@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -46,14 +54,16 @@ export class CodeCityShellComponent {
 
   constructor() {
     effect(() => {
-      if (this.isMobile() && this.state.selectedNodePath() !== '/') {
-        this.state.selectedNodePath.set('/');
-      }
+      const isMobile = this.isMobile();
+      untracked(() => {
+        if (isMobile && this.state.selectedNodePath() !== '/') {
+          this.state.selectedNodePath.set('/');
+        }
+      });
     });
   }
 
   autoRotate = signal<boolean>(false);
-  keyboardNavigationActive = signal<boolean>(false);
 
   resource = pageResource(
     () => this.facade.getCodeCityData(this.id()),

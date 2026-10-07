@@ -1,6 +1,18 @@
 <ng-template shellTemplate>
   <aside class="hotspots">
-    <h3 class="hotspots__heading">{{ 'analysisResults.hotspots.title' | transloco }}</h3>
+    <div class="hotspots__heading">
+      <h3 class="hotspots__heading-label">
+        {{ 'analysisResults.hotspots.title' | transloco }}
+      </h3>
+      <!-- t(analysisResults.hotspots.info) -->
+      <app-info-tooltip
+        class="hotspots__heading-tooltip"
+        [textKey]="'analysisResults.hotspots.info'"
+        [iconSize]="20"
+        [position]="'bottom'"
+      />
+    </div>
+
     <ul class="hotspots__list">
       @for (item of hotspotItems(); track item.path) {
         <li>
@@ -11,10 +23,10 @@
               state.selectedNodePath() === item.path || state.hoveredNodePath() === item.path
             "
             [attr.aria-pressed]="state.selectedNodePath() === item.path"
-            (click)="state.selectedNodePath.set(item.path)"
-            (mouseenter)="state.hoveredNodePath.set(item.path)"
+            (click)="state.selectedNodePath.set(item.path); state.keyboardNavigationActive.set(false)"
+            (mouseenter)="state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(false)"
             (mouseleave)="state.hoveredNodePath.set(null)"
-            (focus)="state.hoveredNodePath.set(item.path)"
+            (focus)="state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(true)"
             (blur)="state.hoveredNodePath.set(null)"
           >
             <span class="hotspots__name">{{ item.name }}</span>
@@ -27,6 +39,10 @@
               aria-hidden="true"
             ></span>
           </button>
+        </li>
+      } @empty {
+        <li class="hotspots__empty">
+          {{ 'common.noData' | transloco }}
         </li>
       }
     </ul>

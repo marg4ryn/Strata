@@ -178,7 +178,8 @@
     },
 
     "hotspots": {
-      "title": "Hotspots"
+      "title": "Hotspots",
+      "info": "Hotspots are complex areas of code that have been modified frequently over a short period of time. They make up a small part of the system but contain a significant proportion of defects. Identifying hotspots helps highlight areas that require particular attention, such as refactoring, additional testing, or more thorough code reviews. The percentage indicates the relative likelihood that a given file is a hotspot among all files in the repository."
     },
 
     "codeAge": {
@@ -200,7 +201,6 @@
     "changeCoupling": {
       "filesWithCoupling": "Files with coupling",
       "coupledFiles": "Coupled files",
-      "sharedCommits": "shared commits",
       "noCoupledFiles": "No coupled files",
       "selectFile": "Select a file from the first list to see its couplings"
     },

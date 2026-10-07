@@ -7,7 +7,7 @@ import type {
   RepositoryDetails,
   RepositoryTrends,
   AuthorStatistics,
-  HotspotsDetails,
+  Hotspot,
   ChangeCoupling,
   CodeAgeDetails,
   AuthorCoupling,
@@ -54,8 +54,8 @@ export class AnalysisResultsApiService {
     return this.http.get<FileDetails>(`/analysis/${analysisId}/files?${queryString}`);
   }
 
-  fetchHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
-    return this.http.get<HotspotsDetails[]>(`/analysis/${analysisId}/files/hotspots`);
+  fetchHotspots(analysisId: string): Promise<Hotspot[]> {
+    return this.http.get<Hotspot[]>(`/analysis/${analysisId}/files/hotspots`);
   }
 
   fetchCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {

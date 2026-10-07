@@ -6,13 +6,13 @@ import type {
   KnowledgeRisksDetails,
   LeadAuthorsDetails,
   RepositorySummary,
-  HotspotsDetails,
+  ChangeCoupling,
   AuthorCoupling,
   CodeAgeDetails,
   FileExtension,
   CodeCityData,
   FileDetails,
-  ChangeCoupling,
+  Hotspot,
 } from './analysis-results.model';
 
 @Service()
@@ -44,8 +44,8 @@ export class AnalysisResultsFacade {
     return this.service.getFileDetails(analysisId, filePath);
   }
 
-  getHotspotsDetails(analysisId: string): Promise<HotspotsDetails[]> {
-    return this.service.getHotspotsDetails(analysisId);
+  getHotspots(analysisId: string): Promise<Hotspot[]> {
+    return this.service.getHotspots(analysisId);
   }
 
   getCodeAgeDetails(analysisId: string): Promise<CodeAgeDetails[]> {

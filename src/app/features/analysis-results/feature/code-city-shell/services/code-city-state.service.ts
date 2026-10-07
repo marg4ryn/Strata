@@ -11,4 +11,6 @@ export class CodeCityStateService {
 
   selectedNodePath = signal<string | null>(null);
   hoveredNodePath = signal<string | null>(null);
+
+  keyboardNavigationActive = signal(false);
 }
