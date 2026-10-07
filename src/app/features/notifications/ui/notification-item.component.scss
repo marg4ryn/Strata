@@ -8,14 +8,9 @@
   border-radius: 8px;
   background-color: var(--bg-primary);
   border-left: 3px solid transparent;
-  transition: all 0.1s ease;
 
   &:last-child {
     margin-bottom: 0;
-  }
-
-  &:hover {
-    transform: translateX(2px);
   }
 
   &.notification-item--success {
