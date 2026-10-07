@@ -117,6 +117,9 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       if (colorData.length > 0) {
         applyColorData(colorData, this.instanceMap);
       }
+      if (this.selectedInstance) {
+        applyInteractionColor(this.selectedInstance, COLORS.selected);
+      }
     });
 
     effect(() => {

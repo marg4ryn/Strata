@@ -18,6 +18,7 @@ import type {
   CityNode,
   CityItem,
   CodeCityData,
+  ChangeCoupling,
 } from '../../analysis-results.model';
 
 @Service()
@@ -160,5 +161,19 @@ export class AnalysisResultsService {
     );
 
     return leadAuthorsDetails;
+  }
+
+  async getChangeCoupling(analysisId: string): Promise<ChangeCoupling[]> {
+    this.logger.info('Fetching change coupling data', { analysisId });
+
+    const cacheName = `analysis:${analysisId}:${this.apiVersion}`;
+
+    const changeCoupling = await this.cachedFetcher.getOrFetch<ChangeCoupling[]>(
+      cacheName,
+      '/change-coupling',
+      () => this.api.fetchChangeCoupling(analysisId),
+    );
+
+    return changeCoupling;
   }
 }

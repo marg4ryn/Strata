@@ -197,6 +197,14 @@
       "title": "Code owners"
     },
 
+    "changeCoupling": {
+      "filesWithCoupling": "Files with coupling",
+      "coupledFiles": "Coupled files",
+      "sharedCommits": "shared commits",
+      "noCoupledFiles": "No coupled files",
+      "selectFile": "Select a file from the first list to see its couplings"
+    },
+
     "codeCity": {
       "renderError": "The code city could not be rendered.",
       "mobileUnavailable": "The code city visualization is not available on mobile devices.",

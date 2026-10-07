@@ -58,6 +58,13 @@ export const analysisResultsRoutes: Routes = [
             (m) => m.LeadAuthorsComponent,
           ),
       },
+      {
+        path: 'change-coupling',
+        loadComponent: () =>
+          import('./feature/change-coupling/change-coupling.component').then(
+            (m) => m.ChangeCouplingComponent,
+          ),
+      },
     ],
   },
 ];

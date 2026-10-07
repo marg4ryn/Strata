@@ -84,7 +84,7 @@ export class AnalysisResultsShellComponent {
         },
         {
           labelKey: marker('analysisResults.navbar.changeCoupling'),
-          path: 'developer-relationships',
+          path: 'code-city/change-coupling',
         },
       ],
     },

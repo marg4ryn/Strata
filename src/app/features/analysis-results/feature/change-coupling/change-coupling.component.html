@@ -1,0 +1,77 @@
+<ng-template shellTemplate>
+  <aside class="change-coupling">
+    <section class="change-coupling__panel">
+      <h3 class="change-coupling__heading">
+        {{ 'analysisResults.changeCoupling.filesWithCoupling' | transloco }}
+      </h3>
+      <ul class="change-coupling__list">
+        @for (item of fileCouplingItems(); track item.path) {
+          <li class="change-coupling__item">
+            <button
+              class="change-coupling__button"
+              type="button"
+              [class.change-coupling__button--selected]="state.selectedNodePath() === item.path"
+              [attr.aria-pressed]="state.selectedNodePath()"
+              (click)="state.selectedNodePath.set(item.path)"
+              (mouseenter)="state.hoveredNodePath.set(item.path)"
+              (mouseleave)="state.hoveredNodePath.set(null)"
+              (focus)="state.hoveredNodePath.set(item.path)"
+              (blur)="state.hoveredNodePath.set(null)"
+            >
+              <span class="change-coupling__name">{{ item.path }}</span>
+              <span class="change-coupling__count">{{ item.count | localizedNumber }}</span>
+              <span
+                class="change-coupling__color"
+                [style.backgroundColor]="item.color"
+                aria-hidden="true"
+              ></span>
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="change-coupling__panel">
+      <h3 class="change-coupling__heading">
+        {{ 'analysisResults.changeCoupling.coupledFiles' | transloco }}
+      </h3>
+      @if (selectedFile(); as file) {
+        <ul class="change-coupling__list">
+          @for (item of selectedCoupledFiles(); track item.path) {
+            <li class="change-coupling__item">
+              <button
+                class="change-coupling__button"
+                type="button"
+                [class.change-coupling__button--selected]="state.selectedNodePath() === item.path"
+                [attr.aria-pressed]="state.selectedNodePath()"
+                (click)="state.selectedNodePath.set(item.path)"
+                (mouseenter)="state.hoveredNodePath.set(item.path)"
+                (mouseleave)="state.hoveredNodePath.set(null)"
+                (focus)="state.hoveredNodePath.set(item.path)"
+                (blur)="state.hoveredNodePath.set(null)"
+              >
+                <span class="change-coupling__name">{{ item.path }}</span>
+                <span class="change-coupling__count">{{
+                  item.percentage | localizedNumber: '1.0-2' : 'percent'
+                }}</span>
+                <span
+                  class="change-coupling__color"
+                  [style.backgroundColor]="item.color"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </li>
+          } @empty {
+            <li class="change-coupling__empty">
+              {{ 'analysisResults.changeCoupling.noCoupledFiles' | transloco }}
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="change-coupling__empty">
+          {{ 'analysisResults.changeCoupling.selectFile' | transloco }}
+        </p>
+      }
+    </section>
+  </aside>
+</ng-template>

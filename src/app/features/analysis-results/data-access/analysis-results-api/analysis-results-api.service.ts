@@ -8,6 +8,7 @@ import type {
   RepositoryTrends,
   AuthorStatistics,
   HotspotsDetails,
+  ChangeCoupling,
   CodeAgeDetails,
   AuthorCoupling,
   FileExtension,
@@ -69,6 +70,10 @@ export class AnalysisResultsApiService {
 
   fetchLeadAuthorsDetails(analysisId: string): Promise<LeadAuthorsDetails[]> {
     return this.http.get<LeadAuthorsDetails[]>(`/analysis/${analysisId}/files/lead-authors`);
+  }
+
+  fetchChangeCoupling(analysisId: string): Promise<ChangeCoupling[]> {
+    return this.http.get<ChangeCoupling[]>(`/analysis/${analysisId}/files/coupling`);
   }
 
   private buildQueryString(params: Record<string, string | number | boolean>): string {

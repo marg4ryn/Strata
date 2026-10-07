@@ -196,6 +196,14 @@
       "title": "Właściciele kodu"
     },
 
+    "changeCoupling": {
+      "filesWithCoupling": "Pliki z powiązaniami",
+      "coupledFiles": "Powiązane pliki",
+      "sharedCommits": "wspólnych commitów",
+      "noCoupledFiles": "Brak powiązanych plików",
+      "selectFile": "Wybierz plik z pierwszej listy, aby zobaczyć powiązania"
+    },
+
     "codeCity": {
       "renderError": "Nie udało się wyświetlić miasta kodu.",
       "mobileUnavailable": "Wizualizacja miasta kodu nie jest dostępna na urządzeniach mobilnych.",

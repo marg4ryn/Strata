@@ -12,6 +12,7 @@ import type {
   FileExtension,
   CodeCityData,
   FileDetails,
+  ChangeCoupling,
 } from './analysis-results.model';
 
 @Service()
@@ -57,5 +58,9 @@ export class AnalysisResultsFacade {
 
   getLeadAuthorsDetails(analysisId: string): Promise<LeadAuthorsDetails[]> {
     return this.service.getLeadAuthorsDetails(analysisId);
+  }
+
+  getChangeCoupling(analysisId: string): Promise<ChangeCoupling[]> {
+    return this.service.getChangeCoupling(analysisId);
   }
 }
