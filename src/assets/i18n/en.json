@@ -210,7 +210,7 @@
         "selectNode": "Select a file or directory to view details",
         "navigateUp": "Navigate up",
         "directoryContent": "Directory contents",
-        "directoryItems": "items",
+        "directoryItems": "it.",
         "loading": "Loading file metrics…",
         "loadError": "Could not load file metrics.",
         "sections": {

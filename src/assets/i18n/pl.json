@@ -209,7 +209,7 @@
         "selectNode": "Wybierz plik lub katalog, aby zobaczyć szczegóły",
         "navigateUp": "Przejdź w górę",
         "directoryContent": "Zawartość katalogu",
-        "directoryItems": "elementów",
+        "directoryItems": "el.",
         "loading": "Wczytywanie metryk pliku…",
         "loadError": "Nie udało się wczytać metryk pliku.",
         "sections": {

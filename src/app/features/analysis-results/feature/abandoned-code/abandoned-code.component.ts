@@ -9,6 +9,13 @@ import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
 
 const MAX_ITEMS = 50;
+const WHITE = [255, 255, 255];
+const GRAY = [0x4a, 0x4a, 0x52];
+
+const toGray = (intensity: number): string => {
+  const [r, g, b] = WHITE.map((w, i) => Math.round(w - (w - GRAY[i]) * intensity));
+  return `rgb(${r}, ${g}, ${b})`;
+};
 
 @Component({
   selector: 'app-knowledge-loss',
@@ -49,7 +56,7 @@ export class AbandonedCodeComponent {
         return {
           ...item,
           name: item.path.split(/[\\/]/).pop() ?? item.path,
-          colorIntensity: Math.max(intensity, 0.2),
+          color: toGray(intensity),
         };
       })
       .sort((a, b) => b.normalizedValue - a.normalizedValue)

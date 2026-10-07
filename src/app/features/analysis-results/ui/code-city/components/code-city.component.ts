@@ -73,6 +73,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
 
   private readonly containerRef = viewChild.required<ElementRef<HTMLDivElement>>('container');
   private readonly cityRenderer = new CodeCityRenderer();
+  private sceneInitialZoom = this.initialZoom();
   private pointerTarget: HTMLElement | null = null;
   private pointerFrameId: number | null = null;
   private latestCursorPosition = { x: 0, y: 0 };
@@ -86,7 +87,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
   private instancePathMap: InstancePathMap = new Map();
   private readonly instanceMap: InstanceMap = new Map();
   private readonly rotationCenter = new THREE.Vector3(0, 0, 0);
-  private readonly controls: CameraControls = createCameraControls(this.initialZoom());
+  private readonly controls: CameraControls = createCameraControls(this.sceneInitialZoom);
   private readonly keydownHandler = (event: KeyboardEvent): void => this.handleKeyPress(event);
   private readonly pointerLeaveHandler = (): void => this.handlePointerLeave();
   private readonly pointerMoveHandler = (event: PointerEvent): void =>
@@ -267,7 +268,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
 
     this.controls.targetCenter.set(0, 0.5, 0);
     setRotationCenter(this.rotationCenter, this.controls.targetCenter);
-    this.controls.targetZoom = this.initialZoom();
+    this.controls.targetZoom = this.sceneInitialZoom;
 
     if (notify) {
       this.selectedNodePath.set(null);
@@ -355,9 +356,9 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
 
     this.instancePathMap = createInstancePathMap(this.instanceMap);
 
-    const optimalZoom = calculateInitialZoom(rootData, resources.camera);
-    this.controls.zoom = optimalZoom;
-    this.controls.targetZoom = optimalZoom;
+    this.sceneInitialZoom = calculateInitialZoom(rootData, resources.camera);
+    this.controls.zoom = this.sceneInitialZoom;
+    this.controls.targetZoom = this.sceneInitialZoom;
     applyColorData(this.colorData(), this.instanceMap);
 
     this.interactionController = new InteractionController({
@@ -369,7 +370,7 @@ export class CodeCityComponent implements AfterViewInit, OnDestroy {
       meshes: this.cityRenderer.meshes,
       instanceMap: this.instanceMap,
       controls: this.controls,
-      initialZoom: () => this.initialZoom(),
+      initialZoom: () => this.sceneInitialZoom,
       selectedInstance: () => this.selectedInstance,
       hoveredInstance: () => this.hoveredInstance,
       isHoverSuspended: () => this.keyboardNavigationActive(),
