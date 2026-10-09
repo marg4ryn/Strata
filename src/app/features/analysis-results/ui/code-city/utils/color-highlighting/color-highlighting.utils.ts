@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { COLORS } from '../../code-city.model';
 import type { InstanceData, InstanceMap, ColorData, PathColorData } from '../../code-city.model';
 
-const COLOR_INTENSITY_MULTIPLIER = 3;
+const COLOR_INTENSITY_MULTIPLIER = 2;
 const BASE_COLOR = new THREE.Color(COLORS.building);
 
 const tempColor = new THREE.Color();

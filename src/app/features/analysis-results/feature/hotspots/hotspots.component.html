@@ -23,19 +23,23 @@
               state.selectedNodePath() === item.path || state.hoveredNodePath() === item.path
             "
             [attr.aria-pressed]="state.selectedNodePath() === item.path"
-            (click)="state.selectedNodePath.set(item.path); state.keyboardNavigationActive.set(false)"
-            (mouseenter)="state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(false)"
+            (click)="
+              state.selectedNodePath.set(item.path); state.keyboardNavigationActive.set(false)
+            "
+            (mouseenter)="
+              state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(false)
+            "
             (mouseleave)="state.hoveredNodePath.set(null)"
             (focus)="state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(true)"
             (blur)="state.hoveredNodePath.set(null)"
           >
             <span class="hotspots__name">{{ item.name }}</span>
             <span class="hotspots__value">{{
-              item.normalizedValue * 100 | localizedNumber: '1.0-2' : 'percent'
+              item.colorIntensity * 100 | localizedNumber: '1.0' : 'percent'
             }}</span>
             <span
               class="hotspots__color"
-              [style.opacity]="item.colorIntensity"
+              [style.--intensity]="item.colorIntensity * 2"
               aria-hidden="true"
             ></span>
           </button>

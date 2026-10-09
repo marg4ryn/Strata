@@ -101,9 +101,11 @@
   }
 
   &__color {
+    --intensity: 0;
+
     width: 0.75rem;
     height: 0.75rem;
-    background-color: #bf1b1b;
+    background-color: color-mix(in srgb, #bf1b1b calc(var(--intensity) * 100%), white);
     border-radius: 50%;
   }
 }

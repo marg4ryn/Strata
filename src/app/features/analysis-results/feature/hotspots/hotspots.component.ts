@@ -17,6 +17,9 @@ interface HotspotsItem extends Hotspot {
 }
 
 const MAX_ITEMS = 30;
+const PERCENT_OF_HOTSPOTS = 0.15;
+const MIN_INTENSITY = 0.1;
+const HOTSPOTS_COLOR = 0xbf1b1b;
 
 @Component({
   selector: 'app-hotspots',
@@ -41,30 +44,55 @@ export class HotspotsComponent {
     () => this.id(),
   );
 
-  hotspotItems = computed<HotspotsItem[]>(() => {
+  private readonly topHotspots = computed<Hotspot[]>(() => {
     if (!this.resource.hasValue()) return [];
 
-    return this.resource
-      .value()
-      .map((item) => ({
-        ...item,
-        name: item.path.split(/[\\/]/).pop() ?? item.path,
-        colorIntensity: Math.min(Math.max(item.normalizedValue, 0), 1),
-      }))
+    const all = this.resource.value();
+    if (all.length === 0) return [];
+
+    const count = Math.min(Math.max(Math.ceil(all.length * PERCENT_OF_HOTSPOTS), 1), MAX_ITEMS);
+
+    return [...all]
       .sort(
         (a, b) =>
           b.normalizedValue - a.normalizedValue || a.path.localeCompare(b.path, this.activeLang()),
       )
-      .slice(0, MAX_ITEMS);
+      .slice(0, count);
+  });
+
+  private readonly intensityByPath = computed(() => {
+    const top = this.topHotspots();
+    const map = new Map<string, number>();
+    if (top.length === 0) return map;
+
+    const max = top[0].normalizedValue;
+    const min = top[top.length - 1].normalizedValue;
+    const range = max - min;
+
+    for (const item of top) {
+      const t = range === 0 ? 1 : (item.normalizedValue - min) / range;
+      map.set(item.path, MIN_INTENSITY + t * (1 - MIN_INTENSITY));
+    }
+    return map;
+  });
+
+  hotspotItems = computed<HotspotsItem[]>(() => {
+    const intensities = this.intensityByPath();
+
+    return this.topHotspots().map((item) => ({
+      ...item,
+      name: item.path.split(/[\\/]/).pop() ?? item.path,
+      colorIntensity: intensities.get(item.path) ?? 0,
+    }));
   });
 
   colorData = computed<PathColorData[]>(() => {
-    if (!this.resource.hasValue()) return [];
+    const intensities = this.intensityByPath();
 
-    return this.resource.value().map((item) => ({
+    return this.topHotspots().map((item) => ({
       path: item.path,
-      color: 0xbf1b1b,
-      intensity: Math.min(Math.max(item.normalizedValue, 0), 1),
+      color: HOTSPOTS_COLOR,
+      intensity: intensities.get(item.path) ?? 0,
     }));
   });
 
