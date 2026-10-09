@@ -183,7 +183,11 @@
     },
 
     "codeAge": {
-      "title": "Code age"
+      "title": "Code age",
+      "info": "The screen shows how long ago individual files and modules were last changed, with age measured from the most recent modification. Young code was changed recently, so the team still has a fresh mental model of how it works. With middle-aged code, some details have already been forgotten, but the code is still modified regularly. As a result, every return to this code requires rediscovering how it works, making this the highest-risk zone. Old code is stable and rarely changed, so it can be treated as a “black box.” A healthy system has a large proportion of young and old code, with relatively little middle-aged code. If files within the same module age at different rates, this may indicate that the module should be split into smaller parts.",
+      "young": "Young",
+      "mid": "Maturing",
+      "old": "Stable"
     },
 
     "knowledgeRisks": {

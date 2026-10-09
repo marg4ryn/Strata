@@ -182,7 +182,11 @@
     },
 
     "codeAge": {
-      "title": "Wiek kodu"
+      "title": "Wiek kodu",
+      "info": "Ekran pokazuje, jak dawno zmieniono poszczególne pliki i moduły, licząc ich wiek od ostatniej modyfikacji. Młody kod był niedawno zmieniany, więc zespół ma jeszcze świeży model mentalny jego działania. W przypadku kodu w średnim wieku część szczegółów została już zapomniana, ale kod nadal bywa modyfikowany, co sprawia, że każdorazowy powrót wymaga ponownego poznawania jego działania. To właśnie ta strefa wiąże się z największym ryzykiem. Stary kod jest natomiast stabilny i rzadko zmieniany, dlatego można traktować go jak „czarną skrzynkę”. Zdrowy system charakteryzuje się dużym udziałem kodu młodego i starego oraz niewielką ilością kodu w średnim wieku. Jeśli pliki w obrębie jednego modułu starzeją się w różnym tempie, może to wskazywać na potrzebę jego podziału.",
+      "young": "Młody",
+      "mid": "Dojrzewający",
+      "old": "Stabilny"
     },
 
     "knowledgeRisks": {
