@@ -1,20 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
-import { LocalizedNumberPipe } from '@app/shared/pipes';
-import { InfoTooltipComponent } from '@app/shared/components';
 import { pageResource } from '../../utils/page-resource/page-resource.utils';
 import { CodeCityStateService } from '../code-city-shell/services/code-city-state.service';
 import { CodeCityTemplateDirective } from '../code-city-shell/directives/code-city-template.directive';
+import { CodeCityListComponent } from '../../ui/code-city-list/code-city-list.component';
+import type { CodeCityListItem } from '../../ui/code-city-list/code-city-list.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { PathColorData } from '../../ui/code-city/code-city.model';
 import type { Hotspot } from '../../analysis-results.model';
-
-interface HotspotsItem extends Hotspot {
-  name: string;
-  colorIntensity: number;
-}
 
 const MAX_ITEMS = 30;
 const PERCENT_OF_HOTSPOTS = 0.15;
@@ -23,9 +18,8 @@ const HOTSPOTS_COLOR = 0xbf1b1b;
 
 @Component({
   selector: 'app-hotspots',
-  imports: [CodeCityTemplateDirective, LocalizedNumberPipe, TranslocoPipe, InfoTooltipComponent],
+  imports: [CodeCityTemplateDirective, CodeCityListComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './hotspots.component.scss',
   templateUrl: './hotspots.component.html',
 })
 export class HotspotsComponent {
@@ -76,12 +70,14 @@ export class HotspotsComponent {
     return map;
   });
 
-  hotspotItems = computed<HotspotsItem[]>(() => {
+  hotspotItems = computed<CodeCityListItem[]>(() => {
     const intensities = this.intensityByPath();
 
     return this.topHotspots().map((item) => ({
-      ...item,
+      path: item.path,
       name: item.path.split(/[\\/]/).pop() ?? item.path,
+      value: item.normalizedValue,
+      color: '#bf1b1b',
       colorIntensity: intensities.get(item.path) ?? 0,
     }));
   });

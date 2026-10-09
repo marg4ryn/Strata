@@ -1,0 +1,53 @@
+<aside class="feature-list">
+  <div class="feature-list__heading">
+    <h3 class="feature-list__heading-label">{{ titleKey() | transloco }}</h3>
+    @if (infoKey(); as key) {
+      <app-info-tooltip
+        class="feature-list__heading-tooltip"
+        [textKey]="key"
+        [iconSize]="20"
+        [position]="'bottom'"
+      />
+    }
+  </div>
+
+  <ul class="feature-list__list">
+    @for (item of items(); track item.path) {
+      <li>
+        <button
+          type="button"
+          class="feature-list__item"
+          [class.feature-list__item--active]="
+            state.selectedNodePath() === item.path || state.hoveredNodePath() === item.path
+          "
+          [attr.aria-pressed]="state.selectedNodePath() === item.path"
+          (click)="state.selectedNodePath.set(item.path); state.keyboardNavigationActive.set(false)"
+          (mouseenter)="
+            state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(false)
+          "
+          (mouseleave)="state.hoveredNodePath.set(null)"
+          (focus)="state.hoveredNodePath.set(item.path); state.keyboardNavigationActive.set(true)"
+          (blur)="state.hoveredNodePath.set(null)"
+        >
+          <span class="feature-list__name">{{ item.name }}</span>
+          <span class="feature-list__value">{{
+            item.value * (valueIsPercent() ? 100 : 1)
+              | localizedNumber
+                : (valueIsPercent() ? '1.0' : '1.0-2')
+                : (valueIsPercent() ? 'percent' : 'decimal')
+          }}</span>
+          <span
+            class="feature-list__color"
+            [style.--color]="item.color"
+            [style.--intensity]="item.colorIntensity * 2"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </li>
+    } @empty {
+      <li class="feature-list__empty">
+        {{ 'common.noData' | transloco }}
+      </li>
+    }
+  </ul>
+</aside>

@@ -18,7 +18,6 @@ import type { DropdownOption } from '@app/shared/components';
   imports: [DropdownComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './language-switcher.component.html',
-  styleUrl: './language-switcher.component.scss',
 })
 export class LanguageSwitcherComponent {
   private readonly facade = inject(LanguageFacade);

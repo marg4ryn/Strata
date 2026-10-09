@@ -7,7 +7,7 @@
   min-height: 0;
 }
 
-.hotspots {
+.feature-list {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -105,7 +105,11 @@
 
     width: 0.75rem;
     height: 0.75rem;
-    background-color: color-mix(in srgb, #bf1b1b calc(var(--intensity) * 100%), white);
+    background-color: color-mix(in srgb, var(--color) calc(var(--intensity) * 100%), white);
     border-radius: 50%;
+
+    &--opacity {
+      background-color: var(--color);
+    }
   }
 }
