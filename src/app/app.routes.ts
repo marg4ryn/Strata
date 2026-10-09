@@ -1,6 +1,7 @@
 import type { Routes } from '@angular/router';
 
 import { AnalysisRunPageComponent } from './features/analysis-run';
+import { AboutPageComponent } from './features/about';
 
 export const routes: Routes = [
   {
@@ -9,12 +10,10 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    loadComponent: () => import('./features/about').then((m) => m.AboutPageComponent),
+    component: AboutPageComponent,
   },
   {
     path: 'analysis/:id',
-    loadComponent: () =>
-      import('./features/analysis-results').then((m) => m.AnalysisResultsShellComponent),
     loadChildren: () => import('./features/analysis-results').then((m) => m.analysisResultsRoutes),
   },
 ];

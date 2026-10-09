@@ -1,69 +1,21 @@
 import type { Routes } from '@angular/router';
 
+import { AnalysisResultsShellComponent } from './feature/analysis-results-shell/analysis-results-shell.component';
+import { RepositoryDetailsComponent } from './feature/repository-details/repository-details.component';
+import { DeveloperRelationshipsComponent } from './feature/developer-relationships/developer-relationships.component';
+
 export const analysisResultsRoutes: Routes = [
   {
-    path: 'summary',
-    loadComponent: () =>
-      import('./feature/repository-details/repository-details.component').then(
-        (m) => m.RepositoryDetailsComponent,
-      ),
-  },
-  {
-    path: 'developer-relationships',
-    loadComponent: () =>
-      import('./feature/developer-relationships/developer-relationships.component').then(
-        (m) => m.DeveloperRelationshipsComponent,
-      ),
-  },
-  {
-    path: 'code-city',
-    loadComponent: () =>
-      import('./feature/code-city-shell/components/code-city-shell.component').then(
-        (m) => m.CodeCityShellComponent,
-      ),
+    path: '',
+    component: AnalysisResultsShellComponent,
     children: [
+      { path: '', pathMatch: 'full', redirectTo: 'summary' },
+      { path: 'summary', component: RepositoryDetailsComponent },
+      { path: 'developer-relationships', component: DeveloperRelationshipsComponent },
       {
-        path: 'file-types',
-        loadComponent: () =>
-          import('./feature/file-types/file-types.component').then((m) => m.FileTypesComponent),
-      },
-      {
-        path: 'hotspots',
-        loadComponent: () =>
-          import('./feature/hotspots/hotspots.component').then((m) => m.HotspotsComponent),
-      },
-      {
-        path: 'code-age',
-        loadComponent: () =>
-          import('./feature/code-age/code-age.component').then((m) => m.CodeAgeComponent),
-      },
-      {
-        path: 'change-coupling',
-        loadComponent: () =>
-          import('./feature/change-coupling/change-coupling.component').then(
-            (m) => m.ChangeCouplingComponent,
-          ),
-      },
-      {
-        path: 'lead-authors',
-        loadComponent: () =>
-          import('./feature/lead-authors/lead-authors.component').then(
-            (m) => m.LeadAuthorsComponent,
-          ),
-      },
-      {
-        path: 'knowledge-risks',
-        loadComponent: () =>
-          import('./feature/knowledge-risks/knowledge-risks.component').then(
-            (m) => m.KnowledgeRisksComponent,
-          ),
-      },
-      {
-        path: 'abandoned-code',
-        loadComponent: () =>
-          import('./feature/abandoned-code/abandoned-code.component').then(
-            (m) => m.AbandonedCodeComponent,
-          ),
+        path: 'code-city',
+        loadChildren: () =>
+          import('./feature/code-city-shell/code-city.routes').then((m) => m.codeCityRoutes),
       },
     ],
   },
