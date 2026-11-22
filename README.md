@@ -29,7 +29,6 @@ If an error occurs or the WebSocket connection is interrupted, the application a
 |:---:|:---:|:---:|:---:|
 | <img src="./docs/screens/target_form.png" width="200"/> | <img src="./docs/screens/loading_screen.png" width="200"/> | <img src="./docs/screens/analysis_error.png" width="200"/> | <img src="./docs/screens/unfinished_analysis.png" width="200"/> |
 
-
 ### Additional Features
 
 Users can access several application panels directly from the header. All panels are implemented using Angular CDK Overlay, which keeps them independent from the main application layout while providing consistent behavior and accessibility.
@@ -45,22 +44,28 @@ The settings panel allows users to change the application language between Engli
 | <img src="./docs/screens/notifications.png" width="300"/> | <img src="./docs/screens/analysis_history.png" width="300"/> | <img src="./docs/screens/settings.png" width="300"/> |
 
 
-### About Page
+## 🏙️ Code City Rendering
 
-Users interested in the application can visit the About Page, accessible from the application's footer. It presents the development team behind the project and the technology stack used to build the system, and it also documents the tool’s limitations to help users better understand Strata’s purpose and scope (see the **About Page** below).
+### Rendering and performance
 
-| About Page |
-|:---:|
-| <img src="./docs/screens/about.png" width="900"/> |
+Repositories can contain thousands of files, so the Code City is built to keep the number of GPU objects and draw calls constant, no matter how large the city gets. Buildings and platforms all reuse a single shared `UNIT_CUBE` (a unit `BoxGeometry`) and differ only by their transform matrix and color. The renderer creates one `InstancedMesh` per type (buildings, platforms and edges), so the GPU draws each type as a single batch instead of issuing a draw call for every node. Edges are instances of a shared, low-detail cylinder.
+
+The CPU computes all instance matrices once per city, and after that the geometry stays static. Each frame, Three.js passes only the updated camera matrices to the GPU, where the vertex shader projects every instance into screen space. Rotating, zooming or panning therefore costs no geometry rebuilds and no buffer uploads. Picking is just as cheap: instead of keeping a scene object per file, a raycaster tests the pointer against the instanced meshes, and an instance map translates the hit back to its repository node.
+
+GPU memory is released explicitly. Build buffers are local to each `GeometryBuilder.build` call, and a failed build rolls back the instance map and disposes of any meshes it already created. Replacing the city or destroying the component disposes of its meshes and scene resources. Only the shared `UNIT_CUBE` is kept alive, because every city reuses it.
+
+### Code City Shell and signal flow
+
+The Code City Shell renders `<app-code-city>` outside the `<router-outlet>` that displays pages such as Hotspots, File Types and Code Age. Switching between these child routes replaces only the page content: the city component stays mounted, so its Three.js scene and GPU resources are reused. The scene is rebuilt only when the repository tree itself changes.
+
+Each page provides its sidebar content as an Angular template. A directive registers that `TemplateRef` in `CodeCityStateService`, and the shell displays it with `NgTemplateOutlet`. The service is provided by the shell, so its signals are shared by the shell, active page, search bar, repository explorer and city without becoming application-wide state.
+
+The shell passes the city tree and color data to the city as inputs. Two-way `model` bindings connect the `selectedNodePath`, `hoveredNodePath` and `keyboardNavigationActive` signals to the search bar, repository explorer and city. For example, selecting a search result selects the matching instance in the city and the same node in the explorer. The active page writes its visualization colors to the shared `colorData` signal, which updates instance colors without rebuilding geometry. Auto-rotation is controlled separately by a shell-local signal and the pause/play button.
 
 
 ## 🧪 Tests
 
-The application is tested using the Vitest + Istanbul stack. Unit tests are used wherever possible. However, components that embed child components are tested using integration tests to avoid losing code coverage (see `docs/architecture-decision-record.md` – *Why do component tests use real child components instead of stubs?*). The test suite achieves 100% code coverage (see the **Code Coverage** below).
-
-| Code Coverage |
-|:---:|
-| <img src="./docs/screens/code_coverage.png" width="900"/> |
+The application is tested using the Vitest + Istanbul stack. Unit tests are used wherever possible. However, components that embed child components are tested using integration tests to avoid losing code coverage (see `docs/architecture-decision-record.md` – *Why do component tests use real child components instead of stubs?*).
 
 
 ## 🤖 AI
