@@ -46,7 +46,11 @@ The settings panel allows users to change the application language between Engli
 
 ## 🏙️ Code City Rendering
 
-### Rendering and performance
+### Layout
+
+Before rendering, the city is laid out bottom-up: each folder packs its children onto a platform, and that platform then becomes a single rectangle inside its parent. Packing uses a greedy guillotine algorithm based on potpack: children go in tallest first, each one into the smallest free space that fits it, with a fixed margin around every rectangle. A short sweep over eight container widths keeps the layout that wastes the least area while staying close to square, and elongated child folders are rotated by 90° when that makes their parent smaller. The layout is deterministic, so the same repository always produces the same city, and it takes milliseconds even for large trees (see `docs/architecture-decision-record.md` – *Why guillotine packing?*).
+
+### Performance
 
 Repositories can contain thousands of files, so the Code City is built to keep the number of GPU objects and draw calls constant, no matter how large the city gets. Buildings and platforms all reuse a single shared `UNIT_CUBE` (a unit `BoxGeometry`) and differ only by their transform matrix and color. The renderer creates one `InstancedMesh` per type (buildings, platforms and edges), so the GPU draws each type as a single batch instead of issuing a draw call for every node. Edges are instances of a shared, low-detail cylinder.
 
@@ -54,7 +58,7 @@ The CPU computes all instance matrices once per city, and after that the geometr
 
 GPU memory is released explicitly. Build buffers are local to each `GeometryBuilder.build` call, and a failed build rolls back the instance map and disposes of any meshes it already created. Replacing the city or destroying the component disposes of its meshes and scene resources. Only the shared `UNIT_CUBE` is kept alive, because every city reuses it.
 
-### Code City Shell and signal flow
+### Code City Shell
 
 The Code City Shell renders `<app-code-city>` outside the `<router-outlet>` that displays pages such as Hotspots, File Types and Code Age. Switching between these child routes replaces only the page content: the city component stays mounted, so its Three.js scene and GPU resources are reused. The scene is rebuilt only when the repository tree itself changes.
 

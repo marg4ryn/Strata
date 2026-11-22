@@ -214,6 +214,41 @@ Every registry update (marking a cache as used and enforcing the cache limit) is
 This prevents lost updates in the cache registry, both between parallel requests within one tab and between multiple tabs, and keeps the number of stored caches within the configured limit.
 
 
+## [Feature: Analysis Results] Why guillotine packing?
+
+### Context
+
+The city layout places square buildings (files) and rectangular platforms (folders) on a parent platform, recursively from the leaves up. Children must not overlap and must keep a fixed margin between each other and the platform edge. The main goal is to minimize unused platform area; keeping platforms close to square is secondary.
+
+### Decision
+
+I chose a simple greedy heuristic made of three parts:
+
+1. **Guillotine packing based on potpack.** Children are sorted by depth (descending) and each one goes into the top-left corner of the smallest free space that fits it; the remaining space is split in two. The margin is added to every rectangle's size before packing, so the packer itself knows nothing about margins.
+2. **A short width sweep.** The packer runs for eight container widths (0.7–1.4 × the ideal square side) and keeps the cheapest result. The cost is `area × (1 + 0.2 × |ln(width / depth)|)`, so area dominates and elongated platforms are penalized slightly.
+3. **Greedy folder rotation.** For every non-square child folder, from the largest, the parent tries the variant rotated by 90° (with its whole subtree) and keeps it if the cost drops.
+
+### Alternatives Considered
+
+**The skyline packer with the genetic algorithm.** It gave slightly worse results at a much higher cost in code and running time, and its parameters (population, mutation, stagnation) had no clear link to the layout quality.
+
+**The potpack library as is.** It is tiny and aims for a near-square container, but it does not allow setting the container width. On a single level it wastes about 15% of the area, and in nested folders these losses multiply: platforms were about 50% larger than before. I therefore kept its algorithm but embedded it with a configurable width.
+
+**MaxRects.** It usually packs better than skyline and guillotine because it tracks overlapping free rectangles, but it is more complex. The simpler packer with a width sweep already beats the previous solution, so the extra complexity was not justified.
+
+**Shelf packing (FFDH/NFDH).** It is very simple, but it wastes space when large and small buildings are mixed, which is typical for repositories.
+
+**Exact solvers (CP-SAT, MILP).** They give optimal layouts, but packing is NP-hard, they do not run natively in the browser, and they would have to be called for every folder. They are excessive for a visualization.
+
+**Squarified treemap.** It gives nicely proportioned areas but does not respect the real building sizes, so the result would have to be repaired anyway. At most it could serve as an initial placement.
+
+### Consequences
+
+The layout is a heuristic, not an optimum. Rotation is greedy and works on one level at a time; child folders are packed before their parent, so they cannot adapt their shape to the parent. If the waste becomes visible, the next step is to let each folder offer a few shape variants to its parent, not to bring back a genetic algorithm.
+
+The aspect ratio weight (0.2) and the list of widths are tuning parameters. A higher weight gives more square platforms at the cost of area.
+
+
 ## [Feature: Analysis History] Why Broadcast Channel API?
 
 ### Context

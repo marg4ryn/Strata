@@ -1,7 +1,5 @@
 import {
-  findBestPosition,
   processNode,
-  updateSkyline,
   MIN_BUILDING_HEIGHT,
   MIN_BUILDING_WIDTH,
   BUILDING_HEIGHT_SCALE,
@@ -9,8 +7,10 @@ import {
   MIN_PLATFORM_WIDTH,
   PLATFORM_HEIGHT,
 } from './layout-generating.utils';
-import type { SkylineSegment } from './layout-generating.utils';
 import type { CityNode, ProcessedNode } from '../../code-city.model';
+
+const MARGIN = 1.5;
+const EPS = 1e-6;
 
 function makeCityNode(overrides: Partial<CityNode>): CityNode {
   return {
@@ -21,9 +21,12 @@ function makeCityNode(overrides: Partial<CityNode>): CityNode {
   } as CityNode;
 }
 
-function assertNoOverlap(result: ProcessedNode) {
-  const rects = result.children.map((child, i) => {
-    const pos = result.positions[i];
+const file = (width: number, height = 1) => makeCityNode({ width, height });
+const dir = (...children: CityNode[]) => makeCityNode({ type: 'dir', children });
+
+function rectsOf(node: ProcessedNode) {
+  return node.children.map((child, i) => {
+    const pos = node.positions[i];
     return {
       minX: pos.centerX - child.width / 2,
       maxX: pos.centerX + child.width / 2,
@@ -31,24 +34,37 @@ function assertNoOverlap(result: ProcessedNode) {
       maxZ: pos.centerZ + child.depth / 2,
     };
   });
+}
+
+function assertValidLayout(node: ProcessedNode, deep = true) {
+  const rects = rectsOf(node);
+
+  for (const r of rects) {
+    expect(r.minX).toBeGreaterThanOrEqual(MARGIN - EPS);
+    expect(r.minZ).toBeGreaterThanOrEqual(MARGIN - EPS);
+    expect(r.maxX).toBeLessThanOrEqual(node.width - MARGIN + EPS);
+    expect(r.maxZ).toBeLessThanOrEqual(node.depth - MARGIN + EPS);
+  }
 
   for (let i = 0; i < rects.length; i++) {
     for (let j = i + 1; j < rects.length; j++) {
       const a = rects[i];
       const b = rects[j];
-      const overlapsX = a.minX < b.maxX && b.minX < a.maxX;
-      const overlapsZ = a.minZ < b.maxZ && b.minZ < a.maxZ;
-      expect(overlapsX && overlapsZ).toBe(false);
+      const closeX = a.minX < b.maxX + MARGIN - EPS && b.minX < a.maxX + MARGIN - EPS;
+      const closeZ = a.minZ < b.maxZ + MARGIN - EPS && b.minZ < a.maxZ + MARGIN - EPS;
+      expect(closeX && closeZ).toBe(false);
     }
   }
+
+  if (deep) node.children.forEach((child) => assertValidLayout(child));
 }
+
+const treeWithElongatedFolder = () => dir(dir(file(2), file(2), file(2)), file(6), file(6));
 
 describe('processNode', () => {
   describe('file node', () => {
     it('calculates dimensions from scaled source values', () => {
-      const node = makeCityNode({ width: 10, height: 20 });
-
-      const result = processNode(node);
+      const result = processNode(file(10, 20));
 
       expect(result.width).toBe((MIN_BUILDING_WIDTH + 10) * BUILDING_WIDTH_SCALE);
       expect(result.height).toBe((MIN_BUILDING_HEIGHT + 20) * BUILDING_HEIGHT_SCALE);
@@ -56,18 +72,14 @@ describe('processNode', () => {
     });
 
     it('returns no children or positions', () => {
-      const node = makeCityNode({ width: 1, height: 1 });
-
-      const result = processNode(node);
+      const result = processNode(file(1, 1));
 
       expect(result.children).toEqual([]);
       expect(result.positions).toEqual([]);
     });
 
     it('uses minimum dimensions for zero width and height', () => {
-      const node = makeCityNode({ width: 0, height: 0 });
-
-      const result = processNode(node);
+      const result = processNode(file(0, 0));
 
       expect(result.width).toBe(MIN_BUILDING_WIDTH * BUILDING_WIDTH_SCALE);
       expect(result.height).toBe(MIN_BUILDING_HEIGHT * BUILDING_HEIGHT_SCALE);
@@ -76,9 +88,7 @@ describe('processNode', () => {
 
   describe('empty directory node', () => {
     it('returns minimum platform dimensions', () => {
-      const node = makeCityNode({ type: 'dir', children: [] });
-
-      const result = processNode(node);
+      const result = processNode(dir());
 
       expect(result.width).toBe(MIN_PLATFORM_WIDTH);
       expect(result.depth).toBe(MIN_PLATFORM_WIDTH);
@@ -88,266 +98,153 @@ describe('processNode', () => {
     });
 
     it('treats a missing children field as an empty list', () => {
-      const node = makeCityNode({ type: 'dir' });
-
-      const result = processNode(node);
+      const result = processNode(makeCityNode({ type: 'dir' }));
 
       expect(result.width).toBe(MIN_PLATFORM_WIDTH);
     });
   });
 
   describe('directory node with children', () => {
-    it('preserves child order in positions after internal sorting', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: [
-          makeCityNode({ width: 1, height: 1 }),
-          makeCityNode({ width: 10, height: 10 }),
-          makeCityNode({ width: 5, height: 5 }),
-        ],
-      });
+    it('keeps positions in the original child order after internal sorting', () => {
+      const children = [file(1), file(10), file(5)];
 
-      const result = processNode(node);
+      const result = processNode(dir(...children));
 
       expect(result.positions).toHaveLength(3);
-      expect(result.positions.every((p) => p !== undefined)).toBe(true);
-      expect(typeof result.positions[1].centerX).toBe('number');
-      expect(typeof result.positions[1].centerZ).toBe('number');
+      result.children.forEach((child, i) => {
+        expect(child.width).toBe(processNode(children[i]).width);
+      });
+      assertValidLayout(result);
     });
 
-    it('places children without overlap', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: [
-          makeCityNode({ width: 2, height: 1 }),
-          makeCityNode({ width: 4, height: 1 }),
-          makeCityNode({ width: 1, height: 1 }),
-          makeCityNode({ width: 3, height: 1 }),
-        ],
-      });
+    it('places children without overlap and with margins', () => {
+      const result = processNode(dir(file(2), file(4), file(1), file(3)));
 
-      const result = processNode(node);
-
-      assertNoOverlap(result);
+      assertValidLayout(result);
     });
 
     it('keeps platform height independent of child dimensions', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: [makeCityNode({ width: 5, height: 100 })],
-      });
-
-      const result = processNode(node);
+      const result = processNode(dir(file(5, 100)));
 
       expect(result.height).toBe(PLATFORM_HEIGHT);
     });
 
-    it('includes a margin around a single child', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: [makeCityNode({ width: 1, height: 1 })],
-      });
-
-      const result = processNode(node);
+    it('centers a single child with a margin on every side', () => {
+      const result = processNode(dir(file(2, 2)));
       const child = result.children[0];
+      const position = result.positions[0];
 
-      expect(result.width).toBeGreaterThan(child.width);
-      expect(result.depth).toBeGreaterThan(child.depth);
+      expect(result.width).toBeCloseTo(child.width + 2 * MARGIN);
+      expect(result.depth).toBeCloseTo(child.depth + 2 * MARGIN);
+      expect(position.centerX).toBeCloseTo(result.width / 2);
+      expect(position.centerZ).toBeCloseTo(result.depth / 2);
     });
 
     it('places multiple children with identical dimensions', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: Array.from({ length: 6 }, () => makeCityNode({ width: 2, height: 2 })),
-      });
-
-      const result = processNode(node);
+      const result = processNode(dir(...Array.from({ length: 6 }, () => file(2, 2))));
 
       expect(result.positions).toHaveLength(6);
-      assertNoOverlap(result);
+      assertValidLayout(result);
+    });
+
+    it('handles a varied set of child sizes', () => {
+      const sizes = [
+        [1, 12],
+        [8, 2],
+        [3, 7],
+        [10, 1],
+        [2, 5],
+        [6, 3],
+        [4, 9],
+        [12, 2],
+        [5, 4],
+        [2, 11],
+        [9, 3],
+        [3, 2],
+        [7, 8],
+        [1, 6],
+        [11, 4],
+      ];
+
+      const result = processNode(dir(...sizes.map(([width, height]) => file(width, height))));
+
+      expect(result.positions).toHaveLength(sizes.length);
+      assertValidLayout(result);
+    });
+
+    it('does not waste much space on many similar buildings', () => {
+      const children = Array.from({ length: 30 }, (_, i) => file(1 + (i % 4) * 0.5));
+
+      const result = processNode(dir(...children));
+      const used = result.children.reduce(
+        (sum, c) => sum + (c.width + MARGIN) * (c.depth + MARGIN),
+        0,
+      );
+
+      expect(used / (result.width * result.depth)).toBeGreaterThan(0.7);
+      expect(Math.max(result.width / result.depth, result.depth / result.width)).toBeLessThan(1.5);
+    });
+
+    it('falls back to a layout when child dimensions are not finite', () => {
+      const result = processNode(dir(file(Number.NaN, 1)));
+
+      expect(Number.isNaN(result.width)).toBe(true);
+      expect(result.positions).toHaveLength(1);
     });
   });
 
   describe('nested directory nodes', () => {
     it('processes nested directories and files recursively', () => {
-      const node = makeCityNode({
-        type: 'dir',
-        children: [
-          makeCityNode({
-            type: 'dir',
-            children: [makeCityNode({ width: 3, height: 3 })],
-          }),
-          makeCityNode({ width: 2, height: 2 }),
-        ],
-      });
-
-      const result = processNode(node);
+      const result = processNode(dir(dir(file(3, 3)), file(2, 2)));
 
       expect(result.children).toHaveLength(2);
       expect(result.children[0].children).toHaveLength(1);
       expect(result.children[1].children).toHaveLength(0);
       expect(result.positions).toHaveLength(2);
-      assertNoOverlap(result);
+      assertValidLayout(result);
+    });
+
+    it('produces a valid layout on every level of a deep tree', () => {
+      const tree = dir(
+        dir(file(1), file(2), dir(file(3), file(1), dir(file(2), file(2)))),
+        dir(file(4), file(1), file(1)),
+        dir(),
+        file(5),
+        dir(dir(file(1), file(1), file(1), file(1)), file(2)),
+      );
+
+      assertValidLayout(processNode(tree));
+    });
+
+    it('is deterministic', () => {
+      const tree = dir(dir(file(1), file(3)), file(2), dir(file(4), file(1)));
+
+      expect(processNode(tree)).toEqual(processNode(tree));
     });
   });
 
-  it('returns centered positions inside the calculated platform', () => {
-    const node = makeCityNode({
-      type: 'dir',
-      children: [makeCityNode({ width: 2, height: 2 })],
+  describe('folder rotation', () => {
+    it('rotates an elongated folder when it makes the parent smaller', () => {
+      const tree = treeWithElongatedFolder();
+
+      const rotated = processNode(tree);
+      const plain = processNode(tree, { rotateFolders: false });
+
+      expect(rotated.children[0].width).toBeCloseTo(plain.children[0].depth);
+      expect(rotated.children[0].depth).toBeCloseTo(plain.children[0].width);
+      expect(rotated.width * rotated.depth).toBeLessThan(plain.width * plain.depth);
     });
 
-    const result = processNode(node);
-    const position = result.positions[0];
-    const child = result.children[0];
-
-    expect(position.centerX).toBe(result.width / 2);
-    expect(position.centerZ).toBe(result.depth / 2);
-    expect(position.centerX - child.width / 2).toBeGreaterThan(0);
-    expect(position.centerZ - child.depth / 2).toBeGreaterThan(0);
-  });
-
-  it('keeps a directory platform large enough for every child', () => {
-    const node = makeCityNode({
-      type: 'dir',
-      children: [makeCityNode({ width: 20, height: 1 }), makeCityNode({ width: 1, height: 20 })],
+    it('keeps the rotated folder contents valid', () => {
+      assertValidLayout(processNode(treeWithElongatedFolder()));
     });
 
-    const result = processNode(node);
+    it('leaves files unrotated', () => {
+      const result = processNode(treeWithElongatedFolder());
 
-    for (const [index, child] of result.children.entries()) {
-      const position = result.positions[index];
-      expect(position.centerX - child.width / 2).toBeGreaterThanOrEqual(0);
-      expect(position.centerX + child.width / 2).toBeLessThanOrEqual(result.width);
-      expect(position.centerZ - child.depth / 2).toBeGreaterThanOrEqual(0);
-      expect(position.centerZ + child.depth / 2).toBeLessThanOrEqual(result.depth);
-    }
-  });
-
-  it('handles a varied set of child sizes without overlap', () => {
-    const sizes = [
-      [1, 12],
-      [8, 2],
-      [3, 7],
-      [10, 1],
-      [2, 5],
-      [6, 3],
-      [4, 9],
-      [12, 2],
-      [5, 4],
-      [2, 11],
-      [9, 3],
-      [3, 2],
-      [7, 8],
-      [1, 6],
-      [11, 4],
-    ];
-    const node = makeCityNode({
-      type: 'dir',
-      children: sizes.map(([width, height]) => makeCityNode({ width, height })),
+      for (const child of result.children.slice(1)) {
+        expect(child.width).toBe(child.depth);
+      }
     });
-
-    const result = processNode(node);
-
-    expect(result.positions).toHaveLength(sizes.length);
-    assertNoOverlap(result);
-  });
-
-  it('uses the fallback layout when child dimensions are not finite', () => {
-    const node = makeCityNode({
-      type: 'dir',
-      children: [makeCityNode({ width: Number.NaN, height: 1 })],
-    });
-
-    const result = processNode(node);
-
-    expect(Number.isNaN(result.width)).toBe(true);
-    expect(result.positions).toHaveLength(1);
-  });
-});
-
-describe('updateSkyline', () => {
-  it('trims only the left side when the new segment ends at the existing segment end', () => {
-    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
-
-    updateSkyline(skyline, 5, 2, 5); // New segment [5,10) covers the right side of [0,10).
-
-    expect(skyline.some((s) => s.startX === 0 && s.length === 5 && s.levelZ === 0)).toBe(true);
-    expect(skyline.some((s) => s.startX === 10)).toBe(false);
-  });
-
-  it('trims only the right side when the new segment starts at the existing segment start', () => {
-    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
-
-    updateSkyline(skyline, 0, 2, 5); // New segment [0,5) covers the left side of [0,10).
-
-    expect(skyline.some((s) => s.startX === 0 && s.levelZ === 0)).toBe(false);
-    expect(skyline.some((s) => s.startX === 5 && s.length === 5 && s.levelZ === 0)).toBe(true);
-  });
-
-  it('trims both sides when the new segment is placed in the middle', () => {
-    const skyline: SkylineSegment[] = [{ startX: 0, levelZ: 0, length: 10 }];
-
-    updateSkyline(skyline, 3, 2, 4); // New segment [3,7) sits inside [0,10).
-
-    expect(skyline.some((s) => s.startX === 0 && s.length === 3)).toBe(true);
-    expect(skyline.some((s) => s.startX === 7 && s.length === 3)).toBe(true);
-  });
-
-  it('leaves no remainder when the new segment exactly covers the old one', () => {
-    const skyline = [{ startX: 0, levelZ: 0, length: 10 }];
-
-    updateSkyline(skyline, 0, 2, 10);
-
-    expect(skyline).toEqual([{ startX: 0, levelZ: 2, length: 10 }]);
-  });
-
-  it('preserves segments outside the updated range', () => {
-    const skyline: SkylineSegment[] = [
-      { startX: 0, levelZ: 0, length: 5 },
-      { startX: 5, levelZ: 1, length: 5 },
-      { startX: 10, levelZ: 0, length: 5 },
-    ];
-
-    updateSkyline(skyline, 6, 3, 2);
-
-    expect(skyline).toEqual([
-      { startX: 0, levelZ: 0, length: 5 },
-      { startX: 5, levelZ: 1, length: 1 },
-      { startX: 6, levelZ: 3, length: 2 },
-      { startX: 8, levelZ: 1, length: 2 },
-      { startX: 10, levelZ: 0, length: 5 },
-    ]);
-  });
-
-  it('merges adjacent segments with matching heights', () => {
-    const skyline: SkylineSegment[] = [
-      { startX: 0, levelZ: 0, length: 5 },
-      { startX: 5, levelZ: 0, length: 5 },
-    ];
-
-    updateSkyline(skyline, 2, 0, 3);
-
-    expect(skyline).toEqual([{ startX: 0, levelZ: 0, length: 10 }]);
-  });
-});
-
-describe('findBestPosition', () => {
-  it('returns null when disjoint skyline segments cannot fit the requested width', () => {
-    const skyline: SkylineSegment[] = [
-      { startX: 0, levelZ: 1, length: 2 },
-      { startX: 5, levelZ: 1, length: 2 },
-    ];
-
-    expect(findBestPosition(skyline, 4, 10)).toBeNull();
-  });
-
-  it('prefers the leftmost segment when candidate positions have equal heights', () => {
-    const skyline: SkylineSegment[] = [
-      { startX: 5, levelZ: 1, length: 5 },
-      { startX: 0, levelZ: 1, length: 5 },
-    ];
-
-    expect(findBestPosition(skyline, 2, 10)).toEqual({ originX: 0, originZ: 1 });
   });
 });
