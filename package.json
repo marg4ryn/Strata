@@ -16,11 +16,11 @@
   "packageManager": "npm@11.17.0",
   "dependencies": {
     "@angular/cdk": "^22.0.4",
-    "@angular/common": "^22.1.6",
-    "@angular/core": "^22.1.6",
-    "@angular/forms": "^22.1.6",
-    "@angular/platform-browser": "^22.1.6",
-    "@angular/router": "^22.1.6",
+    "@angular/common": "^22.3.0",
+    "@angular/core": "^22.3.0",
+    "@angular/forms": "^22.3.0",
+    "@angular/platform-browser": "^22.3.0",
+    "@angular/router": "^22.3.0",
     "@jsverse/transloco": "^8.4.0",
     "chart.js": "^4.5.1",
     "d3": "^7.9.0",
@@ -32,13 +32,13 @@
   "devDependencies": {
     "@angular/build": "^22.1.8",
     "@angular/cli": "^22.1.8",
-    "@angular/compiler": "^22.1.6",
-    "@angular/compiler-cli": "^22.1.6",
+    "@angular/compiler": "^22.3.0",
+    "@angular/compiler-cli": "^22.3.0",
     "@eslint/js": "^9.39.5",
     "@jsverse/transloco-keys-manager": "^8.1.1",
     "@types/d3": "^7.4.3",
     "@types/three": "^0.186.0",
-    "@vitest/coverage-istanbul": "^4.1.11",
+    "@vitest/coverage-istanbul": "^4.1.12",
     "angular-eslint": "^22.5.0",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
@@ -51,14 +51,19 @@
     "resize-observer-polyfill": "^1.5.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",
-    "vitest": "^4.1.11",
+    "vitest": "^4.1.12",
     "vitest-canvas-mock": "^1.2.0"
+  },
+  "overrides": {
+    "@jsverse/transloco-keys-manager": {
+      "glob": "^14.0.6"
+    }
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
-    "lmdb@3.5.6": true,
-    "msgpackr-extract@3.0.4": true,
     "@parcel/watcher@2.6.0": true,
-    "unrs-resolver@1.12.2": true
+    "unrs-resolver@1.12.2": true,
+    "lmdb": false,
+    "msgpackr-extract": false
   }
 }
