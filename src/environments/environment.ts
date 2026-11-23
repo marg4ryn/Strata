@@ -3,7 +3,7 @@ import type { Environment } from './environment.model';
 
 export const environment: Environment = {
   production: true,
-  apiUrl: '',
+  apiUrl: 'http://localhost:8080/api',
   enableLogging: false,
   logLevel: LogLevel.ERROR,
 };
