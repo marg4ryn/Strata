@@ -1,3 +1,5 @@
+name: strata-frontend
+
 services:
   frontend:
     image: strata-frontend

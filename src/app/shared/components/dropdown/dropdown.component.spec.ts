@@ -230,23 +230,10 @@ describe('DropdownComponent', () => {
   });
 
   /**
-   * This test exists solely to achieve full coverage of `viewChild.required(CdkListbox)`.
-   *
-   * Problem: Angular internally wraps tokens passed to `viewChild` in lazily evaluated
-   * functions (forwardRef closures). Since the CdkListbox directive is rendered inside
-   * an asynchronous <ng-template> (CDK Overlay), standard tests cannot synchronously
-   * resolve this token. As a result, Istanbul reports the `CdkListbox` token itself
-   * as uncovered (`fstat-no`).
-   *
-   * Solution: Use `TestBed.overrideTemplate` to remove the asynchronous CDK Overlay
-   * dependency for this isolated test. Although overrideTemplate triggers JIT
-   * recompilation (which would normally affect template coverage), Istanbul aggregates
-   * coverage across all tests. The standard AOT tests still cover the original template,
-   * while this overridden test allows the instrumented TypeScript class to synchronously
-   * resolve and execute the `CdkListbox` token.
-   *
-   * See docs/testing-coverage-caveats.
-   **/
+   * Covers the `forwardRef(() => CdkListbox)` closure emitted in the dev-mode class
+   * metadata, which is only evaluated when TestBed recompiles the component in JIT mode.
+   * See docs/testing-coverage-caveats.md, section 1.
+   */
 
   it('should explicitly resolve viewChild queries to satisfy Istanbul coverage', async () => {
     await TestBed.resetTestingModule()

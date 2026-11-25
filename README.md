@@ -9,7 +9,7 @@
 
 🔗 Backend Repository: https://github.com/marg4ryn/Strata-Backend
 
-> Detailed project documentation can be found in the `docs/` directory. It includes Architecture Decision Record (ADR), the project structure convention, as well as activity and sequence diagrams.
+> Detailed project documentation can be found in the `docs/` directory. It includes [Architecture Decision Records (ADRs)](docs/adr/README.md), the [Project Structure Convention](docs/structure-convention.md), [Code Coverage Caveats](docs/testing-coverage-caveats.md), as well as activity and sequence diagrams.
 
 ## 🧭 About
 
@@ -21,7 +21,7 @@ The application's name refers to rock strata – layers that accumulate over tim
 
 ### Running Analyses
 
-To start an analysis, the user provides the URL of the target Git repository. Optionally, they can specify a date range to limit the analysis; otherwise, the repository's entire commit history is processed by default (see the **Target Form** below). During the analysis, the application displays real-time progress updates delivered by the server over a WebSocket connection, allowing users to monitor each stage of the process (see the **Loading Screen** below). Multiple analyses can be executed simultaneously in separate tabs, enabling users to work on different repositories independently. Application state is synchronized across browser tabs using Local Storage, while the Web Locks API prevents multiple tabs from competing for the same resources, ensuring consistent and reliable behavior.
+To start an analysis, the user provides the URL of the target Git repository. Optionally, they can specify a date range to limit the analysis; otherwise, the repository's entire commit history is processed by default (see the **Target Form** below). During the analysis, the application displays real-time progress updates delivered by the server over a WebSocket connection, allowing users to monitor each stage of the process (see the **Loading Screen** below and [ADR 0009](docs/adr/0009-websocket-for-analysis-run.md)). Multiple analyses can be executed simultaneously in separate tabs, enabling users to work on different repositories independently. Application state is synchronized across browser tabs using Local Storage, while the Web Locks API prevents multiple tabs from competing for the same resources, ensuring consistent and reliable behavior (see [ADR 0010](docs/adr/0010-web-locks-for-analysis-run.md)).
 
 If an error occurs or the WebSocket connection is interrupted, the application allows the user to reconnect and resume receiving status updates without restarting the analysis (see the **Analysis Error** below). An analysis continues running even if the application is closed. When the user returns later, Strata automatically detects any unfinished analysis and offers the option to reconnect to it (see the **Unfinished Analysis** below). 
 
@@ -31,13 +31,13 @@ If an error occurs or the WebSocket connection is interrupted, the application a
 
 ### Additional Features
 
-Users can access several application panels directly from the header. All panels are implemented using Angular CDK Overlay, which keeps them independent from the main application layout while providing consistent behavior and accessibility.
+Users can access several application panels directly from the header. All panels are implemented using Angular CDK Overlay, which keeps them independent from the main application layout while providing consistent behavior and accessibility (see [ADR 0004](docs/adr/0004-use-angular-cdk-overlay.md)).
 
 Important actions trigger notifications that inform users about the result of an operation. Notifications indicate the message type (`success`, `info`, `warn`, or `error`) and the number of unread notifications is displayed in the application header (see the **Notifications** below).
 
-Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below). The analysis history state is synchronized between browser tabs using the Broadcast Channel API, ensuring that additions and removals made in one tab are reflected in the others.
+Each successfully completed analysis is added to the analysis history. Users can open a previous entry to load its results without having to run the analysis again (see the **Analysis History** below). The analysis history state is synchronized between browser tabs using the Broadcast Channel API, ensuring that additions and removals made in one tab are reflected in the others (see [ADR 0012](docs/adr/0012-broadcast-channel-for-analysis-history.md)).
 
-The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below). Dates and numbers are localized at display time using custom pipes, which format the values according to the currently selected application language provided by Transloco.
+The settings panel allows users to change the application language between English and Polish. Translations are handled at runtime using Transloco, allowing the language to be changed without reloading the application (see the **Settings** below). Dates and numbers are localized at display time using custom pipes, which format the values according to the currently selected application language provided by Transloco (see [ADR 0005](docs/adr/0005-use-transloco-for-i18n.md)).
 
 | Notifications | Analysis History | Settings |
 |:---:|:---:|:---:|
@@ -48,7 +48,7 @@ The settings panel allows users to change the application language between Engli
 
 ### Layout
 
-Before rendering, the city is laid out bottom-up: each folder packs its children onto a platform, and that platform then becomes a single rectangle inside its parent. Packing uses a greedy guillotine algorithm based on potpack: children go in tallest first, each one into the smallest free space that fits it, with a fixed margin around every rectangle. A short sweep over eight container widths keeps the layout that wastes the least area while staying close to square, and elongated child folders are rotated by 90° when that makes their parent smaller. The layout is deterministic, so the same repository always produces the same city, and it takes milliseconds even for large trees (see `docs/architecture-decision-record.md` – *Why guillotine packing?*).
+Before rendering, the city is laid out bottom-up: each folder packs its children onto a platform, and that platform then becomes a single rectangle inside its parent. Packing uses a greedy guillotine algorithm based on potpack: children go in tallest first, each one into the smallest free space that fits it, with a fixed margin around every rectangle. A short sweep over eight container widths keeps the layout that wastes the least area while staying close to square, and elongated child folders are rotated by 90° when that makes their parent smaller. The layout is deterministic, so the same repository always produces the same city, and it takes milliseconds even for large trees (see [ADR 0013](docs/adr/0013-guillotine-packing-for-analysis-results.md)).
 
 ### Performance
 
@@ -69,7 +69,7 @@ The shell passes the city tree and color data to the city as inputs. Two-way `mo
 
 ## 🧪 Tests
 
-The application is tested using the Vitest + Istanbul stack. Unit tests are used wherever possible. However, components that embed child components are tested using integration tests to avoid losing code coverage (see `docs/architecture-decision-record.md` – *Why do component tests use real child components instead of stubs?*).
+The application is tested using the Vitest + Istanbul stack. Unit tests are used wherever possible. However, components that embed child components are tested using integration tests to avoid losing code coverage (see [ADR 0007](docs/adr/0007-real-child-components-in-component-tests.md)).
 
 
 ## 🤖 AI

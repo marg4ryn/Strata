@@ -11,17 +11,9 @@ import type { AuthorCoupling } from '../../analysis-results.model';
 import { ChordDiagramComponent } from '../../ui/charts/chord-diagram/chord-diagram.component';
 
 /*
- * Note on HTML branch coverage:
-
- * Coverage tools may report missing branch coverage on [(x)]="y" bindings mapped to Signals/model().
- * Under the hood, Angular compiles two-way bindings with a fallback for plain properties:
- * `updateSignal(...) || updatePlainProperty(...)`
- *
- * Since we exclusively use Signals, the first condition is always true, making the fallback
- * branch (plain property assignment) dead code. This branch cannot be covered by tests
- * without artificially removing the Signal implementation. It is safe to ignore.
- * 
- * See docs/testing-coverage-caveats.
+ * Coverage may report an uncovered branch on [(x)]="y" bindings to signals.
+ * This is compiler-generated dead code and is safe to ignore.
+ * See docs/testing-coverage-caveats.md, section 2.
  */
 
 describe('DeveloperRelationshipsComponent', () => {
