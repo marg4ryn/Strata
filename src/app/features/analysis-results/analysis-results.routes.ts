@@ -3,11 +3,13 @@ import type { Routes } from '@angular/router';
 import { AnalysisResultsShellComponent } from './feature/analysis-results-shell/analysis-results-shell.component';
 import { RepositoryDetailsComponent } from './feature/repository-details/repository-details.component';
 import { DeveloperRelationshipsComponent } from './feature/developer-relationships/developer-relationships.component';
+import { provideAnalysisCharts } from './ui/charts/charts.providers';
 
 export const analysisResultsRoutes: Routes = [
   {
     path: '',
     component: AnalysisResultsShellComponent,
+    providers: [provideAnalysisCharts()],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'summary' },
       { path: 'summary', component: RepositoryDetailsComponent },

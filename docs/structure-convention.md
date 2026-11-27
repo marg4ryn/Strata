@@ -11,6 +11,15 @@ The application architecture is inspired by the feature-oriented approach common
 
 Each subdirectory within the directories listed above is treated as a module. To expose elements outside its own scope, it must provide a public API through an `index.ts` file. Direct access to module's internal files is not allowed. This rule is enforced by the linter.
 
+### Lazy-loaded routes
+
+A lazy-loaded feature has a second public entry point: its `*.routes.ts` file. The two entry points are kept apart because importing a file loads everything it re-exports:
+
+* `index.ts` — what other code imports statically: the facade, types, and components embedded elsewhere. It must never re-export routes or the components they use.
+* `*.routes.ts` — the routes of the feature. It is loaded only with `loadChildren: () => import('…/feature-name.routes')` from the parent routes.
+
+If routes were exported from `index.ts`, any static import of the facade would pull the whole feature into the initial bundle, and the lazy chunk would end up empty. The linter forbids static imports of `*.routes` files (except `app.routes` in `app.config.ts`).
+
 The following dependencies are allowed:
 
 * `feature` → `core`, `shared`, `feature`

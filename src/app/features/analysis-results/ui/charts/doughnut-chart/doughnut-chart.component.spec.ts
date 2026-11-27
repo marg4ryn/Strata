@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { getTranslocoModule } from '@app/core/transloco';
+import { provideAnalysisCharts } from '../charts.providers';
 import { DoughnutChartComponent } from './doughnut-chart.component';
 import type { DoughnutChartItem } from './doughnut-chart.component';
 
@@ -34,7 +34,7 @@ describe('DoughnutChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DoughnutChartComponent, getTranslocoModule()],
-      providers: [provideCharts(withDefaultRegisterables())],
+      providers: [provideAnalysisCharts()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DoughnutChartComponent);

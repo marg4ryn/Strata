@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import type { Mock } from 'vitest';
 
 import { getTranslocoModule } from '@app/core/transloco';
+import { provideAnalysisCharts } from '../../ui/charts/charts.providers';
 import { RepositoryDetailsComponent } from './repository-details.component';
 import { AnalysisResultsFacade } from '../../analysis-results.facade';
 import type { RepositorySummary } from '../../analysis-results.model';
@@ -88,10 +88,7 @@ describe('RepositoryDetailsComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [RepositoryDetailsComponent, getTranslocoModule()],
-      providers: [
-        { provide: AnalysisResultsFacade, useValue: facade },
-        provideCharts(withDefaultRegisterables()),
-      ],
+      providers: [{ provide: AnalysisResultsFacade, useValue: facade }, provideAnalysisCharts()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RepositoryDetailsComponent);

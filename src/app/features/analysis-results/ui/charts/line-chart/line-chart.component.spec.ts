@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { getTranslocoModule } from '@app/core/transloco';
+import { provideAnalysisCharts } from '../charts.providers';
 import { LineChartComponent } from './line-chart.component';
 import type { ChartSeries } from '../../../utils/aggregation/aggregation.utils';
 
@@ -33,7 +33,7 @@ describe('LineChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LineChartComponent, getTranslocoModule()],
-      providers: [provideCharts(withDefaultRegisterables())],
+      providers: [provideAnalysisCharts()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LineChartComponent);

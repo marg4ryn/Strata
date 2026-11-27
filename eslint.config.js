@@ -137,6 +137,26 @@ export default defineConfig(
     },
   },
 
+  // --- Lazy route files may only be loaded with import() ---
+  {
+    files: ['src/app/**/*.ts'],
+    ignores: ['src/app/app.config.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '\\.routes$',
+              message:
+                'Route files are lazy entry points. Load them with loadChildren: () => import(...), never with a static import.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // --- Disallow export * in index.ts files ---
   {
     files: ['**/index.ts'],

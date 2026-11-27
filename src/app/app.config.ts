@@ -6,7 +6,6 @@ import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localePl from '@angular/common/locales/pl';
 import { provideTransloco } from '@jsverse/transloco';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { routes } from './app.routes';
 import { translocoConfig } from './core/transloco/transloco.config';
@@ -51,7 +50,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     // Integrations
-    provideCharts(withDefaultRegisterables()),
     provideTransloco({
       config: translocoConfig,
       loader: TranslocoLoaderService,

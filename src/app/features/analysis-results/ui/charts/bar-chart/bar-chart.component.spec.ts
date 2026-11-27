@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { getTranslocoModule } from '@app/core/transloco';
 import { BarChartComponent } from './bar-chart.component';
+import { provideAnalysisCharts } from '../charts.providers';
 import type { ChartSeries } from '../../../utils/aggregation/aggregation.utils';
 
 describe('BarChartComponent', () => {
@@ -33,7 +33,7 @@ describe('BarChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BarChartComponent, getTranslocoModule()],
-      providers: [provideCharts(withDefaultRegisterables())],
+      providers: [provideAnalysisCharts()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BarChartComponent);

@@ -14,6 +14,9 @@ export const routes: Routes = [
   },
   {
     path: 'analysis/:id',
-    loadChildren: () => import('./features/analysis-results').then((m) => m.analysisResultsRoutes),
+    loadChildren: () =>
+      import('./features/analysis-results/analysis-results.routes').then(
+        (m) => m.analysisResultsRoutes,
+      ),
   },
 ];
