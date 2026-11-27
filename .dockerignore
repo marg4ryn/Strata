@@ -2,3 +2,14 @@ node_modules
 dist
 .angular
 .git
+.gitignore
+.vscode
+.idea
+coverage
+docs
+README.md
+Dockerfile
+.dockerignore
+docker-compose.yml
+npm-debug.log
+*.log
