@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { LocalizedDatePipe } from '@app/shared/pipes';
+import { LocalizedDatePipe } from '@app/shared/ui';
 import type { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({

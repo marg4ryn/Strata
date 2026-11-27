@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { StorageService } from '@app/core/storage';
 import type { LangPreference } from '../language.model';
 

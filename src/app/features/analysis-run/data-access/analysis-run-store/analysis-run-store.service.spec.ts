@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { AnalysisRunStoreService } from './analysis-run-store.service';
 import type { AnalysisTarget, PendingAnalysis } from '../../analysis-run.model';
 

@@ -1,1 +1,1 @@
-export { AboutPageComponent } from './about-page.component';
+export { AboutPageComponent } from './feature/about-page/about-page.component';

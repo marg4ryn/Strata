@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { LocalizedDurationPipe, LocalizedNumberPipe, LocalizedDatePipe } from '@app/shared/pipes';
-import { InfoTooltipComponent } from '@app/shared/components';
+import {
+  InfoTooltipComponent,
+  LocalizedDatePipe,
+  LocalizedDurationPipe,
+  LocalizedNumberPipe,
+} from '@app/shared/ui';
 import { DataSectionComponent } from '../data-section/data-section.component';
 
 export type ListItemValueType =

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { TableComponent } from '@app/shared/components';
-import type { TableColumn, TableRows } from '@app/shared/components';
+import { TableComponent } from '@app/shared/ui';
+import type { TableColumn, TableRows } from '@app/shared/ui';
 import { DataSectionComponent } from '../data-section/data-section.component';
 
 export type { TableColumn, TableRows };

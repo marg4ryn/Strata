@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { DropdownComponent } from '@app/shared/components';
+import { DropdownComponent } from '@app/shared/ui';
 import { provideAnalysisCharts } from '../../charts/charts.providers';
 import { LineChartSectionComponent } from './line-chart-section.component';
 import { LineChartComponent } from '../../charts/line-chart/line-chart.component';

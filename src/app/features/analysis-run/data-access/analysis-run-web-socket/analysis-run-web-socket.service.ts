@@ -1,7 +1,7 @@
 import { inject, Service } from '@angular/core';
 
 import { environment } from '@env/environment';
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import type { AnalysisStatusKey } from '../../analysis-run.model';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
 

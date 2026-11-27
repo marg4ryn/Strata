@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { signal } from '@angular/core';
 
-import { DropdownComponent } from '@app/shared/components';
+import { DropdownComponent } from '@app/shared/ui';
 import { getTranslocoModule } from '@app/core/transloco';
 import { LanguageFacade } from '@app/core/language';
 import type { LangPreference } from '@app/core/language';

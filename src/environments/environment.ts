@@ -1,4 +1,4 @@
-import { LogLevel } from '@app/core/logging/logger.enum';
+import { LogLevel } from '@app/core/logger';
 import type { Environment } from './environment.model';
 
 export const environment: Environment = {

@@ -10,8 +10,8 @@ import { marker } from '@jsverse/transloco-keys-manager/marker';
 
 import { LanguageFacade, LANGUAGES, SYSTEM_PREFERENCE } from '@app/core/language';
 import type { LangPreference } from '@app/core/language';
-import { DropdownComponent } from '@app/shared/components';
-import type { DropdownOption } from '@app/shared/components';
+import { DropdownComponent } from '@app/shared/ui';
+import type { DropdownOption } from '@app/shared/ui';
 
 @Component({
   selector: 'app-language-switcher',

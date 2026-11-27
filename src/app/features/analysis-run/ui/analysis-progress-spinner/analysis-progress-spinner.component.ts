@@ -11,9 +11,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation';
-import { ButtonDirective } from '@app/shared/directives';
-import { LoadingSpinnerComponent } from '@app/shared/components';
+import { ButtonDirective, ConfirmOperationService, LoadingSpinnerComponent } from '@app/shared/ui';
 import type { PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
 

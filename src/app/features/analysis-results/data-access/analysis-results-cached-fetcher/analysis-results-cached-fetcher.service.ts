@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { AnalysisResultsLockService } from '../analysis-results-lock/analysis-results-lock.service';
 import { CACHE_CONFIG } from './cache.config';
 

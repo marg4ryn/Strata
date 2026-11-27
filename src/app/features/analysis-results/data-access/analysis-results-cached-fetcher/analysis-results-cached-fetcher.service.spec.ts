@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { AnalysisResultsCachedFetcherService } from './analysis-results-cached-fetcher.service';
 import { AnalysisResultsLockService } from '../analysis-results-lock/analysis-results-lock.service';
 import { CACHE_CONFIG } from './cache.config';

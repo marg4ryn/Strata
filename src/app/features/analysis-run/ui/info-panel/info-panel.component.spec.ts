@@ -2,7 +2,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { LocalizedDatePipe } from '@app/shared/pipes';
+import { LocalizedDatePipe } from '@app/shared/ui';
 import { InfoPanelComponent } from './info-panel.component';
 import type { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 

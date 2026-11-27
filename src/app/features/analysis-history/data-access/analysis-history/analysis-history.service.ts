@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { AnalysisResultsFacade } from '@app/features/analysis-results';
 import { AnalysisHistoryStoreService } from '../analysis-history-store/analysis-history-store.service';
 import { AnalysisHistoryStorageService } from '../analysis-history-storage/analysis-history-storage.service';

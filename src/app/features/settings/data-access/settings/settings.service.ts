@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { SettingsStoreService } from '../settings-store/settings-store.service';
 
 @Service()

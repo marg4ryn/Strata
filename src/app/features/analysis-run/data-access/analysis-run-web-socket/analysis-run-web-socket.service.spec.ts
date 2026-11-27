@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { AnalysisRunWebSocketService } from './analysis-run-web-socket.service';
 import { AnalysisRunStoreService } from '../analysis-run-store/analysis-run-store.service';
 import type { AnalysisStatusKey, ErrorType } from '../../analysis-run.model';

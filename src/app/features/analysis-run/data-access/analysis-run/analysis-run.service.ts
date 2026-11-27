@@ -1,7 +1,7 @@
 import { Service, inject, effect, untracked } from '@angular/core';
 import { marker } from '@jsverse/transloco-keys-manager/marker';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { AnalysisResultsFacade } from '@app/features/analysis-results';
 import { NotificationsFacade } from '@app/features/notifications';
 import { AnalysisHistoryFacade } from '@app/features/analysis-history';

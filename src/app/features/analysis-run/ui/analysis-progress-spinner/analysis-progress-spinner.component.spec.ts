@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { ConfirmOperationService } from '@app/shared/confirm-operation';
+import { ConfirmOperationService } from '@app/shared/ui';
 import { AnalysisProgressSpinnerComponent } from './analysis-progress-spinner.component';
 
 describe('AnalysisProgressSpinnerComponent', () => {

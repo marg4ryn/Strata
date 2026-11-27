@@ -1,25 +1,23 @@
 import { inject, Service } from '@angular/core';
 
-import { injectLogger } from '@app/core/logging';
+import { injectLogger } from '@app/core/logger';
 import { AnalysisResultsCachedFetcherService } from '../analysis-results-cached-fetcher/analysis-results-cached-fetcher.service';
 import { AnalysisResultsApiService } from '../analysis-results-api/analysis-results-api.service';
+import type { AuthorCoupling } from '../../models/author-coupling.model';
+import type { AuthorStatistics } from '../../models/author-statistics.model';
+import type { ChangeCoupling } from '../../models/change-coupling.model';
+import type { CodeAgeDetails } from '../../models/code-age.model';
+import type { CityNode, CityItem, CodeCityData } from '../../models/code-city.model';
+import type { FileDetails } from '../../models/file-details.model';
+import type { FileExtension } from '../../models/file-extensions.model';
+import type { Hotspot } from '../../models/hotspots.model';
+import type { KnowledgeRisksDetails } from '../../models/knowledge-risks.model';
+import type { LeadAuthorsDetails } from '../../models/lead-authors.model';
 import type {
-  KnowledgeRisksDetails,
-  LeadAuthorsDetails,
   RepositorySummary,
   RepositoryDetails,
   RepositoryTrends,
-  AuthorStatistics,
-  Hotspot,
-  CodeAgeDetails,
-  AuthorCoupling,
-  FileExtension,
-  FileDetails,
-  CityNode,
-  CityItem,
-  CodeCityData,
-  ChangeCoupling,
-} from '../../analysis-results.model';
+} from '../../models/repository-summary.model';
 
 @Service()
 export class AnalysisResultsService {

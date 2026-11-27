@@ -1,21 +1,17 @@
 import { Service, inject } from '@angular/core';
 
 import { HttpService } from '@app/core/http';
-import type {
-  KnowledgeRisksDetails,
-  LeadAuthorsDetails,
-  RepositoryDetails,
-  RepositoryTrends,
-  AuthorStatistics,
-  Hotspot,
-  ChangeCoupling,
-  CodeAgeDetails,
-  AuthorCoupling,
-  FileExtension,
-  FileDetails,
-  CityNode,
-  CityItem,
-} from '../../analysis-results.model';
+import type { AuthorCoupling } from '../../models/author-coupling.model';
+import type { AuthorStatistics } from '../../models/author-statistics.model';
+import type { ChangeCoupling } from '../../models/change-coupling.model';
+import type { CodeAgeDetails } from '../../models/code-age.model';
+import type { CityNode, CityItem } from '../../models/code-city.model';
+import type { FileDetails } from '../../models/file-details.model';
+import type { FileExtension } from '../../models/file-extensions.model';
+import type { Hotspot } from '../../models/hotspots.model';
+import type { KnowledgeRisksDetails } from '../../models/knowledge-risks.model';
+import type { LeadAuthorsDetails } from '../../models/lead-authors.model';
+import type { RepositoryDetails, RepositoryTrends } from '../../models/repository-summary.model';
 
 @Service()
 export class AnalysisResultsApiService {

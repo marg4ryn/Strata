@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ChordDiagramComponent } from './chord-diagram.component';
-import type { AuthorCoupling } from '../../../analysis-results.model';
+import type { AuthorCoupling } from '../../../models/author-coupling.model';
 
 describe('ChordDiagramComponent', () => {
   let component: ChordDiagramComponent;

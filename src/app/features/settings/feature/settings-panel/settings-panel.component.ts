@@ -3,7 +3,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SettingsFacade } from '../../settings.facade';
-import { SettingsSectionComponent } from '../../ui/settings-section.component';
+import { SettingsSectionComponent } from '../../ui/settings-section/settings-section.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 @Component({

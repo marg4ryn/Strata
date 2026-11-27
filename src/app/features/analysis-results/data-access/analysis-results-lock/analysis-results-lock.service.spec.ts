@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { AnalysisResultsLockService } from './analysis-results-lock.service';
 
 class MockLockManager {

@@ -11,7 +11,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ButtonDirective } from '@app/shared/directives';
+import { ButtonDirective } from '@app/shared/ui';
 import type { ErrorType, PendingAnalysis } from '../../analysis-run.model';
 import { InfoPanelComponent } from '../info-panel/info-panel.component';
 

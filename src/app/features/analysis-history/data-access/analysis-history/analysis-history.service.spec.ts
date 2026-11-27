@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { AnalysisResultsFacade } from '@app/features/analysis-results';
 import type { AnalysisTarget } from '@app/features/analysis-run';
 import { AnalysisHistoryService } from './analysis-history.service';

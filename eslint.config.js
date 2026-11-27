@@ -40,11 +40,11 @@ export default defineConfig(
       'boundaries/include': ['src/app/**/*.ts'],
 
       'boundaries/ignore': [
-        'src/app/app.ts',
+        'src/app/app.component.ts',
         'src/app/app.config.ts',
         'src/app/app.routes.ts',
-        'src/app/app.spec.ts',
-        'src/app/app.html',
+        'src/app/app.component.spec.ts',
+        'src/app/app.component.html',
       ],
 
       'boundaries/elements': [

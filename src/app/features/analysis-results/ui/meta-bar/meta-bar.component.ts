@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-import { LocalizedDatePipe } from '@app/shared/pipes';
+import { LocalizedDatePipe } from '@app/shared/ui';
 import type { ISODateString } from '@app/shared/utils';
 
 export type DateRange = {

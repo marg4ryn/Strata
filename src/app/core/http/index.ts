@@ -1,1 +1,1 @@
-export { HttpService } from './http.service';
+export { HttpService } from './http/http.service';

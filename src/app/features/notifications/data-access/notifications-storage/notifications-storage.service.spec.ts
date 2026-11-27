@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService, ContextLogger } from '@app/core/logging';
+import { LoggerService, ContextLogger } from '@app/core/logger';
 import { StorageService } from '@app/core/storage';
 import { NotificationsStorageService } from './notifications-storage.service';
 import type { Notification } from '../../notifications.model';

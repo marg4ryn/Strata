@@ -2,8 +2,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { LocalizedDatePipe } from '@app/shared/pipes';
-import { ConfirmOperationService } from '@app/shared/confirm-operation';
+import { ConfirmOperationService, LocalizedDatePipe } from '@app/shared/ui';
 import { AnalysisUnfinishedModalComponent } from './analysis-unfinished-modal.component';
 import type { AnalysisTarget, DateRange, PendingAnalysis } from '../../analysis-run.model';
 

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { MockService } from 'ng-mocks';
 
-import { LoggerService , ContextLogger } from '@app/core/logging';
+import { LoggerService , ContextLogger } from '@app/core/logger';
 import { NotificationsService } from './notifications.service';
 import { NotificationsStoreService } from '../notifications-store/notifications-store.service';
 import { NotificationsStorageService } from '../notifications-storage/notifications-storage.service';

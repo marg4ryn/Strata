@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { getTranslocoModule } from '@app/core/transloco';
-import { TableComponent } from '@app/shared/components';
+import { TableComponent } from '@app/shared/ui';
 import { TableSectionComponent } from './table-section.component';
 import type { TableColumn, TableRows } from './table-section.component';
 

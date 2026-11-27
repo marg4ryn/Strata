@@ -8,9 +8,7 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { ConfirmOperationService } from '@app/shared/confirm-operation';
-import { LocalizedDatePipe } from '@app/shared/pipes';
-import { ButtonDirective } from '@app/shared/directives';
+import { ButtonDirective, ConfirmOperationService, LocalizedDatePipe } from '@app/shared/ui';
 import type { PendingAnalysis } from '../../analysis-run.model';
 
 @Component({

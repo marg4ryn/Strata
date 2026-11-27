@@ -10,7 +10,7 @@ import {
 import type { ElementRef, OnDestroy } from '@angular/core';
 import * as d3 from 'd3';
 
-import type { AuthorCoupling } from './../../../analysis-results.model';
+import type { AuthorCoupling } from '../../../models/author-coupling.model';
 
 type ChordGroupWithAngle = d3.ChordGroup & { angle: number };
 

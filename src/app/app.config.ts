@@ -9,7 +9,7 @@ import { provideTransloco } from '@jsverse/transloco';
 
 import { routes } from './app.routes';
 import { translocoConfig } from './core/transloco/transloco.config';
-import { TranslocoLoaderService } from './core/transloco/transloco-loader.service';
+import { TranslocoLoaderService } from './core/transloco/transloco-loader/transloco-loader.service';
 import { LanguageFacade } from './core/language/language.facade';
 import { NotificationsFacade } from './features/notifications/notifications.facade';
 import { AnalysisHistoryFacade } from './features/analysis-history/analysis-history.facade';
