@@ -8,7 +8,7 @@ This directory contains the Architecture Decision Records (ADRs) for the applica
 |------|------------------------------------------------------------------------------------------------------------|-------------------------|----------|
 | 0001 | [Use Angular](0001-use-angular.md)                                                                         | Architecture            | Accepted |
 | 0002 | [Use SPA Architecture](0002-use-spa-architecture.md)                                                       | Architecture            | Accepted |
-| 0003 | [Application Directory Structure Convention](0003-application-directory-structure.md)                      | Architecture            | Accepted |
+| 0003 | [Application Directory Structure Convention](0003-application-directory-structure.md)                      | Architecture            | Superseded by [0014](0014-simplified-directory-structure.md) |
 | 0004 | [Use Angular CDK Overlay](0004-use-angular-cdk-overlay.md)                                                 | Architecture            | Accepted |
 | 0005 | [Use Transloco for i18n](0005-use-transloco-for-i18n.md)                                                   | Architecture            | Accepted |
 | 0006 | [Single Translation File per Locale](0006-single-translation-file-per-locale.md)                           | Architecture            | Accepted |
@@ -19,6 +19,7 @@ This directory contains the Architecture Decision Records (ADRs) for the applica
 | 0011 | [Cached Fetcher with Web Locks API for Analysis Results](0011-cached-fetcher-with-web-locks-for-analysis-results.md) | Feature: Analysis Results | Accepted |
 | 0012 | [Broadcast Channel API for Analysis History](0012-broadcast-channel-for-analysis-history.md)               | Feature: Analysis History | Accepted |
 | 0013 | [Guillotine Packing for City Layout](0013-guillotine-packing-for-analysis-results.md)                      | Feature: Analysis Results | Accepted |
+| 0014 | [Simplified Directory Structure Convention](0014-simplified-directory-structure.md)                        | Architecture            | Accepted |
 
 ## Adding a New ADR
 

@@ -1,6 +1,6 @@
 # 0003. Application Directory Structure Convention
 
-- **Status:** Accepted
+- **Status:** Superseded by [0014](0014-simplified-directory-structure.md)
 - **Date:** 2026-08-23
 - **Category:** Architecture
 
@@ -20,3 +20,8 @@ I adopted the organization standard described in detail in [structure-convention
 
 - **Positive:** the structure remains as flat as possible and unnecessary nesting is limited.
 - **Negative:** the directory structure may change as a module grows. Adding or removing artifacts may require moving files between directories, which requires greater discipline during development.
+
+## References
+
+- [0014. Simplified Directory Structure Convention](0014-simplified-directory-structure.md)
+- [Application Directory Structure](../structure-convention.md)
