@@ -23,3 +23,8 @@ Since directives cannot carry their own styles, the styling rules are defined in
 - **Positive:** buttons retain the full native semantics and accessibility of the `<button>` element.
 - **Positive:** style variants are managed in a single place (`styles.scss`), making visual consistency easier to maintain.
 - **Negative:** the button styles are not encapsulated by Angular and must be consciously maintained as part of the global design system rather than as local component logic.
+
+## References
+
+- [MDN: The button element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button)
+- [Angular: Attribute directives](https://angular.dev/guide/directives/attribute-directives)

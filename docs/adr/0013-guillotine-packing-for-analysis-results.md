@@ -30,3 +30,7 @@ I chose a simple greedy heuristic made of three parts:
 - **Positive:** less unused platform area than the previous solution, with simple code and a short running time.
 - **Negative:** the layout is a heuristic, not an optimum. Rotation is greedy and works on one level at a time; child folders are packed before their parent, so they cannot adapt their shape to the parent.
 - **Follow-ups:** the aspect ratio weight (0.2) and the list of widths are tuning parameters; a higher weight gives more square platforms at the cost of area. If the waste becomes visible, the next step is to let each folder offer a few shape variants to its parent, not to bring back a genetic algorithm.
+
+## References
+
+- [potpack](https://github.com/mapbox/potpack)

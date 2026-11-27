@@ -28,3 +28,10 @@ Reading and writing the results themselves does not require the lock, because ea
 - **Positive:** prevents lost updates in the cache registry, both between parallel requests within one tab and between multiple tabs.
 - **Positive:** the number of stored caches stays within the configured limit.
 - **Negative:** registry updates are serialized, so parallel requests wait for each other at this step.
+
+## References
+
+- [0010. Web Locks API for Analysis Run](0010-web-locks-for-analysis-run.md)
+- [MDN: Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)
+- [MDN: Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
+- [MDN: IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)

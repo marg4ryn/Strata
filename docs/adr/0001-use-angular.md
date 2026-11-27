@@ -22,3 +22,11 @@ I chose Angular because of its rich set of features available out of the box and
 - **Positive:** a consistent environment with many features available without having to select and integrate additional libraries.
 - **Negative:** greater reliance on Angular's ecosystem and conventions.
 - **Follow-ups:** the project structure and naming conventions must be maintained consistently to preserve the intended predictability (see [0003. Application Directory Structure Convention](0003-application-directory-structure.md)).
+
+## References
+
+- [0003. Application Directory Structure Convention](0003-application-directory-structure.md)
+- [0014. Simplified Directory Structure Convention](0014-simplified-directory-structure.md)
+- [Angular documentation](https://angular.dev)
+- [React documentation](https://react.dev)
+- [Vue documentation](https://vuejs.org)

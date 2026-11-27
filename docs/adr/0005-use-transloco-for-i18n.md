@@ -20,3 +20,10 @@ I chose Transloco as the most popular library for runtime translations.
 
 - **Positive:** users can change the language without reloading the application.
 - **Negative:** translations are resolved at runtime, which introduces additional runtime overhead compared to a compile-time solution. This cost is accepted in exchange for the flexibility described above.
+
+## References
+
+- [0002. Use SPA Architecture](0002-use-spa-architecture.md)
+- [0006. Single Translation File per Locale](0006-single-translation-file-per-locale.md)
+- [Transloco documentation](https://jsverse.gitbook.io/transloco)
+- [Angular: Internationalization](https://angular.dev/guide/i18n)

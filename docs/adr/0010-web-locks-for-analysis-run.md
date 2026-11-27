@@ -27,3 +27,10 @@ which signals to other tabs that they can take over the analysis.
 - **Positive:** prevents write conflicts in LocalStorage between tabs operating on the same analysis.
 - **Positive:** the browser releases the lock automatically when the tab is closed or crashes, so no stale locks remain.
 - **Negative:** additional logic is required to manage the lock's lifecycle.
+
+## References
+
+- [0009. WebSocket for Analysis Run](0009-websocket-for-analysis-run.md)
+- [0011. Cached Fetcher with Web Locks API for Analysis Results](0011-cached-fetcher-with-web-locks-for-analysis-results.md)
+- [0012. Broadcast Channel API for Analysis History](0012-broadcast-channel-for-analysis-history.md)
+- [MDN: Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)

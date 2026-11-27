@@ -20,3 +20,9 @@ I chose a Single-Page Application (SPA) architecture. Client-side rendering keep
 
 - **Positive:** the focus stays on the performance of interactive visualizations, which is the product's priority.
 - **Negative:** the application's SEO remains limited. This is an intentional trade-off, as SEO is not a priority for this product.
+
+## References
+
+- [0005. Use Transloco for i18n](0005-use-transloco-for-i18n.md)
+- [Angular: Server-side and hybrid rendering](https://angular.dev/guide/ssr)
+- [MDN: Single-page application (SPA)](https://developer.mozilla.org/en-US/docs/Glossary/SPA)

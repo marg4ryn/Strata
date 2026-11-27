@@ -22,3 +22,9 @@ Synchronization between tabs is handled using the Broadcast Channel API. The tab
 - **Positive:** the history state is synchronized between tabs immediately, without reading LocalStorage for every change.
 - **Positive:** messages describe the change explicitly and contain all the data needed to update the state, keeping the synchronization mechanism simple and inexpensive.
 - **Negative:** each tab's state is updated independently of LocalStorage, so the message format must stay consistent with what is persisted; a bug in either path can make them diverge.
+
+## References
+
+- [0010. Web Locks API for Analysis Run](0010-web-locks-for-analysis-run.md)
+- [MDN: Broadcast Channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)
+- [MDN: Window storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event)

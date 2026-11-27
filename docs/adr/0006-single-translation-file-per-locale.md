@@ -21,3 +21,8 @@ I store all translations for a given locale in a single file. This reduces the n
 - **Positive:** the translation structure remains simple and predictable, with minimal configuration overhead.
 - **Negative:** locale files may become harder to navigate as the application grows.
 - **Follow-ups:** if the project or team becomes significantly larger, this decision should be revisited and translations split by module.
+
+## References
+
+- [0005. Use Transloco for i18n](0005-use-transloco-for-i18n.md)
+- [Transloco documentation](https://jsverse.gitbook.io/transloco)

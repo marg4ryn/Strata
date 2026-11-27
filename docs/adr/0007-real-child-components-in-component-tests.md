@@ -28,3 +28,10 @@ This is a workaround for a specific coverage-instrumentation gap, not a preferen
 - **Positive:** coverage numbers remain accurate and reflect real test gaps instead of tooling artifacts.
 - **Negative:** tests require more dependencies and are slower than isolated unit tests.
 - **Follow-ups:** revisit this decision once the Angular/Vitest ecosystem provides a reliable way to preserve code coverage for overridden/recompiled components.
+
+## References
+
+- [Testing Coverage Caveats](../testing-coverage-caveats.md)
+- [Angular: Testing](https://angular.dev/guide/testing)
+- [Vitest: Coverage](https://vitest.dev/guide/coverage)
+- [ng-mocks](https://ng-mocks.sudo.eu)

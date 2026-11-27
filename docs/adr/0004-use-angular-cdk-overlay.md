@@ -20,3 +20,7 @@ All overlay elements are implemented using Angular CDK Overlay.
 
 - **Positive:** all overlays have a consistent implementation with built-in accessibility (a11y) support provided by CDK.
 - **Negative:** dependency on `@angular/cdk` and its API.
+
+## References
+
+- [Angular CDK Overlay](https://material.angular.dev/cdk/overlay/overview)

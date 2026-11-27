@@ -22,3 +22,9 @@ Reconnection after a connection loss is handled by custom client-side logic.
 
 - **Positive:** reliable control over the analysis lifecycle through a single bidirectional channel.
 - **Negative:** reconnection and connection lifecycle management must be implemented manually.
+
+## References
+
+- [0010. Web Locks API for Analysis Run](0010-web-locks-for-analysis-run.md)
+- [MDN: WebSockets API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
+- [MDN: Server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
